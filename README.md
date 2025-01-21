@@ -1,2 +1,3 @@
 # Leetrep0
-Leetcode exercices and their solutions.
+A platform that contains all leetcodes and their solutions.
+More features are in progress.
