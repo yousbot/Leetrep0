@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1724.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1724.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1724 - Checking Existence of Edge Length Limited Paths II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/1724.html 1724. Checking Existence of Edge Length Limited Paths II Level Hard Description An undirected graph of n nodes is defined by edgeList, where edgeList[i] = [u_i, v_i, dis_i] denotes an edge between nodes u_i and v_i with distance dis_i. Note that...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1724.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1724.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1724.html" rel="stylesheet"/>
+   <link href="solution-1724.html" rel="stylesheet"/>
+   <link href="solution-1724.html" rel="stylesheet"/>
+   <link href="solution-1724.html" rel="stylesheet"/>
+   <link href="solution-1724.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1724 - Checking Existence of Edge Length Limited Paths II" property="og:title"/>
+   <meta content='Leetcode Formatted question description: https://leetcode.ca/all/1724.html 1724. Checking Existence of Edge Length Limited Paths II Level Hard Description An undirected graph of n nodes is defined by edgeList, where edgeList[i] = [u_i, v_i, dis_i] denotes an edge between nodes u_i and v_i with distance dis_i. Note that there may be multiple edges between two nodes, and the graph may not be connected. Implement the DistanceLimitedPathsExist class: DistanceLimitedPathsExist(int n, int[][] edgeList) Initializes the class with an undirected graph. boolean query(int p, int q, int limit) Returns true if there exists a path from p to q such that each edge on the path has a distance strictly less than limit, and otherwise false. Example 1: Input ["DistanceLimitedPathsExist", "query", "query", "query", "query"] [[6, [[0, 2, 4], [0, 3, 2], [1, 2, 3], [2, 3, 1], [4, 5, 5]]], [2, 3, 2], [1, 3, 3], [2, 0, 3], [0, 5, 6]] Output [null, true, false, true, false] Explanation DistanceLimitedPathsExist distanceLimitedPathsExist = new DistanceLimitedPathsExist(6, [[0, 2, 4], [0, 3, 2], [1, 2, 3], [2, 3, 1], [4, 5, 5]]); distanceLimitedPathsExist.query(2, 3, 2); // return true. There is an edge from 2 to 3 of distance 1, which is less than 2. distanceLimitedPathsExist.query(1, 3, 3); // return false. There is no way to go from 1 to 3 with distances strictly less than 3. distanceLimitedPathsExist.query(2, 0, 3); // return true. There is a way to go from 2 to 0 with distance &amp;lt; 3: travel from 2 to 3 to 0. distanceLimitedPathsExist.query(0, 5, 6); // return false. There are no paths from 0 to 5. Constraints: 2 &amp;lt;= n &amp;lt;= 10^4 0 &amp;lt;= edgeList.length &amp;lt;= 10^4 edgeList[i].length == 3 0 &amp;lt;= u_i, v_i, p, q &amp;lt;= n-1 u_i != v_i p != q 1 &amp;lt;= dis_i, limit &amp;lt;= 10^9 At most 10^4 calls will be made to query. Solution The main idea of this problem is to create a minimum spanning tree from the edges and the nodes. In the constructor, create a minimum spanning tree using union find and Kruskalâs algorithm. For the method query, the idea is similar to finding the lowest common ancestor. Java C++ Python Go TypeScript class DistanceLimitedPathsExist { int n; int bits; UnionFind uf; int[][] edgeList; Map&amp;lt;Integer, List&amp;lt;int[]&amp;gt;&amp;gt; mstEdges; int[][] parent; int[][] maxWeights; int[] depths; boolean[] visited; public DistanceLimitedPathsExist(int n, int[][] edgeList) { this.n = n; this.uf = new UnionFind(n); this.edgeList = edgeList; Arrays.sort(this.edgeList, new Comparator&amp;lt;int[]&amp;gt;() { public int compare(int[] edge1, int[] edge2) { return edge1[2] - edge2[2]; } }); mstEdges = new HashMap&amp;lt;Integer, List&amp;lt;int[]&amp;gt;&amp;gt;(); bits = (int) (Math.log(n) / Math.log(2)) + 2; this.parent = new int[n][bits]; for (int i = 0; i &amp;lt; n; i++) Arrays.fill(this.parent[i], -1); this.maxWeights = new int[n][bits]; this.depths = new int[n]; this.visited = new boolean[n]; kruskal(); for (int i = 0; i &amp;lt; n; i++) { if (!visited[i]) { depths[i] = 1; depthFirstSearch(i); parent[i][0] = i; } } for (int i = 1; i &amp;lt; bits; i++) { for (int j = 0; j &amp;lt; n; j++) { parent[j][i] = parent[parent[j][i...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-03-07T21:21:01-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-03-07-1724-Checking-Existence-of-Edge-Length-Limited-Paths-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1724.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1724 - Checking Existence of Edge Length Limited Paths II" property="twitter:title"/>
+   <meta content='Leetcode Formatted question description: https://leetcode.ca/all/1724.html 1724. Checking Existence of Edge Length Limited Paths II Level Hard Description An undirected graph of n nodes is defined by edgeList, where edgeList[i] = [u_i, v_i, dis_i] denotes an edge between nodes u_i and v_i with distance dis_i. Note that there may be multiple edges between two nodes, and the graph may not be connected. Implement the DistanceLimitedPathsExist class: DistanceLimitedPathsExist(int n, int[][] edgeList) Initializes the class with an undirected graph. boolean query(int p, int q, int limit) Returns true if there exists a path from p to q such that each edge on the path has a distance strictly less than limit, and otherwise false. Example 1: Input ["DistanceLimitedPathsExist", "query", "query", "query", "query"] [[6, [[0, 2, 4], [0, 3, 2], [1, 2, 3], [2, 3, 1], [4, 5, 5]]], [2, 3, 2], [1, 3, 3], [2, 0, 3], [0, 5, 6]] Output [null, true, false, true, false] Explanation DistanceLimitedPathsExist distanceLimitedPathsExist = new DistanceLimitedPathsExist(6, [[0, 2, 4], [0, 3, 2], [1, 2, 3], [2, 3, 1], [4, 5, 5]]); distanceLimitedPathsExist.query(2, 3, 2); // return true. There is an edge from 2 to 3 of distance 1, which is less than 2. distanceLimitedPathsExist.query(1, 3, 3); // return false. There is no way to go from 1 to 3 with distances strictly less than 3. distanceLimitedPathsExist.query(2, 0, 3); // return true. There is a way to go from 2 to 0 with distance &amp;lt; 3: travel from 2 to 3 to 0. distanceLimitedPathsExist.query(0, 5, 6); // return false. There are no paths from 0 to 5. Constraints: 2 &amp;lt;= n &amp;lt;= 10^4 0 &amp;lt;= edgeList.length &amp;lt;= 10^4 edgeList[i].length == 3 0 &amp;lt;= u_i, v_i, p, q &amp;lt;= n-1 u_i != v_i p != q 1 &amp;lt;= dis_i, limit &amp;lt;= 10^9 At most 10^4 calls will be made to query. Solution The main idea of this problem is to create a minimum spanning tree from the edges and the nodes. In the constructor, create a minimum spanning tree using union find and Kruskalâs algorithm. For the method query, the idea is similar to finding the lowest common ancestor. Java C++ Python Go TypeScript class DistanceLimitedPathsExist { int n; int bits; UnionFind uf; int[][] edgeList; Map&amp;lt;Integer, List&amp;lt;int[]&amp;gt;&amp;gt; mstEdges; int[][] parent; int[][] maxWeights; int[] depths; boolean[] visited; public DistanceLimitedPathsExist(int n, int[][] edgeList) { this.n = n; this.uf = new UnionFind(n); this.edgeList = edgeList; Arrays.sort(this.edgeList, new Comparator&amp;lt;int[]&amp;gt;() { public int compare(int[] edge1, int[] edge2) { return edge1[2] - edge2[2]; } }); mstEdges = new HashMap&amp;lt;Integer, List&amp;lt;int[]&amp;gt;&amp;gt;(); bits = (int) (Math.log(n) / Math.log(2)) + 2; this.parent = new int[n][bits]; for (int i = 0; i &amp;lt; n; i++) Arrays.fill(this.parent[i], -1); this.maxWeights = new int[n][bits]; this.depths = new int[n]; this.visited = new boolean[n]; kruskal(); for (int i = 0; i &amp;lt; n; i++) { if (!visited[i]) { depths[i] = 1; depthFirstSearch(i); parent[i][0] = i; } } for (int i = 1; i &amp;lt; bits; i++) { for (int j = 0; j &amp;lt; n; j++) { parent[j][i] = parent[parent[j][i...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1724 - Checking Existence of Edge Length Limited Paths II | Leetcode
+   </title>
+   <meta content="Jekyll v3.9.4" name="generator">
+    <meta content="1724 - Checking Existence of Edge Length Limited Paths II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1724.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-03-07-1724-Checking-Existence-of-Edge-Length-Limited-Paths-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-03-07T21:21:01-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"headline":"1724 - Checking Existence of Edge Length Limited Paths II","dateModified":"2021-03-07T21:21:01-08:00","datePublished":"2021-03-07T21:21:01-08:00","description":"Leetcode","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-03-07-1724-Checking-Existence-of-Edge-Length-Limited-Paths-II/"},"url":"https://leetcode.ca/2021-03-07-1724-Checking-Existence-of-Edge-Length-Limited-Paths-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCDRuzBvLGzyVvgPyohrahrA" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-1724.html">
+        https://leetcode.ca/all/1724.html
+       </a>
+      </p>
+      <h1 id="1724-checking-existence-of-edge-length-limited-paths-ii">
+       1724. Checking Existence of Edge Length Limited Paths II
+      </h1>
+      <h2 id="level">
+       Level
+      </h2>
+      <p>
+       Hard
+      </p>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       An undirected graph of
+       <code class="language-plaintext highlighter-rouge">
+        n
+       </code>
+       nodes is defined by
+       <code class="language-plaintext highlighter-rouge">
+        edgeList
+       </code>
+       , where
+       <code class="language-plaintext highlighter-rouge">
+        edgeList[i] = [u_i, v_i, dis_i]
+       </code>
+       denotes an edge between nodes
+       <code class="language-plaintext highlighter-rouge">
+        u_i
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        v_i
+       </code>
+       with distance
+       <code class="language-plaintext highlighter-rouge">
+        dis_i
+       </code>
+       . Note that there may be
+       <strong>
+        multiple
+       </strong>
+       edges between two nodes, and the graph may not be connected.
+      </p>
+      <p>
+       Implement the
+       <code class="language-plaintext highlighter-rouge">
+        DistanceLimitedPathsExist
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         DistanceLimitedPathsExist(int n, int[][] edgeList)
+        </code>
+        Initializes the class with an undirected graph.
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         boolean query(int p, int q, int limit)
+        </code>
+        Returns
+        <code class="language-plaintext highlighter-rouge">
+         true
+        </code>
+        if there exists a path from
+        <code class="language-plaintext highlighter-rouge">
+         p
+        </code>
+        to
+        <code class="language-plaintext highlighter-rouge">
+         q
+        </code>
+        such that each edge on the path has a distance
+        <strong>
+         strictly less than
+        </strong>
+        <code class="language-plaintext highlighter-rouge">
+         limit
+        </code>
+        , and otherwise
+        <code class="language-plaintext highlighter-rouge">
+         false
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       <strong>
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="Image text" src="https://assets.leetcode.com/uploads/2021/01/05/messed.png"/>
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>Input
+["DistanceLimitedPathsExist", "query", "query", "query", "query"]
+[[6, [[0, 2, 4], [0, 3, 2], [1, 2, 3], [2, 3, 1], [4, 5, 5]]], [2, 3, 2], [1, 3, 3], [2, 0, 3], [0, 5, 6]]
+Output
+[null, true, false, true, false]
+
+Explanation
+DistanceLimitedPathsExist distanceLimitedPathsExist = new DistanceLimitedPathsExist(6, [[0, 2, 4], [0, 3, 2], [1, 2, 3], [2, 3, 1], [4, 5, 5]]);
+distanceLimitedPathsExist.query(2, 3, 2); // return true. There is an edge from 2 to 3 of distance 1, which is less than 2.
+distanceLimitedPathsExist.query(1, 3, 3); // return false. There is no way to go from 1 to 3 with distances strictly less than 3.
+distanceLimitedPathsExist.query(2, 0, 3); // return true. There is a way to go from 2 to 0 with distance &lt; 3: travel from 2 to 3 to 0.
+distanceLimitedPathsExist.query(0, 5, 6); // return false. There are no paths from 0 to 5.
+</code></pre>
+       </div>
+      </div>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         2 &lt;= n &lt;= 10^4
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         0 &lt;= edgeList.length &lt;= 10^4
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         edgeList[i].length == 3
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         0 &lt;= u_i, v_i, p, q &lt;= n-1
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         u_i != v_i
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         p != q
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         1 &lt;= dis_i, limit &lt;= 10^9
+        </code>
+       </li>
+       <li>
+        At most
+        <code class="language-plaintext highlighter-rouge">
+         10^4
+        </code>
+        calls will be made to
+        <code class="language-plaintext highlighter-rouge">
+         query
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       The main idea of this problem is to create a minimum spanning tree from the edges and the nodes. In the constructor, create a minimum spanning tree using union find and Kruskalâs algorithm. For the method
+       <code class="language-plaintext highlighter-rouge">
+        query
+       </code>
+       , the idea is similar to finding the lowest common ancestor.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#40607a43-0051-4597-aa3a-4b2779a7d5a9'}">
+       <li class="uk-active">
+        <a href="solution-1724.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1724.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1724.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1724.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1724.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="40607a43-0051-4597-aa3a-4b2779a7d5a9">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">DistanceLimitedPathsExist</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">bits</span><span class="o">;</span>
+    <span class="nc">UnionFind</span> <span class="n">uf</span><span class="o">;</span>
+    <span class="kt">int</span><span class="o">[][]</span> <span class="n">edgeList</span><span class="o">;</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;&gt;</span> <span class="n">mstEdges</span><span class="o">;</span>
+    <span class="kt">int</span><span class="o">[][]</span> <span class="n">parent</span><span class="o">;</span>
+    <span class="kt">int</span><span class="o">[][]</span> <span class="n">maxWeights</span><span class="o">;</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">depths</span><span class="o">;</span>
+    <span class="kt">boolean</span><span class="o">[]</span> <span class="n">visited</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">DistanceLimitedPathsExist</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edgeList</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">uf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UnionFind</span><span class="o">(</span><span class="n">n</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">edgeList</span> <span class="o">=</span> <span class="n">edgeList</span><span class="o">;</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">edgeList</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">edge1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">edge2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">edge1</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">-</span> <span class="n">edge2</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+        <span class="n">mstEdges</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;&gt;();</span>
+        <span class="n">bits</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="o">/</span> <span class="nc">Math</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span> <span class="o">+</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">bits</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">parent</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">maxWeights</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">bits</span><span class="o">];</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">depths</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">kruskal</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">visited</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">depths</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">depthFirstSearch</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="n">parent</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bits</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">parent</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">parent</span><span class="o">[</span><span class="n">parent</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="n">maxWeights</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">maxWeights</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">],</span> <span class="n">maxWeights</span><span class="o">[</span><span class="n">parent</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">p</span><span class="o">,</span> <span class="kt">int</span> <span class="n">q</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">uf</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">p</span><span class="o">)</span> <span class="o">!=</span> <span class="n">uf</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">q</span><span class="o">))</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nf">lowestCommonAncestor</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">limit</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">kruskal</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">edgesCount</span> <span class="o">=</span> <span class="n">edgeList</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">edgesCount</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">edge</span> <span class="o">=</span> <span class="n">edgeList</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">edge</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">edge</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">uf</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">u</span><span class="o">,</span> <span class="n">v</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">list1</span> <span class="o">=</span> <span class="n">mstEdges</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">u</span><span class="o">,</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;());</span>
+                <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">list2</span> <span class="o">=</span> <span class="n">mstEdges</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;());</span>
+                <span class="n">list1</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">v</span><span class="o">,</span> <span class="n">dist</span><span class="o">});</span>
+                <span class="n">list2</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">u</span><span class="o">,</span> <span class="n">dist</span><span class="o">});</span>
+                <span class="n">mstEdges</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">u</span><span class="o">,</span> <span class="n">list1</span><span class="o">);</span>
+                <span class="n">mstEdges</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">list2</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">depthFirstSearch</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">visited</span><span class="o">[</span><span class="n">u</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">mstEdges</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">u</span><span class="o">,</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;());</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">array</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">visited</span><span class="o">[</span><span class="n">v</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">depths</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="n">depths</span><span class="o">[</span><span class="n">u</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">parent</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">;</span>
+                <span class="n">maxWeights</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">dist</span><span class="o">;</span>
+                <span class="n">depthFirstSearch</span><span class="o">(</span><span class="n">v</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">lowestCommonAncestor</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="kt">int</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">depths</span><span class="o">[</span><span class="n">u</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">depths</span><span class="o">[</span><span class="n">v</span><span class="o">])</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">u</span><span class="o">;</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">depths</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">-</span> <span class="n">depths</span><span class="o">[</span><span class="n">u</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">temp</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">temp</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">weight</span><span class="o">,</span> <span class="n">maxWeights</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="n">index</span><span class="o">]);</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">parent</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="n">index</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="n">temp</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">index</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">==</span> <span class="n">v</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">weight</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">bits</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">parent</span><span class="o">[</span><span class="n">u</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">!=</span> <span class="n">parent</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">weight</span><span class="o">,</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">maxWeights</span><span class="o">[</span><span class="n">u</span><span class="o">][</span><span class="n">i</span><span class="o">],</span> <span class="n">maxWeights</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="n">i</span><span class="o">]));</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">parent</span><span class="o">[</span><span class="n">u</span><span class="o">][</span><span class="n">i</span><span class="o">];</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">parent</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="n">i</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">weight</span><span class="o">,</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">maxWeights</span><span class="o">[</span><span class="n">u</span><span class="o">][</span><span class="mi">0</span><span class="o">],</span> <span class="n">maxWeights</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="mi">0</span><span class="o">]));</span>
+        <span class="k">return</span> <span class="n">weight</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">UnionFind</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">parent</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">UnionFind</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">parent</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">union</span><span class="o">(</span><span class="kt">int</span> <span class="n">index1</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">ancestor1</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">index1</span><span class="o">),</span> <span class="n">ancestor2</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">index2</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">ancestor1</span> <span class="o">==</span> <span class="n">ancestor2</span><span class="o">)</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="n">parent</span><span class="o">[</span><span class="n">find</span><span class="o">(</span><span class="n">index2</span><span class="o">)]</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">index1</span><span class="o">);</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">find</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">parent</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">!=</span> <span class="n">index</span><span class="o">)</span>
+            <span class="n">parent</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">parent</span><span class="o">[</span><span class="n">index</span><span class="o">]);</span>
+        <span class="k">return</span> <span class="n">parent</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your DistanceLimitedPathsExist object will be instantiated and called as such:
+ * DistanceLimitedPathsExist obj = new DistanceLimitedPathsExist(n, edgeList);
+ * boolean param_1 = obj.query(p,q,limit);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">PersistentUnionFind</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rank</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">version</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">PersistentUnionFind</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">rank</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">parent</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">version</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span> <span class="o">||</span> <span class="n">version</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">t</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">unionSet</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rank</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">version</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">version</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rank</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">==</span> <span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">DistanceLimitedPathsExist</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">PersistentUnionFind</span> <span class="n">puf</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">DistanceLimitedPathsExist</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edgeList</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">puf</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">edgeList</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">edgeList</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+            <span class="p">[](</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+            <span class="p">});</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">edge</span> <span class="o">:</span> <span class="n">edgeList</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">puf</span><span class="p">.</span><span class="n">unionSet</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">q</span><span class="p">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">puf</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span> <span class="o">==</span> <span class="n">puf</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">limit</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your DistanceLimitedPathsExist object will be instantiated and called as such:
+ * DistanceLimitedPathsExist* obj = new DistanceLimitedPathsExist(n, edgeList);
+ * bool param_1 = obj-&gt;query(p,q,limit);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">PersistentUnionFind</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">rank</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">version</span> <span class="o">=</span> <span class="p">[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">inf</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span> <span class="ow">or</span> <span class="bp">self</span><span class="p">.</span><span class="n">version</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">t</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="n">pa</span><span class="p">,</span> <span class="n">pb</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="bp">self</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">version</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">version</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+
+<span class="k">class</span> <span class="nc">DistanceLimitedPathsExist</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edgeList</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">puf</span> <span class="o">=</span> <span class="n">PersistentUnionFind</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">edgeList</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dis</span> <span class="ow">in</span> <span class="n">edgeList</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">puf</span><span class="p">.</span><span class="n">union</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dis</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">puf</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">puf</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">PersistentUnionFind</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">rank</span>    <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">parent</span>  <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">version</span> <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">NewPersistentUnionFind</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">PersistentUnionFind</span> <span class="p">{</span>
+	<span class="n">rank</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="n">parent</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="n">version</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">PersistentUnionFind</span><span class="p">{</span>
+		<span class="n">rank</span><span class="o">:</span>    <span class="n">rank</span><span class="p">,</span>
+		<span class="n">parent</span><span class="o">:</span>  <span class="n">parent</span><span class="p">,</span>
+		<span class="n">version</span><span class="o">:</span> <span class="n">version</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">uf</span> <span class="o">*</span><span class="n">PersistentUnionFind</span><span class="p">)</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">,</span> <span class="n">t</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span> <span class="o">||</span> <span class="n">uf</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">t</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">x</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">uf</span> <span class="o">*</span><span class="n">PersistentUnionFind</span><span class="p">)</span> <span class="n">union</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">t</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">pa</span> <span class="o">:=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span><span class="p">(</span><span class="o">^</span><span class="kt">uint</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="m">1</span><span class="p">))</span>
+	<span class="n">pb</span> <span class="o">:=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span><span class="p">(</span><span class="o">^</span><span class="kt">uint</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="m">1</span><span class="p">))</span>
+
+	<span class="k">if</span> <span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">uf</span><span class="o">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">uf</span><span class="o">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="p">{</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span>
+		<span class="k">if</span> <span class="n">uf</span><span class="o">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">==</span> <span class="n">uf</span><span class="o">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">uf</span><span class="o">.</span><span class="n">rank</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">DistanceLimitedPathsExist</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">puf</span> <span class="o">*</span><span class="n">PersistentUnionFind</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">edgeList</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="n">DistanceLimitedPathsExist</span> <span class="p">{</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">edgeList</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">edgeList</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">edgeList</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">2</span><span class="p">]</span>
+	<span class="p">})</span>
+
+	<span class="n">puf</span> <span class="o">:=</span> <span class="n">NewPersistentUnionFind</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">edge</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edgeList</span> <span class="p">{</span>
+		<span class="n">puf</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">DistanceLimitedPathsExist</span><span class="p">{</span>
+		<span class="n">puf</span><span class="o">:</span> <span class="n">puf</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">dle</span> <span class="o">*</span><span class="n">DistanceLimitedPathsExist</span><span class="p">)</span> <span class="n">Query</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">limit</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">dle</span><span class="o">.</span><span class="n">puf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span> <span class="o">==</span> <span class="n">dle</span><span class="o">.</span><span class="n">puf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your DistanceLimitedPathsExist object will be instantiated and called as such:
+ * obj := Constructor(n, edgeList);
+ * param_1 := obj.Query(p,q,limit);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">PersistentUnionFind</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">rank</span><span class="p">:</span> <span class="kr">number</span><span class="p">[];</span>
+    <span class="k">private</span> <span class="nx">parent</span><span class="p">:</span> <span class="kr">number</span><span class="p">[];</span>
+    <span class="k">private</span> <span class="nx">version</span><span class="p">:</span> <span class="kr">number</span><span class="p">[];</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rank</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">n</span> <span class="p">},</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">i</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">Infinity</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">t</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">===</span> <span class="nx">x</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">version</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">x</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">[</span><span class="nx">x</span><span class="p">],</span> <span class="nx">t</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">union</span><span class="p">(</span><span class="nx">a</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">b</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">t</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">pa</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="kc">Infinity</span><span class="p">);</span>
+        <span class="kd">const</span> <span class="nx">pb</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="kc">Infinity</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">pa</span> <span class="o">===</span> <span class="nx">pb</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rank</span><span class="p">[</span><span class="nx">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">rank</span><span class="p">[</span><span class="nx">pb</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">version</span><span class="p">[</span><span class="nx">pb</span><span class="p">]</span> <span class="o">=</span> <span class="nx">t</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">[</span><span class="nx">pb</span><span class="p">]</span> <span class="o">=</span> <span class="nx">pa</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">version</span><span class="p">[</span><span class="nx">pa</span><span class="p">]</span> <span class="o">=</span> <span class="nx">t</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">[</span><span class="nx">pa</span><span class="p">]</span> <span class="o">=</span> <span class="nx">pb</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rank</span><span class="p">[</span><span class="nx">pa</span><span class="p">]</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">rank</span><span class="p">[</span><span class="nx">pb</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">rank</span><span class="p">[</span><span class="nx">pb</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">DistanceLimitedPathsExist</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">puf</span><span class="p">:</span> <span class="nx">PersistentUnionFind</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">edgeList</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][])</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">puf</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PersistentUnionFind</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+        <span class="nx">edgeList</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="nx">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">dis</span><span class="p">]</span> <span class="k">of</span> <span class="nx">edgeList</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">puf</span><span class="p">.</span><span class="nx">union</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">dis</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">query</span><span class="p">(</span><span class="nx">p</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">q</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">limit</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">puf</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="nx">limit</span><span class="p">)</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">puf</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="nx">limit</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your DistanceLimitedPathsExist object will be instantiated and called as such:
+ * var obj = new DistanceLimitedPathsExist(n, edgeList)
+ * var param_1 = obj.query(p,q,limit)
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1724.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

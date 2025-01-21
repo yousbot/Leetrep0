@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-913.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-913.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>913 - Cat and Mouse</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 913. Cat and Mouse Description A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns. The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-913.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-913.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-913.html" rel="stylesheet"/>
+   <link href="solution-913.html" rel="stylesheet"/>
+   <link href="solution-913.html" rel="stylesheet"/>
+   <link href="solution-913.html" rel="stylesheet"/>
+   <link href="solution-913.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="913 - Cat and Mouse" property="og:title"/>
+   <meta content="Leetcode 913. Cat and Mouse Description A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns. The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph. The mouse starts at node 1 and goes first, the cat starts at node 2 and goes second, and there is a hole at node 0. During each player&amp;#39;s turn, they must travel along one&amp;nbsp;edge of the graph that meets where they are.&amp;nbsp; For example, if the Mouse is at node 1, it must travel to any node in graph[1]. Additionally, it is not allowed for the Cat to travel to the Hole (node 0.) Then, the game can end in three&amp;nbsp;ways: If ever the Cat occupies the same node as the Mouse, the Cat wins. If ever the Mouse reaches the Hole, the Mouse wins. If ever a position is repeated (i.e., the players are in the same position as a previous turn, and&amp;nbsp;it is the same player&amp;#39;s turn to move), the game is a draw. Given a graph, and assuming both players play optimally, return 1&amp;nbsp;if the mouse wins the game, 2&amp;nbsp;if the cat wins the game, or 0&amp;nbsp;if the game is a draw. &amp;nbsp; Example 1: Input: graph = [[2,5],[3],[0,4,5],[1,4,5],[2,3],[0,2,3]] Output: 0 Example 2: Input: graph = [[1,3],[0],[3],[0,2]] Output: 1 &amp;nbsp; Constraints: 3 &amp;lt;= graph.length &amp;lt;= 50 1&amp;nbsp;&amp;lt;= graph[i].length &amp;lt; graph.length 0 &amp;lt;= graph[i][j] &amp;lt; graph.length graph[i][j] != i graph[i] is unique. The mouse and the cat can always move.&amp;nbsp; Solutions Java C++ Go Python class Solution { private int n; private int[][] g; private int[][][] res; private int[][][] degree; private static final int HOLE = 0, MOUSE_START = 1, CAT_START = 2; private static final int MOUSE_TURN = 0, CAT_TURN = 1; private static final int MOUSE_WIN = 1, CAT_WIN = 2, TIE = 0; public int catMouseGame(int[][] graph) { n = graph.length; g = graph; res = new int[n][n][2]; degree = new int[n][n][2]; for (int i = 0; i &amp;lt; n; ++i) { for (int j = 1; j &amp;lt; n; ++j) { degree[i][j][MOUSE_TURN] = g[i].length; degree[i][j][CAT_TURN] = g[j].length; } } for (int i = 0; i &amp;lt; n; ++i) { for (int j : g[HOLE]) { --degree[i][j][CAT_TURN]; } } Deque&amp;lt;int[]&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); for (int j = 1; j &amp;lt; n; ++j) { res[0][j][MOUSE_TURN] = MOUSE_WIN; res[0][j][CAT_TURN] = MOUSE_WIN; q.offer(new int[] {0, j, MOUSE_TURN}); q.offer(new int[] {0, j, CAT_TURN}); } for (int i = 1; i &amp;lt; n; ++i) { res[i][i][MOUSE_TURN] = CAT_WIN; res[i][i][CAT_TURN] = CAT_WIN; q.offer(new int[] {i, i, MOUSE_TURN}); q.offer(new int[] {i, i, CAT_TURN}); } while (!q.isEmpty()) { int[] state = q.poll(); int t = res[state[0]][state[1]][state[2]]; List&amp;lt;int[]&amp;gt; prevStates = getPrevStates(state); for (var prevState : prevStates) { int pm = prevState[0], pc = prevState[1], pt = prevState[2]; if (res[pm][pc][pt] == TIE) { boolean win = (t == MOUSE_WIN &amp;amp;&amp;amp; pt == MOUSE_TURN) || (t == CAT_WIN &amp;amp;&amp;amp; pt == CAT_TURN); if (win)..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-05-31T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-05-31-913-Cat-and-Mouse/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-913.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="913 - Cat and Mouse" property="twitter:title"/>
+   <meta content="Leetcode 913. Cat and Mouse Description A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns. The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph. The mouse starts at node 1 and goes first, the cat starts at node 2 and goes second, and there is a hole at node 0. During each player&amp;#39;s turn, they must travel along one&amp;nbsp;edge of the graph that meets where they are.&amp;nbsp; For example, if the Mouse is at node 1, it must travel to any node in graph[1]. Additionally, it is not allowed for the Cat to travel to the Hole (node 0.) Then, the game can end in three&amp;nbsp;ways: If ever the Cat occupies the same node as the Mouse, the Cat wins. If ever the Mouse reaches the Hole, the Mouse wins. If ever a position is repeated (i.e., the players are in the same position as a previous turn, and&amp;nbsp;it is the same player&amp;#39;s turn to move), the game is a draw. Given a graph, and assuming both players play optimally, return 1&amp;nbsp;if the mouse wins the game, 2&amp;nbsp;if the cat wins the game, or 0&amp;nbsp;if the game is a draw. &amp;nbsp; Example 1: Input: graph = [[2,5],[3],[0,4,5],[1,4,5],[2,3],[0,2,3]] Output: 0 Example 2: Input: graph = [[1,3],[0],[3],[0,2]] Output: 1 &amp;nbsp; Constraints: 3 &amp;lt;= graph.length &amp;lt;= 50 1&amp;nbsp;&amp;lt;= graph[i].length &amp;lt; graph.length 0 &amp;lt;= graph[i][j] &amp;lt; graph.length graph[i][j] != i graph[i] is unique. The mouse and the cat can always move.&amp;nbsp; Solutions Java C++ Go Python class Solution { private int n; private int[][] g; private int[][][] res; private int[][][] degree; private static final int HOLE = 0, MOUSE_START = 1, CAT_START = 2; private static final int MOUSE_TURN = 0, CAT_TURN = 1; private static final int MOUSE_WIN = 1, CAT_WIN = 2, TIE = 0; public int catMouseGame(int[][] graph) { n = graph.length; g = graph; res = new int[n][n][2]; degree = new int[n][n][2]; for (int i = 0; i &amp;lt; n; ++i) { for (int j = 1; j &amp;lt; n; ++j) { degree[i][j][MOUSE_TURN] = g[i].length; degree[i][j][CAT_TURN] = g[j].length; } } for (int i = 0; i &amp;lt; n; ++i) { for (int j : g[HOLE]) { --degree[i][j][CAT_TURN]; } } Deque&amp;lt;int[]&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); for (int j = 1; j &amp;lt; n; ++j) { res[0][j][MOUSE_TURN] = MOUSE_WIN; res[0][j][CAT_TURN] = MOUSE_WIN; q.offer(new int[] {0, j, MOUSE_TURN}); q.offer(new int[] {0, j, CAT_TURN}); } for (int i = 1; i &amp;lt; n; ++i) { res[i][i][MOUSE_TURN] = CAT_WIN; res[i][i][CAT_TURN] = CAT_WIN; q.offer(new int[] {i, i, MOUSE_TURN}); q.offer(new int[] {i, i, CAT_TURN}); } while (!q.isEmpty()) { int[] state = q.poll(); int t = res[state[0]][state[1]][state[2]]; List&amp;lt;int[]&amp;gt; prevStates = getPrevStates(state); for (var prevState : prevStates) { int pm = prevState[0], pc = prevState[1], pt = prevState[2]; if (res[pm][pc][pt] == TIE) { boolean win = (t == MOUSE_WIN &amp;amp;&amp;amp; pt == MOUSE_TURN) || (t == CAT_WIN &amp;amp;&amp;amp; pt == CAT_TURN); if (win)..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    913 - Cat and Mouse | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="913 - Cat and Mouse" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-913.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-05-31-913-Cat-and-Mouse/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-05-31T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"913 - Cat and Mouse","dateModified":"2018-05-31T00:00:00-07:00","datePublished":"2018-05-31T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-05-31-913-Cat-and-Mouse/"},"url":"https://leetcode.ca/2018-05-31-913-Cat-and-Mouse/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="913-cat-and-mouse">
+       <a href="solution-913.html">
+        913. Cat and Mouse
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       A game on an
+       <strong>
+        undirected
+       </strong>
+       graph is played by two players, Mouse and Cat, who alternate turns.
+      </p>
+      <p>
+       The graph is given as follows:
+       <code>
+        graph[a]
+       </code>
+       is a list of all nodes
+       <code>
+        b
+       </code>
+       such that
+       <code>
+        ab
+       </code>
+       is an edge of the graph.
+      </p>
+      <p>
+       The mouse starts at node
+       <code>
+        1
+       </code>
+       and goes first, the cat starts at node
+       <code>
+        2
+       </code>
+       and goes second, and there is a hole at node
+       <code>
+        0
+       </code>
+       .
+      </p>
+      <p>
+       During each player's turn, they
+       <strong>
+        must
+       </strong>
+       travel along one edge of the graph that meets where they are.  For example, if the Mouse is at node 1, it
+       <strong>
+        must
+       </strong>
+       travel to any node in
+       <code>
+        graph[1]
+       </code>
+       .
+      </p>
+      <p>
+       Additionally, it is not allowed for the Cat to travel to the Hole (node 0.)
+      </p>
+      <p>
+       Then, the game can end in three ways:
+      </p>
+      <ul>
+       <li>
+        If ever the Cat occupies the same node as the Mouse, the Cat wins.
+       </li>
+       <li>
+        If ever the Mouse reaches the Hole, the Mouse wins.
+       </li>
+       <li>
+        If ever a position is repeated (i.e., the players are in the same position as a previous turn, and it is the same player's turn to move), the game is a draw.
+       </li>
+      </ul>
+      <p>
+       Given a
+       <code>
+        graph
+       </code>
+       , and assuming both players play optimally, return
+      </p>
+      <ul>
+       <li>
+        <code>
+         1
+        </code>
+        if the mouse wins the game,
+       </li>
+       <li>
+        <code>
+         2
+        </code>
+        if the cat wins the game, or
+       </li>
+       <li>
+        <code>
+         0
+        </code>
+        if the game is a draw.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0900-0999/0913.Cat%20and%20Mouse/images/cat1.jpg" style="width: 300px; height: 300px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> graph = [[2,5],[3],[0,4,5],[1,4,5],[2,3],[0,2,3]]
+<strong>Output:</strong> 0
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0900-0999/0913.Cat%20and%20Mouse/images/cat2.jpg" style="width: 200px; height: 200px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> graph = [[1,3],[0],[3],[0,2]]
+<strong>Output:</strong> 1
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         3 &lt;= graph.length &lt;= 50
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= graph[i].length &lt; graph.length
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= graph[i][j] &lt; graph.length
+        </code>
+       </li>
+       <li>
+        <code>
+         graph[i][j] != i
+        </code>
+       </li>
+       <li>
+        <code>
+         graph[i]
+        </code>
+        is unique.
+       </li>
+       <li>
+        The mouse and the cat can always move.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#2603054f-fbf2-40b4-8fe6-72a55af841b2'}">
+       <li class="uk-active">
+        <a href="solution-913.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-913.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-913.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-913.html">
+         Python
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="2603054f-fbf2-40b4-8fe6-72a55af841b2">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">g</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[][][]</span> <span class="n">res</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[][][]</span> <span class="n">degree</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">HOLE</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="no">MOUSE_START</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="no">CAT_START</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MOUSE_TURN</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="no">CAT_TURN</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MOUSE_WIN</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="no">CAT_WIN</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span> <span class="no">TIE</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">catMouseGame</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">graph</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">graph</span><span class="o">;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
+        <span class="n">degree</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">degree</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="no">MOUSE_TURN</span><span class="o">]</span> <span class="o">=</span> <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+                <span class="n">degree</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="no">CAT_TURN</span><span class="o">]</span> <span class="o">=</span> <span class="n">g</span><span class="o">[</span><span class="n">j</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">:</span> <span class="n">g</span><span class="o">[</span><span class="no">HOLE</span><span class="o">])</span> <span class="o">{</span>
+                <span class="o">--</span><span class="n">degree</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="no">CAT_TURN</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="no">MOUSE_TURN</span><span class="o">]</span> <span class="o">=</span> <span class="no">MOUSE_WIN</span><span class="o">;</span>
+            <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="no">CAT_TURN</span><span class="o">]</span> <span class="o">=</span> <span class="no">MOUSE_WIN</span><span class="o">;</span>
+            <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="no">MOUSE_TURN</span><span class="o">});</span>
+            <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="no">CAT_TURN</span><span class="o">});</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">i</span><span class="o">][</span><span class="no">MOUSE_TURN</span><span class="o">]</span> <span class="o">=</span> <span class="no">CAT_WIN</span><span class="o">;</span>
+            <span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">i</span><span class="o">][</span><span class="no">CAT_TURN</span><span class="o">]</span> <span class="o">=</span> <span class="no">CAT_WIN</span><span class="o">;</span>
+            <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">i</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="no">MOUSE_TURN</span><span class="o">});</span>
+            <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">i</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="no">CAT_TURN</span><span class="o">});</span>
+        <span class="o">}</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">state</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">res</span><span class="o">[</span><span class="n">state</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="n">state</span><span class="o">[</span><span class="mi">1</span><span class="o">]][</span><span class="n">state</span><span class="o">[</span><span class="mi">2</span><span class="o">]];</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">prevStates</span> <span class="o">=</span> <span class="n">getPrevStates</span><span class="o">(</span><span class="n">state</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">prevState</span> <span class="o">:</span> <span class="n">prevStates</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">prevState</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">prevState</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">prevState</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">res</span><span class="o">[</span><span class="n">pm</span><span class="o">][</span><span class="n">pc</span><span class="o">][</span><span class="n">pt</span><span class="o">]</span> <span class="o">==</span> <span class="no">TIE</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">boolean</span> <span class="n">win</span>
+                        <span class="o">=</span> <span class="o">(</span><span class="n">t</span> <span class="o">==</span> <span class="no">MOUSE_WIN</span> <span class="o">&amp;&amp;</span> <span class="n">pt</span> <span class="o">==</span> <span class="no">MOUSE_TURN</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">t</span> <span class="o">==</span> <span class="no">CAT_WIN</span> <span class="o">&amp;&amp;</span> <span class="n">pt</span> <span class="o">==</span> <span class="no">CAT_TURN</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">win</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">res</span><span class="o">[</span><span class="n">pm</span><span class="o">][</span><span class="n">pc</span><span class="o">][</span><span class="n">pt</span><span class="o">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+                        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">prevState</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(--</span><span class="n">degree</span><span class="o">[</span><span class="n">pm</span><span class="o">][</span><span class="n">pc</span><span class="o">][</span><span class="n">pt</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">res</span><span class="o">[</span><span class="n">pm</span><span class="o">][</span><span class="n">pc</span><span class="o">][</span><span class="n">pt</span><span class="o">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+                            <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">prevState</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">[</span><span class="no">MOUSE_START</span><span class="o">][</span><span class="no">CAT_START</span><span class="o">][</span><span class="no">MOUSE_TURN</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="nf">getPrevStates</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">state</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">pre</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">state</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">c</span> <span class="o">=</span> <span class="n">state</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">t</span> <span class="o">=</span> <span class="n">state</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">t</span> <span class="o">^</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">pt</span> <span class="o">==</span> <span class="no">CAT_TURN</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">pc</span> <span class="o">:</span> <span class="n">g</span><span class="o">[</span><span class="n">c</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">pc</span> <span class="o">!=</span> <span class="no">HOLE</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">pre</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">m</span><span class="o">,</span> <span class="n">pc</span><span class="o">,</span> <span class="n">pt</span><span class="o">});</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">pm</span> <span class="o">:</span> <span class="n">g</span><span class="o">[</span><span class="n">m</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">pre</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">pm</span><span class="o">,</span> <span class="n">c</span><span class="o">,</span> <span class="n">pt</span><span class="o">});</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">pre</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">HOLE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MOUSE_START</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">CAT_START</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MOUSE_TURN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">CAT_TURN</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MOUSE_WIN</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">CAT_WIN</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">TIE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">catMouseGame</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">graph</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">res</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">degree</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">res</span><span class="p">);</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">degree</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">degree</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+                <span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">graph</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">HOLE</span><span class="p">])</span> <span class="p">{</span>
+                <span class="o">--</span><span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">auto</span> <span class="n">getPrevStates</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">t</span> <span class="o">^</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pre</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pt</span> <span class="o">==</span> <span class="n">CAT_TURN</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">pc</span> <span class="o">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pc</span> <span class="o">!=</span> <span class="n">HOLE</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">pre</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">pm</span> <span class="o">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">pre</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">pm</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">pt</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">pre</span><span class="p">;</span>
+        <span class="p">};</span>
+        <span class="n">queue</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">MOUSE_WIN</span><span class="p">;</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">MOUSE_TURN</span><span class="p">);</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">CAT_TURN</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">CAT_WIN</span><span class="p">;</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">MOUSE_TURN</span><span class="p">);</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">CAT_TURN</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">c</span><span class="p">][</span><span class="n">t</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">pm</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">]</span> <span class="o">:</span> <span class="n">getPrevStates</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">==</span> <span class="n">TIE</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">bool</span> <span class="n">win</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">MOUSE_WIN</span> <span class="o">&amp;&amp;</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">MOUSE_TURN</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">CAT_WIN</span> <span class="o">&amp;&amp;</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">CAT_TURN</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">win</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+                        <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">pm</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">);</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">degree</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+                            <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">pm</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="n">MOUSE_START</span><span class="p">][</span><span class="n">CAT_START</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">const</span> <span class="p">(</span>
+	<span class="n">hole</span>       <span class="o">=</span> <span class="m">0</span>
+	<span class="n">mouseStart</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="n">catStart</span>   <span class="o">=</span> <span class="m">2</span>
+	<span class="n">mouseTurn</span>  <span class="o">=</span> <span class="m">0</span>
+	<span class="n">catTurn</span>    <span class="o">=</span> <span class="m">1</span>
+	<span class="n">mouseWin</span>   <span class="o">=</span> <span class="m">1</span>
+	<span class="n">catWin</span>     <span class="o">=</span> <span class="m">2</span>
+	<span class="n">tie</span>        <span class="o">=</span> <span class="m">0</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">catMouseGame</span><span class="p">(</span><span class="n">graph</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="p">[</span><span class="m">50</span><span class="p">][</span><span class="m">50</span><span class="p">][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="n">degree</span> <span class="o">:=</span> <span class="p">[</span><span class="m">50</span><span class="p">][</span><span class="m">50</span><span class="p">][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">mouseTurn</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+			<span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">catTurn</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">catTurn</span><span class="p">]</span><span class="o">--</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">type</span> <span class="n">tuple</span> <span class="k">struct</span><span class="p">{</span> <span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span> <span class="kt">int</span> <span class="p">}</span>
+	<span class="n">q</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">tuple</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">res</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">mouseTurn</span><span class="p">],</span> <span class="n">res</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">catTurn</span><span class="p">]</span> <span class="o">=</span> <span class="n">mouseWin</span><span class="p">,</span> <span class="n">mouseWin</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">mouseTurn</span><span class="p">})</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">catTurn</span><span class="p">})</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">mouseTurn</span><span class="p">],</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">catTurn</span><span class="p">]</span> <span class="o">=</span> <span class="n">catWin</span><span class="p">,</span> <span class="n">catWin</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">mouseTurn</span><span class="p">})</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">catTurn</span><span class="p">})</span>
+	<span class="p">}</span>
+	<span class="n">getPrevStates</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="n">tuple</span> <span class="p">{</span>
+		<span class="n">pre</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">tuple</span><span class="p">{}</span>
+		<span class="n">pt</span> <span class="o">:=</span> <span class="n">t</span> <span class="o">^</span> <span class="m">1</span>
+		<span class="k">if</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">catTurn</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">pc</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">pc</span> <span class="o">!=</span> <span class="n">hole</span> <span class="p">{</span>
+					<span class="n">pre</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">pre</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">m</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">})</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">pm</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">pre</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">pre</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">pm</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">pt</span><span class="p">})</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">pre</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">state</span> <span class="o">:=</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+		<span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span> <span class="o">:=</span> <span class="n">state</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">t</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+		<span class="n">x</span> <span class="o">:=</span> <span class="n">res</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">c</span><span class="p">][</span><span class="n">t</span><span class="p">]</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">prevState</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">getPrevStates</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">pm</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span> <span class="o">:=</span> <span class="n">prevState</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">prevState</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">prevState</span><span class="o">.</span><span class="n">t</span>
+			<span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">==</span> <span class="n">tie</span> <span class="p">{</span>
+				<span class="n">win</span> <span class="o">:=</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">mouseWin</span> <span class="o">&amp;&amp;</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">mouseTurn</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">catWin</span> <span class="o">&amp;&amp;</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">catTurn</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">win</span> <span class="p">{</span>
+					<span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+					<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">pm</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">})</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="n">degree</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span><span class="o">--</span>
+					<span class="k">if</span> <span class="n">degree</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+						<span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+						<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">pm</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">})</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="n">mouseStart</span><span class="p">][</span><span class="n">catStart</span><span class="p">][</span><span class="n">mouseTurn</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="n">HOLE</span><span class="p">,</span> <span class="n">MOUSE_START</span><span class="p">,</span> <span class="n">CAT_START</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="n">MOUSE_TURN</span><span class="p">,</span> <span class="n">CAT_TURN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">MOUSE_WIN</span><span class="p">,</span> <span class="n">CAT_WIN</span><span class="p">,</span> <span class="n">TIE</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">catMouseGame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">get_prev_states</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+            <span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">state</span>
+            <span class="n">pt</span> <span class="o">=</span> <span class="n">t</span> <span class="o">^</span> <span class="mi">1</span>
+            <span class="n">pre</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">CAT_TURN</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pc</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">c</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">pc</span> <span class="o">!=</span> <span class="n">HOLE</span><span class="p">:</span>
+                        <span class="n">pre</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pm</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">m</span><span class="p">]:</span>
+                    <span class="n">pre</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">pm</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">pre</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">degree</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                <span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">HOLE</span><span class="p">]:</span>
+                <span class="n">degree</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">MOUSE_WIN</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">MOUSE_TURN</span><span class="p">))</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">CAT_TURN</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">CAT_WIN</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">MOUSE_TURN</span><span class="p">))</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">CAT_TURN</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">state</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+            <span class="k">for</span> <span class="n">prev_state</span> <span class="ow">in</span> <span class="n">get_prev_states</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+                <span class="n">pm</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">prev_state</span>
+                <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">==</span> <span class="n">TIE</span><span class="p">:</span>
+                    <span class="n">win</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="n">MOUSE_WIN</span> <span class="ow">and</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">MOUSE_TURN</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                        <span class="n">t</span> <span class="o">==</span> <span class="n">CAT_WIN</span> <span class="ow">and</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">CAT_TURN</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">win</span><span class="p">:</span>
+                        <span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+                        <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_state</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">degree</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                        <span class="k">if</span> <span class="n">degree</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">res</span><span class="p">[</span><span class="n">pm</span><span class="p">][</span><span class="n">pc</span><span class="p">][</span><span class="n">pt</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+                            <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="n">MOUSE_START</span><span class="p">][</span><span class="n">CAT_START</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-913.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

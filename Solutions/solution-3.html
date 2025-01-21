@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3 - Longest Substring Without Repeating Characters</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3. Longest Substring Without Repeating Characters Description Given a string s, find the length of the longest substring without repeating characters. &amp;nbsp; Example 1: Input: s = &amp;quot;abcabcbb&amp;quot; Output: 3 Explanation: The answer is &amp;quot;abc&amp;quot;, with the length of 3. Example 2: Input: s =...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3.html" rel="stylesheet"/>
+   <link href="solution-3.html" rel="stylesheet"/>
+   <link href="solution-3.html" rel="stylesheet"/>
+   <link href="solution-3.html" rel="stylesheet"/>
+   <link href="solution-3.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3 - Longest Substring Without Repeating Characters" property="og:title"/>
+   <meta content='Leetcode 3. Longest Substring Without Repeating Characters Description Given a string s, find the length of the longest substring without repeating characters. &amp;nbsp; Example 1: Input: s = &amp;quot;abcabcbb&amp;quot; Output: 3 Explanation: The answer is &amp;quot;abc&amp;quot;, with the length of 3. Example 2: Input: s = &amp;quot;bbbbb&amp;quot; Output: 1 Explanation: The answer is &amp;quot;b&amp;quot;, with the length of 1. Example 3: Input: s = &amp;quot;pwwkew&amp;quot; Output: 3 Explanation: The answer is &amp;quot;wke&amp;quot;, with the length of 3. Notice that the answer must be a substring, &amp;quot;pwke&amp;quot; is a subsequence and not a substring. &amp;nbsp; Constraints: 0 &amp;lt;= s.length &amp;lt;= 5 * 104 s consists of English letters, digits, symbols and spaces. Solutions Solution 1: Two pointers + Hash Table Define a hash table to record the characters in the current window. Let $i$ and $j$ represent the start and end positions of the non-repeating substring, respectively. The length of the longest non-repeating substring is recorded by ans. For each character $s[j]$ in the string s, we call it $c$. If $c$ exists in the window $s[i..j-1]$, we move $i$ to the right until $s[i..j-1]$ does not contain c. Then we add c to the hash table. At this time, the window $s[i..j]$ does not contain repeated elements, and we update the maximum value of ans. Finally, return ans. The time complexity is $O(n)$, where $n$ represents the length of the string s. Two pointers algorithm template: for (int i = 0, j = 0; i &amp;lt; n; ++i) { while (j &amp;lt; i &amp;amp;&amp;amp; check(j, i)) { ++j; } // logic of specific problem } C++ Python Go TypeScript Javascript Php C# Nimrod RenderScript Swift class Solution { public: int lengthOfLongestSubstring(string s) { unordered_set&amp;lt;char&amp;gt; ss; int i = 0, ans = 0; for (int j = 0; j &amp;lt; s.size(); ++j) { while (ss.count(s[j])) ss.erase(s[i++]); ss.insert(s[j]); ans = max(ans, j - i + 1); } return ans; } }; class Solution: def lengthOfLongestSubstring(self, s): # map for index d = {} # value =&amp;gt; its index i = 0 ans = 0 for j, c in enumerate(s): if c in d: # mast max check i, example "abba" i = max(i, d[c] + 1) d[c] = j ans = max(ans, j - i + 1) return ans class Solution: def lengthOfLongestSubstring(self, s: str) -&amp;gt; int: if not s: return 0 l = 0 # left r = 0 # right result = 0 isFoundInWindow = [False] * 256 while r &amp;lt; len(s): while isFoundInWindow[ord(s[r])]: isFoundInWindow[ord(s[l])] = False l += 1 isFoundInWindow[ord(s[r])] = True # check before shrink result = max(result, r - l + 1) r += 1 return result class Solution: # extra space for set() def lengthOfLongestSubstring(self, s: str) -&amp;gt; int: d = collections.defaultdict(int) start = 0 ans = 0 for i,c in enumerate(s): # shrink while d[c] &amp;gt; 0: d[s[start]] -= 1 # not s[start], not start start += 1 ans = max(ans, i - start + 1) d[c] = 1 return ans...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2015-12-03T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2015-12-03-3-Longest-Substring-Without-Repeating-Characters/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3 - Longest Substring Without Repeating Characters" property="twitter:title"/>
+   <meta content='Leetcode 3. Longest Substring Without Repeating Characters Description Given a string s, find the length of the longest substring without repeating characters. &amp;nbsp; Example 1: Input: s = &amp;quot;abcabcbb&amp;quot; Output: 3 Explanation: The answer is &amp;quot;abc&amp;quot;, with the length of 3. Example 2: Input: s = &amp;quot;bbbbb&amp;quot; Output: 1 Explanation: The answer is &amp;quot;b&amp;quot;, with the length of 1. Example 3: Input: s = &amp;quot;pwwkew&amp;quot; Output: 3 Explanation: The answer is &amp;quot;wke&amp;quot;, with the length of 3. Notice that the answer must be a substring, &amp;quot;pwke&amp;quot; is a subsequence and not a substring. &amp;nbsp; Constraints: 0 &amp;lt;= s.length &amp;lt;= 5 * 104 s consists of English letters, digits, symbols and spaces. Solutions Solution 1: Two pointers + Hash Table Define a hash table to record the characters in the current window. Let $i$ and $j$ represent the start and end positions of the non-repeating substring, respectively. The length of the longest non-repeating substring is recorded by ans. For each character $s[j]$ in the string s, we call it $c$. If $c$ exists in the window $s[i..j-1]$, we move $i$ to the right until $s[i..j-1]$ does not contain c. Then we add c to the hash table. At this time, the window $s[i..j]$ does not contain repeated elements, and we update the maximum value of ans. Finally, return ans. The time complexity is $O(n)$, where $n$ represents the length of the string s. Two pointers algorithm template: for (int i = 0, j = 0; i &amp;lt; n; ++i) { while (j &amp;lt; i &amp;amp;&amp;amp; check(j, i)) { ++j; } // logic of specific problem } C++ Python Go TypeScript Javascript Php C# Nimrod RenderScript Swift class Solution { public: int lengthOfLongestSubstring(string s) { unordered_set&amp;lt;char&amp;gt; ss; int i = 0, ans = 0; for (int j = 0; j &amp;lt; s.size(); ++j) { while (ss.count(s[j])) ss.erase(s[i++]); ss.insert(s[j]); ans = max(ans, j - i + 1); } return ans; } }; class Solution: def lengthOfLongestSubstring(self, s): # map for index d = {} # value =&amp;gt; its index i = 0 ans = 0 for j, c in enumerate(s): if c in d: # mast max check i, example "abba" i = max(i, d[c] + 1) d[c] = j ans = max(ans, j - i + 1) return ans class Solution: def lengthOfLongestSubstring(self, s: str) -&amp;gt; int: if not s: return 0 l = 0 # left r = 0 # right result = 0 isFoundInWindow = [False] * 256 while r &amp;lt; len(s): while isFoundInWindow[ord(s[r])]: isFoundInWindow[ord(s[l])] = False l += 1 isFoundInWindow[ord(s[r])] = True # check before shrink result = max(result, r - l + 1) r += 1 return result class Solution: # extra space for set() def lengthOfLongestSubstring(self, s: str) -&amp;gt; int: d = collections.defaultdict(int) start = 0 ans = 0 for i,c in enumerate(s): # shrink while d[c] &amp;gt; 0: d[s[start]] -= 1 # not s[start], not start start += 1 ans = max(ans, i - start + 1) d[c] = 1 return ans...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3 - Longest Substring Without Repeating Characters | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3 - Longest Substring Without Repeating Characters" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3.html" rel="canonical">
+          <meta content="https://leetcode.ca/2015-12-03-3-Longest-Substring-Without-Repeating-Characters/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2015-12-03T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3 - Longest Substring Without Repeating Characters","dateModified":"2015-12-03T00:00:00-08:00","datePublished":"2015-12-03T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2015-12-03-3-Longest-Substring-Without-Repeating-Characters/"},"url":"https://leetcode.ca/2015-12-03-3-Longest-Substring-Without-Repeating-Characters/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="3-longest-substring-without-repeating-characters">
+       <a href="solution-3.html">
+        3. Longest Substring Without Repeating Characters
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string
+       <code>
+        s
+       </code>
+       , find the length of the
+       <strong>
+        longest
+       </strong>
+       <span data-keyword="substring-nonempty">
+        <strong>
+         substring
+        </strong>
+       </span>
+       without repeating characters.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "abcabcbb"
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> The answer is "abc", with the length of 3.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "bbbbb"
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> The answer is "b", with the length of 1.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "pwwkew"
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= s.length &lt;= 5 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists of English letters, digits, symbols and spaces.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Two pointers + Hash Table
+       </strong>
+      </p>
+      <p>
+       Define a hash table to record the characters in the current window. Let $i$ and $j$ represent the start and end positions of the non-repeating substring, respectively. The length of the longest non-repeating substring is recorded by
+       <code class="language-plaintext highlighter-rouge">
+        ans
+       </code>
+       .
+      </p>
+      <p>
+       For each character $s[j]$ in the string
+       <code class="language-plaintext highlighter-rouge">
+        s
+       </code>
+       , we call it $c$. If $c$ exists in the window $s[i..j-1]$, we move $i$ to the right until $s[i..j-1]$ does not contain
+       <code class="language-plaintext highlighter-rouge">
+        c
+       </code>
+       . Then we add
+       <code class="language-plaintext highlighter-rouge">
+        c
+       </code>
+       to the hash table. At this time, the window $s[i..j]$ does not contain repeated elements, and we update the maximum value of
+       <code class="language-plaintext highlighter-rouge">
+        ans
+       </code>
+       .
+      </p>
+      <p>
+       Finally, return
+       <code class="language-plaintext highlighter-rouge">
+        ans
+       </code>
+       .
+      </p>
+      <p>
+       The time complexity is $O(n)$, where $n$ represents the length of the string
+       <code class="language-plaintext highlighter-rouge">
+        s
+       </code>
+       .
+      </p>
+      <p>
+       Two pointers algorithm template:
+      </p>
+      <div class="language-java highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="o">(</span><span class="n">j</span><span class="o">,</span> <span class="n">i</span><span class="o">))</span> <span class="o">{</span>
+        <span class="o">++</span><span class="n">j</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// logic of specific problem</span>
+<span class="o">}</span>
+</code></pre>
+       </div>
+      </div>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#302982f4-b990-4474-a5ac-edfb187f8b28'}">
+       <li class="uk-active">
+        <a href="solution-3.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         Javascript
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         Php
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         C#
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         Nimrod
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         RenderScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-3.html">
+         Swift
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="302982f4-b990-4474-a5ac-edfb187f8b28">
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">lengthOfLongestSubstring</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">ss</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">ss</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="n">ss</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]);</span>
+            <span class="n">ss</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span> <span class="c1"># map for index
+</span>    <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># value =&gt; its index
+</span>    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+        <span class="c1"># mast max check i, example "abba"
+</span>        <span class="n">i</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="n">d</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+      <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ans</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># left
+</span>        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># right
+</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">isFoundInWindow</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="mi">256</span>
+
+        <span class="k">while</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+
+            <span class="k">while</span> <span class="n">isFoundInWindow</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">r</span><span class="p">])]:</span>
+                <span class="n">isFoundInWindow</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">l</span><span class="p">])]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">isFoundInWindow</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">r</span><span class="p">])]</span> <span class="o">=</span> <span class="bp">True</span>
+
+            <span class="c1"># check before shrink
+</span>            <span class="n">result</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span> <span class="c1"># extra space for set()
+</span>    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">collections</span><span class="p">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="c1"># shrink
+</span>            <span class="k">while</span> <span class="n">d</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span> <span class="c1"># not s[start], not start
+</span>                <span class="n">start</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">_lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span> <span class="c1"># no extra data structure
+</span>    <span class="s">"""
+    :type s: str
+    :rtype: int
+    """</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">collections</span><span class="p">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+      <span class="k">while</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">d</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">l</span> <span class="o">-=</span> <span class="mi">1</span>
+      <span class="n">d</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ans</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">ss</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">while</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ss</span><span class="p">:</span>
+                <span class="n">ss</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ss</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">lengthOfLongestSubstring</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">ss</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">byte</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+	<span class="n">i</span><span class="p">,</span> <span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">ss</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="p">{</span>
+			<span class="n">ss</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="no">false</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="n">ss</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">lengthOfLongestSubstring</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">vis</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">vis</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nx">vis</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">j</span><span class="o">++</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="nx">vis</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">ans</span><span class="p">,</span> <span class="nx">i</span> <span class="o">-</span> <span class="nx">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * @param {string} s
+ * @return {number}
+ */</span>
+<span class="kd">var</span> <span class="nx">lengthOfLongestSubstring</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">ss</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">();</span>
+    <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">ss</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">j</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nx">ss</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="nx">ss</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">j</span><span class="p">]);</span>
+        <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">ans</span><span class="p">,</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-php highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="cd">/**
+     * @param String $s
+     * @return Integer
+     */</span>
+    <span class="k">function</span> <span class="n">lengthOfLongestSubstring</span><span class="p">(</span><span class="nv">$s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$s</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$chars</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="nv">$sub</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nv">$j</span> <span class="o">=</span> <span class="nv">$i</span><span class="p">;</span> <span class="nv">$j</span> <span class="o">&lt;</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$s</span><span class="p">);</span> <span class="nv">$j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="nv">$j</span><span class="p">],</span> <span class="nv">$chars</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nv">$sub</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$s</span><span class="p">[</span><span class="nv">$j</span><span class="p">];</span>
+                <span class="nv">$chars</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$s</span><span class="p">[</span><span class="nv">$j</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$sub</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nv">$max</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$max</span> <span class="o">=</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$sub</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nv">$max</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">LengthOfLongestSubstring</span><span class="p">(</span><span class="kt">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">ss</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">char</span><span class="p">&gt;();</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">ans</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">ss</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+            <span class="p">{</span>
+                <span class="n">ss</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">++]);</span>
+            <span class="p">}</span>
+            <span class="n">ss</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="n">ans</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">j</span> <span class="p">-</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-nim highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">proc </span><span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="kt">string</span><span class="p">):</span> <span class="kt">int</span> <span class="o">=</span>
+  <span class="k">var</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">literals</span><span class="p">:</span> <span class="kt">set</span><span class="o">[</span><span class="kt">char</span><span class="o">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">len</span><span class="p">:</span>
+    <span class="k">while</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="ow">in</span> <span class="n">literals</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">s</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="ow">in</span> <span class="n">literals</span><span class="p">:</span>
+        <span class="n">excl</span><span class="p">(</span><span class="n">literals</span><span class="p">,</span> <span class="n">s</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="p">)</span>
+      <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">literals</span><span class="p">.</span><span class="n">incl</span><span class="p">(</span><span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">)</span> <span class="c"># Uniform Function Call Syntax f(x) = x.f</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+  <span class="n">result</span> <span class="o">=</span> <span class="n">res</span> <span class="c"># result has the default return value</span>
+
+<span class="n">echo</span> <span class="n">lengthOfLongestSubstring</span><span class="p">(</span><span class="s">"abcddabcf"</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">collections</span><span class="p">::</span><span class="n">HashSet</span><span class="p">;</span>
+
+<span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">length_of_longest_substring</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="nf">.as_bytes</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">set</span> <span class="o">=</span> <span class="nn">HashSet</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">s</span>
+            <span class="nf">.iter</span><span class="p">()</span>
+            <span class="nf">.map</span><span class="p">(|</span><span class="n">c</span><span class="p">|</span> <span class="p">{</span>
+                <span class="k">while</span> <span class="n">set</span><span class="nf">.contains</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">set</span><span class="nf">.remove</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">set</span><span class="nf">.insert</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                <span class="n">set</span><span class="nf">.len</span><span class="p">()</span>
+            <span class="p">})</span>
+            <span class="nf">.max</span><span class="p">()</span>
+            <span class="nf">.unwrap_or</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="nb">i32</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-swift highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">Solution</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="n">_</span> <span class="nv">s</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">map</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Character</span><span class="p">:</span> <span class="kt">Int</span><span class="p">]()</span>
+        <span class="k">var</span> <span class="nv">currentStartingIndex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">var</span> <span class="nv">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">var</span> <span class="nv">maxLength</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="k">in</span> <span class="n">s</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">map</span><span class="p">[</span><span class="n">char</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">map</span><span class="p">[</span><span class="n">char</span><span class="p">]</span><span class="o">!</span> <span class="o">&gt;=</span> <span class="n">currentStartingIndex</span> <span class="p">{</span>
+                    <span class="n">maxLength</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">maxLength</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">currentStartingIndex</span><span class="p">)</span>
+                    <span class="n">currentStartingIndex</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="n">char</span><span class="p">]</span><span class="o">!</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">map</span><span class="p">[</span><span class="n">char</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nf">max</span><span class="p">(</span><span class="n">maxLength</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">currentStartingIndex</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

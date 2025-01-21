@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-432.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-432.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>432 - All O`one Data Structure</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 432. All O`one Data Structure Description Design a data structure to store the strings&amp;#39; count with the ability to return the strings with minimum and maximum counts. Implement the AllOne class: AllOne() Initializes the object of the data structure. inc(String key) Increments the count of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-432.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-432.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-432.html" rel="stylesheet"/>
+   <link href="solution-432.html" rel="stylesheet"/>
+   <link href="solution-432.html" rel="stylesheet"/>
+   <link href="solution-432.html" rel="stylesheet"/>
+   <link href="solution-432.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="432 - All O`one Data Structure" property="og:title"/>
+   <meta content='Leetcode 432. All O`one Data Structure Description Design a data structure to store the strings&amp;#39; count with the ability to return the strings with minimum and maximum counts. Implement the AllOne class: AllOne() Initializes the object of the data structure. inc(String key) Increments the count of the string key by 1. If key does not exist in the data structure, insert it with count 1. dec(String key) Decrements the count of the string key by 1. If the count of key is 0 after the decrement, remove it from the data structure. It is guaranteed that key exists in the data structure before the decrement. getMaxKey() Returns one of the keys with the maximal count. If no element exists, return an empty string &amp;quot;&amp;quot;. getMinKey() Returns one of the keys with the minimum count. If no element exists, return an empty string &amp;quot;&amp;quot;. Note that each function must run in O(1) average time complexity. &amp;nbsp; Example 1: Input [&amp;quot;AllOne&amp;quot;, &amp;quot;inc&amp;quot;, &amp;quot;inc&amp;quot;, &amp;quot;getMaxKey&amp;quot;, &amp;quot;getMinKey&amp;quot;, &amp;quot;inc&amp;quot;, &amp;quot;getMaxKey&amp;quot;, &amp;quot;getMinKey&amp;quot;] [[], [&amp;quot;hello&amp;quot;], [&amp;quot;hello&amp;quot;], [], [], [&amp;quot;leet&amp;quot;], [], []] Output [null, null, null, &amp;quot;hello&amp;quot;, &amp;quot;hello&amp;quot;, null, &amp;quot;hello&amp;quot;, &amp;quot;leet&amp;quot;] Explanation AllOne allOne = new AllOne(); allOne.inc(&amp;quot;hello&amp;quot;); allOne.inc(&amp;quot;hello&amp;quot;); allOne.getMaxKey(); // return &amp;quot;hello&amp;quot; allOne.getMinKey(); // return &amp;quot;hello&amp;quot; allOne.inc(&amp;quot;leet&amp;quot;); allOne.getMaxKey(); // return &amp;quot;hello&amp;quot; allOne.getMinKey(); // return &amp;quot;leet&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= key.length &amp;lt;= 10 key consists of lowercase English letters. It is guaranteed that for each call to dec, key is existing in the data structure. At most 5 * 104&amp;nbsp;calls will be made to inc, dec, getMaxKey, and getMinKey. Solutions Java Python class AllOne { Node root = new Node(); Map&amp;lt;String, Node&amp;gt; nodes = new HashMap&amp;lt;&amp;gt;(); public AllOne() { root.next = root; root.prev = root; } public void inc(String key) { if (!nodes.containsKey(key)) { if (root.next == root || root.next.cnt &amp;gt; 1) { nodes.put(key, root.insert(new Node(key, 1))); } else { root.next.keys.add(key); nodes.put(key, root.next); } } else { Node curr = nodes.get(key); Node next = curr.next; if (next == root || next.cnt &amp;gt; curr.cnt + 1) { nodes.put(key, curr.insert(new Node(key, curr.cnt + 1))); } else { next.keys.add(key); nodes.put(key, next); } curr.keys.remove(key); if (curr.keys.isEmpty()) { curr.remove(); } } } public void dec(String key) { Node curr = nodes.get(key); if (curr.cnt == 1) { nodes.remove(key); } else { Node prev = curr.prev; if (prev == root || prev.cnt &amp;lt; curr.cnt - 1) { nodes.put(key, prev.insert(new Node(key, curr.cnt - 1))); } else { prev.keys.add(key); nodes.put(key, prev); } } curr.keys.remove(key); if (curr.keys.isEmpty()) { curr.remove(); } } public String getMaxKey() { return root.prev.keys.iterator().next(); } public String getMinKey() { return root.next.keys.iterator().next(); } } class Node { Node prev; Node next; int cnt; Set&amp;lt;String&amp;gt; keys = new HashSet&amp;lt;&amp;gt;(); public Node() { this("", 0); } public Node(String key, int cnt) { this.cnt = cnt; keys.add(key); } public Node insert(Node node) { node.prev = this; node.next = this.next; node.prev.next = node; node.next.prev = node; return node; } public void remove() { this.prev.next = this.next; this.next.prev = this.prev; } } /** * Your AllOne object will be instantiated and called as such: * AllOne obj...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-02-04T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-02-04-432-All-O-one-Data-Structure/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-432.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="432 - All O`one Data Structure" property="twitter:title"/>
+   <meta content='Leetcode 432. All O`one Data Structure Description Design a data structure to store the strings&amp;#39; count with the ability to return the strings with minimum and maximum counts. Implement the AllOne class: AllOne() Initializes the object of the data structure. inc(String key) Increments the count of the string key by 1. If key does not exist in the data structure, insert it with count 1. dec(String key) Decrements the count of the string key by 1. If the count of key is 0 after the decrement, remove it from the data structure. It is guaranteed that key exists in the data structure before the decrement. getMaxKey() Returns one of the keys with the maximal count. If no element exists, return an empty string &amp;quot;&amp;quot;. getMinKey() Returns one of the keys with the minimum count. If no element exists, return an empty string &amp;quot;&amp;quot;. Note that each function must run in O(1) average time complexity. &amp;nbsp; Example 1: Input [&amp;quot;AllOne&amp;quot;, &amp;quot;inc&amp;quot;, &amp;quot;inc&amp;quot;, &amp;quot;getMaxKey&amp;quot;, &amp;quot;getMinKey&amp;quot;, &amp;quot;inc&amp;quot;, &amp;quot;getMaxKey&amp;quot;, &amp;quot;getMinKey&amp;quot;] [[], [&amp;quot;hello&amp;quot;], [&amp;quot;hello&amp;quot;], [], [], [&amp;quot;leet&amp;quot;], [], []] Output [null, null, null, &amp;quot;hello&amp;quot;, &amp;quot;hello&amp;quot;, null, &amp;quot;hello&amp;quot;, &amp;quot;leet&amp;quot;] Explanation AllOne allOne = new AllOne(); allOne.inc(&amp;quot;hello&amp;quot;); allOne.inc(&amp;quot;hello&amp;quot;); allOne.getMaxKey(); // return &amp;quot;hello&amp;quot; allOne.getMinKey(); // return &amp;quot;hello&amp;quot; allOne.inc(&amp;quot;leet&amp;quot;); allOne.getMaxKey(); // return &amp;quot;hello&amp;quot; allOne.getMinKey(); // return &amp;quot;leet&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= key.length &amp;lt;= 10 key consists of lowercase English letters. It is guaranteed that for each call to dec, key is existing in the data structure. At most 5 * 104&amp;nbsp;calls will be made to inc, dec, getMaxKey, and getMinKey. Solutions Java Python class AllOne { Node root = new Node(); Map&amp;lt;String, Node&amp;gt; nodes = new HashMap&amp;lt;&amp;gt;(); public AllOne() { root.next = root; root.prev = root; } public void inc(String key) { if (!nodes.containsKey(key)) { if (root.next == root || root.next.cnt &amp;gt; 1) { nodes.put(key, root.insert(new Node(key, 1))); } else { root.next.keys.add(key); nodes.put(key, root.next); } } else { Node curr = nodes.get(key); Node next = curr.next; if (next == root || next.cnt &amp;gt; curr.cnt + 1) { nodes.put(key, curr.insert(new Node(key, curr.cnt + 1))); } else { next.keys.add(key); nodes.put(key, next); } curr.keys.remove(key); if (curr.keys.isEmpty()) { curr.remove(); } } } public void dec(String key) { Node curr = nodes.get(key); if (curr.cnt == 1) { nodes.remove(key); } else { Node prev = curr.prev; if (prev == root || prev.cnt &amp;lt; curr.cnt - 1) { nodes.put(key, prev.insert(new Node(key, curr.cnt - 1))); } else { prev.keys.add(key); nodes.put(key, prev); } } curr.keys.remove(key); if (curr.keys.isEmpty()) { curr.remove(); } } public String getMaxKey() { return root.prev.keys.iterator().next(); } public String getMinKey() { return root.next.keys.iterator().next(); } } class Node { Node prev; Node next; int cnt; Set&amp;lt;String&amp;gt; keys = new HashSet&amp;lt;&amp;gt;(); public Node() { this("", 0); } public Node(String key, int cnt) { this.cnt = cnt; keys.add(key); } public Node insert(Node node) { node.prev = this; node.next = this.next; node.prev.next = node; node.next.prev = node; return node; } public void remove() { this.prev.next = this.next; this.next.prev = this.prev; } } /** * Your AllOne object will be instantiated and called as such: * AllOne obj...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    432 - All O`one Data Structure | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="432 - All O`one Data Structure" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-432.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-02-04-432-All-O-one-Data-Structure/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-02-04T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"432 - All O`one Data Structure","dateModified":"2017-02-04T00:00:00-08:00","datePublished":"2017-02-04T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-02-04-432-All-O-one-Data-Structure/"},"url":"https://leetcode.ca/2017-02-04-432-All-O-one-Data-Structure/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="432-all-oone-data-structure">
+       <a href="solution-432.html">
+        432. All O`one Data Structure
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Design a data structure to store the strings' count with the ability to return the strings with minimum and maximum counts.
+      </p>
+      <p>
+       Implement the
+       <code>
+        AllOne
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         AllOne()
+        </code>
+        Initializes the object of the data structure.
+       </li>
+       <li>
+        <code>
+         inc(String key)
+        </code>
+        Increments the count of the string
+        <code>
+         key
+        </code>
+        by
+        <code>
+         1
+        </code>
+        . If
+        <code>
+         key
+        </code>
+        does not exist in the data structure, insert it with count
+        <code>
+         1
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         dec(String key)
+        </code>
+        Decrements the count of the string
+        <code>
+         key
+        </code>
+        by
+        <code>
+         1
+        </code>
+        . If the count of
+        <code>
+         key
+        </code>
+        is
+        <code>
+         0
+        </code>
+        after the decrement, remove it from the data structure. It is guaranteed that
+        <code>
+         key
+        </code>
+        exists in the data structure before the decrement.
+       </li>
+       <li>
+        <code>
+         getMaxKey()
+        </code>
+        Returns one of the keys with the maximal count. If no element exists, return an empty string
+        <code>
+         ""
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         getMinKey()
+        </code>
+        Returns one of the keys with the minimum count. If no element exists, return an empty string
+        <code>
+         ""
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       <strong>
+        Note
+       </strong>
+       that each function must run in
+       <code>
+        O(1)
+       </code>
+       average time complexity.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["AllOne", "inc", "inc", "getMaxKey", "getMinKey", "inc", "getMaxKey", "getMinKey"]
+[[], ["hello"], ["hello"], [], [], ["leet"], [], []]
+<strong>Output</strong>
+[null, null, null, "hello", "hello", null, "hello", "leet"]
+
+<strong>Explanation</strong>
+AllOne allOne = new AllOne();
+allOne.inc("hello");
+allOne.inc("hello");
+allOne.getMaxKey(); // return "hello"
+allOne.getMinKey(); // return "hello"
+allOne.inc("leet");
+allOne.getMaxKey(); // return "hello"
+allOne.getMinKey(); // return "leet"
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= key.length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         key
+        </code>
+        consists of lowercase English letters.
+       </li>
+       <li>
+        It is guaranteed that for each call to
+        <code>
+         dec
+        </code>
+        ,
+        <code>
+         key
+        </code>
+        is existing in the data structure.
+       </li>
+       <li>
+        At most
+        <code>
+         5 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+        calls will be made to
+        <code>
+         inc
+        </code>
+        ,
+        <code>
+         dec
+        </code>
+        ,
+        <code>
+         getMaxKey
+        </code>
+        , and
+        <code>
+         getMinKey
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8265f866-ea73-4383-8fb6-4fa590ca35c0'}">
+       <li class="uk-active">
+        <a href="solution-432.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-432.html">
+         Python
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8265f866-ea73-4383-8fb6-4fa590ca35c0">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">AllOne</span> <span class="o">{</span>
+    <span class="nc">Node</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">();</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Node</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nf">AllOne</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">inc</span><span class="o">(</span><span class="nc">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">nodes</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="n">root</span> <span class="o">||</span> <span class="n">root</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">cnt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">root</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="mi">1</span><span class="o">)));</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">root</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">root</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="nc">Node</span> <span class="n">next</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">next</span> <span class="o">==</span> <span class="n">root</span> <span class="o">||</span> <span class="n">next</span><span class="o">.</span><span class="na">cnt</span> <span class="o">&gt;</span> <span class="n">curr</span><span class="o">.</span><span class="na">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">curr</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">curr</span><span class="o">.</span><span class="na">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)));</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">next</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">next</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">curr</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">curr</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">curr</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">dec</span><span class="o">(</span><span class="nc">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">curr</span><span class="o">.</span><span class="na">cnt</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="na">prev</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">prev</span> <span class="o">==</span> <span class="n">root</span> <span class="o">||</span> <span class="n">prev</span><span class="o">.</span><span class="na">cnt</span> <span class="o">&lt;</span> <span class="n">curr</span><span class="o">.</span><span class="na">cnt</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">prev</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">curr</span><span class="o">.</span><span class="na">cnt</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)));</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">prev</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">prev</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="n">curr</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">curr</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">curr</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getMaxKey</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="na">prev</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getMinKey</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+    <span class="nc">Node</span> <span class="n">prev</span><span class="o">;</span>
+    <span class="nc">Node</span> <span class="n">next</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">cnt</span><span class="o">;</span>
+    <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">keys</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nf">Node</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">Node</span><span class="o">(</span><span class="nc">String</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cnt</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">cnt</span> <span class="o">=</span> <span class="n">cnt</span><span class="o">;</span>
+        <span class="n">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Node</span> <span class="nf">insert</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">prev</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">prev</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">prev</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">''</span><span class="p">,</span> <span class="n">cnt</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span> <span class="o">=</span> <span class="n">cnt</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="nb">next</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="k">return</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="nb">next</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">prev</span>
+
+
+<span class="k">class</span> <span class="nc">AllOne</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">root</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">root</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">root</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">root</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">inc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">root</span><span class="p">,</span> <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">root</span><span class="p">.</span><span class="nb">next</span> <span class="o">==</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">root</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">cnt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">root</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">keys</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="nb">next</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">curr</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="nb">next</span> <span class="o">=</span> <span class="n">curr</span><span class="p">.</span><span class="nb">next</span>
+            <span class="k">if</span> <span class="nb">next</span> <span class="o">==</span> <span class="n">root</span> <span class="ow">or</span> <span class="nb">next</span><span class="p">.</span><span class="n">cnt</span> <span class="o">&gt;</span> <span class="n">curr</span><span class="p">.</span><span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">curr</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">curr</span><span class="p">.</span><span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">next</span><span class="p">.</span><span class="n">keys</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span>
+            <span class="n">curr</span><span class="p">.</span><span class="n">keys</span><span class="p">.</span><span class="n">discard</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">curr</span><span class="p">.</span><span class="n">keys</span><span class="p">:</span>
+                <span class="n">curr</span><span class="p">.</span><span class="n">remove</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">dec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">root</span><span class="p">,</span> <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">curr</span><span class="p">.</span><span class="n">cnt</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">nodes</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prev</span> <span class="o">=</span> <span class="n">curr</span><span class="p">.</span><span class="n">prev</span>
+            <span class="k">if</span> <span class="n">prev</span> <span class="o">==</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">prev</span><span class="p">.</span><span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">curr</span><span class="p">.</span><span class="n">cnt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">prev</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">curr</span><span class="p">.</span><span class="n">cnt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">prev</span><span class="p">.</span><span class="n">keys</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">prev</span>
+        <span class="n">curr</span><span class="p">.</span><span class="n">keys</span><span class="p">.</span><span class="n">discard</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">curr</span><span class="p">.</span><span class="n">keys</span><span class="p">:</span>
+            <span class="n">curr</span><span class="p">.</span><span class="n">remove</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">getMaxKey</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">root</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="n">keys</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">getMinKey</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">root</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">keys</span><span class="p">))</span>
+
+
+<span class="c1"># Your AllOne object will be instantiated and called as such:
+# obj = AllOne()
+# obj.inc(key)
+# obj.dec(key)
+# param_3 = obj.getMaxKey()
+# param_4 = obj.getMinKey()
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-432.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

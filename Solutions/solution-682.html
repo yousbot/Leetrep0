@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-682.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-682.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>682 - Baseball Game</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 682. Baseball Game Description You are keeping the scores for a baseball game with strange rules. At the beginning of the game, you start with an empty record. You are given a list of strings operations, where operations[i] is the ith operation you must apply...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-682.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-682.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-682.html" rel="stylesheet"/>
+   <link href="solution-682.html" rel="stylesheet"/>
+   <link href="solution-682.html" rel="stylesheet"/>
+   <link href="solution-682.html" rel="stylesheet"/>
+   <link href="solution-682.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="682 - Baseball Game" property="og:title"/>
+   <meta content="Leetcode 682. Baseball Game Description You are keeping the scores for a baseball game with strange rules. At the beginning of the game, you start with an empty record. You are given a list of strings operations, where operations[i] is the ith operation you must apply to the record and is one of the following: An integer x. Record a new score of x. &amp;#39;+&amp;#39;. Record a new score that is the sum of the previous two scores. &amp;#39;D&amp;#39;. Record a new score that is the double of the previous score. &amp;#39;C&amp;#39;. Invalidate the previous score, removing it from the record. Return the sum of all the scores on the record after applying all the operations. The test cases are generated such that the answer and all intermediate calculations fit in a 32-bit integer and that all operations are valid. &amp;nbsp; Example 1: Input: ops = [&amp;quot;5&amp;quot;,&amp;quot;2&amp;quot;,&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;,&amp;quot;+&amp;quot;] Output: 30 Explanation: &amp;quot;5&amp;quot; - Add 5 to the record, record is now [5]. &amp;quot;2&amp;quot; - Add 2 to the record, record is now [5, 2]. &amp;quot;C&amp;quot; - Invalidate and remove the previous score, record is now [5]. &amp;quot;D&amp;quot; - Add 2 * 5 = 10 to the record, record is now [5, 10]. &amp;quot;+&amp;quot; - Add 5 + 10 = 15 to the record, record is now [5, 10, 15]. The total sum is 5 + 10 + 15 = 30. Example 2: Input: ops = [&amp;quot;5&amp;quot;,&amp;quot;-2&amp;quot;,&amp;quot;4&amp;quot;,&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;,&amp;quot;9&amp;quot;,&amp;quot;+&amp;quot;,&amp;quot;+&amp;quot;] Output: 27 Explanation: &amp;quot;5&amp;quot; - Add 5 to the record, record is now [5]. &amp;quot;-2&amp;quot; - Add -2 to the record, record is now [5, -2]. &amp;quot;4&amp;quot; - Add 4 to the record, record is now [5, -2, 4]. &amp;quot;C&amp;quot; - Invalidate and remove the previous score, record is now [5, -2]. &amp;quot;D&amp;quot; - Add 2 * -2 = -4 to the record, record is now [5, -2, -4]. &amp;quot;9&amp;quot; - Add 9 to the record, record is now [5, -2, -4, 9]. &amp;quot;+&amp;quot; - Add -4 + 9 = 5 to the record, record is now [5, -2, -4, 9, 5]. &amp;quot;+&amp;quot; - Add 9 + 5 = 14 to the record, record is now [5, -2, -4, 9, 5, 14]. The total sum is 5 + -2 + -4 + 9 + 5 + 14 = 27. Example 3: Input: ops = [&amp;quot;1&amp;quot;,&amp;quot;C&amp;quot;] Output: 0 Explanation: &amp;quot;1&amp;quot; - Add 1 to the record, record is now [1]. &amp;quot;C&amp;quot; - Invalidate and remove the previous score, record is now []. Since the record is empty, the total sum is 0. &amp;nbsp; Constraints: 1 &amp;lt;= operations.length &amp;lt;= 1000 operations[i] is &amp;quot;C&amp;quot;, &amp;quot;D&amp;quot;, &amp;quot;+&amp;quot;, or a string representing an integer in the range [-3 * 104, 3 * 104]. For operation &amp;quot;+&amp;quot;, there will always be at least two previous scores on the record. For operations &amp;quot;C&amp;quot; and &amp;quot;D&amp;quot;, there will always be at least one previous score on the record. Solutions Java C++ Python Go TypeScript RenderScript class Solution { public int calPoints(String[] ops) { Deque&amp;lt;Integer&amp;gt; stk = new ArrayDeque&amp;lt;&amp;gt;(); for..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-10-12T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-10-12-682-Baseball-Game/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-682.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="682 - Baseball Game" property="twitter:title"/>
+   <meta content="Leetcode 682. Baseball Game Description You are keeping the scores for a baseball game with strange rules. At the beginning of the game, you start with an empty record. You are given a list of strings operations, where operations[i] is the ith operation you must apply to the record and is one of the following: An integer x. Record a new score of x. &amp;#39;+&amp;#39;. Record a new score that is the sum of the previous two scores. &amp;#39;D&amp;#39;. Record a new score that is the double of the previous score. &amp;#39;C&amp;#39;. Invalidate the previous score, removing it from the record. Return the sum of all the scores on the record after applying all the operations. The test cases are generated such that the answer and all intermediate calculations fit in a 32-bit integer and that all operations are valid. &amp;nbsp; Example 1: Input: ops = [&amp;quot;5&amp;quot;,&amp;quot;2&amp;quot;,&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;,&amp;quot;+&amp;quot;] Output: 30 Explanation: &amp;quot;5&amp;quot; - Add 5 to the record, record is now [5]. &amp;quot;2&amp;quot; - Add 2 to the record, record is now [5, 2]. &amp;quot;C&amp;quot; - Invalidate and remove the previous score, record is now [5]. &amp;quot;D&amp;quot; - Add 2 * 5 = 10 to the record, record is now [5, 10]. &amp;quot;+&amp;quot; - Add 5 + 10 = 15 to the record, record is now [5, 10, 15]. The total sum is 5 + 10 + 15 = 30. Example 2: Input: ops = [&amp;quot;5&amp;quot;,&amp;quot;-2&amp;quot;,&amp;quot;4&amp;quot;,&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;,&amp;quot;9&amp;quot;,&amp;quot;+&amp;quot;,&amp;quot;+&amp;quot;] Output: 27 Explanation: &amp;quot;5&amp;quot; - Add 5 to the record, record is now [5]. &amp;quot;-2&amp;quot; - Add -2 to the record, record is now [5, -2]. &amp;quot;4&amp;quot; - Add 4 to the record, record is now [5, -2, 4]. &amp;quot;C&amp;quot; - Invalidate and remove the previous score, record is now [5, -2]. &amp;quot;D&amp;quot; - Add 2 * -2 = -4 to the record, record is now [5, -2, -4]. &amp;quot;9&amp;quot; - Add 9 to the record, record is now [5, -2, -4, 9]. &amp;quot;+&amp;quot; - Add -4 + 9 = 5 to the record, record is now [5, -2, -4, 9, 5]. &amp;quot;+&amp;quot; - Add 9 + 5 = 14 to the record, record is now [5, -2, -4, 9, 5, 14]. The total sum is 5 + -2 + -4 + 9 + 5 + 14 = 27. Example 3: Input: ops = [&amp;quot;1&amp;quot;,&amp;quot;C&amp;quot;] Output: 0 Explanation: &amp;quot;1&amp;quot; - Add 1 to the record, record is now [1]. &amp;quot;C&amp;quot; - Invalidate and remove the previous score, record is now []. Since the record is empty, the total sum is 0. &amp;nbsp; Constraints: 1 &amp;lt;= operations.length &amp;lt;= 1000 operations[i] is &amp;quot;C&amp;quot;, &amp;quot;D&amp;quot;, &amp;quot;+&amp;quot;, or a string representing an integer in the range [-3 * 104, 3 * 104]. For operation &amp;quot;+&amp;quot;, there will always be at least two previous scores on the record. For operations &amp;quot;C&amp;quot; and &amp;quot;D&amp;quot;, there will always be at least one previous score on the record. Solutions Java C++ Python Go TypeScript RenderScript class Solution { public int calPoints(String[] ops) { Deque&amp;lt;Integer&amp;gt; stk = new ArrayDeque&amp;lt;&amp;gt;(); for..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    682 - Baseball Game | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="682 - Baseball Game" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-682.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-10-12-682-Baseball-Game/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-10-12T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"682 - Baseball Game","dateModified":"2017-10-12T00:00:00-07:00","datePublished":"2017-10-12T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-10-12-682-Baseball-Game/"},"url":"https://leetcode.ca/2017-10-12-682-Baseball-Game/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="682-baseball-game">
+       <a href="solution-682.html">
+        682. Baseball Game
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are keeping the scores for a baseball game with strange rules. At the beginning of the game, you start with an empty record.
+      </p>
+      <p>
+       You are given a list of strings
+       <code>
+        operations
+       </code>
+       , where
+       <code>
+        operations[i]
+       </code>
+       is the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       operation you must apply to the record and is one of the following:
+      </p>
+      <ul>
+       <li>
+        An integer
+        <code>
+         x
+        </code>
+        .
+        <ul>
+         <li>
+          Record a new score of
+          <code>
+           x
+          </code>
+          .
+         </li>
+        </ul>
+       </li>
+       <li>
+        <code>
+         '+'
+        </code>
+        .
+        <ul>
+         <li>
+          Record a new score that is the sum of the previous two scores.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <code>
+         'D'
+        </code>
+        .
+        <ul>
+         <li>
+          Record a new score that is the double of the previous score.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <code>
+         'C'
+        </code>
+        .
+        <ul>
+         <li>
+          Invalidate the previous score, removing it from the record.
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the sum of all the scores on the record after applying all the operations
+       </em>
+       .
+      </p>
+      <p>
+       The test cases are generated such that the answer and all intermediate calculations fit in a
+       <strong>
+        32-bit
+       </strong>
+       integer and that all operations are valid.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> ops = ["5","2","C","D","+"]
+<strong>Output:</strong> 30
+<strong>Explanation:</strong>
+"5" - Add 5 to the record, record is now [5].
+"2" - Add 2 to the record, record is now [5, 2].
+"C" - Invalidate and remove the previous score, record is now [5].
+"D" - Add 2 * 5 = 10 to the record, record is now [5, 10].
+"+" - Add 5 + 10 = 15 to the record, record is now [5, 10, 15].
+The total sum is 5 + 10 + 15 = 30.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> ops = ["5","-2","4","C","D","9","+","+"]
+<strong>Output:</strong> 27
+<strong>Explanation:</strong>
+"5" - Add 5 to the record, record is now [5].
+"-2" - Add -2 to the record, record is now [5, -2].
+"4" - Add 4 to the record, record is now [5, -2, 4].
+"C" - Invalidate and remove the previous score, record is now [5, -2].
+"D" - Add 2 * -2 = -4 to the record, record is now [5, -2, -4].
+"9" - Add 9 to the record, record is now [5, -2, -4, 9].
+"+" - Add -4 + 9 = 5 to the record, record is now [5, -2, -4, 9, 5].
+"+" - Add 9 + 5 = 14 to the record, record is now [5, -2, -4, 9, 5, 14].
+The total sum is 5 + -2 + -4 + 9 + 5 + 14 = 27.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> ops = ["1","C"]
+<strong>Output:</strong> 0
+<strong>Explanation:</strong>
+"1" - Add 1 to the record, record is now [1].
+"C" - Invalidate and remove the previous score, record is now [].
+Since the record is empty, the total sum is 0.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= operations.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         operations[i]
+        </code>
+        is
+        <code>
+         "C"
+        </code>
+        ,
+        <code>
+         "D"
+        </code>
+        ,
+        <code>
+         "+"
+        </code>
+        , or a string representing an integer in the range
+        <code>
+         [-3 * 10
+         <sup>
+          4
+         </sup>
+         , 3 * 10
+         <sup>
+          4
+         </sup>
+         ]
+        </code>
+        .
+       </li>
+       <li>
+        For operation
+        <code>
+         "+"
+        </code>
+        , there will always be at least two previous scores on the record.
+       </li>
+       <li>
+        For operations
+        <code>
+         "C"
+        </code>
+        and
+        <code>
+         "D"
+        </code>
+        , there will always be at least one previous score on the record.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#0a701cdd-03ad-44cc-abc2-3ec93d7c76ef'}">
+       <li class="uk-active">
+        <a href="solution-682.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-682.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-682.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-682.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-682.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-682.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="0a701cdd-03ad-44cc-abc2-3ec93d7c76ef">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">calPoints</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">ops</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stk</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">op</span> <span class="o">:</span> <span class="n">ops</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="s">"+"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">stk</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">stk</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"D"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">stk</span><span class="o">.</span><span class="na">peek</span><span class="o">()</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"C"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">op</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">stk</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">mapToInt</span><span class="o">(</span><span class="nl">Integer:</span><span class="o">:</span><span class="n">intValue</span><span class="o">).</span><span class="na">sum</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">calPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">ops</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stk</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">op</span> <span class="o">:</span> <span class="n">ops</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">stk</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="s">"+"</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">];</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="s">"D"</span><span class="p">)</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">stk</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="s">"C"</span><span class="p">)</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+            <span class="k">else</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">stoi</span><span class="p">(</span><span class="n">op</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">stk</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calPoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ops</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">stk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s">'+'</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">stk</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">stk</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s">'D'</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">stk</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s">'C'</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">op</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">calPoints</span><span class="p">(</span><span class="n">ops</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">stk</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">op</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">ops</span> <span class="p">{</span>
+		<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span>
+		<span class="k">switch</span> <span class="n">op</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="s">"+"</span><span class="o">:</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="n">stk</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">+</span><span class="n">stk</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">2</span><span class="p">])</span>
+		<span class="k">case</span> <span class="s">"D"</span><span class="o">:</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="n">stk</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="m">2</span><span class="p">)</span>
+		<span class="k">case</span> <span class="s">"C"</span><span class="o">:</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="o">:</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="k">default</span><span class="o">:</span>
+			<span class="n">num</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Atoi</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">score</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">stk</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">+=</span> <span class="n">score</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">calPoints</span><span class="p">(</span><span class="nx">ops</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">stack</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">op</span> <span class="k">of</span> <span class="nx">ops</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">op</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">+</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">stack</span><span class="p">[</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">stack</span><span class="p">[</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">op</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">D</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">stack</span><span class="p">[</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">op</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">C</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">Number</span><span class="p">(</span><span class="nx">op</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">p</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">p</span> <span class="o">+</span> <span class="nx">v</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">cal_points</span><span class="p">(</span><span class="n">ops</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">stack</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[];</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="k">in</span> <span class="n">ops</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="n">op</span><span class="nf">.as_str</span><span class="p">()</span> <span class="p">{</span>
+                <span class="s">"+"</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">stack</span><span class="nf">.len</span><span class="p">();</span>
+                    <span class="n">stack</span><span class="nf">.push</span><span class="p">(</span><span class="n">stack</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">stack</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]);</span>
+                <span class="p">}</span>
+                <span class="s">"D"</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="n">stack</span><span class="nf">.push</span><span class="p">(</span><span class="n">stack</span><span class="nf">.last</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="s">"C"</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="n">stack</span><span class="nf">.pop</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="n">n</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="n">stack</span><span class="nf">.push</span><span class="p">(</span><span class="n">n</span><span class="py">.parse</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">());</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">stack</span><span class="nf">.into_iter</span><span class="p">()</span><span class="nf">.sum</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-682.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

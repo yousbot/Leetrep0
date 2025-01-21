@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2636.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2636.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2636 - Promise Pool</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2636. Promise Pool Description Given an array&amp;nbsp;of asynchronous functions&amp;nbsp;functions&amp;nbsp;and a pool limit&amp;nbsp;n, return an asynchronous function&amp;nbsp;promisePool. It should return&amp;nbsp;a promise that resolves when all the input&amp;nbsp;functions resolve. Pool limit is defined as the maximum number promises that can be pending at once.&amp;nbsp;promisePool&amp;nbsp;should begin execution of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2636.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2636.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2636.html" rel="stylesheet"/>
+   <link href="solution-2636.html" rel="stylesheet"/>
+   <link href="solution-2636.html" rel="stylesheet"/>
+   <link href="solution-2636.html" rel="stylesheet"/>
+   <link href="solution-2636.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2636 - Promise Pool" property="og:title"/>
+   <meta content="Leetcode 2636. Promise Pool Description Given an array&amp;nbsp;of asynchronous functions&amp;nbsp;functions&amp;nbsp;and a pool limit&amp;nbsp;n, return an asynchronous function&amp;nbsp;promisePool. It should return&amp;nbsp;a promise that resolves when all the input&amp;nbsp;functions resolve. Pool limit is defined as the maximum number promises that can be pending at once.&amp;nbsp;promisePool&amp;nbsp;should begin execution of as many functions as possible and continue executing new functions when old promises&amp;nbsp;resolve.&amp;nbsp;promisePool&amp;nbsp;should execute functions[i]&amp;nbsp;then functions[i + 1]&amp;nbsp;then functions[i + 2], etc. When the last promise resolves,&amp;nbsp;promisePool&amp;nbsp;should also resolve. For example, if&amp;nbsp;n = 1, promisePool&amp;nbsp;will execute one function at&amp;nbsp;a time in&amp;nbsp;series. However, if&amp;nbsp;n = 2, it first executes two functions. When either of the two functions resolve, a 3rd function should be executed (if available), and so on until there are no functions left to execute. You can assume all&amp;nbsp;functions&amp;nbsp;never reject. It is acceptable for&amp;nbsp;promisePool&amp;nbsp;to return a promise that resolves any value. &amp;nbsp; Example 1: Input: functions = [ &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 300)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 400)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 200)) ] n = 2 Output: [[300,400,500],500] Explanation: Three functions are passed in. They sleep for 300ms, 400ms, and 200ms respectively. They resolve at 300ms, 400ms, and 500ms respectively. The returned promise resolves at 500ms. At t=0, the first 2 functions are executed. The pool size limit of 2 is reached. At t=300, the 1st function resolves, and the 3rd function is executed. Pool size is 2. At t=400, the 2nd function resolves. There is nothing left to execute. Pool size is 1. At t=500, the 3rd function resolves. Pool size is zero so the returned promise also resolves. Example 2: Input: functions = [ &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 300)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 400)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 200)) ] n = 5 Output: [[300,400,200],400] Explanation: The three input promises resolve at 300ms, 400ms, and 200ms respectively. The returned promise resolves at 400ms. At t=0, all 3 functions are executed. The pool limit of 5 is never met. At t=200, the 3rd function resolves. Pool size is 2. At t=300, the 1st function resolved. Pool size is 1. At t=400, the 2nd function resolves. Pool size is 0, so the returned promise also resolves. Example 3: Input: functions = [ &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 300)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 400)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 200)) ] n = 1 Output: [[300,700,900],900] Explanation: The three input promises resolve at 300ms, 700ms, and 900ms respectively. The returned promise resolves at 900ms. At t=0, the 1st function is executed. Pool size is 1. At t=300, the 1st function resolves and the 2nd function is executed. Pool size is 1. At t=700, the 2nd function resolves and the 3rd function is executed. Pool size is 1. At t=900, the 3rd function resolves. Pool size is 0 so the returned promise resolves. &amp;nbsp; Constraints: 0 &amp;lt;= functions.length &amp;lt;= 10 1 &amp;lt;= n &amp;lt;= 10..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-02-17T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-02-17-2636-Promise-Pool/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2636.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2636 - Promise Pool" property="twitter:title"/>
+   <meta content="Leetcode 2636. Promise Pool Description Given an array&amp;nbsp;of asynchronous functions&amp;nbsp;functions&amp;nbsp;and a pool limit&amp;nbsp;n, return an asynchronous function&amp;nbsp;promisePool. It should return&amp;nbsp;a promise that resolves when all the input&amp;nbsp;functions resolve. Pool limit is defined as the maximum number promises that can be pending at once.&amp;nbsp;promisePool&amp;nbsp;should begin execution of as many functions as possible and continue executing new functions when old promises&amp;nbsp;resolve.&amp;nbsp;promisePool&amp;nbsp;should execute functions[i]&amp;nbsp;then functions[i + 1]&amp;nbsp;then functions[i + 2], etc. When the last promise resolves,&amp;nbsp;promisePool&amp;nbsp;should also resolve. For example, if&amp;nbsp;n = 1, promisePool&amp;nbsp;will execute one function at&amp;nbsp;a time in&amp;nbsp;series. However, if&amp;nbsp;n = 2, it first executes two functions. When either of the two functions resolve, a 3rd function should be executed (if available), and so on until there are no functions left to execute. You can assume all&amp;nbsp;functions&amp;nbsp;never reject. It is acceptable for&amp;nbsp;promisePool&amp;nbsp;to return a promise that resolves any value. &amp;nbsp; Example 1: Input: functions = [ &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 300)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 400)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 200)) ] n = 2 Output: [[300,400,500],500] Explanation: Three functions are passed in. They sleep for 300ms, 400ms, and 200ms respectively. They resolve at 300ms, 400ms, and 500ms respectively. The returned promise resolves at 500ms. At t=0, the first 2 functions are executed. The pool size limit of 2 is reached. At t=300, the 1st function resolves, and the 3rd function is executed. Pool size is 2. At t=400, the 2nd function resolves. There is nothing left to execute. Pool size is 1. At t=500, the 3rd function resolves. Pool size is zero so the returned promise also resolves. Example 2: Input: functions = [ &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 300)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 400)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 200)) ] n = 5 Output: [[300,400,200],400] Explanation: The three input promises resolve at 300ms, 400ms, and 200ms respectively. The returned promise resolves at 400ms. At t=0, all 3 functions are executed. The pool limit of 5 is never met. At t=200, the 3rd function resolves. Pool size is 2. At t=300, the 1st function resolved. Pool size is 1. At t=400, the 2nd function resolves. Pool size is 0, so the returned promise also resolves. Example 3: Input: functions = [ &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 300)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 400)), &amp;nbsp; () =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, 200)) ] n = 1 Output: [[300,700,900],900] Explanation: The three input promises resolve at 300ms, 700ms, and 900ms respectively. The returned promise resolves at 900ms. At t=0, the 1st function is executed. Pool size is 1. At t=300, the 1st function resolves and the 2nd function is executed. Pool size is 1. At t=700, the 2nd function resolves and the 3rd function is executed. Pool size is 1. At t=900, the 3rd function resolves. Pool size is 0 so the returned promise resolves. &amp;nbsp; Constraints: 0 &amp;lt;= functions.length &amp;lt;= 10 1 &amp;lt;= n &amp;lt;= 10..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2636 - Promise Pool | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2636 - Promise Pool" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2636.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-02-17-2636-Promise-Pool/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-02-17T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2636 - Promise Pool","dateModified":"2023-02-17T00:00:00-08:00","datePublished":"2023-02-17T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-02-17-2636-Promise-Pool/"},"url":"https://leetcode.ca/2023-02-17-2636-Promise-Pool/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2636-promise-pool">
+       <a href="solution-2636.html">
+        2636. Promise Pool
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an array of asynchronous functions
+       <code>
+        functions
+       </code>
+       and a
+       <strong>
+        pool limit
+       </strong>
+       <code>
+        n
+       </code>
+       , return an asynchronous function
+       <code>
+        promisePool
+       </code>
+       . It should return a promise that resolves when all the input functions resolve.
+      </p>
+      <p>
+       <b>
+        Pool limit
+       </b>
+       is defined as the maximum number promises that can be pending at once.
+       <code>
+        promisePool
+       </code>
+       should begin execution of as many functions as possible and continue executing new functions when old promises resolve.
+       <code>
+        promisePool
+       </code>
+       should execute
+       <code>
+        functions[i]
+       </code>
+       then
+       <code>
+        functions[i + 1]
+       </code>
+       then
+       <code>
+        functions[i + 2]
+       </code>
+       , etc. When the last promise resolves,
+       <code>
+        promisePool
+       </code>
+       should also resolve.
+      </p>
+      <p>
+       For example, if
+       <code>
+        n = 1
+       </code>
+       ,
+       <code>
+        promisePool
+       </code>
+       will execute one function at a time in series. However, if
+       <code>
+        n = 2
+       </code>
+       , it first executes two functions. When either of the two functions resolve, a 3rd function should be executed (if available), and so on until there are no functions left to execute.
+      </p>
+      <p>
+       You can assume all
+       <code>
+        functions
+       </code>
+       never reject. It is acceptable for
+       <code>
+        promisePool
+       </code>
+       to return a promise that resolves any value.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+functions = [
+  () =&gt; new Promise(res =&gt; setTimeout(res, 300)),
+  () =&gt; new Promise(res =&gt; setTimeout(res, 400)),
+  () =&gt; new Promise(res =&gt; setTimeout(res, 200))
+]
+n = 2
+<strong>Output:</strong> [[300,400,500],500]
+<strong>Explanation:</strong>
+Three functions are passed in. They sleep for 300ms, 400ms, and 200ms respectively.
+They resolve at 300ms, 400ms, and 500ms respectively. The returned promise resolves at 500ms.
+At t=0, the first 2 functions are executed. The pool size limit of 2 is reached.
+At t=300, the 1st function resolves, and the 3rd function is executed. Pool size is 2.
+At t=400, the 2nd function resolves. There is nothing left to execute. Pool size is 1.
+At t=500, the 3rd function resolves. Pool size is zero so the returned promise also resolves.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:
+</strong>functions = [
+  () =&gt; new Promise(res =&gt; setTimeout(res, 300)),
+  () =&gt; new Promise(res =&gt; setTimeout(res, 400)),
+  () =&gt; new Promise(res =&gt; setTimeout(res, 200))
+]
+n = 5
+<strong>Output:</strong> [[300,400,200],400]
+<strong>Explanation:</strong>
+The three input promises resolve at 300ms, 400ms, and 200ms respectively.
+The returned promise resolves at 400ms.
+At t=0, all 3 functions are executed. The pool limit of 5 is never met.
+At t=200, the 3rd function resolves. Pool size is 2.
+At t=300, the 1st function resolved. Pool size is 1.
+At t=400, the 2nd function resolves. Pool size is 0, so the returned promise also resolves.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong>
+functions = [
+  () =&gt; new Promise(res =&gt; setTimeout(res, 300)),
+  () =&gt; new Promise(res =&gt; setTimeout(res, 400)),
+  () =&gt; new Promise(res =&gt; setTimeout(res, 200))
+]
+n = 1
+<strong>Output:</strong> [[300,700,900],900]
+<strong>Explanation:
+</strong>The three input promises resolve at 300ms, 700ms, and 900ms respectively.
+The returned promise resolves at 900ms.
+At t=0, the 1st function is executed. Pool size is 1.
+At t=300, the 1st function resolves and the 2nd function is executed. Pool size is 1.
+At t=700, the 2nd function resolves and the 3rd function is executed. Pool size is 1.
+At t=900, the 3rd function resolves. Pool size is 0 so the returned promise resolves.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= functions.length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         <font face="monospace">
+          1 &lt;= n &lt;= 10
+         </font>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#dac424af-0ddc-4956-8ec2-f27d5ba4176e'}">
+       <li class="uk-active">
+        <a href="solution-2636.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="dac424af-0ddc-4956-8ec2-f27d5ba4176e">
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">type</span> <span class="nx">F</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">promisePool</span><span class="p">(</span><span class="nx">functions</span><span class="p">:</span> <span class="nx">F</span><span class="p">[],</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">wrappers</span> <span class="o">=</span> <span class="nx">functions</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fn</span> <span class="o">=&gt;</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">await</span> <span class="nx">fn</span><span class="p">();</span>
+        <span class="kd">const</span> <span class="nx">nxt</span> <span class="o">=</span> <span class="nx">waiting</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+        <span class="nx">nxt</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">await</span> <span class="nx">nxt</span><span class="p">());</span>
+    <span class="p">});</span>
+
+    <span class="kd">const</span> <span class="nx">running</span> <span class="o">=</span> <span class="nx">wrappers</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">waiting</span> <span class="o">=</span> <span class="nx">wrappers</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">running</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fn</span> <span class="o">=&gt;</span> <span class="nx">fn</span><span class="p">()));</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2636.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

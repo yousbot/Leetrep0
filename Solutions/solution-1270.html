@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1270.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1270.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1270 - All People Report to the Given Manager</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1270. All People Report to the Given Manager Description Table: Employees +---------------+---------+ | Column Name | Type | +---------------+---------+ | employee_id | int | | employee_name | varchar | | manager_id | int | +---------------+---------+ employee_id is the column of unique values for this table....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1270.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1270.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1270.html" rel="stylesheet"/>
+   <link href="solution-1270.html" rel="stylesheet"/>
+   <link href="solution-1270.html" rel="stylesheet"/>
+   <link href="solution-1270.html" rel="stylesheet"/>
+   <link href="solution-1270.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1270 - All People Report to the Given Manager" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1270. All People Report to the Given Manager
+
+Description
+
+Table: Employees
+
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| employee_id   | int     |
+| employee_name | varchar |
+| manager_id    | int     |
++---------------+---------+
+employee_id is the column of unique values for this table.
+Each row of this table indicates that the employee with ID employee_id and name employee_name reports his work to his/her direct manager with manager_id
+The head of the company is the employee with employee_id = 1.
+
+
+&amp;nbsp;
+
+Write a solution to find employee_id of all employees that directly or indirectly report their work to the head of the company.
+
+The indirect relation between managers will not exceed three managers as the company is small.
+
+Return the result table in any order.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Employees table:
++-------------+---------------+------------+
+| employee_id | employee_name | manager_id |
++-------------+---------------+------------+
+| 1           | Boss          | 1          |
+| 3           | Alice         | 3          |
+| 2           | Bob           | 1          |
+| 4           | Daniel        | 2          |
+| 7           | Luis          | 4          |
+| 8           | Jhon          | 3          |
+| 9           | Angela        | 8          |
+| 77          | Robert        | 1          |
++-------------+---------------+------------+
+Output: 
++-------------+
+| employee_id |
++-------------+
+| 2           |
+| 77          |
+| 4           |
+| 7           |
++-------------+
+Explanation: 
+The head of the company is the employee with employee_id 1.
+The employees with employee_id 2 and 77 report their work directly to the head of the company.
+The employee with employee_id 4 reports their work indirectly to the head of the company 4 --&amp;gt; 2 --&amp;gt; 1. 
+The employee with employee_id 7 reports their work indirectly to the head of the company 7 --&amp;gt; 4 --&amp;gt; 2 --&amp;gt; 1.
+The employees with employee_id 3, 8, and 9 do not report their work to the head of the company directly or indirectly. 
+
+
+Solutions
+
+Solution 1: Two Joins
+
+We can use two joins to find all employees who report directly or indirectly to the company CEO.
+
+Specifically, we first use a join to find the manager_id of the superior manager for each manager_id, and then use another join to find the manager_id of the higher-level manager. Finally, if the manager_id of the higher-level manager is $1$ and the employee_id of the employee is not $1$, it means that the employee reports directly or indirectly to the company CEO.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+
+select a.employee_id as EMPLOYEE_ID
+from
+    Employees as a
+    left join
+    Employees as b on a.manager_id = b.employee_id
+    left join
+    Employees as c on b.manager_id = c.employee_id
+    left join
+    Employees as d on c.manager_id = d.employee_id
+where
+    a.employee_id != 1
+    and
+    d.employee_id = 1;
+
+--
+
+SELECT e1.employee_id
+FROM
+    Employees AS e1
+    JOIN Employees AS e2 ON e1.manager_id = e2.employee_id
+    JOIN Employees AS e3 ON e2.manager_id = e3.employee_id
+WHERE e1.employee_id != 1 AND e3.manager_id = 1;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-05-23T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-05-23-1270-All-People-Report-to-the-Given-Manager/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1270.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1270 - All People Report to the Given Manager" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1270. All People Report to the Given Manager
+
+Description
+
+Table: Employees
+
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| employee_id   | int     |
+| employee_name | varchar |
+| manager_id    | int     |
++---------------+---------+
+employee_id is the column of unique values for this table.
+Each row of this table indicates that the employee with ID employee_id and name employee_name reports his work to his/her direct manager with manager_id
+The head of the company is the employee with employee_id = 1.
+
+
+&amp;nbsp;
+
+Write a solution to find employee_id of all employees that directly or indirectly report their work to the head of the company.
+
+The indirect relation between managers will not exceed three managers as the company is small.
+
+Return the result table in any order.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Employees table:
++-------------+---------------+------------+
+| employee_id | employee_name | manager_id |
++-------------+---------------+------------+
+| 1           | Boss          | 1          |
+| 3           | Alice         | 3          |
+| 2           | Bob           | 1          |
+| 4           | Daniel        | 2          |
+| 7           | Luis          | 4          |
+| 8           | Jhon          | 3          |
+| 9           | Angela        | 8          |
+| 77          | Robert        | 1          |
++-------------+---------------+------------+
+Output: 
++-------------+
+| employee_id |
++-------------+
+| 2           |
+| 77          |
+| 4           |
+| 7           |
++-------------+
+Explanation: 
+The head of the company is the employee with employee_id 1.
+The employees with employee_id 2 and 77 report their work directly to the head of the company.
+The employee with employee_id 4 reports their work indirectly to the head of the company 4 --&amp;gt; 2 --&amp;gt; 1. 
+The employee with employee_id 7 reports their work indirectly to the head of the company 7 --&amp;gt; 4 --&amp;gt; 2 --&amp;gt; 1.
+The employees with employee_id 3, 8, and 9 do not report their work to the head of the company directly or indirectly. 
+
+
+Solutions
+
+Solution 1: Two Joins
+
+We can use two joins to find all employees who report directly or indirectly to the company CEO.
+
+Specifically, we first use a join to find the manager_id of the superior manager for each manager_id, and then use another join to find the manager_id of the higher-level manager. Finally, if the manager_id of the higher-level manager is $1$ and the employee_id of the employee is not $1$, it means that the employee reports directly or indirectly to the company CEO.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+
+select a.employee_id as EMPLOYEE_ID
+from
+    Employees as a
+    left join
+    Employees as b on a.manager_id = b.employee_id
+    left join
+    Employees as c on b.manager_id = c.employee_id
+    left join
+    Employees as d on c.manager_id = d.employee_id
+where
+    a.employee_id != 1
+    and
+    d.employee_id = 1;
+
+--
+
+SELECT e1.employee_id
+FROM
+    Employees AS e1
+    JOIN Employees AS e2 ON e1.manager_id = e2.employee_id
+    JOIN Employees AS e3 ON e2.manager_id = e3.employee_id
+WHERE e1.employee_id != 1 AND e3.manager_id = 1;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1270 - All People Report to the Given Manager | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1270 - All People Report to the Given Manager" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1270.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-05-23-1270-All-People-Report-to-the-Given-Manager/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-05-23T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1270 - All People Report to the Given Manager","dateModified":"2019-05-23T00:00:00-07:00","datePublished":"2019-05-23T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-05-23-1270-All-People-Report-to-the-Given-Manager/"},"url":"https://leetcode.ca/2019-05-23-1270-All-People-Report-to-the-Given-Manager/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1270-all-people-report-to-the-given-manager">
+       <a href="solution-1270.html">
+        1270. All People Report to the Given Manager
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        Employees
+       </code>
+      </p>
+      <pre>
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| employee_id   | int     |
+| employee_name | varchar |
+| manager_id    | int     |
++---------------+---------+
+employee_id is the column of unique values for this table.
+Each row of this table indicates that the employee with ID employee_id and name employee_name reports his work to his/her direct manager with manager_id
+The head of the company is the employee with employee_id = 1.
+</pre>
+      <p>
+      </p>
+      <p>
+       Write a solution to find
+       <code>
+        employee_id
+       </code>
+       of all employees that directly or indirectly report their work to the head of the company.
+      </p>
+      <p>
+       The indirect relation between managers
+       <strong>
+        will not exceed three managers
+       </strong>
+       as the company is small.
+      </p>
+      <p>
+       Return the result table in
+       <strong>
+        any order
+       </strong>
+       .
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+Employees table:
++-------------+---------------+------------+
+| employee_id | employee_name | manager_id |
++-------------+---------------+------------+
+| 1           | Boss          | 1          |
+| 3           | Alice         | 3          |
+| 2           | Bob           | 1          |
+| 4           | Daniel        | 2          |
+| 7           | Luis          | 4          |
+| 8           | Jhon          | 3          |
+| 9           | Angela        | 8          |
+| 77          | Robert        | 1          |
++-------------+---------------+------------+
+<strong>Output:</strong> 
++-------------+
+| employee_id |
++-------------+
+| 2           |
+| 77          |
+| 4           |
+| 7           |
++-------------+
+<strong>Explanation:</strong> 
+The head of the company is the employee with employee_id 1.
+The employees with employee_id 2 and 77 report their work directly to the head of the company.
+The employee with employee_id 4 reports their work indirectly to the head of the company 4 --&gt; 2 --&gt; 1. 
+The employee with employee_id 7 reports their work indirectly to the head of the company 7 --&gt; 4 --&gt; 2 --&gt; 1.
+The employees with employee_id 3, 8, and 9 do not report their work to the head of the company directly or indirectly. 
+</pre>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Two Joins
+       </strong>
+      </p>
+      <p>
+       We can use two joins to find all employees who report directly or indirectly to the company CEO.
+      </p>
+      <p>
+       Specifically, we first use a join to find the
+       <code class="language-plaintext highlighter-rouge">
+        manager_id
+       </code>
+       of the superior manager for each
+       <code class="language-plaintext highlighter-rouge">
+        manager_id
+       </code>
+       , and then use another join to find the
+       <code class="language-plaintext highlighter-rouge">
+        manager_id
+       </code>
+       of the higher-level manager. Finally, if the
+       <code class="language-plaintext highlighter-rouge">
+        manager_id
+       </code>
+       of the higher-level manager is $1$ and the
+       <code class="language-plaintext highlighter-rouge">
+        employee_id
+       </code>
+       of the employee is not $1$, it means that the employee reports directly or indirectly to the company CEO.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#c7943bab-0091-4172-97b1-9fb3081713a7'}">
+       <li class="uk-active">
+        <a href="solution-1270.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="c7943bab-0091-4172-97b1-9fb3081713a7">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+
+<span class="k">select</span> <span class="n">a</span><span class="p">.</span><span class="n">employee_id</span> <span class="k">as</span> <span class="n">EMPLOYEE_ID</span>
+<span class="k">from</span>
+    <span class="n">Employees</span> <span class="k">as</span> <span class="n">a</span>
+    <span class="k">left</span> <span class="k">join</span>
+    <span class="n">Employees</span> <span class="k">as</span> <span class="n">b</span> <span class="k">on</span> <span class="n">a</span><span class="p">.</span><span class="n">manager_id</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">employee_id</span>
+    <span class="k">left</span> <span class="k">join</span>
+    <span class="n">Employees</span> <span class="k">as</span> <span class="k">c</span> <span class="k">on</span> <span class="n">b</span><span class="p">.</span><span class="n">manager_id</span> <span class="o">=</span> <span class="k">c</span><span class="p">.</span><span class="n">employee_id</span>
+    <span class="k">left</span> <span class="k">join</span>
+    <span class="n">Employees</span> <span class="k">as</span> <span class="n">d</span> <span class="k">on</span> <span class="k">c</span><span class="p">.</span><span class="n">manager_id</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">employee_id</span>
+<span class="k">where</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">employee_id</span> <span class="o">!=</span> <span class="mi">1</span>
+    <span class="k">and</span>
+    <span class="n">d</span><span class="p">.</span><span class="n">employee_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">--</span>
+
+<span class="k">SELECT</span> <span class="n">e1</span><span class="p">.</span><span class="n">employee_id</span>
+<span class="k">FROM</span>
+    <span class="n">Employees</span> <span class="k">AS</span> <span class="n">e1</span>
+    <span class="k">JOIN</span> <span class="n">Employees</span> <span class="k">AS</span> <span class="n">e2</span> <span class="k">ON</span> <span class="n">e1</span><span class="p">.</span><span class="n">manager_id</span> <span class="o">=</span> <span class="n">e2</span><span class="p">.</span><span class="n">employee_id</span>
+    <span class="k">JOIN</span> <span class="n">Employees</span> <span class="k">AS</span> <span class="n">e3</span> <span class="k">ON</span> <span class="n">e2</span><span class="p">.</span><span class="n">manager_id</span> <span class="o">=</span> <span class="n">e3</span><span class="p">.</span><span class="n">employee_id</span>
+<span class="k">WHERE</span> <span class="n">e1</span><span class="p">.</span><span class="n">employee_id</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">AND</span> <span class="n">e3</span><span class="p">.</span><span class="n">manager_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1270.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

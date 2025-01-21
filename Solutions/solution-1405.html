@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1405.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1405.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1405 - Longest Happy String</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1405. Longest Happy String Description A string s is called happy if it satisfies the following conditions: s only contains the letters &amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, and &amp;#39;c&amp;#39;. s does not contain any of &amp;quot;aaa&amp;quot;, &amp;quot;bbb&amp;quot;, or &amp;quot;ccc&amp;quot; as a substring. s contains at most a occurrences...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1405.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1405.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1405.html" rel="stylesheet"/>
+   <link href="solution-1405.html" rel="stylesheet"/>
+   <link href="solution-1405.html" rel="stylesheet"/>
+   <link href="solution-1405.html" rel="stylesheet"/>
+   <link href="solution-1405.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1405 - Longest Happy String" property="og:title"/>
+   <meta content="Leetcode 1405. Longest Happy String Description A string s is called happy if it satisfies the following conditions: s only contains the letters &amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, and &amp;#39;c&amp;#39;. s does not contain any of &amp;quot;aaa&amp;quot;, &amp;quot;bbb&amp;quot;, or &amp;quot;ccc&amp;quot; as a substring. s contains at most a occurrences of the letter &amp;#39;a&amp;#39;. s contains at most b occurrences of the letter &amp;#39;b&amp;#39;. s contains at most c occurrences of the letter &amp;#39;c&amp;#39;. Given three integers a, b, and c, return the longest possible happy string. If there are multiple longest happy strings, return any of them. If there is no such string, return the empty string &amp;quot;&amp;quot;. A substring is a contiguous sequence of characters within a string. &amp;nbsp; Example 1: Input: a = 1, b = 1, c = 7 Output: &amp;quot;ccaccbcc&amp;quot; Explanation: &amp;quot;ccbccacc&amp;quot; would also be a correct answer. Example 2: Input: a = 7, b = 1, c = 0 Output: &amp;quot;aabaa&amp;quot; Explanation: It is the only correct answer in this case. &amp;nbsp; Constraints: 0 &amp;lt;= a, b, c &amp;lt;= 100 a + b + c &amp;gt; 0 Solutions Solution 1: Greedy + Priority Queue The greedy strategy is to prioritize the selection of characters with the most remaining occurrences. By using a priority queue or sorting, we ensure that the character selected each time is the one with the most remaining occurrences (to avoid having three consecutive identical characters, in some cases, we need to select the character with the second most remaining occurrences). Java C++ Python Go TypeScript class Solution { public String longestDiverseString(int a, int b, int c) { Queue&amp;lt;int[]&amp;gt; pq = new PriorityQueue&amp;lt;&amp;gt;((x, y) -&amp;gt; y[1] - x[1]); if (a &amp;gt; 0) { pq.offer(new int[] {'a', a}); } if (b &amp;gt; 0) { pq.offer(new int[] {'b', b}); } if (c &amp;gt; 0) { pq.offer(new int[] {'c', c}); } StringBuilder sb = new StringBuilder(); while (pq.size() &amp;gt; 0) { int[] cur = pq.poll(); int n = sb.length(); if (n &amp;gt;= 2 &amp;amp;&amp;amp; sb.codePointAt(n - 1) == cur[0] &amp;amp;&amp;amp; sb.codePointAt(n - 2) == cur[0]) { if (pq.size() == 0) { break; } int[] next = pq.poll(); sb.append((char) next[0]); if (next[1] &amp;gt; 1) { next[1]--; pq.offer(next); } pq.offer(cur); } else { sb.append((char) cur[0]); if (cur[1] &amp;gt; 1) { cur[1]--; pq.offer(cur); } } } return sb.toString(); } } class Solution { public: string longestDiverseString(int a, int b, int c) { using pci = pair&amp;lt;char, int&amp;gt;; auto cmp = [](pci x, pci y) { return x.second &amp;lt; y.second; }; priority_queue&amp;lt;pci, vector&amp;lt;pci&amp;gt;, decltype(cmp)&amp;gt; pq(cmp); if (a &amp;gt; 0) pq.push({'a', a}); if (b &amp;gt; 0) pq.push({'b', b}); if (c &amp;gt; 0) pq.push({'c', c}); string ans; while (!pq.empty()) { pci cur = pq.top(); pq.pop(); int n = ans.size(); if (n &amp;gt;= 2 &amp;amp;&amp;amp; ans[n - 1] == cur.first &amp;amp;&amp;amp; ans[n - 2] == cur.first) { if (pq.empty()) break; pci nxt = pq.top(); pq.pop(); ans.push_back(nxt.first); if (--nxt.second &amp;gt; 0) { pq.push(nxt); } pq.push(cur); } else { ans.push_back(cur.first); if (--cur.second &amp;gt; 0) { pq.push(cur); } } } return ans; } };..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-10-05T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-10-05-1405-Longest-Happy-String/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1405.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1405 - Longest Happy String" property="twitter:title"/>
+   <meta content="Leetcode 1405. Longest Happy String Description A string s is called happy if it satisfies the following conditions: s only contains the letters &amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, and &amp;#39;c&amp;#39;. s does not contain any of &amp;quot;aaa&amp;quot;, &amp;quot;bbb&amp;quot;, or &amp;quot;ccc&amp;quot; as a substring. s contains at most a occurrences of the letter &amp;#39;a&amp;#39;. s contains at most b occurrences of the letter &amp;#39;b&amp;#39;. s contains at most c occurrences of the letter &amp;#39;c&amp;#39;. Given three integers a, b, and c, return the longest possible happy string. If there are multiple longest happy strings, return any of them. If there is no such string, return the empty string &amp;quot;&amp;quot;. A substring is a contiguous sequence of characters within a string. &amp;nbsp; Example 1: Input: a = 1, b = 1, c = 7 Output: &amp;quot;ccaccbcc&amp;quot; Explanation: &amp;quot;ccbccacc&amp;quot; would also be a correct answer. Example 2: Input: a = 7, b = 1, c = 0 Output: &amp;quot;aabaa&amp;quot; Explanation: It is the only correct answer in this case. &amp;nbsp; Constraints: 0 &amp;lt;= a, b, c &amp;lt;= 100 a + b + c &amp;gt; 0 Solutions Solution 1: Greedy + Priority Queue The greedy strategy is to prioritize the selection of characters with the most remaining occurrences. By using a priority queue or sorting, we ensure that the character selected each time is the one with the most remaining occurrences (to avoid having three consecutive identical characters, in some cases, we need to select the character with the second most remaining occurrences). Java C++ Python Go TypeScript class Solution { public String longestDiverseString(int a, int b, int c) { Queue&amp;lt;int[]&amp;gt; pq = new PriorityQueue&amp;lt;&amp;gt;((x, y) -&amp;gt; y[1] - x[1]); if (a &amp;gt; 0) { pq.offer(new int[] {'a', a}); } if (b &amp;gt; 0) { pq.offer(new int[] {'b', b}); } if (c &amp;gt; 0) { pq.offer(new int[] {'c', c}); } StringBuilder sb = new StringBuilder(); while (pq.size() &amp;gt; 0) { int[] cur = pq.poll(); int n = sb.length(); if (n &amp;gt;= 2 &amp;amp;&amp;amp; sb.codePointAt(n - 1) == cur[0] &amp;amp;&amp;amp; sb.codePointAt(n - 2) == cur[0]) { if (pq.size() == 0) { break; } int[] next = pq.poll(); sb.append((char) next[0]); if (next[1] &amp;gt; 1) { next[1]--; pq.offer(next); } pq.offer(cur); } else { sb.append((char) cur[0]); if (cur[1] &amp;gt; 1) { cur[1]--; pq.offer(cur); } } } return sb.toString(); } } class Solution { public: string longestDiverseString(int a, int b, int c) { using pci = pair&amp;lt;char, int&amp;gt;; auto cmp = [](pci x, pci y) { return x.second &amp;lt; y.second; }; priority_queue&amp;lt;pci, vector&amp;lt;pci&amp;gt;, decltype(cmp)&amp;gt; pq(cmp); if (a &amp;gt; 0) pq.push({'a', a}); if (b &amp;gt; 0) pq.push({'b', b}); if (c &amp;gt; 0) pq.push({'c', c}); string ans; while (!pq.empty()) { pci cur = pq.top(); pq.pop(); int n = ans.size(); if (n &amp;gt;= 2 &amp;amp;&amp;amp; ans[n - 1] == cur.first &amp;amp;&amp;amp; ans[n - 2] == cur.first) { if (pq.empty()) break; pci nxt = pq.top(); pq.pop(); ans.push_back(nxt.first); if (--nxt.second &amp;gt; 0) { pq.push(nxt); } pq.push(cur); } else { ans.push_back(cur.first); if (--cur.second &amp;gt; 0) { pq.push(cur); } } } return ans; } };..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1405 - Longest Happy String | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1405 - Longest Happy String" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1405.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-10-05-1405-Longest-Happy-String/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-10-05T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1405 - Longest Happy String","dateModified":"2019-10-05T00:00:00-07:00","datePublished":"2019-10-05T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-10-05-1405-Longest-Happy-String/"},"url":"https://leetcode.ca/2019-10-05-1405-Longest-Happy-String/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1405-longest-happy-string">
+       <a href="solution-1405.html">
+        1405. Longest Happy String
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       A string
+       <code>
+        s
+       </code>
+       is called
+       <strong>
+        happy
+       </strong>
+       if it satisfies the following conditions:
+      </p>
+      <ul>
+       <li>
+        <code>
+         s
+        </code>
+        only contains the letters
+        <code>
+         'a'
+        </code>
+        ,
+        <code>
+         'b'
+        </code>
+        , and
+        <code>
+         'c'
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        does not contain any of
+        <code>
+         "aaa"
+        </code>
+        ,
+        <code>
+         "bbb"
+        </code>
+        , or
+        <code>
+         "ccc"
+        </code>
+        as a substring.
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        contains
+        <strong>
+         at most
+        </strong>
+        <code>
+         a
+        </code>
+        occurrences of the letter
+        <code>
+         'a'
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        contains
+        <strong>
+         at most
+        </strong>
+        <code>
+         b
+        </code>
+        occurrences of the letter
+        <code>
+         'b'
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        contains
+        <strong>
+         at most
+        </strong>
+        <code>
+         c
+        </code>
+        occurrences of the letter
+        <code>
+         'c'
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Given three integers
+       <code>
+        a
+       </code>
+       ,
+       <code>
+        b
+       </code>
+       , and
+       <code>
+        c
+       </code>
+       , return
+       <em>
+        the
+        <strong>
+         longest possible happy
+        </strong>
+        string
+       </em>
+       . If there are multiple longest happy strings, return
+       <em>
+        any of them
+       </em>
+       . If there is no such string, return
+       <em>
+        the empty string
+       </em>
+       <code>
+        ""
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        substring
+       </strong>
+       is a contiguous sequence of characters within a string.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> a = 1, b = 1, c = 7
+<strong>Output:</strong> "ccaccbcc"
+<strong>Explanation:</strong> "ccbccacc" would also be a correct answer.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> a = 7, b = 1, c = 0
+<strong>Output:</strong> "aabaa"
+<strong>Explanation:</strong> It is the only correct answer in this case.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= a, b, c &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         a + b + c &gt; 0
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Greedy + Priority Queue
+       </strong>
+      </p>
+      <p>
+       The greedy strategy is to prioritize the selection of characters with the most remaining occurrences. By using a priority queue or sorting, we ensure that the character selected each time is the one with the most remaining occurrences (to avoid having three consecutive identical characters, in some cases, we need to select the character with the second most remaining occurrences).
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#9e6d3ebf-89d3-4488-8cd9-3aaf944e33fd'}">
+       <li class="uk-active">
+        <a href="solution-1405.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1405.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1405.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1405.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1405.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="9e6d3ebf-89d3-4488-8cd9-3aaf944e33fd">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">longestDiverseString</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">,</span> <span class="kt">int</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">pq</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">y</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">x</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="sc">'a'</span><span class="o">,</span> <span class="n">a</span><span class="o">});</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">b</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="sc">'b'</span><span class="o">,</span> <span class="n">b</span><span class="o">});</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="sc">'c'</span><span class="o">,</span> <span class="n">c</span><span class="o">});</span>
+        <span class="o">}</span>
+
+        <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">pq</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">sb</span><span class="o">.</span><span class="na">codePointAt</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="n">cur</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">sb</span><span class="o">.</span><span class="na">codePointAt</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="o">)</span> <span class="o">==</span> <span class="n">cur</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">pq</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span><span class="o">[]</span> <span class="n">next</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">((</span><span class="kt">char</span><span class="o">)</span> <span class="n">next</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">next</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">next</span><span class="o">[</span><span class="mi">1</span><span class="o">]--;</span>
+                    <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">((</span><span class="kt">char</span><span class="o">)</span> <span class="n">cur</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">cur</span><span class="o">[</span><span class="mi">1</span><span class="o">]--;</span>
+                    <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">string</span> <span class="n">longestDiverseString</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="n">pci</span> <span class="o">=</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[](</span><span class="n">pci</span> <span class="n">x</span><span class="p">,</span> <span class="n">pci</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">.</span><span class="n">second</span><span class="p">;</span> <span class="p">};</span>
+        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">pci</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">pci</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">cmp</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">(</span><span class="n">cmp</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="sc">'a'</span><span class="p">,</span> <span class="n">a</span><span class="p">});</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="sc">'b'</span><span class="p">,</span> <span class="n">b</span><span class="p">});</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="sc">'c'</span><span class="p">,</span> <span class="n">c</span><span class="p">});</span>
+
+        <span class="n">string</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">pci</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ans</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur</span><span class="p">.</span><span class="n">first</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur</span><span class="p">.</span><span class="n">first</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="k">break</span><span class="p">;</span>
+                <span class="n">pci</span> <span class="n">nxt</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+                <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nxt</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">nxt</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">nxt</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">cur</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">longestDiverseString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">heappush</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="s">'a'</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">heappush</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span><span class="p">,</span> <span class="s">'b'</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">heappush</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="s">'c'</span><span class="p">])</span>
+
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">ans</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">ans</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">nxt</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">nxt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="o">-</span><span class="n">nxt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">nxt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">heappush</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">nxt</span><span class="p">)</span>
+                <span class="n">heappush</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="o">-</span><span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">heappush</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">pair</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">c</span>   <span class="kt">byte</span>
+	<span class="n">num</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">hp</span> <span class="p">[]</span><span class="n">pair</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="kt">int</span>           <span class="p">{</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span>      <span class="p">{</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">num</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">num</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">x</span> <span class="n">any</span><span class="p">)</span>        <span class="p">{</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="p">(</span><span class="n">pair</span><span class="p">))</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span>          <span class="p">{</span> <span class="n">l</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">);</span> <span class="n">t</span> <span class="o">:=</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)[</span><span class="n">l</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)[</span><span class="o">:</span><span class="n">l</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="k">return</span> <span class="n">t</span> <span class="p">}</span>
+
+<span class="k">func</span> <span class="n">longestDiverseString</span><span class="p">(</span><span class="n">a</span> <span class="kt">int</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">,</span> <span class="n">c</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">h</span> <span class="n">hp</span>
+	<span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">,</span> <span class="n">pair</span><span class="p">{</span><span class="sc">'a'</span><span class="p">,</span> <span class="n">a</span><span class="p">})</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">,</span> <span class="n">pair</span><span class="p">{</span><span class="sc">'b'</span><span class="p">,</span> <span class="n">b</span><span class="p">})</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">,</span> <span class="n">pair</span><span class="p">{</span><span class="sc">'c'</span><span class="p">,</span> <span class="n">c</span><span class="p">})</span>
+	<span class="p">}</span>
+
+	<span class="k">var</span> <span class="n">ans</span> <span class="p">[]</span><span class="kt">byte</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">cur</span> <span class="o">:=</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="m">2</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur</span><span class="o">.</span><span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span><span class="o">-</span><span class="m">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur</span><span class="o">.</span><span class="n">c</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+			<span class="n">next</span> <span class="o">:=</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">next</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">next</span><span class="o">.</span><span class="n">num</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">next</span><span class="o">.</span><span class="n">num</span><span class="o">--</span>
+				<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">num</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">cur</span><span class="o">.</span><span class="n">num</span><span class="o">--</span>
+				<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">h</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="kt">string</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">longestDiverseString</span><span class="p">(</span><span class="nx">a</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">b</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">c</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">string</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">let</span> <span class="nx">store</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="p">[</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="nx">a</span><span class="p">],</span>
+        <span class="p">[</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span> <span class="nx">b</span><span class="p">],</span>
+        <span class="p">[</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span> <span class="nx">c</span><span class="p">],</span>
+    <span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">store</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="kd">let</span> <span class="nx">hasNext</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="p">[</span><span class="nx">i</span><span class="p">,</span> <span class="p">[</span><span class="nx">ch</span><span class="p">,</span> <span class="nx">ctn</span><span class="p">]]</span> <span class="k">of</span> <span class="nx">store</span><span class="p">.</span><span class="nx">entries</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">ctn</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">ans</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">ans</span><span class="p">[</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nx">ch</span> <span class="o">&amp;&amp;</span> <span class="nx">ans</span><span class="p">[</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="nx">ch</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">hasNext</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">ch</span><span class="p">);</span>
+            <span class="nx">store</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">hasNext</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1405.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

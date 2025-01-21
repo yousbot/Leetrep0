@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1657.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1657.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1657 - Determine if Two Strings Are Close</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1657. Determine if Two Strings Are Close Description Two strings are considered close if you can attain one from the other using the following operations: Operation 1: Swap any two existing characters. For example, abcde -&amp;gt; aecdb Operation 2: Transform every occurrence of one existing...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1657.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1657.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1657.html" rel="stylesheet"/>
+   <link href="solution-1657.html" rel="stylesheet"/>
+   <link href="solution-1657.html" rel="stylesheet"/>
+   <link href="solution-1657.html" rel="stylesheet"/>
+   <link href="solution-1657.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1657 - Determine if Two Strings Are Close" property="og:title"/>
+   <meta content="Leetcode 1657. Determine if Two Strings Are Close Description Two strings are considered close if you can attain one from the other using the following operations: Operation 1: Swap any two existing characters. For example, abcde -&amp;gt; aecdb Operation 2: Transform every occurrence of one existing character into another existing character, and do the same with the other character. For example, aacabb -&amp;gt; bbcbaa (all a&amp;#39;s turn into b&amp;#39;s, and all b&amp;#39;s turn into a&amp;#39;s) You can use the operations on either string as many times as necessary. Given two strings, word1 and word2, return true if word1 and word2 are close, and false otherwise. &amp;nbsp; Example 1: Input: word1 = &amp;quot;abc&amp;quot;, word2 = &amp;quot;bca&amp;quot; Output: true Explanation: You can attain word2 from word1 in 2 operations. Apply Operation 1: &amp;quot;abc&amp;quot; -&amp;gt; &amp;quot;acb&amp;quot; Apply Operation 1: &amp;quot;acb&amp;quot; -&amp;gt; &amp;quot;bca&amp;quot; Example 2: Input: word1 = &amp;quot;a&amp;quot;, word2 = &amp;quot;aa&amp;quot; Output: false Explanation: It is impossible to attain word2 from word1, or vice versa, in any number of operations. Example 3: Input: word1 = &amp;quot;cabbba&amp;quot;, word2 = &amp;quot;abbccc&amp;quot; Output: true Explanation: You can attain word2 from word1 in 3 operations. Apply Operation 1: &amp;quot;cabbba&amp;quot; -&amp;gt; &amp;quot;caabbb&amp;quot; Apply Operation 2: &amp;quot;caabbb&amp;quot; -&amp;gt; &amp;quot;baaccc&amp;quot; Apply Operation 2: &amp;quot;baaccc&amp;quot; -&amp;gt; &amp;quot;abbccc&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= word1.length, word2.length &amp;lt;= 105 word1 and word2 contain only lowercase English letters. Solutions Solution 1: Counting + Sorting According to the problem description, two strings are close if they meet the following two conditions simultaneously: The strings word1 and word2 must contain the same types of letters. The arrays obtained by sorting the counts of all characters in word1 and word2 must be the same. Therefore, we can first use an array or hash table to count the occurrences of each letter in word1 and word2 respectively, and then compare whether they are the same. If they are not the same, return false early. Otherwise, we sort the corresponding counts, and then compare whether the counts at the corresponding positions are the same. If they are not the same, return false. At the end of the traversal, return true. The time complexity is $O(m + n + C \times \log C)$, and the space complexity is $O(C)$. Here, $m$ and $n$ are the lengths of the strings word1 and word2 respectively, and $C$ is the number of letter types. In this problem, $C=26$. Java C++ Python Go TypeScript RenderScript class Solution { public boolean closeStrings(String word1, String word2) { int[] cnt1 = new int[26]; int[] cnt2 = new int[26]; for (int i = 0; i &amp;lt; word1.length(); ++i) { ++cnt1[word1.charAt(i) - 'a']; } for (int i = 0; i &amp;lt; word2.length(); ++i) { ++cnt2[word2.charAt(i) - 'a']; } for (int i = 0; i &amp;lt; 26; ++i) { if ((cnt1[i] == 0) != (cnt2[i] == 0)) { return false; } } Arrays.sort(cnt1); Arrays.sort(cnt2); return Arrays.equals(cnt1, cnt2); } } class Solution { public: bool closeStrings(string word1, string word2) { int cnt1[26]{}; int cnt2[26]{}; for (char&amp;amp; c : word1)..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2020-06-13T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2020-06-13-1657-Determine-if-Two-Strings-Are-Close/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1657.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1657 - Determine if Two Strings Are Close" property="twitter:title"/>
+   <meta content="Leetcode 1657. Determine if Two Strings Are Close Description Two strings are considered close if you can attain one from the other using the following operations: Operation 1: Swap any two existing characters. For example, abcde -&amp;gt; aecdb Operation 2: Transform every occurrence of one existing character into another existing character, and do the same with the other character. For example, aacabb -&amp;gt; bbcbaa (all a&amp;#39;s turn into b&amp;#39;s, and all b&amp;#39;s turn into a&amp;#39;s) You can use the operations on either string as many times as necessary. Given two strings, word1 and word2, return true if word1 and word2 are close, and false otherwise. &amp;nbsp; Example 1: Input: word1 = &amp;quot;abc&amp;quot;, word2 = &amp;quot;bca&amp;quot; Output: true Explanation: You can attain word2 from word1 in 2 operations. Apply Operation 1: &amp;quot;abc&amp;quot; -&amp;gt; &amp;quot;acb&amp;quot; Apply Operation 1: &amp;quot;acb&amp;quot; -&amp;gt; &amp;quot;bca&amp;quot; Example 2: Input: word1 = &amp;quot;a&amp;quot;, word2 = &amp;quot;aa&amp;quot; Output: false Explanation: It is impossible to attain word2 from word1, or vice versa, in any number of operations. Example 3: Input: word1 = &amp;quot;cabbba&amp;quot;, word2 = &amp;quot;abbccc&amp;quot; Output: true Explanation: You can attain word2 from word1 in 3 operations. Apply Operation 1: &amp;quot;cabbba&amp;quot; -&amp;gt; &amp;quot;caabbb&amp;quot; Apply Operation 2: &amp;quot;caabbb&amp;quot; -&amp;gt; &amp;quot;baaccc&amp;quot; Apply Operation 2: &amp;quot;baaccc&amp;quot; -&amp;gt; &amp;quot;abbccc&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= word1.length, word2.length &amp;lt;= 105 word1 and word2 contain only lowercase English letters. Solutions Solution 1: Counting + Sorting According to the problem description, two strings are close if they meet the following two conditions simultaneously: The strings word1 and word2 must contain the same types of letters. The arrays obtained by sorting the counts of all characters in word1 and word2 must be the same. Therefore, we can first use an array or hash table to count the occurrences of each letter in word1 and word2 respectively, and then compare whether they are the same. If they are not the same, return false early. Otherwise, we sort the corresponding counts, and then compare whether the counts at the corresponding positions are the same. If they are not the same, return false. At the end of the traversal, return true. The time complexity is $O(m + n + C \times \log C)$, and the space complexity is $O(C)$. Here, $m$ and $n$ are the lengths of the strings word1 and word2 respectively, and $C$ is the number of letter types. In this problem, $C=26$. Java C++ Python Go TypeScript RenderScript class Solution { public boolean closeStrings(String word1, String word2) { int[] cnt1 = new int[26]; int[] cnt2 = new int[26]; for (int i = 0; i &amp;lt; word1.length(); ++i) { ++cnt1[word1.charAt(i) - 'a']; } for (int i = 0; i &amp;lt; word2.length(); ++i) { ++cnt2[word2.charAt(i) - 'a']; } for (int i = 0; i &amp;lt; 26; ++i) { if ((cnt1[i] == 0) != (cnt2[i] == 0)) { return false; } } Arrays.sort(cnt1); Arrays.sort(cnt2); return Arrays.equals(cnt1, cnt2); } } class Solution { public: bool closeStrings(string word1, string word2) { int cnt1[26]{}; int cnt2[26]{}; for (char&amp;amp; c : word1)..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1657 - Determine if Two Strings Are Close | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1657 - Determine if Two Strings Are Close" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1657.html" rel="canonical">
+          <meta content="https://leetcode.ca/2020-06-13-1657-Determine-if-Two-Strings-Are-Close/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2020-06-13T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1657 - Determine if Two Strings Are Close","dateModified":"2020-06-13T00:00:00-07:00","datePublished":"2020-06-13T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2020-06-13-1657-Determine-if-Two-Strings-Are-Close/"},"url":"https://leetcode.ca/2020-06-13-1657-Determine-if-Two-Strings-Are-Close/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1657-determine-if-two-strings-are-close">
+       <a href="solution-1657.html">
+        1657. Determine if Two Strings Are Close
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Two strings are considered
+       <strong>
+        close
+       </strong>
+       if you can attain one from the other using the following operations:
+      </p>
+      <ul>
+       <li>
+        Operation 1: Swap any two
+        <strong>
+         existing
+        </strong>
+        characters.
+        <ul>
+         <li>
+          For example,
+          <code>
+           a
+           <u>
+            b
+           </u>
+           cd
+           <u>
+            e
+           </u>
+           -&gt; a
+           <u>
+            e
+           </u>
+           cd
+           <u>
+            b
+           </u>
+          </code>
+         </li>
+        </ul>
+       </li>
+       <li>
+        Operation 2: Transform
+        <strong>
+         every
+        </strong>
+        occurrence of one
+        <strong>
+         existing
+        </strong>
+        character into another
+        <strong>
+         existing
+        </strong>
+        character, and do the same with the other character.
+        <ul>
+         <li>
+          For example,
+          <code>
+           <u>
+            aa
+           </u>
+           c
+           <u>
+            abb
+           </u>
+           -&gt;
+           <u>
+            bb
+           </u>
+           c
+           <u>
+            baa
+           </u>
+          </code>
+          (all
+          <code>
+           a
+          </code>
+          's turn into
+          <code>
+           b
+          </code>
+          's, and all
+          <code>
+           b
+          </code>
+          's turn into
+          <code>
+           a
+          </code>
+          's)
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+       You can use the operations on either string as many times as necessary.
+      </p>
+      <p>
+       Given two strings,
+       <code>
+        word1
+       </code>
+       and
+       <code>
+        word2
+       </code>
+       , return
+       <code>
+        true
+       </code>
+       <em>
+        if
+       </em>
+       <code>
+        word1
+       </code>
+       <em>
+        and
+       </em>
+       <code>
+        word2
+       </code>
+       <em>
+        are
+        <strong>
+         close
+        </strong>
+        , and
+       </em>
+       <code>
+        false
+       </code>
+       <em>
+        otherwise.
+       </em>
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> word1 = "abc", word2 = "bca"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> You can attain word2 from word1 in 2 operations.
+Apply Operation 1: "a<u>bc</u>" -&gt; "a<u>cb</u>"
+Apply Operation 1: "<u>a</u>c<u>b</u>" -&gt; "<u>b</u>c<u>a</u>"
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> word1 = "a", word2 = "aa"
+<strong>Output:</strong> false
+<strong>Explanation: </strong>It is impossible to attain word2 from word1, or vice versa, in any number of operations.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> word1 = "cabbba", word2 = "abbccc"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> You can attain word2 from word1 in 3 operations.
+Apply Operation 1: "ca<u>b</u>bb<u>a</u>" -&gt; "ca<u>a</u>bb<u>b</u>"
+<code>Apply Operation 2: "</code><u>c</u>aa<u>bbb</u>" -&gt; "<u>b</u>aa<u>ccc</u>"
+Apply Operation 2: "<u>baa</u>ccc" -&gt; "<u>abb</u>ccc"
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= word1.length, word2.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         word1
+        </code>
+        and
+        <code>
+         word2
+        </code>
+        contain only lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Counting + Sorting
+       </strong>
+      </p>
+      <p>
+       According to the problem description, two strings are close if they meet the following two conditions simultaneously:
+      </p>
+      <ol>
+       <li>
+        The strings
+        <code class="language-plaintext highlighter-rouge">
+         word1
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         word2
+        </code>
+        must contain the same types of letters.
+       </li>
+       <li>
+        The arrays obtained by sorting the counts of all characters in
+        <code class="language-plaintext highlighter-rouge">
+         word1
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         word2
+        </code>
+        must be the same.
+       </li>
+      </ol>
+      <p>
+       Therefore, we can first use an array or hash table to count the occurrences of each letter in
+       <code class="language-plaintext highlighter-rouge">
+        word1
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        word2
+       </code>
+       respectively, and then compare whether they are the same. If they are not the same, return
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       early.
+      </p>
+      <p>
+       Otherwise, we sort the corresponding counts, and then compare whether the counts at the corresponding positions are the same. If they are not the same, return
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       .
+      </p>
+      <p>
+       At the end of the traversal, return
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       .
+      </p>
+      <p>
+       The time complexity is $O(m + n + C \times \log C)$, and the space complexity is $O(C)$. Here, $m$ and $n$ are the lengths of the strings
+       <code class="language-plaintext highlighter-rouge">
+        word1
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        word2
+       </code>
+       respectively, and $C$ is the number of letter types. In this problem, $C=26$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#54992164-2fd0-48eb-8b84-79e55d723165'}">
+       <li class="uk-active">
+        <a href="solution-1657.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1657.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1657.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1657.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1657.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-1657.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="54992164-2fd0-48eb-8b84-79e55d723165">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">closeStrings</span><span class="o">(</span><span class="nc">String</span> <span class="n">word1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">word2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">cnt1</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">cnt2</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">word1</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">++</span><span class="n">cnt1</span><span class="o">[</span><span class="n">word1</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">word2</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">++</span><span class="n">cnt2</span><span class="o">[</span><span class="n">word2</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">cnt1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">!=</span> <span class="o">(</span><span class="n">cnt2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">cnt1</span><span class="o">);</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">cnt2</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">cnt1</span><span class="o">,</span> <span class="n">cnt2</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">closeStrings</span><span class="p">(</span><span class="n">string</span> <span class="n">word1</span><span class="p">,</span> <span class="n">string</span> <span class="n">word2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">cnt1</span><span class="p">[</span><span class="mi">26</span><span class="p">]{};</span>
+        <span class="kt">int</span> <span class="n">cnt2</span><span class="p">[</span><span class="mi">26</span><span class="p">]{};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">cnt1</span><span class="p">[</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">cnt2</span><span class="p">[</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">cnt1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">cnt2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">cnt1</span><span class="p">,</span> <span class="n">cnt1</span> <span class="o">+</span> <span class="mi">26</span><span class="p">);</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">cnt2</span><span class="p">,</span> <span class="n">cnt2</span> <span class="o">+</span> <span class="mi">26</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">equal</span><span class="p">(</span><span class="n">cnt1</span><span class="p">,</span> <span class="n">cnt1</span> <span class="o">+</span> <span class="mi">26</span><span class="p">,</span> <span class="n">cnt2</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">closeStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">word2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">cnt1</span><span class="p">,</span> <span class="n">cnt2</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">word1</span><span class="p">),</span> <span class="n">Counter</span><span class="p">(</span><span class="n">word2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cnt1</span><span class="p">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cnt2</span><span class="p">.</span><span class="n">values</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">cnt1</span><span class="p">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">cnt2</span><span class="p">.</span><span class="n">keys</span><span class="p">())</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">closeStrings</span><span class="p">(</span><span class="n">word1</span> <span class="kt">string</span><span class="p">,</span> <span class="n">word2</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">cnt1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">26</span><span class="p">)</span>
+	<span class="n">cnt2</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">26</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word1</span> <span class="p">{</span>
+		<span class="n">cnt1</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word2</span> <span class="p">{</span>
+		<span class="n">cnt2</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="o">!</span><span class="n">slices</span><span class="o">.</span><span class="n">EqualFunc</span><span class="p">(</span><span class="n">cnt1</span><span class="p">,</span> <span class="n">cnt2</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">v1</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">v2</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">})</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">cnt1</span><span class="p">)</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">cnt2</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">slices</span><span class="o">.</span><span class="n">Equal</span><span class="p">(</span><span class="n">cnt1</span><span class="p">,</span> <span class="n">cnt2</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">closeStrings</span><span class="p">(</span><span class="nx">word1</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">word2</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">cnt1</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">26</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">cnt2</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">26</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">c</span> <span class="k">of</span> <span class="nx">word1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">++</span><span class="nx">cnt1</span><span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">c</span> <span class="k">of</span> <span class="nx">word2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">++</span><span class="nx">cnt2</span><span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="nx">cnt1</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!==</span> <span class="p">(</span><span class="nx">cnt2</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">cnt1</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="nx">cnt2</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">cnt1</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="s1">.</span><span class="dl">'</span><span class="p">)</span> <span class="o">===</span> <span class="nx">cnt2</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="s1">.</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">close_strings</span><span class="p">(</span><span class="n">word1</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">word2</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">cnt1</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">26</span><span class="p">];</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">cnt2</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">26</span><span class="p">];</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="k">in</span> <span class="n">word1</span><span class="nf">.chars</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">cnt1</span><span class="p">[((</span><span class="n">c</span> <span class="k">as</span> <span class="nb">u8</span><span class="p">)</span> <span class="o">-</span> <span class="sc">b'a'</span><span class="p">)</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="k">in</span> <span class="n">word2</span><span class="nf">.chars</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">cnt2</span><span class="p">[((</span><span class="n">c</span> <span class="k">as</span> <span class="nb">u8</span><span class="p">)</span> <span class="o">-</span> <span class="sc">b'a'</span><span class="p">)</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="mi">26</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cnt1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">cnt2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">cnt1</span><span class="nf">.sort</span><span class="p">();</span>
+        <span class="n">cnt2</span><span class="nf">.sort</span><span class="p">();</span>
+        <span class="n">cnt1</span> <span class="o">==</span> <span class="n">cnt2</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1657.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

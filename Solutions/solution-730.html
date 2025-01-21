@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-730.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-730.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>730 - Count Different Palindromic Subsequences</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 730. Count Different Palindromic Subsequences Description Given a string s, return the number of different non-empty palindromic subsequences in s. Since the answer may be very large, return it modulo 109 + 7. A subsequence of a string is obtained by deleting zero or more...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-730.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-730.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-730.html" rel="stylesheet"/>
+   <link href="solution-730.html" rel="stylesheet"/>
+   <link href="solution-730.html" rel="stylesheet"/>
+   <link href="solution-730.html" rel="stylesheet"/>
+   <link href="solution-730.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="730 - Count Different Palindromic Subsequences" property="og:title"/>
+   <meta content="Leetcode 730. Count Different Palindromic Subsequences Description Given a string s, return the number of different non-empty palindromic subsequences in s. Since the answer may be very large, return it modulo 109 + 7. A subsequence of a string is obtained by deleting zero or more characters from the string. A sequence is palindromic if it is equal to the sequence reversed. Two sequences a1, a2, ... and b1, b2, ... are different if there is some i for which ai != bi. &amp;nbsp; Example 1: Input: s = &amp;quot;bccb&amp;quot; Output: 6 Explanation: The 6 different non-empty palindromic subsequences are &amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;, &amp;#39;bb&amp;#39;, &amp;#39;cc&amp;#39;, &amp;#39;bcb&amp;#39;, &amp;#39;bccb&amp;#39;. Note that &amp;#39;bcb&amp;#39; is counted only once, even though it occurs twice. Example 2: Input: s = &amp;quot;abcdabcdabcdabcdabcdabcdabcdabcddcbadcbadcbadcbadcbadcbadcbadcba&amp;quot; Output: 104860361 Explanation: There are 3104860382 different non-empty palindromic subsequences, which is 104860361 modulo 109 + 7. &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 1000 s[i] is either &amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;, or &amp;#39;d&amp;#39;. Solutions Java C++ Python Go class Solution { private final int MOD = (int) 1e9 + 7; public int countPalindromicSubsequences(String s) { int n = s.length(); long[][][] dp = new long[n][n][4]; for (int i = 0; i &amp;lt; n; ++i) { dp[i][i][s.charAt(i) - 'a'] = 1; } for (int l = 2; l &amp;lt;= n; ++l) { for (int i = 0; i + l &amp;lt;= n; ++i) { int j = i + l - 1; for (char c = 'a'; c &amp;lt;= 'd'; ++c) { int k = c - 'a'; if (s.charAt(i) == c &amp;amp;&amp;amp; s.charAt(j) == c) { dp[i][j][k] = 2 + dp[i + 1][j - 1][0] + dp[i + 1][j - 1][1] + dp[i + 1][j - 1][2] + dp[i + 1][j - 1][3]; dp[i][j][k] %= MOD; } else if (s.charAt(i) == c) { dp[i][j][k] = dp[i][j - 1][k]; } else if (s.charAt(j) == c) { dp[i][j][k] = dp[i + 1][j][k]; } else { dp[i][j][k] = dp[i + 1][j - 1][k]; } } } } long ans = 0; for (int k = 0; k &amp;lt; 4; ++k) { ans += dp[0][n - 1][k]; } return (int) (ans % MOD); } } using ll = long long; class Solution { public: int countPalindromicSubsequences(string s) { int mod = 1e9 + 7; int n = s.size(); vector&amp;lt;vector&amp;lt;vector&amp;lt;ll&amp;gt;&amp;gt;&amp;gt; dp(n, vector&amp;lt;vector&amp;lt;ll&amp;gt;&amp;gt;(n, vector&amp;lt;ll&amp;gt;(4))); for (int i = 0; i &amp;lt; n; ++i) dp[i][i][s[i] - 'a'] = 1; for (int l = 2; l &amp;lt;= n; ++l) { for (int i = 0; i + l &amp;lt;= n; ++i) { int j = i + l - 1; for (char c = 'a'; c &amp;lt;= 'd'; ++c) { int k = c - 'a'; if (s[i] == c &amp;amp;&amp;amp; s[j] == c) dp[i][j][k] = 2 + accumulate(dp[i + 1][j - 1].begin(), dp[i + 1][j - 1].end(), 0ll) % mod; else if (s[i] == c) dp[i][j][k] = dp[i][j - 1][k]; else if (s[j] == c) dp[i][j][k] = dp[i + 1][j][k]; else dp[i][j][k] = dp[i + 1][j - 1][k]; } } }..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-11-29T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-11-29-730-Count-Different-Palindromic-Subsequences/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-730.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="730 - Count Different Palindromic Subsequences" property="twitter:title"/>
+   <meta content="Leetcode 730. Count Different Palindromic Subsequences Description Given a string s, return the number of different non-empty palindromic subsequences in s. Since the answer may be very large, return it modulo 109 + 7. A subsequence of a string is obtained by deleting zero or more characters from the string. A sequence is palindromic if it is equal to the sequence reversed. Two sequences a1, a2, ... and b1, b2, ... are different if there is some i for which ai != bi. &amp;nbsp; Example 1: Input: s = &amp;quot;bccb&amp;quot; Output: 6 Explanation: The 6 different non-empty palindromic subsequences are &amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;, &amp;#39;bb&amp;#39;, &amp;#39;cc&amp;#39;, &amp;#39;bcb&amp;#39;, &amp;#39;bccb&amp;#39;. Note that &amp;#39;bcb&amp;#39; is counted only once, even though it occurs twice. Example 2: Input: s = &amp;quot;abcdabcdabcdabcdabcdabcdabcdabcddcbadcbadcbadcbadcbadcbadcbadcba&amp;quot; Output: 104860361 Explanation: There are 3104860382 different non-empty palindromic subsequences, which is 104860361 modulo 109 + 7. &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 1000 s[i] is either &amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;, or &amp;#39;d&amp;#39;. Solutions Java C++ Python Go class Solution { private final int MOD = (int) 1e9 + 7; public int countPalindromicSubsequences(String s) { int n = s.length(); long[][][] dp = new long[n][n][4]; for (int i = 0; i &amp;lt; n; ++i) { dp[i][i][s.charAt(i) - 'a'] = 1; } for (int l = 2; l &amp;lt;= n; ++l) { for (int i = 0; i + l &amp;lt;= n; ++i) { int j = i + l - 1; for (char c = 'a'; c &amp;lt;= 'd'; ++c) { int k = c - 'a'; if (s.charAt(i) == c &amp;amp;&amp;amp; s.charAt(j) == c) { dp[i][j][k] = 2 + dp[i + 1][j - 1][0] + dp[i + 1][j - 1][1] + dp[i + 1][j - 1][2] + dp[i + 1][j - 1][3]; dp[i][j][k] %= MOD; } else if (s.charAt(i) == c) { dp[i][j][k] = dp[i][j - 1][k]; } else if (s.charAt(j) == c) { dp[i][j][k] = dp[i + 1][j][k]; } else { dp[i][j][k] = dp[i + 1][j - 1][k]; } } } } long ans = 0; for (int k = 0; k &amp;lt; 4; ++k) { ans += dp[0][n - 1][k]; } return (int) (ans % MOD); } } using ll = long long; class Solution { public: int countPalindromicSubsequences(string s) { int mod = 1e9 + 7; int n = s.size(); vector&amp;lt;vector&amp;lt;vector&amp;lt;ll&amp;gt;&amp;gt;&amp;gt; dp(n, vector&amp;lt;vector&amp;lt;ll&amp;gt;&amp;gt;(n, vector&amp;lt;ll&amp;gt;(4))); for (int i = 0; i &amp;lt; n; ++i) dp[i][i][s[i] - 'a'] = 1; for (int l = 2; l &amp;lt;= n; ++l) { for (int i = 0; i + l &amp;lt;= n; ++i) { int j = i + l - 1; for (char c = 'a'; c &amp;lt;= 'd'; ++c) { int k = c - 'a'; if (s[i] == c &amp;amp;&amp;amp; s[j] == c) dp[i][j][k] = 2 + accumulate(dp[i + 1][j - 1].begin(), dp[i + 1][j - 1].end(), 0ll) % mod; else if (s[i] == c) dp[i][j][k] = dp[i][j - 1][k]; else if (s[j] == c) dp[i][j][k] = dp[i + 1][j][k]; else dp[i][j][k] = dp[i + 1][j - 1][k]; } } }..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    730 - Count Different Palindromic Subsequences | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="730 - Count Different Palindromic Subsequences" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-730.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-11-29-730-Count-Different-Palindromic-Subsequences/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-11-29T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"730 - Count Different Palindromic Subsequences","dateModified":"2017-11-29T00:00:00-08:00","datePublished":"2017-11-29T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-11-29-730-Count-Different-Palindromic-Subsequences/"},"url":"https://leetcode.ca/2017-11-29-730-Count-Different-Palindromic-Subsequences/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="730-count-different-palindromic-subsequences">
+       <a href="solution-730.html">
+        730. Count Different Palindromic Subsequences
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string s, return
+       <em>
+        the number of different non-empty palindromic subsequences in
+       </em>
+       <code>
+        s
+       </code>
+       . Since the answer may be very large, return it
+       <strong>
+        modulo
+       </strong>
+       <code>
+        10
+        <sup>
+         9
+        </sup>
+        + 7
+       </code>
+       .
+      </p>
+      <p>
+       A subsequence of a string is obtained by deleting zero or more characters from the string.
+      </p>
+      <p>
+       A sequence is palindromic if it is equal to the sequence reversed.
+      </p>
+      <p>
+       Two sequences
+       <code>
+        a
+        <sub>
+         1
+        </sub>
+        , a
+        <sub>
+         2
+        </sub>
+        , ...
+       </code>
+       and
+       <code>
+        b
+        <sub>
+         1
+        </sub>
+        , b
+        <sub>
+         2
+        </sub>
+        , ...
+       </code>
+       are different if there is some
+       <code>
+        i
+       </code>
+       for which
+       <code>
+        a
+        <sub>
+         i
+        </sub>
+        != b
+        <sub>
+         i
+        </sub>
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "bccb"
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> The 6 different non-empty palindromic subsequences are 'b', 'c', 'bb', 'cc', 'bcb', 'bccb'.
+Note that 'bcb' is counted only once, even though it occurs twice.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "abcdabcdabcdabcdabcdabcdabcdabcddcbadcbadcbadcbadcbadcbadcbadcba"
+<strong>Output:</strong> 104860361
+<strong>Explanation:</strong> There are 3104860382 different non-empty palindromic subsequences, which is 104860361 modulo 10<sup>9</sup> + 7.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         s[i]
+        </code>
+        is either
+        <code>
+         'a'
+        </code>
+        ,
+        <code>
+         'b'
+        </code>
+        ,
+        <code>
+         'c'
+        </code>
+        , or
+        <code>
+         'd'
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#ecb0acde-2f1a-4465-9efa-3163a7f7d921'}">
+       <li class="uk-active">
+        <a href="solution-730.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-730.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-730.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-730.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="ecb0acde-2f1a-4465-9efa-3163a7f7d921">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MOD</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">countPalindromicSubsequences</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">long</span><span class="o">[][][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">][</span><span class="mi">4</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">i</span><span class="o">][</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="sc">'a'</span><span class="o">;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="sc">'d'</span><span class="o">;</span> <span class="o">++</span><span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span>
+                            <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="mi">2</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="mi">3</span><span class="o">];</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">%=</span> <span class="no">MOD</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">k</span><span class="o">];</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">];</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">k</span><span class="o">];</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">k</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">ans</span> <span class="o">%</span> <span class="no">MOD</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">using</span> <span class="n">ll</span> <span class="o">=</span> <span class="kt">long</span> <span class="kt">long</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">countPalindromicSubsequences</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mf">1e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">4</span><span class="p">)));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="sc">'a'</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="sc">'d'</span><span class="p">;</span> <span class="o">++</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="n">begin</span><span class="p">(),</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0ll</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+                    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+                    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+                    <span class="k">else</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ll</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="n">begin</span><span class="p">(),</span> <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0ll</span><span class="p">);</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="o">%</span> <span class="n">mod</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">countPalindromicSubsequences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="s">'abcd'</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">:</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">:</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">:</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">countPalindromicSubsequences</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">mod</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="m">1e9</span><span class="p">)</span> <span class="o">+</span> <span class="m">7</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span> <span class="p">{</span>
+		<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+		<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">l</span> <span class="o">:=</span> <span class="m">2</span><span class="p">;</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">l</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">l</span> <span class="o">-</span> <span class="m">1</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[</span><span class="m">4</span><span class="p">]</span><span class="kt">byte</span><span class="p">{</span><span class="sc">'a'</span><span class="p">,</span> <span class="sc">'b'</span><span class="p">,</span> <span class="sc">'c'</span><span class="p">,</span> <span class="sc">'d'</span><span class="p">}</span> <span class="p">{</span>
+				<span class="n">k</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span> <span class="p">{</span>
+					<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="m">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">0</span><span class="p">]</span><span class="o">+</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">1</span><span class="p">]</span><span class="o">+</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">2</span><span class="p">]</span><span class="o">+</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">3</span><span class="p">])</span><span class="o">%</span><span class="n">mod</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span> <span class="p">{</span>
+					<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span> <span class="p">{</span>
+					<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">+=</span> <span class="n">v</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span> <span class="o">%</span> <span class="n">mod</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-730.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

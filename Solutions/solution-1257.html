@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1257.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1257.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1257 - Smallest Common Region</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1257. Smallest Common Region Description You are given some lists of regions where the first region of each list includes all other regions in that list. Naturally, if a region x contains another region y then x is bigger than y. Also, by definition, a...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1257.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1257.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1257.html" rel="stylesheet"/>
+   <link href="solution-1257.html" rel="stylesheet"/>
+   <link href="solution-1257.html" rel="stylesheet"/>
+   <link href="solution-1257.html" rel="stylesheet"/>
+   <link href="solution-1257.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1257 - Smallest Common Region" property="og:title"/>
+   <meta content='Leetcode
+
+
+
+
+1257. Smallest Common Region
+
+Description
+
+You are given some lists of regions where the first region of each list includes all other regions in that list.
+
+Naturally, if a region x contains another region y then x is bigger than y. Also, by definition, a region x contains itself.
+
+Given two regions: region1 and region2, return the smallest region that contains both of them.
+
+If you are given regions r1, r2, and r3 such that r1 includes r3, it is guaranteed there is no r2 such that r2 includes r3.
+
+It is guaranteed the smallest region exists.
+
+&amp;nbsp;
+Example 1:
+
+
+Input:
+regions = [[&amp;quot;Earth&amp;quot;,&amp;quot;North America&amp;quot;,&amp;quot;South America&amp;quot;],
+[&amp;quot;North America&amp;quot;,&amp;quot;United States&amp;quot;,&amp;quot;Canada&amp;quot;],
+[&amp;quot;United States&amp;quot;,&amp;quot;New York&amp;quot;,&amp;quot;Boston&amp;quot;],
+[&amp;quot;Canada&amp;quot;,&amp;quot;Ontario&amp;quot;,&amp;quot;Quebec&amp;quot;],
+[&amp;quot;South America&amp;quot;,&amp;quot;Brazil&amp;quot;]],
+region1 = &amp;quot;Quebec&amp;quot;,
+region2 = &amp;quot;New York&amp;quot;
+Output: &amp;quot;North America&amp;quot;
+
+
+Example 2:
+
+
+Input: regions = [[&amp;quot;Earth&amp;quot;, &amp;quot;North America&amp;quot;, &amp;quot;South America&amp;quot;],[&amp;quot;North America&amp;quot;, &amp;quot;United States&amp;quot;, &amp;quot;Canada&amp;quot;],[&amp;quot;United States&amp;quot;, &amp;quot;New York&amp;quot;, &amp;quot;Boston&amp;quot;],[&amp;quot;Canada&amp;quot;, &amp;quot;Ontario&amp;quot;, &amp;quot;Quebec&amp;quot;],[&amp;quot;South America&amp;quot;, &amp;quot;Brazil&amp;quot;]], region1 = &amp;quot;Canada&amp;quot;, region2 = &amp;quot;South America&amp;quot;
+Output: &amp;quot;Earth&amp;quot;
+
+
+&amp;nbsp;
+Constraints:
+
+
+	2 &amp;lt;= regions.length &amp;lt;= 104
+	2 &amp;lt;= regions[i].length &amp;lt;= 20
+	1 &amp;lt;= regions[i][j].length, region1.length, region2.length &amp;lt;= 20
+	region1 != region2
+	regions[i][j], region1, and region2 consist of English letters.
+
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+
+
+
+
+	
+class Solution {
+    public String findSmallestRegion(List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; regions, String region1, String region2) {
+        Map&amp;lt;String, String&amp;gt; m = new HashMap&amp;lt;&amp;gt;();
+        for (List&amp;lt;String&amp;gt; region : regions) {
+            for (int i = 1; i &amp;lt; region.size(); ++i) {
+                m.put(region.get(i), region.get(0));
+            }
+        }
+        Set&amp;lt;String&amp;gt; s = new HashSet&amp;lt;&amp;gt;();
+        while (m.containsKey(region1)) {
+            s.add(region1);
+            region1 = m.get(region1);
+        }
+        while (m.containsKey(region2)) {
+            if (s.contains(region2)) {
+                return region2;
+            }
+            region2 = m.get(region2);
+        }
+        return region1;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    string findSmallestRegion(vector&amp;lt;vector&amp;lt;string&amp;gt;&amp;gt;&amp;amp; regions, string region1, string region2) {
+        unordered_map&amp;lt;string, string&amp;gt; m;
+        for (auto&amp;amp; region : regions)
+            for (int i = 1; i &amp;lt; region.size(); ++i)
+                m[region[i]] = region[0];
+        unordered_set&amp;lt;string&amp;gt; s;
+        while (m.count(region1)) {
+            s.insert(region1);
+            region1 = m[region1];
+        }
+        while (m.count(region2)) {
+            if (s.count(region2)) return region2;
+            region2 = m[region2];
+        }
+        return region1;
+    }
+};
+
+
+
+	
+class Solution:
+    def findSmallestRegion(
+        self, regions: List[List[str]], region1: str, region2: str
+    ) -&amp;gt; str:
+        m = {}
+        for region in regions:
+            for r in region[1:]:
+                m[r] = region[0]
+        s = set()
+        while m.get(region1):
+            s.add(region1)
+            region1 = m[region1]
+        while m.get(region2):
+            if region2 in s:
+                return region2
+            region2 = m[region2]
+        return region1
+
+
+
+
+	
+func findSmallestRegion(regions [][]string, region1 string, region2 string) string {
+	m := make(map[string]string)
+	for _, region := range regions {
+		for i := 1; i &amp;lt; len(region); i++ {
+			m[region[i]] = region[0]
+		}
+	}
+	s := make(map[string]bool)
+	for region1 != "" {
+		s[region1] = true
+		region1 = m[region1]
+	}
+	for region2 != "" {
+		if s[region2] {
+			return region2
+		}
+		region2 = m[region2]
+	}
+	return region1
+}
+
+
+
+
+
+All Problems
+
+All Solutions' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-05-10T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-05-10-1257-Smallest-Common-Region/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1257.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1257 - Smallest Common Region" property="twitter:title"/>
+   <meta content='Leetcode
+
+
+
+
+1257. Smallest Common Region
+
+Description
+
+You are given some lists of regions where the first region of each list includes all other regions in that list.
+
+Naturally, if a region x contains another region y then x is bigger than y. Also, by definition, a region x contains itself.
+
+Given two regions: region1 and region2, return the smallest region that contains both of them.
+
+If you are given regions r1, r2, and r3 such that r1 includes r3, it is guaranteed there is no r2 such that r2 includes r3.
+
+It is guaranteed the smallest region exists.
+
+&amp;nbsp;
+Example 1:
+
+
+Input:
+regions = [[&amp;quot;Earth&amp;quot;,&amp;quot;North America&amp;quot;,&amp;quot;South America&amp;quot;],
+[&amp;quot;North America&amp;quot;,&amp;quot;United States&amp;quot;,&amp;quot;Canada&amp;quot;],
+[&amp;quot;United States&amp;quot;,&amp;quot;New York&amp;quot;,&amp;quot;Boston&amp;quot;],
+[&amp;quot;Canada&amp;quot;,&amp;quot;Ontario&amp;quot;,&amp;quot;Quebec&amp;quot;],
+[&amp;quot;South America&amp;quot;,&amp;quot;Brazil&amp;quot;]],
+region1 = &amp;quot;Quebec&amp;quot;,
+region2 = &amp;quot;New York&amp;quot;
+Output: &amp;quot;North America&amp;quot;
+
+
+Example 2:
+
+
+Input: regions = [[&amp;quot;Earth&amp;quot;, &amp;quot;North America&amp;quot;, &amp;quot;South America&amp;quot;],[&amp;quot;North America&amp;quot;, &amp;quot;United States&amp;quot;, &amp;quot;Canada&amp;quot;],[&amp;quot;United States&amp;quot;, &amp;quot;New York&amp;quot;, &amp;quot;Boston&amp;quot;],[&amp;quot;Canada&amp;quot;, &amp;quot;Ontario&amp;quot;, &amp;quot;Quebec&amp;quot;],[&amp;quot;South America&amp;quot;, &amp;quot;Brazil&amp;quot;]], region1 = &amp;quot;Canada&amp;quot;, region2 = &amp;quot;South America&amp;quot;
+Output: &amp;quot;Earth&amp;quot;
+
+
+&amp;nbsp;
+Constraints:
+
+
+	2 &amp;lt;= regions.length &amp;lt;= 104
+	2 &amp;lt;= regions[i].length &amp;lt;= 20
+	1 &amp;lt;= regions[i][j].length, region1.length, region2.length &amp;lt;= 20
+	region1 != region2
+	regions[i][j], region1, and region2 consist of English letters.
+
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+
+
+
+
+	
+class Solution {
+    public String findSmallestRegion(List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; regions, String region1, String region2) {
+        Map&amp;lt;String, String&amp;gt; m = new HashMap&amp;lt;&amp;gt;();
+        for (List&amp;lt;String&amp;gt; region : regions) {
+            for (int i = 1; i &amp;lt; region.size(); ++i) {
+                m.put(region.get(i), region.get(0));
+            }
+        }
+        Set&amp;lt;String&amp;gt; s = new HashSet&amp;lt;&amp;gt;();
+        while (m.containsKey(region1)) {
+            s.add(region1);
+            region1 = m.get(region1);
+        }
+        while (m.containsKey(region2)) {
+            if (s.contains(region2)) {
+                return region2;
+            }
+            region2 = m.get(region2);
+        }
+        return region1;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    string findSmallestRegion(vector&amp;lt;vector&amp;lt;string&amp;gt;&amp;gt;&amp;amp; regions, string region1, string region2) {
+        unordered_map&amp;lt;string, string&amp;gt; m;
+        for (auto&amp;amp; region : regions)
+            for (int i = 1; i &amp;lt; region.size(); ++i)
+                m[region[i]] = region[0];
+        unordered_set&amp;lt;string&amp;gt; s;
+        while (m.count(region1)) {
+            s.insert(region1);
+            region1 = m[region1];
+        }
+        while (m.count(region2)) {
+            if (s.count(region2)) return region2;
+            region2 = m[region2];
+        }
+        return region1;
+    }
+};
+
+
+
+	
+class Solution:
+    def findSmallestRegion(
+        self, regions: List[List[str]], region1: str, region2: str
+    ) -&amp;gt; str:
+        m = {}
+        for region in regions:
+            for r in region[1:]:
+                m[r] = region[0]
+        s = set()
+        while m.get(region1):
+            s.add(region1)
+            region1 = m[region1]
+        while m.get(region2):
+            if region2 in s:
+                return region2
+            region2 = m[region2]
+        return region1
+
+
+
+
+	
+func findSmallestRegion(regions [][]string, region1 string, region2 string) string {
+	m := make(map[string]string)
+	for _, region := range regions {
+		for i := 1; i &amp;lt; len(region); i++ {
+			m[region[i]] = region[0]
+		}
+	}
+	s := make(map[string]bool)
+	for region1 != "" {
+		s[region1] = true
+		region1 = m[region1]
+	}
+	for region2 != "" {
+		if s[region2] {
+			return region2
+		}
+		region2 = m[region2]
+	}
+	return region1
+}
+
+
+
+
+
+All Problems
+
+All Solutions' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1257 - Smallest Common Region | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1257 - Smallest Common Region" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1257.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-05-10-1257-Smallest-Common-Region/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-05-10T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1257 - Smallest Common Region","dateModified":"2019-05-10T00:00:00-07:00","datePublished":"2019-05-10T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-05-10-1257-Smallest-Common-Region/"},"url":"https://leetcode.ca/2019-05-10-1257-Smallest-Common-Region/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1257-smallest-common-region">
+       <a href="solution-1257.html">
+        1257. Smallest Common Region
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given some lists of
+       <code>
+        regions
+       </code>
+       where the first region of each list includes all other regions in that list.
+      </p>
+      <p>
+       Naturally, if a region
+       <code>
+        x
+       </code>
+       contains another region
+       <code>
+        y
+       </code>
+       then
+       <code>
+        x
+       </code>
+       is bigger than
+       <code>
+        y
+       </code>
+       . Also, by definition, a region
+       <code>
+        x
+       </code>
+       contains itself.
+      </p>
+      <p>
+       Given two regions:
+       <code>
+        region1
+       </code>
+       and
+       <code>
+        region2
+       </code>
+       , return
+       <em>
+        the smallest region that contains both of them
+       </em>
+       .
+      </p>
+      <p>
+       If you are given regions
+       <code>
+        r1
+       </code>
+       ,
+       <code>
+        r2
+       </code>
+       , and
+       <code>
+        r3
+       </code>
+       such that
+       <code>
+        r1
+       </code>
+       includes
+       <code>
+        r3
+       </code>
+       , it is guaranteed there is no
+       <code>
+        r2
+       </code>
+       such that
+       <code>
+        r2
+       </code>
+       includes
+       <code>
+        r3
+       </code>
+       .
+      </p>
+      <p>
+       It is guaranteed the smallest region exists.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:
+</strong>regions = [["Earth","North America","South America"],
+["North America","United States","Canada"],
+["United States","New York","Boston"],
+["Canada","Ontario","Quebec"],
+["South America","Brazil"]],
+region1 = "Quebec",
+region2 = "New York"
+<strong>Output:</strong> "North America"
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> regions = [["Earth", "North America", "South America"],["North America", "United States", "Canada"],["United States", "New York", "Boston"],["Canada", "Ontario", "Quebec"],["South America", "Brazil"]], region1 = "Canada", region2 = "South America"
+<strong>Output:</strong> "Earth"
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         2 &lt;= regions.length &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         2 &lt;= regions[i].length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= regions[i][j].length, region1.length, region2.length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         region1 != region2
+        </code>
+       </li>
+       <li>
+        <code>
+         regions[i][j]
+        </code>
+        ,
+        <code>
+         region1
+        </code>
+        , and
+        <code>
+         region2
+        </code>
+        consist of English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#b02d87dd-36a7-49bc-a9a6-153bd53dc794'}">
+       <li class="uk-active">
+        <a href="solution-1257.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1257.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1257.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1257.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="b02d87dd-36a7-49bc-a9a6-153bd53dc794">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">findSmallestRegion</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">regions</span><span class="o">,</span> <span class="nc">String</span> <span class="n">region1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">region2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">region</span> <span class="o">:</span> <span class="n">regions</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">region</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">m</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">region</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">region</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">region1</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">s</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">region1</span><span class="o">);</span>
+            <span class="n">region1</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">region1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">region2</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">region2</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">region2</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">region2</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">region2</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">region1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">string</span> <span class="n">findSmallestRegion</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">regions</span><span class="p">,</span> <span class="n">string</span> <span class="n">region1</span><span class="p">,</span> <span class="n">string</span> <span class="n">region2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span> <span class="n">m</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">region</span> <span class="o">:</span> <span class="n">regions</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">region</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">m</span><span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">region1</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">region1</span><span class="p">);</span>
+            <span class="n">region1</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">region1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">region2</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">region2</span><span class="p">))</span> <span class="k">return</span> <span class="n">region2</span><span class="p">;</span>
+            <span class="n">region2</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">region2</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">region1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">findSmallestRegion</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">regions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">region1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">region2</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">m</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">m</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">region1</span><span class="p">):</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">region1</span><span class="p">)</span>
+            <span class="n">region1</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">region1</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">m</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">region2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">region2</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">region2</span>
+            <span class="n">region2</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">region2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">region1</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">findSmallestRegion</span><span class="p">(</span><span class="n">regions</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">,</span> <span class="n">region1</span> <span class="kt">string</span><span class="p">,</span> <span class="n">region2</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="n">m</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">region</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">regions</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">region</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">m</span><span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">region1</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+		<span class="n">s</span><span class="p">[</span><span class="n">region1</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="n">region1</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">region1</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">region2</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">region2</span><span class="p">]</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">region2</span>
+		<span class="p">}</span>
+		<span class="n">region2</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">region2</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">region1</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1257.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

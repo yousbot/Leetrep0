@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1906.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1906.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1906 - Minimum Absolute Difference Queries</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1906. Minimum Absolute Difference Queries Description The minimum absolute difference of an array a is defined as the minimum value of |a[i] - a[j]|, where 0 &amp;lt;= i &amp;lt; j &amp;lt; a.length and a[i] != a[j]. If all elements of a are the same, the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1906.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1906.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1906.html" rel="stylesheet"/>
+   <link href="solution-1906.html" rel="stylesheet"/>
+   <link href="solution-1906.html" rel="stylesheet"/>
+   <link href="solution-1906.html" rel="stylesheet"/>
+   <link href="solution-1906.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1906 - Minimum Absolute Difference Queries" property="og:title"/>
+   <meta content="Leetcode 1906. Minimum Absolute Difference Queries Description The minimum absolute difference of an array a is defined as the minimum value of |a[i] - a[j]|, where 0 &amp;lt;= i &amp;lt; j &amp;lt; a.length and a[i] != a[j]. If all elements of a are the same, the minimum absolute difference is -1. For example, the minimum absolute difference of the array [5,2,3,7,2] is |2 - 3| = 1. Note that it is not 0 because a[i] and a[j] must be different. You are given an integer array nums and the array queries where queries[i] = [li, ri]. For each query i, compute the minimum absolute difference of the subarray nums[li...ri] containing the elements of nums between the 0-based indices li and ri (inclusive). Return an array ans where ans[i] is the answer to the ith query. A subarray is a contiguous sequence of elements in an array. The value of |x| is defined as: x if x &amp;gt;= 0. -x if x &amp;lt; 0. &amp;nbsp; Example 1: Input: nums = [1,3,4,8], queries = [[0,1],[1,2],[2,3],[0,3]] Output: [2,1,4,1] Explanation: The queries are processed as follows: - queries[0] = [0,1]: The subarray is [1,3] and the minimum absolute difference is |1-3| = 2. - queries[1] = [1,2]: The subarray is [3,4] and the minimum absolute difference is |3-4| = 1. - queries[2] = [2,3]: The subarray is [4,8] and the minimum absolute difference is |4-8| = 4. - queries[3] = [0,3]: The subarray is [1,3,4,8] and the minimum absolute difference is |3-4| = 1. Example 2: Input: nums = [4,5,2,2,7,10], queries = [[2,3],[0,2],[0,5],[3,5]] Output: [-1,1,1,3] Explanation: The queries are processed as follows: - queries[0] = [2,3]: The subarray is [2,2] and the minimum absolute difference is -1 because all the elements are the same. - queries[1] = [0,2]: The subarray is [4,5,2] and the minimum absolute difference is |4-5| = 1. - queries[2] = [0,5]: The subarray is [4,5,2,2,7,10] and the minimum absolute difference is |4-5| = 1. - queries[3] = [3,5]: The subarray is [2,7,10] and the minimum absolute difference is |7-10| = 3. &amp;nbsp; Constraints: 2 &amp;lt;= nums.length &amp;lt;= 105 1 &amp;lt;= nums[i] &amp;lt;= 100 1 &amp;lt;= queries.length &amp;lt;= 2&amp;nbsp;* 104 0 &amp;lt;= li &amp;lt; ri &amp;lt; nums.length Solutions Java C++ Python Go TypeScript class Solution { public int[] minDifference(int[] nums, int[][] queries) { int m = nums.length, n = queries.length; int[][] preSum = new int[m + 1][101]; for (int i = 1; i &amp;lt;= m; ++i) { for (int j = 1; j &amp;lt;= 100; ++j) { int t = nums[i - 1] == j ? 1 : 0; preSum[i][j] = preSum[i - 1][j] + t; } } int[] ans = new int[n]; for (int i = 0; i &amp;lt; n; ++i) { int left = queries[i][0], right = queries[i][1] + 1; int t = Integer.MAX_VALUE; int last = -1; for (int j = 1; j &amp;lt;= 100; ++j) { if (preSum[right][j] &amp;gt; preSum[left][j]) { if (last != -1) { t = Math.min(t, j - last); }..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-02-17T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-02-17-1906-Minimum-Absolute-Difference-Queries/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1906.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1906 - Minimum Absolute Difference Queries" property="twitter:title"/>
+   <meta content="Leetcode 1906. Minimum Absolute Difference Queries Description The minimum absolute difference of an array a is defined as the minimum value of |a[i] - a[j]|, where 0 &amp;lt;= i &amp;lt; j &amp;lt; a.length and a[i] != a[j]. If all elements of a are the same, the minimum absolute difference is -1. For example, the minimum absolute difference of the array [5,2,3,7,2] is |2 - 3| = 1. Note that it is not 0 because a[i] and a[j] must be different. You are given an integer array nums and the array queries where queries[i] = [li, ri]. For each query i, compute the minimum absolute difference of the subarray nums[li...ri] containing the elements of nums between the 0-based indices li and ri (inclusive). Return an array ans where ans[i] is the answer to the ith query. A subarray is a contiguous sequence of elements in an array. The value of |x| is defined as: x if x &amp;gt;= 0. -x if x &amp;lt; 0. &amp;nbsp; Example 1: Input: nums = [1,3,4,8], queries = [[0,1],[1,2],[2,3],[0,3]] Output: [2,1,4,1] Explanation: The queries are processed as follows: - queries[0] = [0,1]: The subarray is [1,3] and the minimum absolute difference is |1-3| = 2. - queries[1] = [1,2]: The subarray is [3,4] and the minimum absolute difference is |3-4| = 1. - queries[2] = [2,3]: The subarray is [4,8] and the minimum absolute difference is |4-8| = 4. - queries[3] = [0,3]: The subarray is [1,3,4,8] and the minimum absolute difference is |3-4| = 1. Example 2: Input: nums = [4,5,2,2,7,10], queries = [[2,3],[0,2],[0,5],[3,5]] Output: [-1,1,1,3] Explanation: The queries are processed as follows: - queries[0] = [2,3]: The subarray is [2,2] and the minimum absolute difference is -1 because all the elements are the same. - queries[1] = [0,2]: The subarray is [4,5,2] and the minimum absolute difference is |4-5| = 1. - queries[2] = [0,5]: The subarray is [4,5,2,2,7,10] and the minimum absolute difference is |4-5| = 1. - queries[3] = [3,5]: The subarray is [2,7,10] and the minimum absolute difference is |7-10| = 3. &amp;nbsp; Constraints: 2 &amp;lt;= nums.length &amp;lt;= 105 1 &amp;lt;= nums[i] &amp;lt;= 100 1 &amp;lt;= queries.length &amp;lt;= 2&amp;nbsp;* 104 0 &amp;lt;= li &amp;lt; ri &amp;lt; nums.length Solutions Java C++ Python Go TypeScript class Solution { public int[] minDifference(int[] nums, int[][] queries) { int m = nums.length, n = queries.length; int[][] preSum = new int[m + 1][101]; for (int i = 1; i &amp;lt;= m; ++i) { for (int j = 1; j &amp;lt;= 100; ++j) { int t = nums[i - 1] == j ? 1 : 0; preSum[i][j] = preSum[i - 1][j] + t; } } int[] ans = new int[n]; for (int i = 0; i &amp;lt; n; ++i) { int left = queries[i][0], right = queries[i][1] + 1; int t = Integer.MAX_VALUE; int last = -1; for (int j = 1; j &amp;lt;= 100; ++j) { if (preSum[right][j] &amp;gt; preSum[left][j]) { if (last != -1) { t = Math.min(t, j - last); }..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1906 - Minimum Absolute Difference Queries | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1906 - Minimum Absolute Difference Queries" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1906.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-02-17-1906-Minimum-Absolute-Difference-Queries/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-02-17T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1906 - Minimum Absolute Difference Queries","dateModified":"2021-02-17T00:00:00-08:00","datePublished":"2021-02-17T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-02-17-1906-Minimum-Absolute-Difference-Queries/"},"url":"https://leetcode.ca/2021-02-17-1906-Minimum-Absolute-Difference-Queries/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1906-minimum-absolute-difference-queries">
+       <a href="solution-1906.html">
+        1906. Minimum Absolute Difference Queries
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       The
+       <strong>
+        minimum absolute difference
+       </strong>
+       of an array
+       <code>
+        a
+       </code>
+       is defined as the
+       <strong>
+        minimum value
+       </strong>
+       of
+       <code>
+        |a[i] - a[j]|
+       </code>
+       , where
+       <code>
+        0 &lt;= i &lt; j &lt; a.length
+       </code>
+       and
+       <code>
+        a[i] != a[j]
+       </code>
+       . If all elements of
+       <code>
+        a
+       </code>
+       are the
+       <strong>
+        same
+       </strong>
+       , the minimum absolute difference is
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <ul>
+       <li>
+        For example, the minimum absolute difference of the array
+        <code>
+         [5,
+         <u>
+          2
+         </u>
+         ,
+         <u>
+          3
+         </u>
+         ,7,2]
+        </code>
+        is
+        <code>
+         |2 - 3| = 1
+        </code>
+        . Note that it is not
+        <code>
+         0
+        </code>
+        because
+        <code>
+         a[i]
+        </code>
+        and
+        <code>
+         a[j]
+        </code>
+        must be different.
+       </li>
+      </ul>
+      <p>
+       You are given an integer array
+       <code>
+        nums
+       </code>
+       and the array
+       <code>
+        queries
+       </code>
+       where
+       <code>
+        queries[i] = [l
+        <sub>
+         i
+        </sub>
+        , r
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       . For each query
+       <code>
+        i
+       </code>
+       , compute the
+       <strong>
+        minimum absolute difference
+       </strong>
+       of the
+       <strong>
+        subarray
+       </strong>
+       <code>
+        nums[l
+        <sub>
+         i
+        </sub>
+        ...r
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       containing the elements of
+       <code>
+        nums
+       </code>
+       between the
+       <strong>
+        0-based
+       </strong>
+       indices
+       <code>
+        l
+        <sub>
+         i
+        </sub>
+       </code>
+       and
+       <code>
+        r
+        <sub>
+         i
+        </sub>
+       </code>
+       (
+       <strong>
+        inclusive
+       </strong>
+       ).
+      </p>
+      <p>
+       Return
+       <em>
+        an
+        <strong>
+         array
+        </strong>
+       </em>
+       <code>
+        ans
+       </code>
+       <em>
+        where
+       </em>
+       <code>
+        ans[i]
+       </code>
+       <em>
+        is the answer to the
+       </em>
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       <em>
+        query
+       </em>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        subarray
+       </strong>
+       is a contiguous sequence of elements in an array.
+      </p>
+      <p>
+       The value of
+       <code>
+        |x|
+       </code>
+       is defined as:
+      </p>
+      <ul>
+       <li>
+        <code>
+         x
+        </code>
+        if
+        <code>
+         x &gt;= 0
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         -x
+        </code>
+        if
+        <code>
+         x &lt; 0
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [1,3,4,8], queries = [[0,1],[1,2],[2,3],[0,3]]
+<strong>Output:</strong> [2,1,4,1]
+<strong>Explanation:</strong> The queries are processed as follows:
+- queries[0] = [0,1]: The subarray is [<u>1</u>,<u>3</u>] and the minimum absolute difference is |1-3| = 2.
+- queries[1] = [1,2]: The subarray is [<u>3</u>,<u>4</u>] and the minimum absolute difference is |3-4| = 1.
+- queries[2] = [2,3]: The subarray is [<u>4</u>,<u>8</u>] and the minimum absolute difference is |4-8| = 4.
+- queries[3] = [0,3]: The subarray is [1,<u>3</u>,<u>4</u>,8] and the minimum absolute difference is |3-4| = 1.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [4,5,2,2,7,10], queries = [[2,3],[0,2],[0,5],[3,5]]
+<strong>Output:</strong> [-1,1,1,3]
+<strong>Explanation: </strong>The queries are processed as follows:
+- queries[0] = [2,3]: The subarray is [2,2] and the minimum absolute difference is -1 because all the
+  elements are the same.
+- queries[1] = [0,2]: The subarray is [<u>4</u>,<u>5</u>,2] and the minimum absolute difference is |4-5| = 1.
+- queries[2] = [0,5]: The subarray is [<u>4</u>,<u>5</u>,2,2,7,10] and the minimum absolute difference is |4-5| = 1.
+- queries[3] = [3,5]: The subarray is [2,<u>7</u>,<u>10</u>] and the minimum absolute difference is |7-10| = 3.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         2 &lt;= nums.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= nums[i] &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= queries.length &lt;= 2 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= l
+         <sub>
+          i
+         </sub>
+         &lt; r
+         <sub>
+          i
+         </sub>
+         &lt; nums.length
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#9086cbd6-d212-4dd1-b00c-5707992e3311'}">
+       <li class="uk-active">
+        <a href="solution-1906.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1906.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1906.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1906.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1906.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="9086cbd6-d212-4dd1-b00c-5707992e3311">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">minDifference</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">queries</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">queries</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">preSum</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="mi">101</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="n">j</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="n">preSum</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">preSum</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">t</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">queries</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">],</span> <span class="n">right</span> <span class="o">=</span> <span class="n">queries</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">last</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">preSum</span><span class="o">[</span><span class="n">right</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">preSum</span><span class="o">[</span><span class="n">left</span><span class="o">][</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">last</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">t</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">last</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="n">last</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">t</span> <span class="o">==</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">minDifference</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">queries</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">queries</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">preSum</span><span class="p">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">101</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">j</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">preSum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">preSum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">right</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">101</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">last</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">preSum</span><span class="p">[</span><span class="n">right</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">preSum</span><span class="p">[</span><span class="n">left</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">last</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">t</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">last</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="n">last</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">101</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minDifference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span>
+        <span class="n">pre_sum</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">101</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">):</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">j</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="n">pre_sum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span>
+
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">inf</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">right</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">left</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">last</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">t</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span>
+                    <span class="n">last</span> <span class="o">=</span> <span class="n">j</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">inf</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minDifference</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">queries</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span>
+	<span class="n">preSum</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">101</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="m">100</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">t</span> <span class="o">:=</span> <span class="m">0</span>
+			<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">j</span> <span class="p">{</span>
+				<span class="n">t</span> <span class="o">=</span> <span class="m">1</span>
+			<span class="p">}</span>
+			<span class="n">preSum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">preSum</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">:=</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">],</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">1</span><span class="p">]</span><span class="o">+</span><span class="m">1</span>
+		<span class="n">t</span><span class="p">,</span> <span class="n">last</span> <span class="o">:=</span> <span class="m">101</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="m">100</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">preSum</span><span class="p">[</span><span class="n">right</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">preSum</span><span class="p">[</span><span class="n">left</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">last</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+					<span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">j</span><span class="o">-</span><span class="n">last</span> <span class="p">{</span>
+						<span class="n">t</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">last</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+				<span class="n">last</span> <span class="o">=</span> <span class="n">j</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="m">101</span> <span class="p">{</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+		<span class="p">}</span>
+		<span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minDifference</span><span class="p">(</span><span class="nx">nums</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">queries</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
+        <span class="nx">n</span> <span class="o">=</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+    <span class="c1">// let max = Math.max(...nums);</span>
+    <span class="kd">let</span> <span class="nx">pre</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">pre</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">num</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">pre</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">pre</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">slice</span><span class="p">());</span>
+        <span class="nx">pre</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">num</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="p">[</span><span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">]</span> <span class="k">of</span> <span class="nx">queries</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">last</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">min</span> <span class="o">=</span> <span class="kc">Infinity</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">pre</span><span class="p">[</span><span class="nx">left</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">pre</span><span class="p">[</span><span class="nx">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">last</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">min</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">min</span><span class="p">,</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">last</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="nx">last</span> <span class="o">=</span> <span class="nx">j</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">min</span> <span class="o">==</span> <span class="kc">Infinity</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="nx">min</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1906.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

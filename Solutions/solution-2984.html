@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2984.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2984.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2984 - Find Peak Calling Hours for Each City</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2984. Find Peak Calling Hours for Each City Description Table: Calls +--------------+----------+ | Column Name | Type | +--------------+----------+ | caller_id | int | | recipient_id | int | | call_time | datetime | | city | varchar | +--------------+----------+ (caller_id, recipient_id, call_time) is the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2984.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2984.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2984.html" rel="stylesheet"/>
+   <link href="solution-2984.html" rel="stylesheet"/>
+   <link href="solution-2984.html" rel="stylesheet"/>
+   <link href="solution-2984.html" rel="stylesheet"/>
+   <link href="solution-2984.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2984 - Find Peak Calling Hours for Each City" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+2984. Find Peak Calling Hours for Each City
+
+Description
+
+Table: Calls
+
+
++--------------+----------+
+| Column Name  | Type     |
++--------------+----------+
+| caller_id    | int      |
+| recipient_id | int      |
+| call_time    | datetime |
+| city         | varchar  |
++--------------+----------+
+(caller_id, recipient_id, call_time) is the primary key (combination of columns with unique values) for this table.
+Each row contains caller id, recipient id, call time, and city.
+
+
+Write a solution to find the peak calling hour for each city. If multiple hours have the same number of calls, all of those hours will be recognized as peak hours for that specific city.
+
+Return the result table ordered by peak calling hour and city in descending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Calls table:
++-----------+--------------+---------------------+----------+
+| caller_id | recipient_id | call_time           | city     |
++-----------+--------------+---------------------+----------+
+| 8         | 4            | 2021-08-24 22:46:07 | Houston  |
+| 4         | 8            | 2021-08-24 22:57:13 | Houston  |  
+| 5         | 1            | 2021-08-11 21:28:44 | Houston  |  
+| 8         | 3            | 2021-08-17 22:04:15 | Houston  |
+| 11        | 3            | 2021-08-17 13:07:00 | New York |
+| 8         | 11           | 2021-08-17 14:22:22 | New York |
++-----------+--------------+---------------------+----------+
+Output: 
++----------+-------------------+-----------------+
+| city     | peak_calling_hour | number_of_calls |
++----------+-------------------+-----------------+
+| Houston  | 22                | 3               |
+| New York | 14                | 1               |
+| New York | 13                | 1               |
++----------+-------------------+-----------------+
+Explanation: 
+For Houston:
+  - The peak time is 22:00, with a total of 3 calls recorded. 
+For New York:
+  - Both 13:00 and 14:00 hours have equal call counts of 1, so both times are considered peak hours.
+Output table is ordered by peak_calling_hour and city in descending order.
+
+Solutions
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            *,
+            RANK() OVER (
+                PARTITION BY city
+                ORDER BY cnt DESC
+            ) AS rk
+        FROM
+            (
+                SELECT
+                    city,
+                    HOUR(call_time) AS h,
+                    COUNT(1) AS cnt
+                FROM Calls
+                GROUP BY 1, 2
+            ) AS t
+    )
+SELECT city, h AS peak_calling_hour, cnt AS number_of_calls
+FROM T
+WHERE rk = 1
+ORDER BY 2 DESC, 1 DESC;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-01-15T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-01-15-2984-Find-Peak-Calling-Hours-for-Each-City/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2984.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2984 - Find Peak Calling Hours for Each City" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+2984. Find Peak Calling Hours for Each City
+
+Description
+
+Table: Calls
+
+
++--------------+----------+
+| Column Name  | Type     |
++--------------+----------+
+| caller_id    | int      |
+| recipient_id | int      |
+| call_time    | datetime |
+| city         | varchar  |
++--------------+----------+
+(caller_id, recipient_id, call_time) is the primary key (combination of columns with unique values) for this table.
+Each row contains caller id, recipient id, call time, and city.
+
+
+Write a solution to find the peak calling hour for each city. If multiple hours have the same number of calls, all of those hours will be recognized as peak hours for that specific city.
+
+Return the result table ordered by peak calling hour and city in descending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Calls table:
++-----------+--------------+---------------------+----------+
+| caller_id | recipient_id | call_time           | city     |
++-----------+--------------+---------------------+----------+
+| 8         | 4            | 2021-08-24 22:46:07 | Houston  |
+| 4         | 8            | 2021-08-24 22:57:13 | Houston  |  
+| 5         | 1            | 2021-08-11 21:28:44 | Houston  |  
+| 8         | 3            | 2021-08-17 22:04:15 | Houston  |
+| 11        | 3            | 2021-08-17 13:07:00 | New York |
+| 8         | 11           | 2021-08-17 14:22:22 | New York |
++-----------+--------------+---------------------+----------+
+Output: 
++----------+-------------------+-----------------+
+| city     | peak_calling_hour | number_of_calls |
++----------+-------------------+-----------------+
+| Houston  | 22                | 3               |
+| New York | 14                | 1               |
+| New York | 13                | 1               |
++----------+-------------------+-----------------+
+Explanation: 
+For Houston:
+  - The peak time is 22:00, with a total of 3 calls recorded. 
+For New York:
+  - Both 13:00 and 14:00 hours have equal call counts of 1, so both times are considered peak hours.
+Output table is ordered by peak_calling_hour and city in descending order.
+
+Solutions
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            *,
+            RANK() OVER (
+                PARTITION BY city
+                ORDER BY cnt DESC
+            ) AS rk
+        FROM
+            (
+                SELECT
+                    city,
+                    HOUR(call_time) AS h,
+                    COUNT(1) AS cnt
+                FROM Calls
+                GROUP BY 1, 2
+            ) AS t
+    )
+SELECT city, h AS peak_calling_hour, cnt AS number_of_calls
+FROM T
+WHERE rk = 1
+ORDER BY 2 DESC, 1 DESC;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2984 - Find Peak Calling Hours for Each City | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2984 - Find Peak Calling Hours for Each City" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2984.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-01-15-2984-Find-Peak-Calling-Hours-for-Each-City/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-01-15T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2984 - Find Peak Calling Hours for Each City","dateModified":"2024-01-15T00:00:00-08:00","datePublished":"2024-01-15T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-01-15-2984-Find-Peak-Calling-Hours-for-Each-City/"},"url":"https://leetcode.ca/2024-01-15-2984-Find-Peak-Calling-Hours-for-Each-City/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2984-find-peak-calling-hours-for-each-city">
+       <a href="solution-2984.html">
+        2984. Find Peak Calling Hours for Each City
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        Calls
+       </code>
+      </p>
+      <pre>
++--------------+----------+
+| Column Name  | Type     |
++--------------+----------+
+| caller_id    | int      |
+| recipient_id | int      |
+| call_time    | datetime |
+| city         | varchar  |
++--------------+----------+
+(caller_id, recipient_id, call_time) is the primary key (combination of columns with unique values) for this table.
+Each row contains caller id, recipient id, call time, and city.
+</pre>
+      <p>
+       Write a solution to find the
+       <strong>
+        peak
+       </strong>
+       calling
+       <strong>
+        hour
+       </strong>
+       for each
+       <code>
+        city
+       </code>
+       . If
+       <strong>
+        multiple hours
+       </strong>
+       have the
+       <strong>
+        same
+       </strong>
+       number of calls, all of those hours will be recognized as
+       <strong>
+        peak hours
+       </strong>
+       for that specific city.
+      </p>
+      <p>
+       Return
+       <em>
+        the result table ordered by
+        <strong>
+         peak calling hour
+        </strong>
+        and
+       </em>
+       <code>
+        city
+       </code>
+       <em>
+        in
+        <strong>
+         descending
+        </strong>
+       </em>
+       <em>
+        <strong>
+        </strong>
+        order.
+       </em>
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+Calls table:
++-----------+--------------+---------------------+----------+
+| caller_id | recipient_id | call_time           | city     |
++-----------+--------------+---------------------+----------+
+| 8         | 4            | 2021-08-24 22:46:07 | Houston  |
+| 4         | 8            | 2021-08-24 22:57:13 | Houston  |  
+| 5         | 1            | 2021-08-11 21:28:44 | Houston  |  
+| 8         | 3            | 2021-08-17 22:04:15 | Houston  |
+| 11        | 3            | 2021-08-17 13:07:00 | New York |
+| 8         | 11           | 2021-08-17 14:22:22 | New York |
++-----------+--------------+---------------------+----------+
+<strong>Output:</strong> 
++----------+-------------------+-----------------+
+| city     | peak_calling_hour | number_of_calls |
++----------+-------------------+-----------------+
+| Houston  | 22                | 3               |
+| New York | 14                | 1               |
+| New York | 13                | 1               |
++----------+-------------------+-----------------+
+<strong>Explanation:</strong> 
+For Houston:
+  - The peak time is 22:00, with a total of 3 calls recorded. 
+For New York:
+  - Both 13:00 and 14:00 hours have equal call counts of 1, so both times are considered peak hours.
+Output table is ordered by peak_calling_hour and city in descending order.</pre>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#91fd35c2-3e19-40b0-85c8-8079003b9264'}">
+       <li class="uk-active">
+        <a href="solution-2984.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="91fd35c2-3e19-40b0-85c8-8079003b9264">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">WITH</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">RANK</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">(</span>
+                <span class="k">PARTITION</span> <span class="k">BY</span> <span class="n">city</span>
+                <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">cnt</span> <span class="k">DESC</span>
+            <span class="p">)</span> <span class="k">AS</span> <span class="n">rk</span>
+        <span class="k">FROM</span>
+            <span class="p">(</span>
+                <span class="k">SELECT</span>
+                    <span class="n">city</span><span class="p">,</span>
+                    <span class="n">HOUR</span><span class="p">(</span><span class="n">call_time</span><span class="p">)</span> <span class="k">AS</span> <span class="n">h</span><span class="p">,</span>
+                    <span class="k">COUNT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">cnt</span>
+                <span class="k">FROM</span> <span class="n">Calls</span>
+                <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+            <span class="p">)</span> <span class="k">AS</span> <span class="n">t</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">city</span><span class="p">,</span> <span class="n">h</span> <span class="k">AS</span> <span class="n">peak_calling_hour</span><span class="p">,</span> <span class="n">cnt</span> <span class="k">AS</span> <span class="n">number_of_calls</span>
+<span class="k">FROM</span> <span class="n">T</span>
+<span class="k">WHERE</span> <span class="n">rk</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span> <span class="k">DESC</span><span class="p">,</span> <span class="mi">1</span> <span class="k">DESC</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2984.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

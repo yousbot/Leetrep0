@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1072.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1072.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1072 - Flip Columns For Maximum Number of Equal Rows</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1072. Flip Columns For Maximum Number of Equal Rows Description You are given an m x n binary matrix matrix. You can choose any number of columns in the matrix and flip every cell in that column (i.e., Change the value of the cell from...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1072.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1072.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1072.html" rel="stylesheet"/>
+   <link href="solution-1072.html" rel="stylesheet"/>
+   <link href="solution-1072.html" rel="stylesheet"/>
+   <link href="solution-1072.html" rel="stylesheet"/>
+   <link href="solution-1072.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1072 - Flip Columns For Maximum Number of Equal Rows" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1072. Flip Columns For Maximum Number of Equal Rows
+
+Description
+
+You are given an m x n binary matrix matrix.
+
+You can choose any number of columns in the matrix and flip every cell in that column (i.e., Change the value of the cell from 0 to 1 or vice versa).
+
+Return the maximum number of rows that have all values equal after some number of flips.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: matrix = [[0,1],[1,1]]
+Output: 1
+Explanation: After flipping no values, 1 row has all values equal.
+
+
+Example 2:
+
+
+Input: matrix = [[0,1],[1,0]]
+Output: 2
+Explanation: After flipping values in the first column, both rows have equal values.
+
+
+Example 3:
+
+
+Input: matrix = [[0,0,0],[0,0,1],[1,1,0]]
+Output: 2
+Explanation: After flipping values in the first two columns, the last two rows have equal values.
+
+
+&amp;nbsp;
+Constraints:
+
+
+	m == matrix.length
+	n == matrix[i].length
+	1 &amp;lt;= m, n &amp;lt;= 300
+	matrix[i][j] is either&amp;nbsp;0 or 1.
+
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public int maxEqualRowsAfterFlips(int[][] matrix) {
+        Map&amp;lt;String, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;();
+        int ans = 0, n = matrix[0].length;
+        for (var row : matrix) {
+            char[] cs = new char[n];
+            for (int i = 0; i &amp;lt; n; ++i) {
+                cs[i] = (char) (row[0] ^ row[i]);
+            }
+            ans = Math.max(ans, cnt.merge(String.valueOf(cs), 1, Integer::sum));
+        }
+        return ans;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    int maxEqualRowsAfterFlips(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; matrix) {
+        unordered_map&amp;lt;string, int&amp;gt; cnt;
+        int ans = 0;
+        for (auto&amp;amp; row : matrix) {
+            string s;
+            for (int x : row) {
+                s.push_back('0' + (row[0] == 0 ? x : x ^ 1));
+            }
+            ans = max(ans, ++cnt[s]);
+        }
+        return ans;
+    }
+};
+
+
+
+	
+class Solution:
+    def maxEqualRowsAfterFlips(self, matrix: List[List[int]]) -&amp;gt; int:
+        cnt = Counter()
+        for row in matrix:
+            t = tuple(row) if row[0] == 0 else tuple(x ^ 1 for x in row)
+            cnt[t] += 1
+        return max(cnt.values())
+
+
+
+
+	
+func maxEqualRowsAfterFlips(matrix [][]int) (ans int) {
+	cnt := map[string]int{}
+	for _, row := range matrix {
+		s := []byte{}
+		for _, x := range row {
+			if row[0] == 1 {
+				x ^= 1
+			}
+			s = append(s, byte(x)+'0')
+		}
+		t := string(s)
+		cnt[t]++
+		ans = max(ans, cnt[t])
+	}
+	return
+}
+
+
+
+	
+function maxEqualRowsAfterFlips(matrix: number[][]): number {
+    const cnt = new Map&amp;lt;string, number&amp;gt;();
+    let ans = 0;
+    for (const row of matrix) {
+        if (row[0] === 1) {
+            for (let i = 0; i &amp;lt; row.length; i++) {
+                row[i] ^= 1;
+            }
+        }
+        const s = row.join('');
+        cnt.set(s, (cnt.get(s) || 0) + 1);
+        ans = Math.max(ans, cnt.get(s)!);
+    }
+    return ans;
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-11-06T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-11-06-1072-Flip-Columns-For-Maximum-Number-of-Equal-Rows/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1072.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1072 - Flip Columns For Maximum Number of Equal Rows" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1072. Flip Columns For Maximum Number of Equal Rows
+
+Description
+
+You are given an m x n binary matrix matrix.
+
+You can choose any number of columns in the matrix and flip every cell in that column (i.e., Change the value of the cell from 0 to 1 or vice versa).
+
+Return the maximum number of rows that have all values equal after some number of flips.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: matrix = [[0,1],[1,1]]
+Output: 1
+Explanation: After flipping no values, 1 row has all values equal.
+
+
+Example 2:
+
+
+Input: matrix = [[0,1],[1,0]]
+Output: 2
+Explanation: After flipping values in the first column, both rows have equal values.
+
+
+Example 3:
+
+
+Input: matrix = [[0,0,0],[0,0,1],[1,1,0]]
+Output: 2
+Explanation: After flipping values in the first two columns, the last two rows have equal values.
+
+
+&amp;nbsp;
+Constraints:
+
+
+	m == matrix.length
+	n == matrix[i].length
+	1 &amp;lt;= m, n &amp;lt;= 300
+	matrix[i][j] is either&amp;nbsp;0 or 1.
+
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public int maxEqualRowsAfterFlips(int[][] matrix) {
+        Map&amp;lt;String, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;();
+        int ans = 0, n = matrix[0].length;
+        for (var row : matrix) {
+            char[] cs = new char[n];
+            for (int i = 0; i &amp;lt; n; ++i) {
+                cs[i] = (char) (row[0] ^ row[i]);
+            }
+            ans = Math.max(ans, cnt.merge(String.valueOf(cs), 1, Integer::sum));
+        }
+        return ans;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    int maxEqualRowsAfterFlips(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; matrix) {
+        unordered_map&amp;lt;string, int&amp;gt; cnt;
+        int ans = 0;
+        for (auto&amp;amp; row : matrix) {
+            string s;
+            for (int x : row) {
+                s.push_back('0' + (row[0] == 0 ? x : x ^ 1));
+            }
+            ans = max(ans, ++cnt[s]);
+        }
+        return ans;
+    }
+};
+
+
+
+	
+class Solution:
+    def maxEqualRowsAfterFlips(self, matrix: List[List[int]]) -&amp;gt; int:
+        cnt = Counter()
+        for row in matrix:
+            t = tuple(row) if row[0] == 0 else tuple(x ^ 1 for x in row)
+            cnt[t] += 1
+        return max(cnt.values())
+
+
+
+
+	
+func maxEqualRowsAfterFlips(matrix [][]int) (ans int) {
+	cnt := map[string]int{}
+	for _, row := range matrix {
+		s := []byte{}
+		for _, x := range row {
+			if row[0] == 1 {
+				x ^= 1
+			}
+			s = append(s, byte(x)+'0')
+		}
+		t := string(s)
+		cnt[t]++
+		ans = max(ans, cnt[t])
+	}
+	return
+}
+
+
+
+	
+function maxEqualRowsAfterFlips(matrix: number[][]): number {
+    const cnt = new Map&amp;lt;string, number&amp;gt;();
+    let ans = 0;
+    for (const row of matrix) {
+        if (row[0] === 1) {
+            for (let i = 0; i &amp;lt; row.length; i++) {
+                row[i] ^= 1;
+            }
+        }
+        const s = row.join('');
+        cnt.set(s, (cnt.get(s) || 0) + 1);
+        ans = Math.max(ans, cnt.get(s)!);
+    }
+    return ans;
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1072 - Flip Columns For Maximum Number of Equal Rows | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1072 - Flip Columns For Maximum Number of Equal Rows" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1072.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-11-06-1072-Flip-Columns-For-Maximum-Number-of-Equal-Rows/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-11-06T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1072 - Flip Columns For Maximum Number of Equal Rows","dateModified":"2018-11-06T00:00:00-08:00","datePublished":"2018-11-06T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-11-06-1072-Flip-Columns-For-Maximum-Number-of-Equal-Rows/"},"url":"https://leetcode.ca/2018-11-06-1072-Flip-Columns-For-Maximum-Number-of-Equal-Rows/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1072-flip-columns-for-maximum-number-of-equal-rows">
+       <a href="solution-1072.html">
+        1072. Flip Columns For Maximum Number of Equal Rows
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an
+       <code>
+        m x n
+       </code>
+       binary matrix
+       <code>
+        matrix
+       </code>
+       .
+      </p>
+      <p>
+       You can choose any number of columns in the matrix and flip every cell in that column (i.e., Change the value of the cell from
+       <code>
+        0
+       </code>
+       to
+       <code>
+        1
+       </code>
+       or vice versa).
+      </p>
+      <p>
+       Return
+       <em>
+        the maximum number of rows that have all values equal after some number of flips
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> matrix = [[0,1],[1,1]]
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> After flipping no values, 1 row has all values equal.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> matrix = [[0,1],[1,0]]
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> After flipping values in the first column, both rows have equal values.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> matrix = [[0,0,0],[0,0,1],[1,1,0]]
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> After flipping values in the first two columns, the last two rows have equal values.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == matrix.length
+        </code>
+       </li>
+       <li>
+        <code>
+         n == matrix[i].length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m, n &lt;= 300
+        </code>
+       </li>
+       <li>
+        <code>
+         matrix[i][j]
+        </code>
+        is either
+        <code>
+         0
+        </code>
+        or
+        <code>
+         1
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#169d7e76-6156-48d2-88e2-7744606c7c47'}">
+       <li class="uk-active">
+        <a href="solution-1072.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1072.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1072.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1072.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1072.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="169d7e76-6156-48d2-88e2-7744606c7c47">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxEqualRowsAfterFlips</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">row</span> <span class="o">:</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span><span class="o">[]</span> <span class="n">cs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cs</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span> <span class="o">(</span><span class="n">row</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">^</span> <span class="n">row</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+            <span class="o">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">cs</span><span class="o">),</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">maxEqualRowsAfterFlips</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">row</span> <span class="o">:</span> <span class="n">matrix</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">row</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">s</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="sc">'0'</span> <span class="o">+</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">x</span> <span class="o">^</span> <span class="mi">1</span><span class="p">));</span>
+            <span class="p">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="o">++</span><span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">maxEqualRowsAfterFlips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">matrix</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">row</span><span class="p">)</span>
+            <span class="n">cnt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">values</span><span class="p">())</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">maxEqualRowsAfterFlips</span><span class="p">(</span><span class="n">matrix</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">matrix</span> <span class="p">{</span>
+		<span class="n">s</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">{}</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">row</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">x</span> <span class="o">^=</span> <span class="m">1</span>
+			<span class="p">}</span>
+			<span class="n">s</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="kt">byte</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="sc">'0'</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="n">t</span> <span class="o">:=</span> <span class="kt">string</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+		<span class="n">cnt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">++</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">cnt</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">maxEqualRowsAfterFlips</span><span class="p">(</span><span class="nx">matrix</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">row</span> <span class="k">of</span> <span class="nx">matrix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">row</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">row</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">^=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">row</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+        <span class="nx">cnt</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="p">(</span><span class="nx">cnt</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">ans</span><span class="p">,</span> <span class="nx">cnt</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span><span class="o">!</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1072.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

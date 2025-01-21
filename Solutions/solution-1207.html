@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1207.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1207.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1207 - Unique Number of Occurrences</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1207. Unique Number of Occurrences Description Given an array of integers arr, return true if the number of occurrences of each value in the array is unique or false otherwise. &amp;nbsp; Example 1: Input: arr = [1,2,2,1,1,3] Output: true Explanation:&amp;nbsp;The value 1 has 3 occurrences,...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1207.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1207.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1207.html" rel="stylesheet"/>
+   <link href="solution-1207.html" rel="stylesheet"/>
+   <link href="solution-1207.html" rel="stylesheet"/>
+   <link href="solution-1207.html" rel="stylesheet"/>
+   <link href="solution-1207.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1207 - Unique Number of Occurrences" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1207. Unique Number of Occurrences
+
+Description
+
+Given an array of integers arr, return true if the number of occurrences of each value in the array is unique or false otherwise.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: arr = [1,2,2,1,1,3]
+Output: true
+Explanation:&amp;nbsp;The value 1 has 3 occurrences, 2 has 2 and 3 has 1. No two values have the same number of occurrences.
+
+Example 2:
+
+
+Input: arr = [1,2]
+Output: false
+
+
+Example 3:
+
+
+Input: arr = [-3,0,1,-3,1,1,1,-3,10,0]
+Output: true
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= arr.length &amp;lt;= 1000
+	-1000 &amp;lt;= arr[i] &amp;lt;= 1000
+
+
+Solutions
+
+Solution 1: Hash Table
+
+We use a hash table $cnt$ to count the frequency of each number in the array $arr$, and then use another hash table $vis$ to count the types of frequencies. Finally, we check whether the sizes of $cnt$ and $vis$ are equal.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $arr$.
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public boolean uniqueOccurrences(int[] arr) {
+        Map&amp;lt;Integer, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;();
+        for (int x : arr) {
+            cnt.merge(x, 1, Integer::sum);
+        }
+        return new HashSet&amp;lt;&amp;gt;(cnt.values()).size() == cnt.size();
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    bool uniqueOccurrences(vector&amp;lt;int&amp;gt;&amp;amp; arr) {
+        unordered_map&amp;lt;int, int&amp;gt; cnt;
+        for (int&amp;amp; x : arr) {
+            ++cnt[x];
+        }
+        unordered_set&amp;lt;int&amp;gt; vis;
+        for (auto&amp;amp; [_, v] : cnt) {
+            if (vis.count(v)) {
+                return false;
+            }
+            vis.insert(v);
+        }
+        return true;
+    }
+};
+
+
+
+	
+class Solution:
+    def uniqueOccurrences(self, arr: List[int]) -&amp;gt; bool:
+        cnt = Counter(arr)
+        return len(set(cnt.values())) == len(cnt)
+
+
+
+
+	
+func uniqueOccurrences(arr []int) bool {
+	cnt := map[int]int{}
+	for _, x := range arr {
+		cnt[x]++
+	}
+	vis := map[int]bool{}
+	for _, v := range cnt {
+		if vis[v] {
+			return false
+		}
+		vis[v] = true
+	}
+	return true
+}
+
+
+
+	
+function uniqueOccurrences(arr: number[]): boolean {
+    const cnt: Map&amp;lt;number, number&amp;gt; = new Map();
+    for (const x of arr) {
+        cnt.set(x, (cnt.get(x) || 0) + 1);
+    }
+    return cnt.size === new Set(cnt.values()).size;
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-03-21T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-03-21-1207-Unique-Number-of-Occurrences/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1207.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1207 - Unique Number of Occurrences" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1207. Unique Number of Occurrences
+
+Description
+
+Given an array of integers arr, return true if the number of occurrences of each value in the array is unique or false otherwise.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: arr = [1,2,2,1,1,3]
+Output: true
+Explanation:&amp;nbsp;The value 1 has 3 occurrences, 2 has 2 and 3 has 1. No two values have the same number of occurrences.
+
+Example 2:
+
+
+Input: arr = [1,2]
+Output: false
+
+
+Example 3:
+
+
+Input: arr = [-3,0,1,-3,1,1,1,-3,10,0]
+Output: true
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= arr.length &amp;lt;= 1000
+	-1000 &amp;lt;= arr[i] &amp;lt;= 1000
+
+
+Solutions
+
+Solution 1: Hash Table
+
+We use a hash table $cnt$ to count the frequency of each number in the array $arr$, and then use another hash table $vis$ to count the types of frequencies. Finally, we check whether the sizes of $cnt$ and $vis$ are equal.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $arr$.
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public boolean uniqueOccurrences(int[] arr) {
+        Map&amp;lt;Integer, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;();
+        for (int x : arr) {
+            cnt.merge(x, 1, Integer::sum);
+        }
+        return new HashSet&amp;lt;&amp;gt;(cnt.values()).size() == cnt.size();
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    bool uniqueOccurrences(vector&amp;lt;int&amp;gt;&amp;amp; arr) {
+        unordered_map&amp;lt;int, int&amp;gt; cnt;
+        for (int&amp;amp; x : arr) {
+            ++cnt[x];
+        }
+        unordered_set&amp;lt;int&amp;gt; vis;
+        for (auto&amp;amp; [_, v] : cnt) {
+            if (vis.count(v)) {
+                return false;
+            }
+            vis.insert(v);
+        }
+        return true;
+    }
+};
+
+
+
+	
+class Solution:
+    def uniqueOccurrences(self, arr: List[int]) -&amp;gt; bool:
+        cnt = Counter(arr)
+        return len(set(cnt.values())) == len(cnt)
+
+
+
+
+	
+func uniqueOccurrences(arr []int) bool {
+	cnt := map[int]int{}
+	for _, x := range arr {
+		cnt[x]++
+	}
+	vis := map[int]bool{}
+	for _, v := range cnt {
+		if vis[v] {
+			return false
+		}
+		vis[v] = true
+	}
+	return true
+}
+
+
+
+	
+function uniqueOccurrences(arr: number[]): boolean {
+    const cnt: Map&amp;lt;number, number&amp;gt; = new Map();
+    for (const x of arr) {
+        cnt.set(x, (cnt.get(x) || 0) + 1);
+    }
+    return cnt.size === new Set(cnt.values()).size;
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1207 - Unique Number of Occurrences | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1207 - Unique Number of Occurrences" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1207.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-03-21-1207-Unique-Number-of-Occurrences/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-03-21T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1207 - Unique Number of Occurrences","dateModified":"2019-03-21T00:00:00-07:00","datePublished":"2019-03-21T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-03-21-1207-Unique-Number-of-Occurrences/"},"url":"https://leetcode.ca/2019-03-21-1207-Unique-Number-of-Occurrences/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1207-unique-number-of-occurrences">
+       <a href="solution-1207.html">
+        1207. Unique Number of Occurrences
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an array of integers
+       <code>
+        arr
+       </code>
+       , return
+       <code>
+        true
+       </code>
+       <em>
+        if the number of occurrences of each value in the array is
+        <strong>
+         unique
+        </strong>
+        or
+       </em>
+       <code>
+        false
+       </code>
+       <em>
+        otherwise
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> arr = [1,2,2,1,1,3]
+<strong>Output:</strong> true
+<strong>Explanation:</strong> The value 1 has 3 occurrences, 2 has 2 and 3 has 1. No two values have the same number of occurrences.</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> arr = [1,2]
+<strong>Output:</strong> false
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> arr = [-3,0,1,-3,1,1,1,-3,10,0]
+<strong>Output:</strong> true
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= arr.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         -1000 &lt;= arr[i] &lt;= 1000
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Hash Table
+       </strong>
+      </p>
+      <p>
+       We use a hash table $cnt$ to count the frequency of each number in the array $arr$, and then use another hash table $vis$ to count the types of frequencies. Finally, we check whether the sizes of $cnt$ and $vis$ are equal.
+      </p>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $arr$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#abcd619a-76e7-4009-af23-37285e63c6b8'}">
+       <li class="uk-active">
+        <a href="solution-1207.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1207.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1207.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1207.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1207.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="abcd619a-76e7-4009-af23-37285e63c6b8">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">uniqueOccurrences</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">cnt</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">cnt</span><span class="o">.</span><span class="na">values</span><span class="o">()).</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">cnt</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">uniqueOccurrences</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">arr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">x</span> <span class="o">:</span> <span class="n">arr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vis</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">:</span> <span class="n">cnt</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">vis</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">vis</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">uniqueOccurrences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">uniqueOccurrences</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">arr</span> <span class="p">{</span>
+		<span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="n">vis</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">cnt</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+		<span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">uniqueOccurrences</span><span class="p">(</span><span class="nx">arr</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]):</span> <span class="nx">boolean</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">cnt</span><span class="p">:</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">number</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">x</span> <span class="k">of</span> <span class="nx">arr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cnt</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="p">(</span><span class="nx">cnt</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">cnt</span><span class="p">.</span><span class="nx">size</span> <span class="o">===</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">cnt</span><span class="p">.</span><span class="nx">values</span><span class="p">()).</span><span class="nx">size</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1207.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

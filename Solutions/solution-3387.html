@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3387.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3387.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3387 - Maximize Amount After Two Days of Conversions</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3387. Maximize Amount After Two Days of Conversions Description You are given a string initialCurrency, and you start with 1.0 of initialCurrency. You are also given four arrays with currency pairs (strings) and rates (real numbers): pairs1[i] = [startCurrencyi, targetCurrencyi] denotes that you can convert...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3387.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3387.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3387.html" rel="stylesheet"/>
+   <link href="solution-3387.html" rel="stylesheet"/>
+   <link href="solution-3387.html" rel="stylesheet"/>
+   <link href="solution-3387.html" rel="stylesheet"/>
+   <link href="solution-3387.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3387 - Maximize Amount After Two Days of Conversions" property="og:title"/>
+   <meta content="Leetcode 3387. Maximize Amount After Two Days of Conversions Description You are given a string initialCurrency, and you start with 1.0 of initialCurrency. You are also given four arrays with currency pairs (strings) and rates (real numbers): pairs1[i] = [startCurrencyi, targetCurrencyi] denotes that you can convert from startCurrencyi to targetCurrencyi at a rate of rates1[i] on day 1. pairs2[i] = [startCurrencyi, targetCurrencyi] denotes that you can convert from startCurrencyi to targetCurrencyi at a rate of rates2[i] on day 2. Also, each targetCurrency can be converted back to its corresponding startCurrency at a rate of 1 / rate. You can perform any number of conversions, including zero, using rates1 on day 1, followed by any number of additional conversions, including zero, using rates2 on day 2. Return the maximum amount of initialCurrency you can have after performing any number of conversions on both days in order. Note: Conversion rates are valid, and there will be no contradictions in the rates for either day. The rates for the days are independent of each other. &amp;nbsp; Example 1: Input: initialCurrency = &amp;quot;EUR&amp;quot;, pairs1 = [[&amp;quot;EUR&amp;quot;,&amp;quot;USD&amp;quot;],[&amp;quot;USD&amp;quot;,&amp;quot;JPY&amp;quot;]], rates1 = [2.0,3.0], pairs2 = [[&amp;quot;JPY&amp;quot;,&amp;quot;USD&amp;quot;],[&amp;quot;USD&amp;quot;,&amp;quot;CHF&amp;quot;],[&amp;quot;CHF&amp;quot;,&amp;quot;EUR&amp;quot;]], rates2 = [4.0,5.0,6.0] Output: 720.00000 Explanation: To get the maximum amount of EUR, starting with 1.0 EUR: On Day 1: Convert EUR to USD to get 2.0 USD. Convert USD to JPY to get 6.0 JPY. On Day 2: Convert JPY to USD to get 24.0 USD. Convert USD to CHF to get 120.0 CHF. Finally, convert CHF to EUR to get 720.0 EUR. Example 2: Input: initialCurrency = &amp;quot;NGN&amp;quot;, pairs1 = [[&amp;quot;NGN&amp;quot;,&amp;quot;EUR&amp;quot;]], rates1 = [9.0], pairs2 = [[&amp;quot;NGN&amp;quot;,&amp;quot;EUR&amp;quot;]], rates2 = [6.0] Output: 1.50000 Explanation: Converting NGN to EUR on day 1 and EUR to NGN using the inverse rate on day 2 gives the maximum amount. Example 3: Input: initialCurrency = &amp;quot;USD&amp;quot;, pairs1 = [[&amp;quot;USD&amp;quot;,&amp;quot;EUR&amp;quot;]], rates1 = [1.0], pairs2 = [[&amp;quot;EUR&amp;quot;,&amp;quot;JPY&amp;quot;]], rates2 = [10.0] Output: 1.00000 Explanation: In this example, there is no need to make any conversions on either day. &amp;nbsp; Constraints: 1 &amp;lt;= initialCurrency.length &amp;lt;= 3 initialCurrency consists only of uppercase English letters. 1 &amp;lt;= n == pairs1.length &amp;lt;= 10 1 &amp;lt;= m == pairs2.length &amp;lt;= 10 pairs1[i] == [startCurrencyi, targetCurrencyi] pairs2[i] == [startCurrencyi, targetCurrencyi] 1 &amp;lt;= startCurrencyi.length, targetCurrencyi.length &amp;lt;= 3 startCurrencyi and targetCurrencyi consist only of uppercase English letters. rates1.length == n rates2.length == m 1.0 &amp;lt;= rates1[i], rates2[i] &amp;lt;= 10.0 The input is generated such that there are no contradictions or cycles in the conversion graphs for either day. The input is generated such that the output is at most 5 * 1010. Solutions Solution 1 Java C++ Python Go TypeScript class Solution { public double maxAmount(String initialCurrency, List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; pairs1, double[] rates1, List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; pairs2, double[] rates2) { Map&amp;lt;String, Double&amp;gt; d1 = build(pairs1, rates1, initialCurrency); Map&amp;lt;String, Double&amp;gt; d2 = build(pairs2, rates2, initialCurrency); double ans = 0; for (Map.Entry&amp;lt;String, Double&amp;gt; entry : d2.entrySet()) { String currency = entry.getKey(); double rate = entry.getValue(); if (d1.containsKey(currency)) { ans = Math.max(ans, d1.get(currency) / rate); } } return ans;..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-12-31T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-12-31-3387-Maximize-Amount-After-Two-Days-of-Conversions/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3387.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3387 - Maximize Amount After Two Days of Conversions" property="twitter:title"/>
+   <meta content="Leetcode 3387. Maximize Amount After Two Days of Conversions Description You are given a string initialCurrency, and you start with 1.0 of initialCurrency. You are also given four arrays with currency pairs (strings) and rates (real numbers): pairs1[i] = [startCurrencyi, targetCurrencyi] denotes that you can convert from startCurrencyi to targetCurrencyi at a rate of rates1[i] on day 1. pairs2[i] = [startCurrencyi, targetCurrencyi] denotes that you can convert from startCurrencyi to targetCurrencyi at a rate of rates2[i] on day 2. Also, each targetCurrency can be converted back to its corresponding startCurrency at a rate of 1 / rate. You can perform any number of conversions, including zero, using rates1 on day 1, followed by any number of additional conversions, including zero, using rates2 on day 2. Return the maximum amount of initialCurrency you can have after performing any number of conversions on both days in order. Note: Conversion rates are valid, and there will be no contradictions in the rates for either day. The rates for the days are independent of each other. &amp;nbsp; Example 1: Input: initialCurrency = &amp;quot;EUR&amp;quot;, pairs1 = [[&amp;quot;EUR&amp;quot;,&amp;quot;USD&amp;quot;],[&amp;quot;USD&amp;quot;,&amp;quot;JPY&amp;quot;]], rates1 = [2.0,3.0], pairs2 = [[&amp;quot;JPY&amp;quot;,&amp;quot;USD&amp;quot;],[&amp;quot;USD&amp;quot;,&amp;quot;CHF&amp;quot;],[&amp;quot;CHF&amp;quot;,&amp;quot;EUR&amp;quot;]], rates2 = [4.0,5.0,6.0] Output: 720.00000 Explanation: To get the maximum amount of EUR, starting with 1.0 EUR: On Day 1: Convert EUR to USD to get 2.0 USD. Convert USD to JPY to get 6.0 JPY. On Day 2: Convert JPY to USD to get 24.0 USD. Convert USD to CHF to get 120.0 CHF. Finally, convert CHF to EUR to get 720.0 EUR. Example 2: Input: initialCurrency = &amp;quot;NGN&amp;quot;, pairs1 = [[&amp;quot;NGN&amp;quot;,&amp;quot;EUR&amp;quot;]], rates1 = [9.0], pairs2 = [[&amp;quot;NGN&amp;quot;,&amp;quot;EUR&amp;quot;]], rates2 = [6.0] Output: 1.50000 Explanation: Converting NGN to EUR on day 1 and EUR to NGN using the inverse rate on day 2 gives the maximum amount. Example 3: Input: initialCurrency = &amp;quot;USD&amp;quot;, pairs1 = [[&amp;quot;USD&amp;quot;,&amp;quot;EUR&amp;quot;]], rates1 = [1.0], pairs2 = [[&amp;quot;EUR&amp;quot;,&amp;quot;JPY&amp;quot;]], rates2 = [10.0] Output: 1.00000 Explanation: In this example, there is no need to make any conversions on either day. &amp;nbsp; Constraints: 1 &amp;lt;= initialCurrency.length &amp;lt;= 3 initialCurrency consists only of uppercase English letters. 1 &amp;lt;= n == pairs1.length &amp;lt;= 10 1 &amp;lt;= m == pairs2.length &amp;lt;= 10 pairs1[i] == [startCurrencyi, targetCurrencyi] pairs2[i] == [startCurrencyi, targetCurrencyi] 1 &amp;lt;= startCurrencyi.length, targetCurrencyi.length &amp;lt;= 3 startCurrencyi and targetCurrencyi consist only of uppercase English letters. rates1.length == n rates2.length == m 1.0 &amp;lt;= rates1[i], rates2[i] &amp;lt;= 10.0 The input is generated such that there are no contradictions or cycles in the conversion graphs for either day. The input is generated such that the output is at most 5 * 1010. Solutions Solution 1 Java C++ Python Go TypeScript class Solution { public double maxAmount(String initialCurrency, List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; pairs1, double[] rates1, List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; pairs2, double[] rates2) { Map&amp;lt;String, Double&amp;gt; d1 = build(pairs1, rates1, initialCurrency); Map&amp;lt;String, Double&amp;gt; d2 = build(pairs2, rates2, initialCurrency); double ans = 0; for (Map.Entry&amp;lt;String, Double&amp;gt; entry : d2.entrySet()) { String currency = entry.getKey(); double rate = entry.getValue(); if (d1.containsKey(currency)) { ans = Math.max(ans, d1.get(currency) / rate); } } return ans;..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3387 - Maximize Amount After Two Days of Conversions | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3387 - Maximize Amount After Two Days of Conversions" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3387.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-12-31-3387-Maximize-Amount-After-Two-Days-of-Conversions/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-12-31T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3387 - Maximize Amount After Two Days of Conversions","dateModified":"2024-12-31T00:00:00-08:00","datePublished":"2024-12-31T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-12-31-3387-Maximize-Amount-After-Two-Days-of-Conversions/"},"url":"https://leetcode.ca/2024-12-31-3387-Maximize-Amount-After-Two-Days-of-Conversions/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3387-maximize-amount-after-two-days-of-conversions">
+       <a href="solution-3387.html">
+        3387. Maximize Amount After Two Days of Conversions
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       You are given a string
+       <code>
+        initialCurrency
+       </code>
+       , and you start with
+       <code>
+        1.0
+       </code>
+       of
+       <code>
+        initialCurrency
+       </code>
+       .
+      </p>
+      <p>
+       You are also given four arrays with currency pairs (strings) and rates (real numbers):
+      </p>
+      <ul>
+       <li>
+        <code>
+         pairs1[i] = [startCurrency
+         <sub>
+          i
+         </sub>
+         , targetCurrency
+         <sub>
+          i
+         </sub>
+         ]
+        </code>
+        denotes that you can convert from
+        <code>
+         startCurrency
+         <sub>
+          i
+         </sub>
+        </code>
+        to
+        <code>
+         targetCurrency
+         <sub>
+          i
+         </sub>
+        </code>
+        at a rate of
+        <code>
+         rates1[i]
+        </code>
+        on
+        <strong>
+         day 1
+        </strong>
+        .
+       </li>
+       <li>
+        <code>
+         pairs2[i] = [startCurrency
+         <sub>
+          i
+         </sub>
+         , targetCurrency
+         <sub>
+          i
+         </sub>
+         ]
+        </code>
+        denotes that you can convert from
+        <code>
+         startCurrency
+         <sub>
+          i
+         </sub>
+        </code>
+        to
+        <code>
+         targetCurrency
+         <sub>
+          i
+         </sub>
+        </code>
+        at a rate of
+        <code>
+         rates2[i]
+        </code>
+        on
+        <strong>
+         day 2
+        </strong>
+        .
+       </li>
+       <li>
+        Also, each
+        <code>
+         targetCurrency
+        </code>
+        can be converted back to its corresponding
+        <code>
+         startCurrency
+        </code>
+        at a rate of
+        <code>
+         1 / rate
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       You can perform
+       <strong>
+        any
+       </strong>
+       number of conversions,
+       <strong>
+        including zero
+       </strong>
+       , using
+       <code>
+        rates1
+       </code>
+       on day 1,
+       <strong>
+        followed
+       </strong>
+       by any number of additional conversions,
+       <strong>
+        including zero
+       </strong>
+       , using
+       <code>
+        rates2
+       </code>
+       on day 2.
+      </p>
+      <p>
+       Return the
+       <strong>
+        maximum
+       </strong>
+       amount of
+       <code>
+        initialCurrency
+       </code>
+       you can have after performing any number of conversions on both days
+       <strong>
+        in order
+       </strong>
+       .
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       Conversion rates are valid, and there will be no contradictions in the rates for either day. The rates for the days are independent of each other.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         initialCurrency = "EUR", pairs1 = [["EUR","USD"],["USD","JPY"]], rates1 = [2.0,3.0], pairs2 = [["JPY","USD"],["USD","CHF"],["CHF","EUR"]], rates2 = [4.0,5.0,6.0]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         720.00000
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        To get the maximum amount of
+        <strong>
+         EUR
+        </strong>
+        , starting with 1.0
+        <strong>
+         EUR
+        </strong>
+        :
+       </p>
+       <ul>
+        <li>
+         On Day 1:
+         <ul>
+          <li>
+           Convert
+           <strong>
+            EUR
+           </strong>
+           to
+           <strong>
+            USD
+           </strong>
+           to get 2.0
+           <strong>
+            USD
+           </strong>
+           .
+          </li>
+          <li>
+           Convert
+           <strong>
+            USD
+           </strong>
+           to
+           <strong>
+            JPY
+           </strong>
+           to get 6.0
+           <strong>
+            JPY
+           </strong>
+           .
+          </li>
+         </ul>
+        </li>
+        <li>
+         On Day 2:
+         <ul>
+          <li>
+           Convert
+           <strong>
+            JPY
+           </strong>
+           to
+           <strong>
+            USD
+           </strong>
+           to get 24.0
+           <strong>
+            USD
+           </strong>
+           .
+          </li>
+          <li>
+           Convert
+           <strong>
+            USD
+           </strong>
+           to
+           <strong>
+            CHF
+           </strong>
+           to get 120.0
+           <strong>
+            CHF
+           </strong>
+           .
+          </li>
+          <li>
+           Finally, convert
+           <strong>
+            CHF
+           </strong>
+           to
+           <strong>
+            EUR
+           </strong>
+           to get 720.0
+           <strong>
+            EUR
+           </strong>
+           .
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         initialCurrency = "NGN", pairs1 =
+        </span>
+        [["NGN","EUR"]]
+        <span class="example-io">
+         , rates1 =
+        </span>
+        [9.0]
+        <span class="example-io">
+         , pairs2 =
+        </span>
+        [["NGN","EUR"]]
+        <span class="example-io">
+         , rates2 =
+        </span>
+        [6.0]
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        1.50000
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        Converting
+        <strong>
+         NGN
+        </strong>
+        to
+        <strong>
+         EUR
+        </strong>
+        on day 1 and
+        <strong>
+         EUR
+        </strong>
+        to
+        <strong>
+         NGN
+        </strong>
+        using the inverse rate on day 2 gives the maximum amount.
+       </p>
+      </div>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         initialCurrency = "USD", pairs1 = [["USD","EUR"]], rates1 = [1.0], pairs2 = [["EUR","JPY"]], rates2 = [10.0]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         1.00000
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        In this example, there is no need to make any conversions on either day.
+       </p>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= initialCurrency.length &lt;= 3
+        </code>
+       </li>
+       <li>
+        <code>
+         initialCurrency
+        </code>
+        consists only of uppercase English letters.
+       </li>
+       <li>
+        <code>
+         1 &lt;= n == pairs1.length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m == pairs2.length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         pairs1[i] == [startCurrency
+         <sub>
+          i
+         </sub>
+         , targetCurrency
+         <sub>
+          i
+         </sub>
+         ]
+        </code>
+        <!-- notionvc: c31b5bb8-4df6-4987-9bcd-6dff8a5f7cd4 -->
+       </li>
+       <li>
+        <code>
+         pairs2[i] == [startCurrency
+         <sub>
+          i
+         </sub>
+         , targetCurrency
+         <sub>
+          i
+         </sub>
+         ]
+        </code>
+        <!--{C}%3C!%2D%2D%20notionvc%3A%20c31b5bb8-4df6-4987-9bcd-6dff8a5f7cd4%20%2D%2D%3E-->
+       </li>
+       <li>
+        <code>
+         1 &lt;= startCurrency
+         <sub>
+          i
+         </sub>
+         .length, targetCurrency
+         <sub>
+          i
+         </sub>
+         .length &lt;= 3
+        </code>
+       </li>
+       <li>
+        <code>
+         startCurrency
+         <sub>
+          i
+         </sub>
+        </code>
+        and
+        <code>
+         targetCurrency
+         <sub>
+          i
+         </sub>
+        </code>
+        consist only of uppercase English letters.
+       </li>
+       <li>
+        <code>
+         rates1.length == n
+        </code>
+       </li>
+       <li>
+        <code>
+         rates2.length == m
+        </code>
+       </li>
+       <li>
+        <code>
+         1.0 &lt;= rates1[i], rates2[i] &lt;= 10.0
+        </code>
+       </li>
+       <li>
+        The input is generated such that there are no contradictions or cycles in the conversion graphs for either day.
+       </li>
+       <li>
+        The input is generated such that the output is
+        <strong>
+         at most
+        </strong>
+        <code>
+         5 * 10
+         <sup>
+          10
+         </sup>
+        </code>
+        .
+       </li>
+      </ul>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1">
+       Solution 1
+      </h3>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#100746f3-f2a8-4a87-b0e6-eb32c4fbe882'}">
+       <li class="uk-active">
+        <a href="solution-3387.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3387.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3387.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3387.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3387.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="100746f3-f2a8-4a87-b0e6-eb32c4fbe882">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">maxAmount</span><span class="o">(</span><span class="nc">String</span> <span class="n">initialCurrency</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">pairs1</span><span class="o">,</span> <span class="kt">double</span><span class="o">[]</span> <span class="n">rates1</span><span class="o">,</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">pairs2</span><span class="o">,</span> <span class="kt">double</span><span class="o">[]</span> <span class="n">rates2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">build</span><span class="o">(</span><span class="n">pairs1</span><span class="o">,</span> <span class="n">rates1</span><span class="o">,</span> <span class="n">initialCurrency</span><span class="o">);</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">build</span><span class="o">(</span><span class="n">pairs2</span><span class="o">,</span> <span class="n">rates2</span><span class="o">,</span> <span class="n">initialCurrency</span><span class="o">);</span>
+        <span class="kt">double</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">d2</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">currency</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="kt">double</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">d1</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">currency</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">d1</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">currency</span><span class="o">)</span> <span class="o">/</span> <span class="n">rate</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="nf">build</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">pairs</span><span class="o">,</span> <span class="kt">double</span><span class="o">[]</span> <span class="n">rates</span><span class="o">,</span> <span class="nc">String</span> <span class="n">init</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pairs</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">a</span> <span class="o">=</span> <span class="n">pairs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pairs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+            <span class="kt">double</span> <span class="n">r</span> <span class="o">=</span> <span class="n">rates</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">b</span><span class="o">,</span> <span class="n">r</span><span class="o">));</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">b</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">a</span><span class="o">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">r</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">d</span><span class="o">,</span> <span class="n">init</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">d</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="n">d</span><span class="o">,</span> <span class="nc">String</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">d</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">d</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">v</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">g</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="kt">double</span> <span class="n">r</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">d</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">d</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">v</span> <span class="o">*</span> <span class="n">r</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">double</span> <span class="n">maxAmount</span><span class="p">(</span><span class="n">string</span> <span class="n">initialCurrency</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">pairs1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">rates1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">pairs2</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">rates2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="n">pairs1</span><span class="p">,</span> <span class="n">rates1</span><span class="p">,</span> <span class="n">initialCurrency</span><span class="p">);</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="n">pairs2</span><span class="p">,</span> <span class="n">rates2</span><span class="p">,</span> <span class="n">initialCurrency</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">currency</span><span class="p">,</span> <span class="n">rate</span><span class="p">]</span> <span class="o">:</span> <span class="n">d2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">d1</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">currency</span><span class="p">)</span> <span class="o">!=</span> <span class="n">d1</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">d1</span><span class="p">[</span><span class="n">currency</span><span class="p">]</span> <span class="o">/</span> <span class="n">rate</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">build</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">pairs</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">rates</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">init</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="p">;</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pairs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+            <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+            <span class="kt">double</span> <span class="n">r</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">push_back</span><span class="p">({</span><span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">});</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">push_back</span><span class="p">({</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">r</span><span class="p">});</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">this</span> <span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">void</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="n">d</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">d</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">]</span> <span class="o">:</span> <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">d</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">v</span> <span class="o">*</span> <span class="n">r</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">init</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">d</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">maxAmount</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">initialCurrency</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">pairs1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">rates1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">pairs2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">rates2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">pairs1</span><span class="p">,</span> <span class="n">rates1</span><span class="p">,</span> <span class="n">initialCurrency</span><span class="p">)</span>
+        <span class="n">d2</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">pairs2</span><span class="p">,</span> <span class="n">rates2</span><span class="p">,</span> <span class="n">initialCurrency</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">d1</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">r2</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">r2</span> <span class="ow">in</span> <span class="n">d2</span><span class="p">.</span><span class="n">items</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pairs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">rates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">init</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">b</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">v</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pairs</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">append</span><span class="p">((</span><span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">append</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">r</span><span class="p">))</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">init</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">Pair</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">Key</span>   <span class="kt">string</span>
+	<span class="n">Value</span> <span class="kt">float64</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">maxAmount</span><span class="p">(</span><span class="n">initialCurrency</span> <span class="kt">string</span><span class="p">,</span> <span class="n">pairs1</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">,</span> <span class="n">rates1</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">pairs2</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">,</span> <span class="n">rates2</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">float64</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">d1</span> <span class="o">:=</span> <span class="n">build</span><span class="p">(</span><span class="n">pairs1</span><span class="p">,</span> <span class="n">rates1</span><span class="p">,</span> <span class="n">initialCurrency</span><span class="p">)</span>
+	<span class="n">d2</span> <span class="o">:=</span> <span class="n">build</span><span class="p">(</span><span class="n">pairs2</span><span class="p">,</span> <span class="n">rates2</span><span class="p">,</span> <span class="n">initialCurrency</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">currency</span><span class="p">,</span> <span class="n">rate</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">d2</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">val</span><span class="p">,</span> <span class="n">found</span> <span class="o">:=</span> <span class="n">d1</span><span class="p">[</span><span class="n">currency</span><span class="p">];</span> <span class="n">found</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">val</span><span class="o">/</span><span class="n">rate</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">build</span><span class="p">(</span><span class="n">pairs</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">,</span> <span class="n">rates</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">init</span> <span class="kt">string</span><span class="p">)</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span> <span class="p">{</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="n">Pair</span><span class="p">)</span>
+	<span class="n">d</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">a</span> <span class="o">:=</span> <span class="n">pairs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span>
+		<span class="n">b</span> <span class="o">:=</span> <span class="n">pairs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">r</span> <span class="o">:=</span> <span class="n">rates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">Pair</span><span class="p">{</span><span class="n">Key</span><span class="o">:</span> <span class="n">b</span><span class="p">,</span> <span class="n">Value</span><span class="o">:</span> <span class="n">r</span><span class="p">})</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">Pair</span><span class="p">{</span><span class="n">Key</span><span class="o">:</span> <span class="n">a</span><span class="p">,</span> <span class="n">Value</span><span class="o">:</span> <span class="m">1.0</span> <span class="o">/</span> <span class="n">r</span><span class="p">})</span>
+	<span class="p">}</span>
+
+	<span class="n">dfs</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">init</span><span class="p">,</span> <span class="m">1.0</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">d</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">dfs</span><span class="p">(</span><span class="n">g</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="n">Pair</span><span class="p">,</span> <span class="n">d</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">a</span> <span class="kt">string</span><span class="p">,</span> <span class="n">v</span> <span class="kt">float64</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">found</span> <span class="o">:=</span> <span class="n">d</span><span class="p">[</span><span class="n">a</span><span class="p">];</span> <span class="n">found</span> <span class="p">{</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="n">d</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">pair</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="p">{</span>
+		<span class="n">b</span> <span class="o">:=</span> <span class="n">pair</span><span class="o">.</span><span class="n">Key</span>
+		<span class="n">r</span> <span class="o">:=</span> <span class="n">pair</span><span class="o">.</span><span class="n">Value</span>
+		<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">found</span> <span class="o">:=</span> <span class="n">d</span><span class="p">[</span><span class="n">b</span><span class="p">];</span> <span class="o">!</span><span class="n">found</span> <span class="p">{</span>
+			<span class="n">dfs</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">v</span><span class="o">*</span><span class="n">r</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">Pair</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span>
+        <span class="k">public</span> <span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+        <span class="k">public</span> <span class="nx">value</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+    <span class="p">)</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">maxAmount</span><span class="p">(</span>
+    <span class="nx">initialCurrency</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+    <span class="nx">pairs1</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][],</span>
+    <span class="nx">rates1</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span>
+    <span class="nx">pairs2</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][],</span>
+    <span class="nx">rates2</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span>
+<span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">d1</span> <span class="o">=</span> <span class="nx">build</span><span class="p">(</span><span class="nx">pairs1</span><span class="p">,</span> <span class="nx">rates1</span><span class="p">,</span> <span class="nx">initialCurrency</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">d2</span> <span class="o">=</span> <span class="nx">build</span><span class="p">(</span><span class="nx">pairs2</span><span class="p">,</span> <span class="nx">rates2</span><span class="p">,</span> <span class="nx">initialCurrency</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">currency</span><span class="p">,</span> <span class="nx">rate</span><span class="p">]</span> <span class="k">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">d2</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">currency</span> <span class="k">in</span> <span class="nx">d1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">ans</span><span class="p">,</span> <span class="nx">d1</span><span class="p">[</span><span class="nx">currency</span><span class="p">]</span> <span class="o">/</span> <span class="nx">rate</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">build</span><span class="p">(</span><span class="nx">pairs</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][],</span> <span class="nx">rates</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">init</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="p">{</span> <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="kr">number</span> <span class="p">}</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="na">g</span><span class="p">:</span> <span class="p">{</span> <span class="p">[</span><span class="na">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">Pair</span><span class="p">[]</span> <span class="p">}</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="kd">const</span> <span class="na">d</span><span class="p">:</span> <span class="p">{</span> <span class="p">[</span><span class="na">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="kr">number</span> <span class="p">}</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">pairs</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">pairs</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+        <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">pairs</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+        <span class="kd">const</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">rates</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">g</span><span class="p">[</span><span class="nx">a</span><span class="p">])</span> <span class="nx">g</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">g</span><span class="p">[</span><span class="nx">b</span><span class="p">])</span> <span class="nx">g</span><span class="p">[</span><span class="nx">b</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">a</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Pair</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">r</span><span class="p">));</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">b</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Pair</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="nx">r</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="nx">dfs</span><span class="p">(</span><span class="nx">g</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">init</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">d</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">dfs</span><span class="p">(</span>
+    <span class="nx">g</span><span class="p">:</span> <span class="p">{</span> <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">Pair</span><span class="p">[]</span> <span class="p">},</span>
+    <span class="nx">d</span><span class="p">:</span> <span class="p">{</span> <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="kr">number</span> <span class="p">},</span>
+    <span class="nx">a</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+    <span class="nx">v</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+<span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="k">in</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">d</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">pair</span> <span class="k">of</span> <span class="nx">g</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">||</span> <span class="p">[])</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">pair</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">pair</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">b</span> <span class="k">in</span> <span class="nx">d</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">dfs</span><span class="p">(</span><span class="nx">g</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">v</span> <span class="o">*</span> <span class="nx">r</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3387.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

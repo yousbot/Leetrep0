@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-93.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-93.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>93 - Restore IP Addresses</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 93. Restore IP Addresses Description A valid IP address consists of exactly four integers separated by single dots. Each integer is between 0 and 255 (inclusive) and cannot have leading zeros. For example, &amp;quot;0.1.2.201&amp;quot; and &amp;quot;192.168.1.1&amp;quot; are valid IP addresses, but &amp;quot;0.011.255.245&amp;quot;, &amp;quot;192.168.1.312&amp;quot; and &amp;quot;192.168@1.1&amp;quot;...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-93.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-93.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-93.html" rel="stylesheet"/>
+   <link href="solution-93.html" rel="stylesheet"/>
+   <link href="solution-93.html" rel="stylesheet"/>
+   <link href="solution-93.html" rel="stylesheet"/>
+   <link href="solution-93.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="93 - Restore IP Addresses" property="og:title"/>
+   <meta content="Leetcode 93. Restore IP Addresses Description A valid IP address consists of exactly four integers separated by single dots. Each integer is between 0 and 255 (inclusive) and cannot have leading zeros. For example, &amp;quot;0.1.2.201&amp;quot; and &amp;quot;192.168.1.1&amp;quot; are valid IP addresses, but &amp;quot;0.011.255.245&amp;quot;, &amp;quot;192.168.1.312&amp;quot; and &amp;quot;192.168@1.1&amp;quot; are invalid IP addresses. Given a string s containing only digits, return all possible valid IP addresses that can be formed by inserting dots into s. You are not allowed to reorder or remove any digits in s. You may return the valid IP addresses in any order. &amp;nbsp; Example 1: Input: s = &amp;quot;25525511135&amp;quot; Output: [&amp;quot;255.255.11.135&amp;quot;,&amp;quot;255.255.111.35&amp;quot;] Example 2: Input: s = &amp;quot;0000&amp;quot; Output: [&amp;quot;0.0.0.0&amp;quot;] Example 3: Input: s = &amp;quot;101023&amp;quot; Output: [&amp;quot;1.0.10.23&amp;quot;,&amp;quot;1.0.102.3&amp;quot;,&amp;quot;10.1.0.23&amp;quot;,&amp;quot;10.10.2.3&amp;quot;,&amp;quot;101.0.2.3&amp;quot;] &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 20 s consists of digits only. Solutions Solution 1: DFS We define a function $dfs(i)$, which represents the list of IP addresses that can be formed starting from the $i$th position of string $s$. The execution steps of function $dfs(i)$ are as follows: If $i$ is greater than or equal to the length of string $s$, it means that we have completed the splicing of four segments of the IP address. At this point, we need to check whether it meets the requirements of the four segments of the IP address. If it does, add the current $IP$ to the answer. If $i$ is less than the length of string $s$, it means that we still need to splice a segment of the IP address. At this point, we need to determine the value of this segment of the IP address. If the value is greater than $255$, or the current position $i$ is $0$ and the value of several positions after $i$ is greater than $0$, it means that it does not meet the requirements, so we return directly. Otherwise, add it to the IP address list, and continue to search for the next segment of the IP address. The time complexity is $O(n \times 3^4)$, and the space complexity is $O(n)$. Here, $n$ is the length of string $s$. Java C++ Python Go TypeScript C# class Solution { private int n; private String s; private List&amp;lt;String&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); private List&amp;lt;String&amp;gt; t = new ArrayList&amp;lt;&amp;gt;(); public List&amp;lt;String&amp;gt; restoreIpAddresses(String s) { n = s.length(); this.s = s; dfs(0); return ans; } private void dfs(int i) { if (i &amp;gt;= n &amp;amp;&amp;amp; t.size() == 4) { ans.add(String.join(&quot;.&quot;, t)); return; } if (i &amp;gt;= n || t.size() &amp;gt;= 4) { return; } int x = 0; for (int j = i; j &amp;lt; Math.min(i + 3, n); ++j) { x = x * 10 + s.charAt(j) - '0'; if (x &amp;gt; 255 || (s.charAt(i) == '0' &amp;amp;&amp;amp; i != j)) { break; } t.add(s.substring(i, j + 1)); dfs(j + 1); t.remove(t.size() - 1); } } } ////// import java.util.ArrayList; import java.util.List; public class Restore_IP_Addresses { public static void main(String[] args) { // @note:@memorize: test substring boundary String a = &quot;abc&quot;; //..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-03-02T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-03-02-93-Restore-IP-Addresses/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-93.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="93 - Restore IP Addresses" property="twitter:title"/>
+   <meta content="Leetcode 93. Restore IP Addresses Description A valid IP address consists of exactly four integers separated by single dots. Each integer is between 0 and 255 (inclusive) and cannot have leading zeros. For example, &amp;quot;0.1.2.201&amp;quot; and &amp;quot;192.168.1.1&amp;quot; are valid IP addresses, but &amp;quot;0.011.255.245&amp;quot;, &amp;quot;192.168.1.312&amp;quot; and &amp;quot;192.168@1.1&amp;quot; are invalid IP addresses. Given a string s containing only digits, return all possible valid IP addresses that can be formed by inserting dots into s. You are not allowed to reorder or remove any digits in s. You may return the valid IP addresses in any order. &amp;nbsp; Example 1: Input: s = &amp;quot;25525511135&amp;quot; Output: [&amp;quot;255.255.11.135&amp;quot;,&amp;quot;255.255.111.35&amp;quot;] Example 2: Input: s = &amp;quot;0000&amp;quot; Output: [&amp;quot;0.0.0.0&amp;quot;] Example 3: Input: s = &amp;quot;101023&amp;quot; Output: [&amp;quot;1.0.10.23&amp;quot;,&amp;quot;1.0.102.3&amp;quot;,&amp;quot;10.1.0.23&amp;quot;,&amp;quot;10.10.2.3&amp;quot;,&amp;quot;101.0.2.3&amp;quot;] &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 20 s consists of digits only. Solutions Solution 1: DFS We define a function $dfs(i)$, which represents the list of IP addresses that can be formed starting from the $i$th position of string $s$. The execution steps of function $dfs(i)$ are as follows: If $i$ is greater than or equal to the length of string $s$, it means that we have completed the splicing of four segments of the IP address. At this point, we need to check whether it meets the requirements of the four segments of the IP address. If it does, add the current $IP$ to the answer. If $i$ is less than the length of string $s$, it means that we still need to splice a segment of the IP address. At this point, we need to determine the value of this segment of the IP address. If the value is greater than $255$, or the current position $i$ is $0$ and the value of several positions after $i$ is greater than $0$, it means that it does not meet the requirements, so we return directly. Otherwise, add it to the IP address list, and continue to search for the next segment of the IP address. The time complexity is $O(n \times 3^4)$, and the space complexity is $O(n)$. Here, $n$ is the length of string $s$. Java C++ Python Go TypeScript C# class Solution { private int n; private String s; private List&amp;lt;String&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); private List&amp;lt;String&amp;gt; t = new ArrayList&amp;lt;&amp;gt;(); public List&amp;lt;String&amp;gt; restoreIpAddresses(String s) { n = s.length(); this.s = s; dfs(0); return ans; } private void dfs(int i) { if (i &amp;gt;= n &amp;amp;&amp;amp; t.size() == 4) { ans.add(String.join(&quot;.&quot;, t)); return; } if (i &amp;gt;= n || t.size() &amp;gt;= 4) { return; } int x = 0; for (int j = i; j &amp;lt; Math.min(i + 3, n); ++j) { x = x * 10 + s.charAt(j) - '0'; if (x &amp;gt; 255 || (s.charAt(i) == '0' &amp;amp;&amp;amp; i != j)) { break; } t.add(s.substring(i, j + 1)); dfs(j + 1); t.remove(t.size() - 1); } } } ////// import java.util.ArrayList; import java.util.List; public class Restore_IP_Addresses { public static void main(String[] args) { // @note:@memorize: test substring boundary String a = &quot;abc&quot;; //..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    93 - Restore IP Addresses | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="93 - Restore IP Addresses" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-93.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-03-02-93-Restore-IP-Addresses/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-03-02T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"93 - Restore IP Addresses","dateModified":"2016-03-02T00:00:00-08:00","datePublished":"2016-03-02T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-03-02-93-Restore-IP-Addresses/"},"url":"https://leetcode.ca/2016-03-02-93-Restore-IP-Addresses/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="93-restore-ip-addresses">
+       <a href="solution-93.html">
+        93. Restore IP Addresses
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       A
+       <strong>
+        valid IP address
+       </strong>
+       consists of exactly four integers separated by single dots. Each integer is between
+       <code>
+        0
+       </code>
+       and
+       <code>
+        255
+       </code>
+       (
+       <strong>
+        inclusive
+       </strong>
+       ) and cannot have leading zeros.
+      </p>
+      <ul>
+       <li>
+        For example,
+        <code>
+         "0.1.2.201"
+        </code>
+        and
+        <code>
+         "192.168.1.1"
+        </code>
+        are
+        <strong>
+         valid
+        </strong>
+        IP addresses, but
+        <code>
+         "0.011.255.245"
+        </code>
+        ,
+        <code>
+         "192.168.1.312"
+        </code>
+        and
+        <code>
+         "192.168@1.1"
+        </code>
+        are
+        <strong>
+         invalid
+        </strong>
+        IP addresses.
+       </li>
+      </ul>
+      <p>
+       Given a string
+       <code>
+        s
+       </code>
+       containing only digits, return
+       <em>
+        all possible valid IP addresses that can be formed by inserting dots into
+       </em>
+       <code>
+        s
+       </code>
+       . You are
+       <strong>
+        not
+       </strong>
+       allowed to reorder or remove any digits in
+       <code>
+        s
+       </code>
+       . You may return the valid IP addresses in
+       <strong>
+        any
+       </strong>
+       order.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "25525511135"
+<strong>Output:</strong> ["255.255.11.135","255.255.111.35"]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "0000"
+<strong>Output:</strong> ["0.0.0.0"]
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "101023"
+<strong>Output:</strong> ["1.0.10.23","1.0.102.3","10.1.0.23","10.10.2.3","101.0.2.3"]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists of digits only.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: DFS
+       </strong>
+      </p>
+      <p>
+       We define a function $dfs(i)$, which represents the list of IP addresses that can be formed starting from the $i$th position of string $s$.
+      </p>
+      <p>
+       The execution steps of function $dfs(i)$ are as follows:
+      </p>
+      <p>
+       If $i$ is greater than or equal to the length of string $s$, it means that we have completed the splicing of four segments of the IP address. At this point, we need to check whether it meets the requirements of the four segments of the IP address. If it does, add the current $IP$ to the answer.
+      </p>
+      <p>
+       If $i$ is less than the length of string $s$, it means that we still need to splice a segment of the IP address. At this point, we need to determine the value of this segment of the IP address. If the value is greater than $255$, or the current position $i$ is $0$ and the value of several positions after $i$ is greater than $0$, it means that it does not meet the requirements, so we return directly. Otherwise, add it to the IP address list, and continue to search for the next segment of the IP address.
+      </p>
+      <p>
+       The time complexity is $O(n \times 3^4)$, and the space complexity is $O(n)$. Here, $n$ is the length of string $s$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#cd181397-d393-4a37-9cbb-c477bfa80879'}">
+       <li class="uk-active">
+        <a href="solution-93.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-93.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-93.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-93.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-93.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-93.html">
+         C#
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="cd181397-d393-4a37-9cbb-c477bfa80879">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">s</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">restoreIpAddresses</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">"."</span><span class="o">,</span> <span class="n">t</span><span class="o">));</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'0'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">255</span> <span class="o">||</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">//////</span>
+
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Restore_IP_Addresses</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="c1">// @note:@memorize: test substring boundary</span>
+		<span class="nc">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+		<span class="c1">// a = a.substring(0, 4); // String index out of range: 4</span>
+		<span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span> <span class="c1">// ok</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+
+		<span class="n">Restore_IP_Addresses</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Restore_IP_Addresses</span><span class="o">();</span>
+		<span class="nc">Solution</span> <span class="n">s</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="na">new</span> <span class="nf">Solution</span><span class="o">();</span>
+
+		<span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="nl">each:</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">restoreIpAddresses</span><span class="o">(</span><span class="s">"25525511135"</span><span class="o">)))</span> <span class="o">{</span>
+			<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">each</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+	<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+	    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">restoreIpAddresses</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+
+	    	<span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">||</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">12</span> <span class="o">||</span> <span class="o">!</span><span class="n">s</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="s">"\\d+"</span><span class="o">))</span> <span class="o">{</span>
+	        	<span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+	        <span class="o">}</span>
+
+	    	<span class="n">restore</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+
+	    	<span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+	    <span class="o">}</span>
+
+	    <span class="c1">// seg: segment, in total 4</span>
+	    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">restore</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">String</span> <span class="n">result</span><span class="o">,</span> <span class="kt">int</span> <span class="n">seg</span><span class="o">)</span> <span class="o">{</span>
+	    	<span class="k">if</span> <span class="o">(</span><span class="n">seg</span> <span class="o">==</span> <span class="mi">4</span><span class="o">)</span> <span class="o">{</span>
+	    		<span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+
+	    			<span class="c1">// remove last "."</span>
+	    			<span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">result</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+
+	    			<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+	    		<span class="o">}</span>
+
+	    		<span class="k">return</span><span class="o">;</span>
+	    	<span class="o">}</span>
+
+	    	<span class="c1">// for (int i = 0; i &lt; 3; i++) { // @note: out of boundary</span>
+	    	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+	    		<span class="nc">String</span> <span class="n">thisSeg</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+
+	    		<span class="k">if</span> <span class="o">(</span><span class="n">isValid</span><span class="o">(</span><span class="n">thisSeg</span><span class="o">))</span> <span class="o">{</span>
+	    			<span class="n">restore</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">),</span> <span class="n">result</span> <span class="o">+</span> <span class="n">thisSeg</span> <span class="o">+</span> <span class="s">"."</span><span class="o">,</span> <span class="n">seg</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+	    		<span class="o">}</span>
+	    	<span class="o">}</span>
+	    <span class="o">}</span>
+
+	    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+
+	    	<span class="c1">// can NOT be: 10.01.1.1</span>
+	    	<span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"0"</span><span class="o">))</span> <span class="o">{</span>
+	    		<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+	    	<span class="o">}</span>
+
+	    	<span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+	    	<span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">255</span><span class="o">)</span> <span class="o">{</span>
+	    		<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+	    	<span class="o">}</span>
+
+	    	<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+	    <span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">restoreIpAddresses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">;</span>
+        <span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">255</span> <span class="o">||</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'0'</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+                <span class="n">dfs</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">restoreIpAddresses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"0"</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">255</span>
+
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"."</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+                    <span class="n">t</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">t</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">restoreIpAddresses</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">t</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{}</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="m">4</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">strings</span><span class="o">.</span><span class="n">Join</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s">"."</span><span class="p">))</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="m">4</span> <span class="p">{</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="n">x</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">+</span><span class="m">3</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="m">10</span> <span class="o">+</span> <span class="kt">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="sc">'0'</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="m">255</span> <span class="o">||</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'0'</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">:</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">])</span>
+			<span class="n">dfs</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">dfs</span><span class="p">(</span><span class="m">0</span><span class="p">)</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">restoreIpAddresses</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">string</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">const</span> <span class="nx">t</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">const</span> <span class="nx">dfs</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;=</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="s1">.</span><span class="dl">'</span><span class="p">));</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;=</span> <span class="nx">n</span> <span class="o">||</span> <span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="nx">s</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">255</span> <span class="o">||</span> <span class="p">(</span><span class="nx">j</span> <span class="o">&gt;</span> <span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+            <span class="nx">dfs</span><span class="p">(</span><span class="nx">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="nx">t</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="nx">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="n">IList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">ans</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+    <span class="k">private</span> <span class="n">IList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">t</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">s</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="n">IList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="nf">RestoreIpAddresses</span><span class="p">(</span><span class="kt">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">n</span> <span class="p">=</span> <span class="n">s</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">s</span> <span class="p">=</span> <span class="n">s</span><span class="p">;</span>
+        <span class="nf">dfs</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">&gt;=</span> <span class="n">n</span> <span class="p">&amp;&amp;</span> <span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">"."</span><span class="p">,</span> <span class="n">t</span><span class="p">));</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">&gt;=</span> <span class="n">n</span> <span class="p">||</span> <span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">i</span> <span class="p">+</span> <span class="m">3</span> <span class="p">&amp;&amp;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">x</span> <span class="p">=</span> <span class="n">x</span> <span class="p">*</span> <span class="m">10</span> <span class="p">+</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">-</span> <span class="sc">'0'</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="p">&gt;</span> <span class="m">255</span> <span class="p">||</span> <span class="p">(</span><span class="n">j</span> <span class="p">&gt;</span> <span class="n">i</span> <span class="p">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">==</span> <span class="sc">'0'</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">t</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+            <span class="nf">dfs</span><span class="p">(</span><span class="n">j</span> <span class="p">+</span> <span class="m">1</span><span class="p">);</span>
+            <span class="n">t</span><span class="p">.</span><span class="nf">RemoveAt</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-93.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

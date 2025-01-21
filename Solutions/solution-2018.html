@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2018.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2018.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2018 - Check if Word Can Be Placed In Crossword</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2018. Check if Word Can Be Placed In Crossword Description You are given an m x n matrix board, representing the current state of a crossword puzzle. The crossword contains lowercase English letters (from solved words), &amp;#39; &amp;#39; to represent any empty cells, and &amp;#39;#&amp;#39;...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2018.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2018.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2018.html" rel="stylesheet"/>
+   <link href="solution-2018.html" rel="stylesheet"/>
+   <link href="solution-2018.html" rel="stylesheet"/>
+   <link href="solution-2018.html" rel="stylesheet"/>
+   <link href="solution-2018.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2018 - Check if Word Can Be Placed In Crossword" property="og:title"/>
+   <meta content="Leetcode 2018. Check if Word Can Be Placed In Crossword Description You are given an m x n matrix board, representing the current state of a crossword puzzle. The crossword contains lowercase English letters (from solved words), &amp;#39; &amp;#39; to represent any empty cells, and &amp;#39;#&amp;#39; to represent any blocked cells. A word can be placed horizontally (left to right or right to left) or vertically (top to bottom or bottom to top) in the board if: It does not occupy a cell containing the character &amp;#39;#&amp;#39;. The cell each letter is placed in must either be &amp;#39; &amp;#39; (empty) or match the letter already on the board. There must not be any empty cells &amp;#39; &amp;#39; or other lowercase letters directly left or right of the word if the word was placed horizontally. There must not be any empty cells &amp;#39; &amp;#39; or other lowercase letters directly above or below the word if the word was placed vertically. Given a string word, return true if word can be placed in board, or false otherwise. &amp;nbsp; Example 1: Input: board = [[&amp;quot;#&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;, &amp;quot;c&amp;quot;, &amp;quot; &amp;quot;]], word = &amp;quot;abc&amp;quot; Output: true Explanation: The word &amp;quot;abc&amp;quot; can be placed as shown above (top to bottom). Example 2: Input: board = [[&amp;quot; &amp;quot;, &amp;quot;#&amp;quot;, &amp;quot;a&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot;#&amp;quot;, &amp;quot;c&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot;#&amp;quot;, &amp;quot;a&amp;quot;]], word = &amp;quot;ac&amp;quot; Output: false Explanation: It is impossible to place the word because there will always be a space/letter above or below it. Example 3: Input: board = [[&amp;quot;#&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;c&amp;quot;]], word = &amp;quot;ca&amp;quot; Output: true Explanation: The word &amp;quot;ca&amp;quot; can be placed as shown above (right to left). &amp;nbsp; Constraints: m == board.length n == board[i].length 1 &amp;lt;= m * n &amp;lt;= 2 * 105 board[i][j] will be &amp;#39; &amp;#39;, &amp;#39;#&amp;#39;, or a lowercase English letter. 1 &amp;lt;= word.length &amp;lt;= max(m, n) word will contain only lowercase English letters. Solutions Solution 1: Enumeration We can enumerate each position $(i, j)$ in the matrix, and judge whether we can place the word word from left to right or from right to left, or from top to bottom or from bottom to top, starting from this position. The following conditions must be met for this position to be used as a starting point: If the word word is to be placed from left to right, then this position must be the left boundary, or the cell board[i][j - 1] to the left of this position is '#'. If the word word is to be placed from right to left, then this position must be the right boundary, or the cell board[i][j + 1] to the right of this position is '#'. If the word word is to be placed from top to bottom, then this position must be the upper boundary, or the cell board[i - 1][j] above this position is '#'. If the word word is..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-06-09T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-06-09-2018-Check-if-Word-Can-Be-Placed-In-Crossword/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2018.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2018 - Check if Word Can Be Placed In Crossword" property="twitter:title"/>
+   <meta content="Leetcode 2018. Check if Word Can Be Placed In Crossword Description You are given an m x n matrix board, representing the current state of a crossword puzzle. The crossword contains lowercase English letters (from solved words), &amp;#39; &amp;#39; to represent any empty cells, and &amp;#39;#&amp;#39; to represent any blocked cells. A word can be placed horizontally (left to right or right to left) or vertically (top to bottom or bottom to top) in the board if: It does not occupy a cell containing the character &amp;#39;#&amp;#39;. The cell each letter is placed in must either be &amp;#39; &amp;#39; (empty) or match the letter already on the board. There must not be any empty cells &amp;#39; &amp;#39; or other lowercase letters directly left or right of the word if the word was placed horizontally. There must not be any empty cells &amp;#39; &amp;#39; or other lowercase letters directly above or below the word if the word was placed vertically. Given a string word, return true if word can be placed in board, or false otherwise. &amp;nbsp; Example 1: Input: board = [[&amp;quot;#&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;, &amp;quot;c&amp;quot;, &amp;quot; &amp;quot;]], word = &amp;quot;abc&amp;quot; Output: true Explanation: The word &amp;quot;abc&amp;quot; can be placed as shown above (top to bottom). Example 2: Input: board = [[&amp;quot; &amp;quot;, &amp;quot;#&amp;quot;, &amp;quot;a&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot;#&amp;quot;, &amp;quot;c&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot;#&amp;quot;, &amp;quot;a&amp;quot;]], word = &amp;quot;ac&amp;quot; Output: false Explanation: It is impossible to place the word because there will always be a space/letter above or below it. Example 3: Input: board = [[&amp;quot;#&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot; &amp;quot;, &amp;quot; &amp;quot;, &amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;c&amp;quot;]], word = &amp;quot;ca&amp;quot; Output: true Explanation: The word &amp;quot;ca&amp;quot; can be placed as shown above (right to left). &amp;nbsp; Constraints: m == board.length n == board[i].length 1 &amp;lt;= m * n &amp;lt;= 2 * 105 board[i][j] will be &amp;#39; &amp;#39;, &amp;#39;#&amp;#39;, or a lowercase English letter. 1 &amp;lt;= word.length &amp;lt;= max(m, n) word will contain only lowercase English letters. Solutions Solution 1: Enumeration We can enumerate each position $(i, j)$ in the matrix, and judge whether we can place the word word from left to right or from right to left, or from top to bottom or from bottom to top, starting from this position. The following conditions must be met for this position to be used as a starting point: If the word word is to be placed from left to right, then this position must be the left boundary, or the cell board[i][j - 1] to the left of this position is '#'. If the word word is to be placed from right to left, then this position must be the right boundary, or the cell board[i][j + 1] to the right of this position is '#'. If the word word is to be placed from top to bottom, then this position must be the upper boundary, or the cell board[i - 1][j] above this position is '#'. If the word word is..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2018 - Check if Word Can Be Placed In Crossword | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2018 - Check if Word Can Be Placed In Crossword" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2018.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-06-09-2018-Check-if-Word-Can-Be-Placed-In-Crossword/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-06-09T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2018 - Check if Word Can Be Placed In Crossword","dateModified":"2021-06-09T00:00:00-07:00","datePublished":"2021-06-09T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-06-09-2018-Check-if-Word-Can-Be-Placed-In-Crossword/"},"url":"https://leetcode.ca/2021-06-09-2018-Check-if-Word-Can-Be-Placed-In-Crossword/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2018-check-if-word-can-be-placed-in-crossword">
+       <a href="solution-2018.html">
+        2018. Check if Word Can Be Placed In Crossword
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an
+       <code>
+        m x n
+       </code>
+       matrix
+       <code>
+        board
+       </code>
+       , representing the
+       <strong>
+        current
+       </strong>
+       state of a crossword puzzle. The crossword contains lowercase English letters (from solved words),
+       <code>
+        ' '
+       </code>
+       to represent any
+       <strong>
+        empty
+       </strong>
+       cells, and
+       <code>
+        '#'
+       </code>
+       to represent any
+       <strong>
+        blocked
+       </strong>
+       cells.
+      </p>
+      <p>
+       A word can be placed
+       <strong>
+        horizontally
+       </strong>
+       (left to right
+       <strong>
+        or
+       </strong>
+       right to left) or
+       <strong>
+        vertically
+       </strong>
+       (top to bottom
+       <strong>
+        or
+       </strong>
+       bottom to top) in the board if:
+      </p>
+      <ul>
+       <li>
+        It does not occupy a cell containing the character
+        <code>
+         '#'
+        </code>
+        .
+       </li>
+       <li>
+        The cell each letter is placed in must either be
+        <code>
+         ' '
+        </code>
+        (empty) or
+        <strong>
+         match
+        </strong>
+        the letter already on the
+        <code>
+         board
+        </code>
+        .
+       </li>
+       <li>
+        There must not be any empty cells
+        <code>
+         ' '
+        </code>
+        or other lowercase letters
+        <strong>
+         directly left or right
+        </strong>
+        <strong>
+        </strong>
+        of the word if the word was placed
+        <strong>
+         horizontally
+        </strong>
+        .
+       </li>
+       <li>
+        There must not be any empty cells
+        <code>
+         ' '
+        </code>
+        or other lowercase letters
+        <strong>
+         directly above or below
+        </strong>
+        the word if the word was placed
+        <strong>
+         vertically
+        </strong>
+        .
+       </li>
+      </ul>
+      <p>
+       Given a string
+       <code>
+        word
+       </code>
+       , return
+       <code>
+        true
+       </code>
+       <em>
+        if
+       </em>
+       <code>
+        word
+       </code>
+       <em>
+        can be placed in
+       </em>
+       <code>
+        board
+       </code>
+       <em>
+        , or
+       </em>
+       <code>
+        false
+       </code>
+       <em>
+        <strong>
+         otherwise
+        </strong>
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2000-2099/2018.Check%20if%20Word%20Can%20Be%20Placed%20In%20Crossword/images/crossword-ex1-1.png" style="width: 478px; height: 180px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> board = [["#", " ", "#"], [" ", " ", "#"], ["#", "c", " "]], word = "abc"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> The word "abc" can be placed as shown above (top to bottom).
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2000-2099/2018.Check%20if%20Word%20Can%20Be%20Placed%20In%20Crossword/images/crossword-ex2-1.png" style="width: 180px; height: 180px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> board = [[" ", "#", "a"], [" ", "#", "c"], [" ", "#", "a"]], word = "ac"
+<strong>Output:</strong> false
+<strong>Explanation:</strong> It is impossible to place the word because there will always be a space/letter above or below it.</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2000-2099/2018.Check%20if%20Word%20Can%20Be%20Placed%20In%20Crossword/images/crossword-ex3-1.png" style="width: 478px; height: 180px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> board = [["#", " ", "#"], [" ", " ", "#"], ["#", " ", "c"]], word = "ca"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> The word "ca" can be placed as shown above (right to left). 
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == board.length
+        </code>
+       </li>
+       <li>
+        <code>
+         n == board[i].length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m * n &lt;= 2 * 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         board[i][j]
+        </code>
+        will be
+        <code>
+         ' '
+        </code>
+        ,
+        <code>
+         '#'
+        </code>
+        , or a lowercase English letter.
+       </li>
+       <li>
+        <code>
+         1 &lt;= word.length &lt;= max(m, n)
+        </code>
+       </li>
+       <li>
+        <code>
+         word
+        </code>
+        will contain only lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Enumeration
+       </strong>
+      </p>
+      <p>
+       We can enumerate each position $(i, j)$ in the matrix, and judge whether we can place the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       from left to right or from right to left, or from top to bottom or from bottom to top, starting from this position.
+      </p>
+      <p>
+       The following conditions must be met for this position to be used as a starting point:
+      </p>
+      <ol>
+       <li>
+        If the word
+        <code class="language-plaintext highlighter-rouge">
+         word
+        </code>
+        is to be placed from left to right, then this position must be the left boundary, or the cell
+        <code class="language-plaintext highlighter-rouge">
+         board[i][j - 1]
+        </code>
+        to the left of this position is
+        <code class="language-plaintext highlighter-rouge">
+         '#'
+        </code>
+        .
+       </li>
+       <li>
+        If the word
+        <code class="language-plaintext highlighter-rouge">
+         word
+        </code>
+        is to be placed from right to left, then this position must be the right boundary, or the cell
+        <code class="language-plaintext highlighter-rouge">
+         board[i][j + 1]
+        </code>
+        to the right of this position is
+        <code class="language-plaintext highlighter-rouge">
+         '#'
+        </code>
+        .
+       </li>
+       <li>
+        If the word
+        <code class="language-plaintext highlighter-rouge">
+         word
+        </code>
+        is to be placed from top to bottom, then this position must be the upper boundary, or the cell
+        <code class="language-plaintext highlighter-rouge">
+         board[i - 1][j]
+        </code>
+        above this position is
+        <code class="language-plaintext highlighter-rouge">
+         '#'
+        </code>
+        .
+       </li>
+       <li>
+        If the word
+        <code class="language-plaintext highlighter-rouge">
+         word
+        </code>
+        is to be placed from bottom to top, then this position must be the lower boundary, or the cell
+        <code class="language-plaintext highlighter-rouge">
+         board[i + 1][j]
+        </code>
+        below this position is
+        <code class="language-plaintext highlighter-rouge">
+         '#'
+        </code>
+        .
+       </li>
+      </ol>
+      <p>
+       Under the above conditions, we can start from this position and judge whether the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       can be placed. We design a function $check(i, j, a, b)$, which represents whether it is legal to place the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       from the position $(i, j)$ in the direction $(a, b)$. If it is legal, return
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       , otherwise return
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       .
+      </p>
+      <p>
+       The implementation of the function $check(i, j, a, b)$ is as follows:
+      </p>
+      <p>
+       We first get the other boundary position $(x, y)$ in the current direction, i.e., $(x, y) = (i + a \times k, j + b \times k)$, where $k$ is the length of the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       . If $(x, y)$ is in the matrix and the cell at $(x, y)$ is not
+       <code class="language-plaintext highlighter-rouge">
+        '#'
+       </code>
+       , it means that the other boundary position in the current direction is not
+       <code class="language-plaintext highlighter-rouge">
+        '#'
+       </code>
+       , so the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       cannot be placed, and
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       is returned.
+      </p>
+      <p>
+       Otherwise, we start from the position $(i, j)$ and traverse the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       in the direction $(a, b)$. If we encounter a cell
+       <code class="language-plaintext highlighter-rouge">
+        board[i][j]
+       </code>
+       that is not a space or not the current character of the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       , it means that the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       cannot be placed, and
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       is returned. If the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       is traversed, it means that the word
+       <code class="language-plaintext highlighter-rouge">
+        word
+       </code>
+       can be placed, and
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       is returned.
+      </p>
+      <p>
+       The time complexity is $O(m \times n)$, and the space complexity is $O(1)$. Here, $m$ and $n$ are the number of rows and columns in the matrix, respectively.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#fd88e1d1-26cf-4d13-9141-fa1ff069a4a5'}">
+       <li class="uk-active">
+        <a href="solution-2018.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2018.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2018.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2018.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="fd88e1d1-26cf-4d13-9141-fa1ff069a4a5">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">m</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">word</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">k</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">placeWordInCrossword</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">,</span> <span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">board</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">board</span> <span class="o">=</span> <span class="n">board</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">boolean</span> <span class="n">leftToRight</span> <span class="o">=</span> <span class="o">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="kt">boolean</span> <span class="n">rightToLeft</span> <span class="o">=</span> <span class="o">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+                <span class="kt">boolean</span> <span class="n">upToDown</span> <span class="o">=</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">board</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+                <span class="kt">boolean</span> <span class="n">downToUp</span> <span class="o">=</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">board</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">leftToRight</span> <span class="o">||</span> <span class="n">rightToLeft</span> <span class="o">||</span> <span class="n">upToDown</span> <span class="o">||</span> <span class="n">downToUp</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">check</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">,</span> <span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">k</span><span class="o">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">k</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">!=</span> <span class="sc">'#'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">n</span>
+                <span class="o">||</span> <span class="o">(</span><span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">!=</span> <span class="sc">' '</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">!=</span> <span class="n">word</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">p</span><span class="o">)))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">a</span><span class="o">;</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="n">b</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">placeWordInCrossword</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&amp;</span> <span class="n">board</span><span class="p">,</span> <span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">board</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">auto</span> <span class="n">check</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">k</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">k</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'#'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">c</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="n">a</span><span class="p">;</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="n">b</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">bool</span> <span class="n">leftToRight</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="kt">bool</span> <span class="n">rightToLeft</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+                <span class="kt">bool</span> <span class="n">upToDown</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="kt">bool</span> <span class="n">downToUp</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">leftToRight</span> <span class="o">||</span> <span class="n">rightToLeft</span> <span class="o">||</span> <span class="n">upToDown</span> <span class="o">||</span> <span class="n">downToUp</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">placeWordInCrossword</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">k</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">board</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'#'</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span>
+                    <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">m</span>
+                    <span class="ow">or</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">0</span>
+                    <span class="ow">or</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">n</span>
+                    <span class="ow">or</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="s">' '</span> <span class="ow">and</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">c</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="k">return</span> <span class="bp">False</span>
+                <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">left_to_right</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'#'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">right_to_left</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'#'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">check</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="p">)</span>
+                <span class="n">up_to_down</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s">'#'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">down_to_up</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s">'#'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">check</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">left_to_right</span> <span class="ow">or</span> <span class="n">right_to_left</span> <span class="ow">or</span> <span class="n">up_to_down</span> <span class="ow">or</span> <span class="n">down_to_up</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">placeWordInCrossword</span><span class="p">(</span><span class="n">board</span> <span class="p">[][]</span><span class="kt">byte</span><span class="p">,</span> <span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="n">k</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+	<span class="n">check</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">i</span><span class="o">+</span><span class="n">a</span><span class="o">*</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="n">b</span><span class="o">*</span><span class="n">k</span>
+		<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'#'</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="kt">byte</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="no">false</span>
+			<span class="p">}</span>
+			<span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="n">a</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="n">b</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="no">true</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">board</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">leftToRight</span> <span class="o">:=</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+			<span class="n">rightToLeft</span> <span class="o">:=</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">)</span>
+			<span class="n">upToDown</span> <span class="o">:=</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+			<span class="n">downToUp</span> <span class="o">:=</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">m</span><span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">leftToRight</span> <span class="o">||</span> <span class="n">rightToLeft</span> <span class="o">||</span> <span class="n">upToDown</span> <span class="o">||</span> <span class="n">downToUp</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="no">true</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2018.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

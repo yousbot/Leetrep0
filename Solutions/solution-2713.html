@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2713.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2713.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2713 - Maximum Strictly Increasing Cells in a Matrix</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2713. Maximum Strictly Increasing Cells in a Matrix Description Given a 1-indexed&amp;nbsp;m x n integer matrix mat, you can select any cell in the matrix as your starting cell. From the starting cell, you can move to any other cell in the same row or...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2713.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2713.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2713.html" rel="stylesheet"/>
+   <link href="solution-2713.html" rel="stylesheet"/>
+   <link href="solution-2713.html" rel="stylesheet"/>
+   <link href="solution-2713.html" rel="stylesheet"/>
+   <link href="solution-2713.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2713 - Maximum Strictly Increasing Cells in a Matrix" property="og:title"/>
+   <meta content="Leetcode 2713. Maximum Strictly Increasing Cells in a Matrix Description Given a 1-indexed&amp;nbsp;m x n integer matrix mat, you can select any cell in the matrix as your starting cell. From the starting cell, you can move to any other cell in the same row or column, but only if the value of the destination cell is strictly greater than the value of the current cell. You can repeat this process as many times as possible, moving from cell to cell until you can no longer make any moves. Your task is to find the maximum number of cells that you can visit in the matrix by starting from some cell. Return an integer denoting the maximum number of cells that can be visited. &amp;nbsp; Example 1: Input: mat = [[3,1],[3,4]] Output: 2 Explanation: The image shows how we can visit 2 cells starting from row 1, column 2. It can be shown that we cannot visit more than 2 cells no matter where we start from, so the answer is 2. Example 2: Input: mat = [[1,1],[1,1]] Output: 1 Explanation: Since the cells must be strictly increasing, we can only visit one cell in this example. Example 3: Input: mat = [[3,1,6],[-9,5,7]] Output: 4 Explanation: The image above shows how we can visit 4 cells starting from row 2, column 1. It can be shown that we cannot visit more than 4 cells no matter where we start from, so the answer is 4. &amp;nbsp; Constraints: m == mat.length&amp;nbsp; n == mat[i].length&amp;nbsp; 1 &amp;lt;= m, n &amp;lt;= 105 1 &amp;lt;= m * n &amp;lt;= 105 -105&amp;nbsp;&amp;lt;= mat[i][j] &amp;lt;= 105 Solutions Java C++ Python Go TypeScript class Solution { public int maxIncreasingCells(int[][] mat) { int m = mat.length, n = mat[0].length; TreeMap&amp;lt;Integer, List&amp;lt;int[]&amp;gt;&amp;gt; g = new TreeMap&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { g.computeIfAbsent(mat[i][j], k -&amp;gt; new ArrayList&amp;lt;&amp;gt;()).add(new int[] {i, j}); } } int[] rowMax = new int[m]; int[] colMax = new int[n]; int ans = 0; for (var e : g.entrySet()) { var pos = e.getValue(); int[] mx = new int[pos.size()]; int k = 0; for (var p : pos) { int i = p[0], j = p[1]; mx[k] = Math.max(rowMax[i], colMax[j]) + 1; ans = Math.max(ans, mx[k++]); } for (k = 0; k &amp;lt; mx.length; ++k) { int i = pos.get(k)[0], j = pos.get(k)[1]; rowMax[i] = Math.max(rowMax[i], mx[k]); colMax[j] = Math.max(colMax[j], mx[k]); } } return ans; } } class Solution { public: int maxIncreasingCells(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; mat) { int m = mat.size(), n = mat[0].size(); map&amp;lt;int, vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt;&amp;gt; g; for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { g[mat[i][j]].emplace_back(i, j); } } vector&amp;lt;int&amp;gt; rowMax(m); vector&amp;lt;int&amp;gt; colMax(n); int ans = 0; for (auto&amp;amp; [_, pos] : g) { vector&amp;lt;int&amp;gt; mx; for (auto&amp;amp; [i, j] : pos) { mx.push_back(max(rowMax[i], colMax[j]) + 1); ans = max(ans, mx.back()); } for (int k = 0; k..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-05-05T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-05-05-2713-Maximum-Strictly-Increasing-Cells-in-a-Matrix/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2713.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2713 - Maximum Strictly Increasing Cells in a Matrix" property="twitter:title"/>
+   <meta content="Leetcode 2713. Maximum Strictly Increasing Cells in a Matrix Description Given a 1-indexed&amp;nbsp;m x n integer matrix mat, you can select any cell in the matrix as your starting cell. From the starting cell, you can move to any other cell in the same row or column, but only if the value of the destination cell is strictly greater than the value of the current cell. You can repeat this process as many times as possible, moving from cell to cell until you can no longer make any moves. Your task is to find the maximum number of cells that you can visit in the matrix by starting from some cell. Return an integer denoting the maximum number of cells that can be visited. &amp;nbsp; Example 1: Input: mat = [[3,1],[3,4]] Output: 2 Explanation: The image shows how we can visit 2 cells starting from row 1, column 2. It can be shown that we cannot visit more than 2 cells no matter where we start from, so the answer is 2. Example 2: Input: mat = [[1,1],[1,1]] Output: 1 Explanation: Since the cells must be strictly increasing, we can only visit one cell in this example. Example 3: Input: mat = [[3,1,6],[-9,5,7]] Output: 4 Explanation: The image above shows how we can visit 4 cells starting from row 2, column 1. It can be shown that we cannot visit more than 4 cells no matter where we start from, so the answer is 4. &amp;nbsp; Constraints: m == mat.length&amp;nbsp; n == mat[i].length&amp;nbsp; 1 &amp;lt;= m, n &amp;lt;= 105 1 &amp;lt;= m * n &amp;lt;= 105 -105&amp;nbsp;&amp;lt;= mat[i][j] &amp;lt;= 105 Solutions Java C++ Python Go TypeScript class Solution { public int maxIncreasingCells(int[][] mat) { int m = mat.length, n = mat[0].length; TreeMap&amp;lt;Integer, List&amp;lt;int[]&amp;gt;&amp;gt; g = new TreeMap&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { g.computeIfAbsent(mat[i][j], k -&amp;gt; new ArrayList&amp;lt;&amp;gt;()).add(new int[] {i, j}); } } int[] rowMax = new int[m]; int[] colMax = new int[n]; int ans = 0; for (var e : g.entrySet()) { var pos = e.getValue(); int[] mx = new int[pos.size()]; int k = 0; for (var p : pos) { int i = p[0], j = p[1]; mx[k] = Math.max(rowMax[i], colMax[j]) + 1; ans = Math.max(ans, mx[k++]); } for (k = 0; k &amp;lt; mx.length; ++k) { int i = pos.get(k)[0], j = pos.get(k)[1]; rowMax[i] = Math.max(rowMax[i], mx[k]); colMax[j] = Math.max(colMax[j], mx[k]); } } return ans; } } class Solution { public: int maxIncreasingCells(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; mat) { int m = mat.size(), n = mat[0].size(); map&amp;lt;int, vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt;&amp;gt; g; for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { g[mat[i][j]].emplace_back(i, j); } } vector&amp;lt;int&amp;gt; rowMax(m); vector&amp;lt;int&amp;gt; colMax(n); int ans = 0; for (auto&amp;amp; [_, pos] : g) { vector&amp;lt;int&amp;gt; mx; for (auto&amp;amp; [i, j] : pos) { mx.push_back(max(rowMax[i], colMax[j]) + 1); ans = max(ans, mx.back()); } for (int k = 0; k..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2713 - Maximum Strictly Increasing Cells in a Matrix | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2713 - Maximum Strictly Increasing Cells in a Matrix" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2713.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-05-05-2713-Maximum-Strictly-Increasing-Cells-in-a-Matrix/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-05-05T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2713 - Maximum Strictly Increasing Cells in a Matrix","dateModified":"2023-05-05T00:00:00-07:00","datePublished":"2023-05-05T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-05-05-2713-Maximum-Strictly-Increasing-Cells-in-a-Matrix/"},"url":"https://leetcode.ca/2023-05-05-2713-Maximum-Strictly-Increasing-Cells-in-a-Matrix/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2713-maximum-strictly-increasing-cells-in-a-matrix">
+       <a href="solution-2713.html">
+        2713. Maximum Strictly Increasing Cells in a Matrix
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a
+       <strong>
+        1-indexed
+       </strong>
+       <code>
+        m x n
+       </code>
+       integer matrix
+       <code>
+        mat
+       </code>
+       , you can select any cell in the matrix as your
+       <strong>
+        starting cell
+       </strong>
+       .
+      </p>
+      <p>
+       From the starting cell, you can move to any other cell
+       <strong>
+        in the
+       </strong>
+       <strong>
+        same row or column
+       </strong>
+       , but only if the value of the destination cell is
+       <strong>
+        strictly greater
+       </strong>
+       than the value of the current cell. You can repeat this process as many times as possible, moving from cell to cell until you can no longer make any moves.
+      </p>
+      <p>
+       Your task is to find the
+       <strong>
+        maximum number of cells
+       </strong>
+       that you can visit in the matrix by starting from some cell.
+      </p>
+      <p>
+       Return
+       <em>
+        an integer denoting the maximum number of cells that can be visited.
+       </em>
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <strong class="example">
+        <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2700-2799/2713.Maximum%20Strictly%20Increasing%20Cells%20in%20a%20Matrix/images/diag1drawio.png" style="width: 200px; height: 176px;"/>
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> mat = [[3,1],[3,4]]
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> The image shows how we can visit 2 cells starting from row 1, column 2. It can be shown that we cannot visit more than 2 cells no matter where we start from, so the answer is 2. 
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <strong class="example">
+        <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2700-2799/2713.Maximum%20Strictly%20Increasing%20Cells%20in%20a%20Matrix/images/diag3drawio.png" style="width: 200px; height: 176px;"/>
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> mat = [[1,1],[1,1]]
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> Since the cells must be strictly increasing, we can only visit one cell in this example. 
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <strong class="example">
+        <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2700-2799/2713.Maximum%20Strictly%20Increasing%20Cells%20in%20a%20Matrix/images/diag4drawio.png" style="width: 350px; height: 250px;"/>
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> mat = [[3,1,6],[-9,5,7]]
+<strong>Output:</strong> 4
+<strong>Explanation:</strong> The image above shows how we can visit 4 cells starting from row 2, column 1. It can be shown that we cannot visit more than 4 cells no matter where we start from, so the answer is 4. 
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == mat.length
+        </code>
+       </li>
+       <li>
+        <code>
+         n == mat[i].length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m, n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m * n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         -10
+         <sup>
+          5
+         </sup>
+         &lt;= mat[i][j] &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#824c0846-6ca0-4375-84ad-28f7d08531cd'}">
+       <li class="uk-active">
+        <a href="solution-2713.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2713.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2713.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2713.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2713.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="824c0846-6ca0-4375-84ad-28f7d08531cd">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxIncreasingCells</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">mat</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">mat</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="nc">TreeMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">g</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">mat</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">],</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">});</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">rowMax</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">colMax</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">g</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">var</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">mx</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">pos</span><span class="o">.</span><span class="na">size</span><span class="o">()];</span>
+            <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">p</span> <span class="o">:</span> <span class="n">pos</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">j</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+                <span class="n">mx</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">rowMax</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">colMax</span><span class="o">[</span><span class="n">j</span><span class="o">])</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">mx</span><span class="o">[</span><span class="n">k</span><span class="o">++]);</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">mx</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">k</span><span class="o">)[</span><span class="mi">0</span><span class="o">],</span> <span class="n">j</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">k</span><span class="o">)[</span><span class="mi">1</span><span class="o">];</span>
+                <span class="n">rowMax</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">rowMax</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">mx</span><span class="o">[</span><span class="n">k</span><span class="o">]);</span>
+                <span class="n">colMax</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">colMax</span><span class="o">[</span><span class="n">j</span><span class="o">],</span> <span class="n">mx</span><span class="o">[</span><span class="n">k</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">maxIncreasingCells</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">mat</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mat</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">g</span><span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]].</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rowMax</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">colMax</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">pos</span><span class="p">]</span> <span class="o">:</span> <span class="n">g</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">mx</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">:</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">mx</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">rowMax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">colMax</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">mx</span><span class="p">.</span><span class="n">back</span><span class="p">());</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">mx</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+                <span class="n">rowMax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">rowMax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mx</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
+                <span class="n">colMax</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">colMax</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">mx</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">maxIncreasingCells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">g</span><span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]].</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+        <span class="n">rowMax</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span>
+        <span class="n">colMax</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">mx</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">:</span>
+                <span class="n">mx</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="n">rowMax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">colMax</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">mx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+                <span class="n">rowMax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">rowMax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mx</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">colMax</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">colMax</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">mx</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">maxIncreasingCells</span><span class="p">(</span><span class="n">mat</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">][][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">mat</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">row</span> <span class="p">{</span>
+			<span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">})</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">nums</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+		<span class="n">nums</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+	<span class="n">rowMax</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+	<span class="n">colMax</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+		<span class="n">pos</span> <span class="o">:=</span> <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+		<span class="n">mx</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">pos</span> <span class="p">{</span>
+			<span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">rowMax</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">]],</span> <span class="n">colMax</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">]])</span> <span class="o">+</span> <span class="m">1</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">pos</span> <span class="p">{</span>
+			<span class="n">rowMax</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">rowMax</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">]],</span> <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+			<span class="n">colMax</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">colMax</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">]],</span> <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">maxIncreasingCells</span><span class="p">(</span><span class="nx">mat</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">mat</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">g</span><span class="p">:</span> <span class="p">{</span> <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">number</span><span class="p">]:</span> <span class="p">[</span><span class="kr">number</span><span class="p">,</span> <span class="kr">number</span><span class="p">][]</span> <span class="p">}</span> <span class="o">=</span> <span class="p">{};</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">g</span><span class="p">[</span><span class="nx">mat</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]])</span> <span class="p">{</span>
+                <span class="nx">g</span><span class="p">[</span><span class="nx">mat</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="p">}</span>
+            <span class="nx">g</span><span class="p">[</span><span class="nx">mat</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]].</span><span class="nx">push</span><span class="p">([</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">rowMax</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">m</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">colMax</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="kd">const</span> <span class="nx">sortedKeys</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">g</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">sortedKeys</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">g</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+        <span class="kd">const</span> <span class="nx">mx</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">]</span> <span class="k">of</span> <span class="nx">pos</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">mx</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">rowMax</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">colMax</span><span class="p">[</span><span class="nx">j</span><span class="p">]));</span>
+            <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">ans</span><span class="p">,</span> <span class="nx">mx</span><span class="p">[</span><span class="nx">mx</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="p">[</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">pos</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
+            <span class="nx">rowMax</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">rowMax</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">mx</span><span class="p">[</span><span class="nx">k</span><span class="p">]);</span>
+            <span class="nx">colMax</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">colMax</span><span class="p">[</span><span class="nx">j</span><span class="p">],</span> <span class="nx">mx</span><span class="p">[</span><span class="nx">k</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2713.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

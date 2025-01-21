@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-295.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-295.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>295 - Find Median from Data Stream</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 295. Find Median from Data Stream Description The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values. For example, for...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-295.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-295.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-295.html" rel="stylesheet"/>
+   <link href="solution-295.html" rel="stylesheet"/>
+   <link href="solution-295.html" rel="stylesheet"/>
+   <link href="solution-295.html" rel="stylesheet"/>
+   <link href="solution-295.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="295 - Find Median from Data Stream" property="og:title"/>
+   <meta content="Leetcode 295. Find Median from Data Stream Description The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values. For example, for arr = [2,3,4], the median is 3. For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5. Implement the MedianFinder class: MedianFinder() initializes the MedianFinder object. void addNum(int num) adds the integer num from the data stream to the data structure. double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted. &amp;nbsp; Example 1: Input [&amp;quot;MedianFinder&amp;quot;, &amp;quot;addNum&amp;quot;, &amp;quot;addNum&amp;quot;, &amp;quot;findMedian&amp;quot;, &amp;quot;addNum&amp;quot;, &amp;quot;findMedian&amp;quot;] [[], [1], [2], [], [3], []] Output [null, null, null, 1.5, null, 2.0] Explanation MedianFinder medianFinder = new MedianFinder(); medianFinder.addNum(1); // arr = [1] medianFinder.addNum(2); // arr = [1, 2] medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2) medianFinder.addNum(3); // arr[1, 2, 3] medianFinder.findMedian(); // return 2.0 &amp;nbsp; Constraints: -105 &amp;lt;= num &amp;lt;= 105 There will be at least one element in the data structure before calling findMedian. At most 5 * 104 calls will be made to addNum and findMedian. &amp;nbsp; Follow up: If all integer numbers from the stream are in the range [0, 100], how would you optimize your solution? If 99% of all integer numbers from the stream are in the range [0, 100], how would you optimize your solution? Solutions Since the data in the data stream is not in order, we should first think of a way to make it in ordered. If we use a vector to save the data stream, we must sort the array every time a new data comes in, which is not efficient. Use large and small heaps to solve the problem, where the large heap holds the larger numbers in the right half, and the small heap holds the smaller numbers in the left half. In this way, the entire array is divided into two sections in the middle. Since the heap is saved from large to small, we hope that the data in the large pile is from small to large, so it is convenient to take the first one to calculate the median. Follow up Q-1: If all integer numbers from the stream are between 0 and 100, how would you optimize it? We can maintain an integer array of length 100 to store the count of each number along with a total count. Then, we can iterate over the array to find the middle value to get our median. Time and space complexity would be O(100) = O(1). Q-2: If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it? In this case, we can keep a counter for lessThanHundred and greaterThanHundred. As we know the solution will be definitely in 0-100 we donât need to know those..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-09-20T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-09-20-295-Find-Median-from-Data-Stream/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-295.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="295 - Find Median from Data Stream" property="twitter:title"/>
+   <meta content="Leetcode 295. Find Median from Data Stream Description The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values. For example, for arr = [2,3,4], the median is 3. For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5. Implement the MedianFinder class: MedianFinder() initializes the MedianFinder object. void addNum(int num) adds the integer num from the data stream to the data structure. double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted. &amp;nbsp; Example 1: Input [&amp;quot;MedianFinder&amp;quot;, &amp;quot;addNum&amp;quot;, &amp;quot;addNum&amp;quot;, &amp;quot;findMedian&amp;quot;, &amp;quot;addNum&amp;quot;, &amp;quot;findMedian&amp;quot;] [[], [1], [2], [], [3], []] Output [null, null, null, 1.5, null, 2.0] Explanation MedianFinder medianFinder = new MedianFinder(); medianFinder.addNum(1); // arr = [1] medianFinder.addNum(2); // arr = [1, 2] medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2) medianFinder.addNum(3); // arr[1, 2, 3] medianFinder.findMedian(); // return 2.0 &amp;nbsp; Constraints: -105 &amp;lt;= num &amp;lt;= 105 There will be at least one element in the data structure before calling findMedian. At most 5 * 104 calls will be made to addNum and findMedian. &amp;nbsp; Follow up: If all integer numbers from the stream are in the range [0, 100], how would you optimize your solution? If 99% of all integer numbers from the stream are in the range [0, 100], how would you optimize your solution? Solutions Since the data in the data stream is not in order, we should first think of a way to make it in ordered. If we use a vector to save the data stream, we must sort the array every time a new data comes in, which is not efficient. Use large and small heaps to solve the problem, where the large heap holds the larger numbers in the right half, and the small heap holds the smaller numbers in the left half. In this way, the entire array is divided into two sections in the middle. Since the heap is saved from large to small, we hope that the data in the large pile is from small to large, so it is convenient to take the first one to calculate the median. Follow up Q-1: If all integer numbers from the stream are between 0 and 100, how would you optimize it? We can maintain an integer array of length 100 to store the count of each number along with a total count. Then, we can iterate over the array to find the middle value to get our median. Time and space complexity would be O(100) = O(1). Q-2: If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it? In this case, we can keep a counter for lessThanHundred and greaterThanHundred. As we know the solution will be definitely in 0-100 we donât need to know those..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    295 - Find Median from Data Stream | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="295 - Find Median from Data Stream" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-295.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-09-20-295-Find-Median-from-Data-Stream/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-09-20T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"295 - Find Median from Data Stream","dateModified":"2016-09-20T00:00:00-07:00","datePublished":"2016-09-20T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-09-20-295-Find-Median-from-Data-Stream/"},"url":"https://leetcode.ca/2016-09-20-295-Find-Median-from-Data-Stream/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="295-find-median-from-data-stream">
+       <a href="solution-295.html">
+        295. Find Median from Data Stream
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       The
+       <strong>
+        median
+       </strong>
+       is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
+      </p>
+      <ul>
+       <li>
+        For example, for
+        <code>
+         arr = [2,3,4]
+        </code>
+        , the median is
+        <code>
+         3
+        </code>
+        .
+       </li>
+       <li>
+        For example, for
+        <code>
+         arr = [2,3]
+        </code>
+        , the median is
+        <code>
+         (2 + 3) / 2 = 2.5
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Implement the MedianFinder class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         MedianFinder()
+        </code>
+        initializes the
+        <code>
+         MedianFinder
+        </code>
+        object.
+       </li>
+       <li>
+        <code>
+         void addNum(int num)
+        </code>
+        adds the integer
+        <code>
+         num
+        </code>
+        from the data stream to the data structure.
+       </li>
+       <li>
+        <code>
+         double findMedian()
+        </code>
+        returns the median of all elements so far. Answers within
+        <code>
+         10
+         <sup>
+          -5
+         </sup>
+        </code>
+        of the actual answer will be accepted.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+[[], [1], [2], [], [3], []]
+<strong>Output</strong>
+[null, null, null, 1.5, null, 2.0]
+
+<strong>Explanation</strong>
+MedianFinder medianFinder = new MedianFinder();
+medianFinder.addNum(1);    // arr = [1]
+medianFinder.addNum(2);    // arr = [1, 2]
+medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+medianFinder.addNum(3);    // arr[1, 2, 3]
+medianFinder.findMedian(); // return 2.0
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         -10
+         <sup>
+          5
+         </sup>
+         &lt;= num &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        There will be at least one element in the data structure before calling
+        <code>
+         findMedian
+        </code>
+        .
+       </li>
+       <li>
+        At most
+        <code>
+         5 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+        calls will be made to
+        <code>
+         addNum
+        </code>
+        and
+        <code>
+         findMedian
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Follow up:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        If all integer numbers from the stream are in the range
+        <code>
+         [0, 100]
+        </code>
+        , how would you optimize your solution?
+       </li>
+       <li>
+        If
+        <code>
+         99%
+        </code>
+        of all integer numbers from the stream are in the range
+        <code>
+         [0, 100]
+        </code>
+        , how would you optimize your solution?
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       Since the data in the data stream is
+       <code class="language-plaintext highlighter-rouge">
+        not in order
+       </code>
+       , we should first think of a way to make it in ordered. If we use a vector to save the data stream, we must sort the array every time a new data comes in, which is not efficient.
+      </p>
+      <p>
+       Use
+       <code class="language-plaintext highlighter-rouge">
+        large and small heaps
+       </code>
+       to solve the problem, where the large heap holds the larger numbers in the right half, and the small heap holds the smaller numbers in the left half. In this way, the entire array is
+       <code class="language-plaintext highlighter-rouge">
+        divided
+       </code>
+       into two sections in the middle. Since the heap is saved from large to small, we hope that the data in the large pile is from small to large, so it is convenient to take the first one to calculate the median.
+      </p>
+      <h3 id="follow-up">
+       Follow up
+      </h3>
+      <h5 id="q-1-if-all-integer-numbers-from-the-stream-are-between-0-and-100-how-would-you-optimize-it">
+       Q-1: If all integer numbers from the stream are between 0 and 100, how would you optimize it?
+      </h5>
+      <ul>
+       <li>
+        We can maintain an integer array of length 100 to store the count of each number along with a total count. Then, we can iterate over the array to find the middle value to get our median. Time and space complexity would be
+        <code class="language-plaintext highlighter-rouge">
+         O(100) = O(1)
+        </code>
+        .
+       </li>
+      </ul>
+      <h5 id="q-2-if-99-of-all-integer-numbers-from-the-stream-are-between-0-and-100-how-would-you-optimize-it">
+       Q-2: If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it?
+      </h5>
+      <ul>
+       <li>
+        In this case, we can keep a counter for
+        <code class="language-plaintext highlighter-rouge">
+         lessThanHundred
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         greaterThanHundred
+        </code>
+        . As we know the solution will be definitely in 0-100 we donât need to know those number which are &gt;100 or &lt;0, only count of them will be enough.
+       </li>
+      </ul>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#901120a8-0fe8-4026-aba7-c732d4f9ccef'}">
+       <li class="uk-active">
+        <a href="solution-295.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         Javascript
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         C#
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         RenderScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-295.html">
+         Swift
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="901120a8-0fe8-4026-aba7-c732d4f9ccef">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">MedianFinder</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">q1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">q2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;(</span><span class="nc">Collections</span><span class="o">.</span><span class="na">reverseOrder</span><span class="o">());</span>
+
+    <span class="cm">/** initialize your data structure here. */</span>
+    <span class="kd">public</span> <span class="nf">MedianFinder</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addNum</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">q1</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+        <span class="n">q2</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">q1</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">q2</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="n">q1</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">q1</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">q2</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">findMedian</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">q2</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">q1</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">q2</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">q1</span><span class="o">.</span><span class="na">peek</span><span class="o">()</span> <span class="o">+</span> <span class="n">q2</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">MedianFinder</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/** initialize your data structure here. */</span>
+    <span class="n">MedianFinder</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">addNum</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">q1</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+        <span class="n">q2</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">q1</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+        <span class="n">q1</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">q2</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">q1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">q1</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">q2</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+            <span class="n">q2</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">double</span> <span class="n">findMedian</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">q2</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">q1</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">q2</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span> <span class="p">(</span><span class="n">q1</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">+</span> <span class="n">q2</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">q1</span><span class="p">;</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q2</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj-&gt;addNum(num);
+ * double param_2 = obj-&gt;findMedian();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
+
+<span class="k">class</span> <span class="nc">MedianFinder</span><span class="p">:</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># the smaller half of the list, max heap (invert min-heap)
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># the larger half of the list, min heap
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">largerHalf</span> <span class="o">=</span> <span class="p">[]</span>
+
+	<span class="k">def</span> <span class="nf">addNum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+
+		<span class="c1"># trick for smaller half, use -1*val
+</span>		<span class="c1"># heapq in python does NOT have comparator like in Java
+</span>		<span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span><span class="p">,</span> <span class="o">-</span><span class="n">num</span><span class="p">)</span>
+		<span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">largerHalf</span><span class="p">,</span> <span class="o">-</span><span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span><span class="p">))</span> <span class="c1"># note: not self.smallerHalf.pop()
+</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">largerHalf</span><span class="p">):</span>
+			<span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span><span class="p">,</span> <span class="o">-</span><span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">largerHalf</span><span class="p">))</span>
+
+	<span class="k">def</span> <span class="nf">findMedian</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">largerHalf</span><span class="p">):</span>
+			<span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">largerHalf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="p">.</span><span class="n">smallerHalf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+<span class="c1"># Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+</span>
+
+<span class="c1"># follow up
+</span><span class="k">class</span> <span class="nc">MedianFinder</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">101</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">addNum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">findMedian</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">total</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># even number of elements
+</span>            <span class="n">middle1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">total</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="n">middle2</span> <span class="o">=</span> <span class="n">middle1</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">i1</span> <span class="o">=</span> <span class="n">i2</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">):</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="bp">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="n">middle1</span> <span class="ow">and</span> <span class="n">i1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">i1</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="n">middle2</span><span class="p">:</span>
+                    <span class="n">i2</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="k">break</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">i1</span> <span class="o">+</span> <span class="n">i2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># odd number of elements
+</span>            <span class="n">middle</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">total</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">):</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="bp">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="n">middle</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">i</span>
+
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">MedianFinder</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        initialize your data structure here.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">h1</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">h2</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">addNum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h1</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+        <span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h2</span><span class="p">,</span> <span class="o">-</span><span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h2</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h1</span><span class="p">,</span> <span class="o">-</span><span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h2</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">findMedian</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h1</span><span class="p">):</span>
+            <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="p">.</span><span class="n">h2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">h2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="c1"># Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">MedianFinder</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">q1</span> <span class="n">hp</span>
+	<span class="n">q2</span> <span class="n">hp</span>
+<span class="p">}</span>
+
+<span class="c">/** initialize your data structure here. */</span>
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">MedianFinder</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">MedianFinder</span><span class="p">{</span><span class="n">hp</span><span class="p">{},</span> <span class="n">hp</span><span class="p">{}</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MedianFinder</span><span class="p">)</span> <span class="n">AddNum</span><span class="p">(</span><span class="n">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">this</span><span class="o">.</span><span class="n">q1</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+	<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">this</span><span class="o">.</span><span class="n">q2</span><span class="p">,</span> <span class="o">-</span><span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="o">&amp;</span><span class="n">this</span><span class="o">.</span><span class="n">q1</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span>
+	<span class="k">if</span> <span class="n">this</span><span class="o">.</span><span class="n">q2</span><span class="o">.</span><span class="n">Len</span><span class="p">()</span><span class="o">-</span><span class="n">this</span><span class="o">.</span><span class="n">q1</span><span class="o">.</span><span class="n">Len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="p">{</span>
+		<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">this</span><span class="o">.</span><span class="n">q1</span><span class="p">,</span> <span class="o">-</span><span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="o">&amp;</span><span class="n">this</span><span class="o">.</span><span class="n">q2</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MedianFinder</span><span class="p">)</span> <span class="n">FindMedian</span><span class="p">()</span> <span class="kt">float64</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">this</span><span class="o">.</span><span class="n">q2</span><span class="o">.</span><span class="n">Len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">this</span><span class="o">.</span><span class="n">q1</span><span class="o">.</span><span class="n">Len</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="kt">float64</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">q2</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kt">float64</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">q1</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">-</span><span class="n">this</span><span class="o">.</span><span class="n">q2</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="m">0</span><span class="p">])</span> <span class="o">/</span> <span class="m">2.0</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.AddNum(num);
+ * param_2 := obj.FindMedian();
+ */</span>
+
+<span class="k">type</span> <span class="n">hp</span> <span class="k">struct</span><span class="p">{</span> <span class="n">sort</span><span class="o">.</span><span class="n">IntSlice</span> <span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">v</span> <span class="n">any</span><span class="p">)</span>        <span class="p">{</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span> <span class="p">{</span>
+	<span class="n">a</span> <span class="o">:=</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span>
+	<span class="n">v</span> <span class="o">:=</span> <span class="n">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">v</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">MedianFinder</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">nums</span><span class="p">:</span> <span class="kr">number</span><span class="p">[];</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">nums</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">}</span>
+
+    <span class="nx">addNum</span><span class="p">(</span><span class="nx">num</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="p">{</span> <span class="nx">nums</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&lt;</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="p">(</span><span class="nx">l</span> <span class="o">+</span> <span class="nx">r</span><span class="p">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">nums</span><span class="p">[</span><span class="nx">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">l</span> <span class="o">=</span> <span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">r</span> <span class="o">=</span> <span class="nx">mid</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">nums</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">num</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">findMedian</span><span class="p">():</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="p">{</span> <span class="nx">nums</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">((</span><span class="nx">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">nums</span><span class="p">[</span><span class="nx">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">nums</span><span class="p">[(</span><span class="nx">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * var obj = new MedianFinder()
+ * obj.addNum(num)
+ * var param_2 = obj.findMedian()
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * initialize your data structure here.
+ */</span>
+<span class="kd">var</span> <span class="nx">MedianFinder</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">val</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * @param {number} num
+ * @return {void}
+ */</span>
+<span class="nx">MedianFinder</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addNum</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">right</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">left</span> <span class="o">&lt;</span> <span class="nx">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">mid</span> <span class="o">=</span> <span class="nx">left</span> <span class="o">+</span> <span class="o">~~</span><span class="p">((</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">num</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">[</span><span class="nx">mid</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nx">left</span> <span class="o">=</span> <span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">right</span> <span class="o">=</span> <span class="nx">mid</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">num</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * @return {number}
+ */</span>
+<span class="nx">MedianFinder</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">findMedian</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">mid</span> <span class="o">=</span> <span class="o">~~</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">.</span><span class="nx">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">.</span><span class="nx">length</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">[</span><span class="nx">mid</span><span class="p">]</span> <span class="p">:</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">[</span><span class="nx">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="p">[</span><span class="nx">mid</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">MedianFinder</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">nums</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">curIndex</span><span class="p">;</span>
+
+    <span class="cm">/** initialize your data structure here. */</span>
+    <span class="k">public</span> <span class="nf">MedianFinder</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">nums</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="kt">int</span> <span class="nf">FindIndex</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="p">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="p">&lt;=</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="p">=</span> <span class="n">left</span> <span class="p">+</span> <span class="p">(</span><span class="n">right</span> <span class="p">-</span> <span class="n">left</span><span class="p">)</span> <span class="p">/</span> <span class="m">2</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="p">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="p">=</span> <span class="n">mid</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">right</span> <span class="p">=</span> <span class="n">mid</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddNum</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">nums</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+            <span class="n">curIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">curIndex</span> <span class="p">=</span> <span class="nf">FindIndex</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">curIndex</span> <span class="p">==</span> <span class="n">nums</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">nums</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">nums</span><span class="p">.</span><span class="nf">Insert</span><span class="p">(</span><span class="n">curIndex</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="kt">double</span> <span class="nf">FindMedian</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">Count</span> <span class="p">%</span> <span class="m">2</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">nums</span><span class="p">[</span><span class="n">nums</span><span class="p">.</span><span class="n">Count</span> <span class="p">/</span> <span class="m">2</span><span class="p">];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="m">0</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">nums</span><span class="p">.</span><span class="n">Count</span> <span class="p">/</span> <span class="m">2</span> <span class="p">-</span> <span class="m">1</span><span class="p">]</span> <span class="p">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">nums</span><span class="p">.</span><span class="n">Count</span> <span class="p">/</span> <span class="m">2</span><span class="p">])</span> <span class="p">/</span> <span class="m">2</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.AddNum(num);
+ * double param_2 = obj.FindMedian();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">struct</span> <span class="n">MedianFinder</span> <span class="p">{</span>
+    <span class="n">nums</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="cd">/**
+ * `&amp;self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&amp;mut self` instead.
+ */</span>
+<span class="k">impl</span> <span class="n">MedianFinder</span> <span class="p">{</span>
+    <span class="cd">/** initialize your data structure here. */</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="k">Self</span> <span class="p">{</span>
+        <span class="k">Self</span> <span class="p">{</span> <span class="n">nums</span><span class="p">:</span> <span class="nn">Vec</span><span class="p">::</span><span class="nf">new</span><span class="p">()</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">add_num</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">r</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nums</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">while</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="k">self</span><span class="py">.nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="p">{</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">self</span><span class="py">.nums</span><span class="nf">.insert</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">find_median</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nums</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nn">f64</span><span class="p">::</span><span class="nf">from</span><span class="p">(</span><span class="k">self</span><span class="py">.nums</span><span class="p">[</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="nn">f64</span><span class="p">::</span><span class="nf">from</span><span class="p">(</span><span class="k">self</span><span class="py">.nums</span><span class="p">[</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="k">self</span><span class="py">.nums</span><span class="p">[(</span><span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="p">}</span>
+<span class="p">}</span><span class="cd">/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * let obj = MedianFinder::new();
+ * obj.add_num(num);
+ * let ret_2: f64 = obj.find_median();
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-swift highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">MedianFinder</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">minQ</span> <span class="o">=</span> <span class="kt">Heap</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">sort</span><span class="p">:</span> <span class="o">&lt;</span><span class="p">)</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">maxQ</span> <span class="o">=</span> <span class="kt">Heap</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">sort</span><span class="p">:</span> <span class="o">&gt;</span><span class="p">)</span>
+
+    <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">addNum</span><span class="p">(</span><span class="n">_</span> <span class="nv">num</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">maxQ</span><span class="o">.</span><span class="nf">insert</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+        <span class="n">minQ</span><span class="o">.</span><span class="nf">insert</span><span class="p">(</span><span class="n">maxQ</span><span class="o">.</span><span class="nf">remove</span><span class="p">()</span><span class="o">!</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">maxQ</span><span class="o">.</span><span class="n">count</span> <span class="o">&lt;</span> <span class="n">minQ</span><span class="o">.</span><span class="n">count</span> <span class="p">{</span>
+            <span class="n">maxQ</span><span class="o">.</span><span class="nf">insert</span><span class="p">(</span><span class="n">minQ</span><span class="o">.</span><span class="nf">remove</span><span class="p">()</span><span class="o">!</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">findMedian</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Double</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">maxQ</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">minQ</span><span class="o">.</span><span class="n">count</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kt">Double</span><span class="p">(</span><span class="n">maxQ</span><span class="o">.</span><span class="nf">peek</span><span class="p">()</span><span class="o">!</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nf">return</span> <span class="p">(</span><span class="kt">Double</span><span class="p">(</span><span class="n">maxQ</span><span class="o">.</span><span class="nf">peek</span><span class="p">()</span><span class="o">!</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Double</span><span class="p">(</span><span class="n">minQ</span><span class="o">.</span><span class="nf">peek</span><span class="p">()</span><span class="o">!</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">Heap</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt">T</span><span class="p">]</span>
+    <span class="k">let</span> <span class="nv">sort</span><span class="p">:</span> <span class="p">(</span><span class="kt">T</span><span class="p">,</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="nv">sort</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">T</span><span class="p">,</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt">T</span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">sort</span> <span class="o">=</span> <span class="n">sort</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">elements</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">elements</span><span class="o">.</span><span class="n">isEmpty</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="nf">stride</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">elements</span><span class="o">.</span><span class="n">count</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">through</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">by</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nf">siftDown</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">i</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="nv">isEmpty</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">elements</span><span class="o">.</span><span class="n">isEmpty</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="nv">count</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">elements</span><span class="o">.</span><span class="n">count</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">peek</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">elements</span><span class="o">.</span><span class="n">first</span>
+    <span class="p">}</span>
+
+    <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">insert</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">elements</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="nf">siftUp</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">elements</span><span class="o">.</span><span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">remove</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="o">!</span><span class="n">elements</span><span class="o">.</span><span class="n">isEmpty</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+        <span class="n">elements</span><span class="o">.</span><span class="nf">swapAt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">elements</span><span class="o">.</span><span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">let</span> <span class="nv">removedValue</span> <span class="o">=</span> <span class="n">elements</span><span class="o">.</span><span class="nf">removeLast</span><span class="p">()</span>
+        <span class="nf">siftDown</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">removedValue</span>
+    <span class="p">}</span>
+
+    <span class="kd">private</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">siftUp</span><span class="p">(</span><span class="n">from</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">child</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="k">var</span> <span class="nv">parent</span> <span class="o">=</span> <span class="nf">parentIndex</span><span class="p">(</span><span class="nv">ofChildAt</span><span class="p">:</span> <span class="n">child</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">child</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nf">sort</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">child</span><span class="p">],</span> <span class="n">elements</span><span class="p">[</span><span class="n">parent</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">elements</span><span class="o">.</span><span class="nf">swapAt</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">parent</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="nf">parentIndex</span><span class="p">(</span><span class="nv">ofChildAt</span><span class="p">:</span> <span class="n">child</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">private</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">siftDown</span><span class="p">(</span><span class="n">from</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">parent</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="k">while</span> <span class="kc">true</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">left</span> <span class="o">=</span> <span class="nf">leftChildIndex</span><span class="p">(</span><span class="nv">ofParentAt</span><span class="p">:</span> <span class="n">parent</span><span class="p">)</span>
+            <span class="k">let</span> <span class="nv">right</span> <span class="o">=</span> <span class="nf">rightChildIndex</span><span class="p">(</span><span class="nv">ofParentAt</span><span class="p">:</span> <span class="n">parent</span><span class="p">)</span>
+            <span class="k">var</span> <span class="nv">candidate</span> <span class="o">=</span> <span class="n">parent</span>
+            <span class="k">if</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">count</span> <span class="o">&amp;&amp;</span> <span class="nf">sort</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="n">elements</span><span class="p">[</span><span class="n">candidate</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">candidate</span> <span class="o">=</span> <span class="n">left</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">count</span> <span class="o">&amp;&amp;</span> <span class="nf">sort</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">right</span><span class="p">],</span> <span class="n">elements</span><span class="p">[</span><span class="n">candidate</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">candidate</span> <span class="o">=</span> <span class="n">right</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">candidate</span> <span class="o">==</span> <span class="n">parent</span> <span class="p">{</span>
+                <span class="k">return</span>
+            <span class="p">}</span>
+            <span class="n">elements</span><span class="o">.</span><span class="nf">swapAt</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">candidate</span><span class="p">)</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">candidate</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">parentIndex</span><span class="p">(</span><span class="n">ofChildAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="nf">return</span> <span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="p">}</span>
+
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">leftChildIndex</span><span class="p">(</span><span class="n">ofParentAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">}</span>
+
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">rightChildIndex</span><span class="p">(</span><span class="n">ofParentAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * let obj = MedianFinder()
+ * obj.addNum(num)
+ * let ret_2: Double = obj.findMedian()
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-295.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

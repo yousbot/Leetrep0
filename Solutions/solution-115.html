@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-115.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-115.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>115 - Distinct Subsequences</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 115. Distinct Subsequences Description Given two strings s and t, return the number of distinct subsequences of s which equals t. The test cases are generated so that the answer fits on a 32-bit signed integer. &amp;nbsp; Example 1: Input: s = &amp;quot;rabbbit&amp;quot;, t =...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-115.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-115.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-115.html" rel="stylesheet"/>
+   <link href="solution-115.html" rel="stylesheet"/>
+   <link href="solution-115.html" rel="stylesheet"/>
+   <link href="solution-115.html" rel="stylesheet"/>
+   <link href="solution-115.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="115 - Distinct Subsequences" property="og:title"/>
+   <meta content="Leetcode 115. Distinct Subsequences Description Given two strings s and t, return the number of distinct subsequences of s which equals t. The test cases are generated so that the answer fits on a 32-bit signed integer. &amp;nbsp; Example 1: Input: s = &amp;quot;rabbbit&amp;quot;, t = &amp;quot;rabbit&amp;quot; Output: 3 Explanation: As shown below, there are 3 ways you can generate &amp;quot;rabbit&amp;quot; from s. rabbbit rabbbit rabbbit Example 2: Input: s = &amp;quot;babgbag&amp;quot;, t = &amp;quot;bag&amp;quot; Output: 5 Explanation: As shown below, there are 5 ways you can generate &amp;quot;bag&amp;quot; from s. babgbag babgbag babgbag babgbag babgbag &amp;nbsp; Constraints: 1 &amp;lt;= s.length, t.length &amp;lt;= 1000 s and t consist of English letters. Solutions Solution 1: Dynamic Programming We define $f[i][j]$ as the number of schemes where the first $i$ characters of string $s$ form the first $j$ characters of string $t$. Initially, $f[i][0]=1$ for all $i \in [0,m]$. When $i &amp;gt; 0$, we consider the calculation of $f[i][j]$: When $s[i-1] \ne t[j-1]$, we cannot select $s[i-1]$, so $f[i][j]=f[i-1][j]$; Otherwise, we can select $s[i-1]$, so $f[i][j]=f[i-1][j-1]$. Therefore, we have the following state transition equation: \[f[i][j]=\left\{ \begin{aligned} &amp;amp;f[i-1][j], &amp;amp;s[i-1] \ne t[j-1] \\ &amp;amp;f[i-1][j-1]+f[i-1][j], &amp;amp;s[i-1]=t[j-1] \end{aligned} \right.\] The final answer is $f[m][n]$, where $m$ and $n$ are the lengths of strings $s$ and $t$ respectively. The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. We notice that the calculation of $f[i][j]$ is only related to $f[i-1][..]$. Therefore, we can optimize the first dimension, reducing the space complexity to $O(n)$. Java C++ Python Go TypeScript RenderScript class Solution { public int numDistinct(String s, String t) { int n = t.length(); int[] f = new int[n + 1]; f[0] = 1; for (char a : s.toCharArray()) { for (int j = n; j &amp;gt; 0; --j) { char b = t.charAt(j - 1); if (a == b) { f[j] += f[j - 1]; } } } return f[n]; } } class Solution { public: int numDistinct(string s, string t) { int n = t.size(); unsigned long long f[n + 1]; memset(f, 0, sizeof(f)); f[0] = 1; for (char&amp;amp; a : s) { for (int j = n; j; --j) { char b = t[j - 1]; if (a == b) { f[j] += f[j - 1]; } } } return f[n]; } }; class Solution: def numDistinct(self, s: str, t: str) -&amp;gt; int: n = len(t) f = [1] + [0] * n for a in s: for j in range(n, 0, -1): if a == t[j - 1]: f[j] += f[j - 1] return f[n] func numDistinct(s string, t string) int { n := len(t) f := make([]int, n+1) f[0] = 1 for _, a := range s { for j := n; j &amp;gt; 0; j-- { if b := t[j-1]; byte(a) == b { f[j] += f[j-1] } } } return f[n] } function numDistinct(s: string, t: string): number { const n = t.length; const f: number[] = new Array(n + 1).fill(0); f[0]..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-03-24T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-03-24-115-Distinct-Subsequences/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-115.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="115 - Distinct Subsequences" property="twitter:title"/>
+   <meta content="Leetcode 115. Distinct Subsequences Description Given two strings s and t, return the number of distinct subsequences of s which equals t. The test cases are generated so that the answer fits on a 32-bit signed integer. &amp;nbsp; Example 1: Input: s = &amp;quot;rabbbit&amp;quot;, t = &amp;quot;rabbit&amp;quot; Output: 3 Explanation: As shown below, there are 3 ways you can generate &amp;quot;rabbit&amp;quot; from s. rabbbit rabbbit rabbbit Example 2: Input: s = &amp;quot;babgbag&amp;quot;, t = &amp;quot;bag&amp;quot; Output: 5 Explanation: As shown below, there are 5 ways you can generate &amp;quot;bag&amp;quot; from s. babgbag babgbag babgbag babgbag babgbag &amp;nbsp; Constraints: 1 &amp;lt;= s.length, t.length &amp;lt;= 1000 s and t consist of English letters. Solutions Solution 1: Dynamic Programming We define $f[i][j]$ as the number of schemes where the first $i$ characters of string $s$ form the first $j$ characters of string $t$. Initially, $f[i][0]=1$ for all $i \in [0,m]$. When $i &amp;gt; 0$, we consider the calculation of $f[i][j]$: When $s[i-1] \ne t[j-1]$, we cannot select $s[i-1]$, so $f[i][j]=f[i-1][j]$; Otherwise, we can select $s[i-1]$, so $f[i][j]=f[i-1][j-1]$. Therefore, we have the following state transition equation: \[f[i][j]=\left\{ \begin{aligned} &amp;amp;f[i-1][j], &amp;amp;s[i-1] \ne t[j-1] \\ &amp;amp;f[i-1][j-1]+f[i-1][j], &amp;amp;s[i-1]=t[j-1] \end{aligned} \right.\] The final answer is $f[m][n]$, where $m$ and $n$ are the lengths of strings $s$ and $t$ respectively. The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. We notice that the calculation of $f[i][j]$ is only related to $f[i-1][..]$. Therefore, we can optimize the first dimension, reducing the space complexity to $O(n)$. Java C++ Python Go TypeScript RenderScript class Solution { public int numDistinct(String s, String t) { int n = t.length(); int[] f = new int[n + 1]; f[0] = 1; for (char a : s.toCharArray()) { for (int j = n; j &amp;gt; 0; --j) { char b = t.charAt(j - 1); if (a == b) { f[j] += f[j - 1]; } } } return f[n]; } } class Solution { public: int numDistinct(string s, string t) { int n = t.size(); unsigned long long f[n + 1]; memset(f, 0, sizeof(f)); f[0] = 1; for (char&amp;amp; a : s) { for (int j = n; j; --j) { char b = t[j - 1]; if (a == b) { f[j] += f[j - 1]; } } } return f[n]; } }; class Solution: def numDistinct(self, s: str, t: str) -&amp;gt; int: n = len(t) f = [1] + [0] * n for a in s: for j in range(n, 0, -1): if a == t[j - 1]: f[j] += f[j - 1] return f[n] func numDistinct(s string, t string) int { n := len(t) f := make([]int, n+1) f[0] = 1 for _, a := range s { for j := n; j &amp;gt; 0; j-- { if b := t[j-1]; byte(a) == b { f[j] += f[j-1] } } } return f[n] } function numDistinct(s: string, t: string): number { const n = t.length; const f: number[] = new Array(n + 1).fill(0); f[0]..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    115 - Distinct Subsequences | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="115 - Distinct Subsequences" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-115.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-03-24-115-Distinct-Subsequences/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-03-24T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"115 - Distinct Subsequences","dateModified":"2016-03-24T00:00:00-07:00","datePublished":"2016-03-24T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-03-24-115-Distinct-Subsequences/"},"url":"https://leetcode.ca/2016-03-24-115-Distinct-Subsequences/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="115-distinct-subsequences">
+       <a href="solution-115.html">
+        115. Distinct Subsequences
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given two strings s and t, return
+       <i>
+        the number of distinct
+       </i>
+       <b>
+        <i>
+         subsequences
+        </i>
+       </b>
+       <i>
+        of
+       </i>
+       s
+       <i>
+        which equals
+       </i>
+       t.
+      </p>
+      <p>
+       The test cases are generated so that the answer fits on a 32-bit signed integer.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "rabbbit", t = "rabbit"
+<strong>Output:</strong> 3
+<strong>Explanation:</strong>
+As shown below, there are 3 ways you can generate "rabbit" from s.
+<code><strong><u>rabb</u></strong>b<strong><u>it</u></strong></code>
+<code><strong><u>ra</u></strong>b<strong><u>bbit</u></strong></code>
+<code><strong><u>rab</u></strong>b<strong><u>bit</u></strong></code>
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "babgbag", t = "bag"
+<strong>Output:</strong> 5
+<strong>Explanation:</strong>
+As shown below, there are 5 ways you can generate "bag" from s.
+<code><strong><u>ba</u></strong>b<u><strong>g</strong></u>bag</code>
+<code><strong><u>ba</u></strong>bgba<strong><u>g</u></strong></code>
+<code><u><strong>b</strong></u>abgb<strong><u>ag</u></strong></code>
+<code>ba<u><strong>b</strong></u>gb<u><strong>ag</strong></u></code>
+<code>babg<strong><u>bag</u></strong></code></pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length, t.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        and
+        <code>
+         t
+        </code>
+        consist of English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Dynamic Programming
+       </strong>
+      </p>
+      <p>
+       We define $f[i][j]$ as the number of schemes where the first $i$ characters of string $s$ form the first $j$ characters of string $t$. Initially, $f[i][0]=1$ for all $i \in [0,m]$.
+      </p>
+      <p>
+       When $i &gt; 0$, we consider the calculation of $f[i][j]$:
+      </p>
+      <ul>
+       <li>
+        When $s[i-1] \ne t[j-1]$, we cannot select $s[i-1]$, so $f[i][j]=f[i-1][j]$;
+       </li>
+       <li>
+        Otherwise, we can select $s[i-1]$, so $f[i][j]=f[i-1][j-1]$.
+       </li>
+      </ul>
+      <p>
+       Therefore, we have the following state transition equation:
+      </p>
+      \[f[i][j]=\left\{
+\begin{aligned}
+&amp;f[i-1][j], &amp;s[i-1] \ne t[j-1] \\
+&amp;f[i-1][j-1]+f[i-1][j], &amp;s[i-1]=t[j-1]
+\end{aligned}
+\right.\]
+      <p>
+       The final answer is $f[m][n]$, where $m$ and $n$ are the lengths of strings $s$ and $t$ respectively.
+      </p>
+      <p>
+       The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$.
+      </p>
+      <p>
+       We notice that the calculation of $f[i][j]$ is only related to $f[i-1][..]$. Therefore, we can optimize the first dimension, reducing the space complexity to $O(n)$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#932a859e-b9bb-4e42-a1f3-dc96ac0f53cb'}">
+       <li class="uk-active">
+        <a href="solution-115.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-115.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-115.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-115.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-115.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-115.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="932a859e-b9bb-4e42-a1f3-dc96ac0f53cb">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">numDistinct</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">String</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">f</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">a</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="o">--</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">+=</span> <span class="n">f</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">numDistinct</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="n">a</span> <span class="o">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="p">;</span> <span class="o">--</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">f</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">numDistinct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">f</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">numDistinct</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">t</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">f</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">a</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="kt">byte</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="n">b</span> <span class="p">{</span>
+				<span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">numDistinct</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">t</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">j</span><span class="p">;</span> <span class="o">--</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">t</span><span class="p">[</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">f</span><span class="p">[</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="nd">#[allow(dead_code)]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">num_distinct</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">m</span> <span class="o">=</span> <span class="n">t</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">dp</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">u64</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="nd">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+
+        <span class="c1">// Initialize the dp vector</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..=</span><span class="n">n</span> <span class="p">{</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Begin the actual dp process</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..=</span><span class="n">n</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..=</span><span class="n">m</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="k">if</span> <span class="n">s</span><span class="nf">.as_bytes</span><span class="p">()[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="nf">.as_bytes</span><span class="p">()[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="k">as</span> <span class="nb">i32</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-115.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

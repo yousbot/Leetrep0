@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-139.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-139.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>139 - Word Break</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Question Formatted question description: https://leetcode.ca/all/139.html Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words. Note that the same word in the dictionary may be reused multiple times...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-139.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-139.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-139.html" rel="stylesheet"/>
+   <link href="solution-139.html" rel="stylesheet"/>
+   <link href="solution-139.html" rel="stylesheet"/>
+   <link href="solution-139.html" rel="stylesheet"/>
+   <link href="solution-139.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="139 - Word Break" property="og:title"/>
+   <meta content='Leetcode Question Formatted question description: https://leetcode.ca/all/139.html Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words. Note that the same word in the dictionary may be reused multiple times in the segmentation. &amp;nbsp; Example 1: Input: s = &amp;quot;leetcode&amp;quot;, wordDict = [&amp;quot;leet&amp;quot;,&amp;quot;code&amp;quot;] Output: true Explanation: Return true because &amp;quot;leetcode&amp;quot; can be segmented as &amp;quot;leet code&amp;quot;. Example 2: Input: s = &amp;quot;applepenapple&amp;quot;, wordDict = [&amp;quot;apple&amp;quot;,&amp;quot;pen&amp;quot;] Output: true Explanation: Return true because &amp;quot;applepenapple&amp;quot; can be segmented as &amp;quot;apple pen apple&amp;quot;. Note that you are allowed to reuse a dictionary word. Example 3: Input: s = &amp;quot;catsandog&amp;quot;, wordDict = [&amp;quot;cats&amp;quot;,&amp;quot;dog&amp;quot;,&amp;quot;sand&amp;quot;,&amp;quot;and&amp;quot;,&amp;quot;cat&amp;quot;] Output: false &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 300 1 &amp;lt;= wordDict.length &amp;lt;= 1000 1 &amp;lt;= wordDict[i].length &amp;lt;= 20 s and wordDict[i] consist of only lowercase English letters. All the strings of wordDict are unique. Algorithm Recursion The memory array memo[i] is designed to track whether the substring within the range [i, n] is segmentable. It is initialized to -1, indicating that the calculation has not yet been performed. If segmentation is possible, it is updated to 1; if not, to 0. A start variable is employed to denote the beginning of the segment. This allows the recursive function to efficiently traverse from the start position using the memory array memo. Dynamic Programming (DP) A dictionary array is used to mark indices in the string, avoiding the need to try every possible substring combination. A one-dimensional DP array dp[i] is utilized, where each element represents whether the substring in the range [0, i) is segmentable. Itâs important to note that the dp arrayâs length exceeds the string sâs length by one to accommodate the empty string scenario. dp[0] is initialized to true. Traversal begins with two nested loops. Since there is no recursive function, itâs necessary to examine all substrings. The substring range [0, i) is divided into two parts at j: [0, j) and [j, i), where: The range [0, j) corresponds to dp[j], reflecting a previously calculated state. The range [j, i) is represented by s.substr(j, i-j), needing verification against the dictionary. If both conditions are met (dp[j] is true and s.substr(j, i-j) is in the dictionary), dp[i] is set to true, and the loop breaks. This implies no further division by j is necessary for the [0, i) range, as it is confirmed to be segmentable. The function ultimately returns the last element of the dp array, signifying whether the entire string can be segmented. Code Java C++ Python Go C# TypeScript RenderScript import java.util.LinkedList; import java.util.Queue; import java.util.Set; public class Word_Break { /* input - 1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"] input - 2: "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"] */ public class Solution_dp { public boolean wordBreak(String s, Set&amp;lt;String&amp;gt; dict) { if (s == null || dict == null || dict.size() == 0) return false; int length = s.length(); // since both dfs and bfs not working, try dynamic programming here // construct dp,...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-04-17T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-04-17-139-Word-Break/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-139.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="139 - Word Break" property="twitter:title"/>
+   <meta content='Leetcode Question Formatted question description: https://leetcode.ca/all/139.html Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words. Note that the same word in the dictionary may be reused multiple times in the segmentation. &amp;nbsp; Example 1: Input: s = &amp;quot;leetcode&amp;quot;, wordDict = [&amp;quot;leet&amp;quot;,&amp;quot;code&amp;quot;] Output: true Explanation: Return true because &amp;quot;leetcode&amp;quot; can be segmented as &amp;quot;leet code&amp;quot;. Example 2: Input: s = &amp;quot;applepenapple&amp;quot;, wordDict = [&amp;quot;apple&amp;quot;,&amp;quot;pen&amp;quot;] Output: true Explanation: Return true because &amp;quot;applepenapple&amp;quot; can be segmented as &amp;quot;apple pen apple&amp;quot;. Note that you are allowed to reuse a dictionary word. Example 3: Input: s = &amp;quot;catsandog&amp;quot;, wordDict = [&amp;quot;cats&amp;quot;,&amp;quot;dog&amp;quot;,&amp;quot;sand&amp;quot;,&amp;quot;and&amp;quot;,&amp;quot;cat&amp;quot;] Output: false &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 300 1 &amp;lt;= wordDict.length &amp;lt;= 1000 1 &amp;lt;= wordDict[i].length &amp;lt;= 20 s and wordDict[i] consist of only lowercase English letters. All the strings of wordDict are unique. Algorithm Recursion The memory array memo[i] is designed to track whether the substring within the range [i, n] is segmentable. It is initialized to -1, indicating that the calculation has not yet been performed. If segmentation is possible, it is updated to 1; if not, to 0. A start variable is employed to denote the beginning of the segment. This allows the recursive function to efficiently traverse from the start position using the memory array memo. Dynamic Programming (DP) A dictionary array is used to mark indices in the string, avoiding the need to try every possible substring combination. A one-dimensional DP array dp[i] is utilized, where each element represents whether the substring in the range [0, i) is segmentable. Itâs important to note that the dp arrayâs length exceeds the string sâs length by one to accommodate the empty string scenario. dp[0] is initialized to true. Traversal begins with two nested loops. Since there is no recursive function, itâs necessary to examine all substrings. The substring range [0, i) is divided into two parts at j: [0, j) and [j, i), where: The range [0, j) corresponds to dp[j], reflecting a previously calculated state. The range [j, i) is represented by s.substr(j, i-j), needing verification against the dictionary. If both conditions are met (dp[j] is true and s.substr(j, i-j) is in the dictionary), dp[i] is set to true, and the loop breaks. This implies no further division by j is necessary for the [0, i) range, as it is confirmed to be segmentable. The function ultimately returns the last element of the dp array, signifying whether the entire string can be segmented. Code Java C++ Python Go C# TypeScript RenderScript import java.util.LinkedList; import java.util.Queue; import java.util.Set; public class Word_Break { /* input - 1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"] input - 2: "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"] */ public class Solution_dp { public boolean wordBreak(String s, Set&amp;lt;String&amp;gt; dict) { if (s == null || dict == null || dict.size() == 0) return false; int length = s.length(); // since both dfs and bfs not working, try dynamic programming here // construct dp,...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    139 - Word Break | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="139 - Word Break" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-139.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-04-17-139-Word-Break/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-04-17T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"139 - Word Break","dateModified":"2016-04-17T22:21:01-07:00","datePublished":"2016-04-17T22:21:01-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-04-17-139-Word-Break/"},"url":"https://leetcode.ca/2016-04-17-139-Word-Break/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="question">
+       Question
+      </h1>
+      <p>
+       Formatted question description:
+       <a href="solution-139.html">
+        https://leetcode.ca/all/139.html
+       </a>
+      </p>
+      <p>
+       Given a string
+       <code>
+        s
+       </code>
+       and a dictionary of strings
+       <code>
+        wordDict
+       </code>
+       , return
+       <code>
+        true
+       </code>
+       if
+       <code>
+        s
+       </code>
+       can be segmented into a space-separated sequence of one or more dictionary words.
+      </p>
+      <p>
+       <strong>
+        Note
+       </strong>
+       that the same word in the dictionary may be reused multiple times in the segmentation.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "leetcode", wordDict = ["leet","code"]
+<strong>Output:</strong> true
+<strong>Explanation:</strong> Return true because "leetcode" can be segmented as "leet code".
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "applepenapple", wordDict = ["apple","pen"]
+<strong>Output:</strong> true
+<strong>Explanation:</strong> Return true because "applepenapple" can be segmented as "apple pen apple".
+Note that you are allowed to reuse a dictionary word.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+<strong>Output:</strong> false
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 300
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= wordDict.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= wordDict[i].length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        and
+        <code>
+         wordDict[i]
+        </code>
+        consist of only lowercase English letters.
+       </li>
+       <li>
+        All the strings of
+        <code>
+         wordDict
+        </code>
+        are
+        <strong>
+         unique
+        </strong>
+        .
+       </li>
+      </ul>
+      <h1 id="algorithm">
+       Algorithm
+      </h1>
+      <h3 id="recursion">
+       Recursion
+      </h3>
+      <p>
+       The memory array
+       <code class="language-plaintext highlighter-rouge">
+        memo[i]
+       </code>
+       is designed to track whether the substring within the range
+       <code class="language-plaintext highlighter-rouge">
+        [i, n]
+       </code>
+       is segmentable. It is initialized to -1, indicating that the calculation has not yet been performed. If segmentation is possible, it is updated to 1; if not, to 0.
+      </p>
+      <p>
+       A
+       <code class="language-plaintext highlighter-rouge">
+        start
+       </code>
+       variable is employed to denote the beginning of the segment. This allows the recursive function to efficiently traverse from the
+       <code class="language-plaintext highlighter-rouge">
+        start
+       </code>
+       position using the memory array
+       <code class="language-plaintext highlighter-rouge">
+        memo
+       </code>
+       .
+      </p>
+      <h3 id="dynamic-programming-dp">
+       Dynamic Programming (DP)
+      </h3>
+      <ul>
+       <li>
+        A dictionary array is used to mark indices in the string, avoiding the need to try every possible substring combination.
+       </li>
+      </ul>
+      <p>
+       A one-dimensional DP array
+       <code class="language-plaintext highlighter-rouge">
+        dp[i]
+       </code>
+       is utilized, where each element represents whether the substring in the range
+       <code class="language-plaintext highlighter-rouge">
+        [0, i)
+       </code>
+       is segmentable.
+      </p>
+      <p>
+       Itâs important to note that the
+       <code class="language-plaintext highlighter-rouge">
+        dp
+       </code>
+       arrayâs length exceeds the string
+       <code class="language-plaintext highlighter-rouge">
+        s
+       </code>
+       âs length by one to accommodate the empty string scenario.
+       <code class="language-plaintext highlighter-rouge">
+        dp[0]
+       </code>
+       is initialized to
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       .
+      </p>
+      <p>
+       Traversal begins with two nested loops. Since there is no recursive function, itâs necessary to examine all substrings. The substring range
+       <code class="language-plaintext highlighter-rouge">
+        [0, i)
+       </code>
+       is divided into two parts at
+       <code class="language-plaintext highlighter-rouge">
+        j
+       </code>
+       :
+       <code class="language-plaintext highlighter-rouge">
+        [0, j)
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        [j, i)
+       </code>
+       , where:
+      </p>
+      <ul>
+       <li>
+        The range
+        <code class="language-plaintext highlighter-rouge">
+         [0, j)
+        </code>
+        corresponds to
+        <code class="language-plaintext highlighter-rouge">
+         dp[j]
+        </code>
+        , reflecting a previously calculated state.
+       </li>
+       <li>
+        The range
+        <code class="language-plaintext highlighter-rouge">
+         [j, i)
+        </code>
+        is represented by
+        <code class="language-plaintext highlighter-rouge">
+         s.substr(j, i-j)
+        </code>
+        , needing verification against the dictionary.
+       </li>
+      </ul>
+      <p>
+       If both conditions are met (
+       <code class="language-plaintext highlighter-rouge">
+        dp[j]
+       </code>
+       is
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        s.substr(j, i-j)
+       </code>
+       is in the dictionary),
+       <code class="language-plaintext highlighter-rouge">
+        dp[i]
+       </code>
+       is set to
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       , and the loop breaks. This implies no further division by
+       <code class="language-plaintext highlighter-rouge">
+        j
+       </code>
+       is necessary for the
+       <code class="language-plaintext highlighter-rouge">
+        [0, i)
+       </code>
+       range, as it is confirmed to be segmentable. The function ultimately returns the last element of the
+       <code class="language-plaintext highlighter-rouge">
+        dp
+       </code>
+       array, signifying whether the entire string can be segmented.
+      </p>
+      <h1 id="code">
+       Code
+      </h1>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#ab3054f7-122b-46a6-896d-cfb237a43d41'}">
+       <li class="uk-active">
+        <a href="solution-139.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-139.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-139.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-139.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-139.html">
+         C#
+        </a>
+       </li>
+       <li>
+        <a href="solution-139.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-139.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="ab3054f7-122b-46a6-896d-cfb237a43d41">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.LinkedList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Queue</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Word_Break</span> <span class="o">{</span>
+
+
+	<span class="cm">/*
+	input - 1:
+	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+	["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"]
+
+	input - 2:
+	"baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+	["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"]
+
+	*/</span>
+
+	<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution_dp</span> <span class="o">{</span>
+	    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">wordBreak</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">dict</span><span class="o">)</span> <span class="o">{</span>
+
+	        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">dict</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">dict</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+
+	        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+
+	        <span class="c1">// since both dfs and bfs not working, try dynamic programming here</span>
+	        <span class="c1">// construct dp, dp[i] meaning position i-1 can from dict or not</span>
+	        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+	        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// @note: initiate</span>
+
+	        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+
+	            <span class="k">if</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="kc">false</span><span class="o">)</span>  <span class="o">{</span>
+	            	<span class="k">continue</span><span class="o">;</span>
+
+	            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c1">// if some previous dict word ending at index i-1</span>
+
+		            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="nl">each:</span> <span class="n">dict</span><span class="o">)</span> <span class="o">{</span>
+
+		                <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">each</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">length</span><span class="o">)</span>  <span class="k">continue</span><span class="o">;</span>
+
+		                <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">each</span><span class="o">.</span><span class="na">length</span><span class="o">()).</span><span class="na">equals</span><span class="o">(</span><span class="n">each</span><span class="o">))</span> <span class="o">{</span>
+
+		                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">each</span><span class="o">.</span><span class="na">length</span><span class="o">()]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+		                    <span class="c1">// i = i + each.length() - 1; // i++ later</span>
+		                    <span class="c1">// break;</span>
+		                <span class="o">}</span>
+		            <span class="o">}</span>
+	            <span class="o">}</span>
+	        <span class="o">}</span>
+
+	        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">length</span><span class="o">];</span>
+	    <span class="o">}</span>
+	<span class="o">}</span>
+
+
+
+
+	<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution_bfs_over_time</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">wordBreak</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordDict</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">wordDict</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">wordDict</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">// since dfs is not working, now try bfs. all valid word's substring enqueue</span>
+            <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+
+            <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+
+            <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+
+                <span class="nc">String</span> <span class="n">current</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+
+             <span class="c1">// if (current.length() == 0) { // meaning all previoius matched in dict</span>
+
+             <span class="c1">//     return true;</span>
+             <span class="c1">// }</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">current</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+
+                    <span class="nc">String</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="n">wordDict</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">sub</span><span class="o">))</span> <span class="o">{</span>
+
+                        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">endsWith</span><span class="o">(</span><span class="n">sub</span><span class="o">))</span> <span class="o">{</span> <span class="c1">// @note: here is key, I missed it and the last word keeps dequeue and enqueue, infinite looping</span>
+                            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="o">}</span>
+
+                        <span class="c1">// q.offer(s.substring(i + 1)); // @note: mistake here, should be current.substring(), not s.substring()</span>
+                        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+	<span class="o">}</span>
+
+
+	<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution_dfs_over_time</span> <span class="o">{</span>
+
+	    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">wordBreak</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordDict</span><span class="o">)</span> <span class="o">{</span>
+
+	        <span class="c1">// @note: here is contradictory somehow, maybe a separate helper method would be good</span>
+	        <span class="c1">// if (s == null || s.length() == 0 || wordDict == null || wordDict.size() == 0) {</span>
+	        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">wordDict</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+	            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+	        <span class="o">}</span>
+
+	        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+	            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+	        <span class="o">}</span>
+
+	        <span class="c1">// substring from index 0 to i, check if in wordDict</span>
+	        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+	            <span class="nc">String</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+
+	            <span class="k">if</span> <span class="o">(</span><span class="n">wordDict</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">sub</span><span class="o">))</span> <span class="o">{</span>
+	                <span class="kt">boolean</span> <span class="n">isBreakable</span> <span class="o">=</span> <span class="n">wordBreak</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">),</span> <span class="n">wordDict</span><span class="o">);</span>
+
+	                <span class="c1">// just write out logic more clearly</span>
+	                <span class="k">if</span> <span class="o">(</span><span class="n">isBreakable</span><span class="o">)</span> <span class="o">{</span>
+	                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+	                <span class="o">}</span>
+	            <span class="o">}</span>
+	        <span class="o">}</span>
+
+	        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+	    <span class="o">}</span>
+	<span class="o">}</span>
+
+<span class="o">}</span>
+
+<span class="c1">//////</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">wordBreak</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordDict</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">words</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">wordDict</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">words</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">j</span><span class="o">,</span> <span class="n">i</span><span class="o">)))</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/word-break/</span>
+<span class="c1">// Time: O(S^3)</span>
+<span class="c1">// Space: O(S + W)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">wordBreak</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">dict</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">st</span><span class="p">(</span><span class="n">begin</span><span class="p">(</span><span class="n">dict</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">dict</span><span class="p">));</span>
+        <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">st</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">wordBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wordDict</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wordDict</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="c1"># dp[j] meaining s from 0 to index=i-1~ is breakable
+</span>        <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="bp">True</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="c1"># so actually size is n+1
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+<span class="c1">#############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">wordBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wordDict</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">wordDict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="c1"># construct dp, dp[i] meaning position i-1 can from dict or not
+</span>        <span class="n">dp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="n">meaning</span> <span class="n">at</span> <span class="n">last</span><span class="o">-</span><span class="n">index</span> <span class="n">plus</span> <span class="mi">1</span><span class="p">,</span> <span class="n">checking</span> <span class="n">up</span> <span class="n">to</span> <span class="n">last</span><span class="o">-</span><span class="n">index</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># initiate
+</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">wordDict</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">length</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span> <span class="o">==</span> <span class="n">word</span><span class="p">:</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">length</span><span class="p">]</span>
+
+<span class="c1">#############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">wordBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wordDict</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wordDict</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1"># i'th char in string, is good
+</span>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="p">):</span> <span class="c1"># starting at 0, includng dp[0]
+</span>                <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1"># j is exclusive, meaining True until index i-1
+</span>                    <span class="k">break</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="c1">#############
+</span>
+<span class="k">class</span> <span class="nc">Trie</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">26</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">is_end</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Trie</span><span class="p">()</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">is_end</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">is_end</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">wordBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wordDict</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># https://docs.python.org/3/library/functools.html#functools.cache
+</span>        <span class="c1"># creating a thin wrapper around a dictionary lookup for the function arguments
+</span>        <span class="o">@</span><span class="n">cache</span>
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">trie</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span><span class="n">i</span><span class="p">])</span> <span class="ow">and</span> <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">:])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">trie</span> <span class="o">=</span> <span class="n">Trie</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wordDict</span><span class="p">:</span>
+            <span class="n">trie</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="c1">#############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">wordBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">wordDict</span><span class="p">):</span>
+    <span class="s">"""
+    :type s: str
+    :type wordDict: Set[str]
+    :rtype: bool
+    """</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">lenList</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">wordDict</span><span class="p">))]</span>
+    <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+      <span class="n">start</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lenList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">l</span><span class="p">]</span> <span class="ow">in</span> <span class="n">wordDict</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">start</span> <span class="o">+</span> <span class="n">l</span> <span class="o">==</span> <span class="n">ls</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+          <span class="k">if</span> <span class="n">visited</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">l</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">l</span><span class="p">)</span>
+            <span class="n">visited</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">wordBreak</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">wordDict</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">words</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">wordDict</span> <span class="p">{</span>
+		<span class="n">words</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="p">}</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">dp</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">words</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="o">:</span><span class="n">i</span><span class="p">]]</span> <span class="p">{</span>
+				<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">WordBreak</span><span class="p">(</span><span class="kt">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">IList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">wordDict</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">words</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">wordDict</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="n">s</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">dp</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">bool</span><span class="p">[</span><span class="n">n</span> <span class="p">+</span> <span class="m">1</span><span class="p">];</span>
+        <span class="n">dp</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">&amp;&amp;</span> <span class="n">words</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">Substring</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="p">-</span> <span class="n">j</span><span class="p">)))</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">wordBreak</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">wordDict</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]):</span> <span class="nx">boolean</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">words</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">wordDict</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+    <span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">i</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">words</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">i</span><span class="p">)))</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">word_break</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">word_dict</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">words</span><span class="p">:</span> <span class="nn">std</span><span class="p">::</span><span class="nn">collections</span><span class="p">::</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">word_dict</span><span class="nf">.into_iter</span><span class="p">()</span><span class="nf">.collect</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">f</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="kc">false</span><span class="p">;</span> <span class="n">s</span><span class="nf">.len</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..=</span><span class="n">s</span><span class="nf">.len</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">i</span> <span class="p">{</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">|</span><span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">words</span><span class="nf">.contains</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="o">..</span><span class="n">i</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">s</span><span class="nf">.len</span><span class="p">()]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-139.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

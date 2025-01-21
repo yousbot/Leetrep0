@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-130.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-130.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>130 - Surrounded Regions</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 130. Surrounded Regions Description Given an m x n matrix board containing &amp;#39;X&amp;#39; and &amp;#39;O&amp;#39;, capture all regions that are 4-directionally&amp;nbsp;surrounded by &amp;#39;X&amp;#39;. A region is captured by flipping all &amp;#39;O&amp;#39;s into &amp;#39;X&amp;#39;s in that surrounded region. &amp;nbsp; Example 1: Input: board = [[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;]] Output:...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-130.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-130.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-130.html" rel="stylesheet"/>
+   <link href="solution-130.html" rel="stylesheet"/>
+   <link href="solution-130.html" rel="stylesheet"/>
+   <link href="solution-130.html" rel="stylesheet"/>
+   <link href="solution-130.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="130 - Surrounded Regions" property="og:title"/>
+   <meta content="Leetcode 130. Surrounded Regions Description Given an m x n matrix board containing &amp;#39;X&amp;#39; and &amp;#39;O&amp;#39;, capture all regions that are 4-directionally&amp;nbsp;surrounded by &amp;#39;X&amp;#39;. A region is captured by flipping all &amp;#39;O&amp;#39;s into &amp;#39;X&amp;#39;s in that surrounded region. &amp;nbsp; Example 1: Input: board = [[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;]] Output: [[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;]] Explanation: Notice that an &amp;#39;O&amp;#39; should not be flipped if: - It is on the border, or - It is adjacent to an &amp;#39;O&amp;#39; that should not be flipped. The bottom &amp;#39;O&amp;#39; is on the border, so it is not flipped. The other three &amp;#39;O&amp;#39; form a surrounded region, so they are flipped. Example 2: Input: board = [[&amp;quot;X&amp;quot;]] Output: [[&amp;quot;X&amp;quot;]] &amp;nbsp; Constraints: m == board.length n == board[i].length 1 &amp;lt;= m, n &amp;lt;= 200 board[i][j] is &amp;#39;X&amp;#39; or &amp;#39;O&amp;#39;. Solutions Java C++ Python Go TypeScript C# RenderScript class Solution { private char[][] board; private int m; private int n; public void solve(char[][] board) { m = board.length; n = board[0].length; this.board = board; for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { if ((i == 0 || i == m - 1 || j == 0 || j == n - 1) &amp;amp;&amp;amp; board[i][j] == 'O') { dfs(i, j); } } } for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { if (board[i][j] == '.') { board[i][j] = 'O'; } else if (board[i][j] == 'O') { board[i][j] = 'X'; } } } } private void dfs(int i, int j) { board[i][j] = '.'; int[] dirs = {-1, 0, 1, 0, -1}; for (int k = 0; k &amp;lt; 4; ++k) { int x = i + dirs[k]; int y = j + dirs[k + 1]; if (x &amp;gt;= 0 &amp;amp;&amp;amp; x &amp;lt; m &amp;amp;&amp;amp; y &amp;gt;= 0 &amp;amp;&amp;amp; y &amp;lt; n &amp;amp;&amp;amp; board[x][y] == 'O') { dfs(x, y); } } } } class Solution { public: void solve(vector&amp;lt;vector&amp;lt;char&amp;gt;&amp;gt;&amp;amp; board) { int m = board.size(), n = board[0].size(); for (int i = 0; i &amp;lt; m; ++i) for (int j = 0; j &amp;lt; n; ++j) if ((i == 0 || i == m - 1 || j == 0 || j == n - 1) &amp;amp;&amp;amp; board[i][j] == 'O') dfs(board, i, j); for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { if (board[i][j] == '.') board[i][j] = 'O'; else if (board[i][j] == 'O') board[i][j] = 'X'; } } } void dfs(vector&amp;lt;vector&amp;lt;char&amp;gt;&amp;gt;&amp;amp; board, int i, int j) { board[i][j] = '.'; vector&amp;lt;int&amp;gt; dirs = {-1, 0, 1, 0, -1}; for (int k = 0; k &amp;lt; 4; ++k) { int x = i + dirs[k], y = j + dirs[k + 1]; if (x &amp;gt;= 0 &amp;amp;&amp;amp; x &amp;lt; board.size() &amp;amp;&amp;amp; y &amp;gt;= 0 &amp;amp;&amp;amp; y &amp;lt; board[0].size() &amp;amp;&amp;amp; board[x][y] == 'O') dfs(board, x, y); } } }; class Solution: def solve(self, board: List[List[str]]) -&amp;gt; None:..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-04-08T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-04-08-130-Surrounded-Regions/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-130.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="130 - Surrounded Regions" property="twitter:title"/>
+   <meta content="Leetcode 130. Surrounded Regions Description Given an m x n matrix board containing &amp;#39;X&amp;#39; and &amp;#39;O&amp;#39;, capture all regions that are 4-directionally&amp;nbsp;surrounded by &amp;#39;X&amp;#39;. A region is captured by flipping all &amp;#39;O&amp;#39;s into &amp;#39;X&amp;#39;s in that surrounded region. &amp;nbsp; Example 1: Input: board = [[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;]] Output: [[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;],[&amp;quot;X&amp;quot;,&amp;quot;O&amp;quot;,&amp;quot;X&amp;quot;,&amp;quot;X&amp;quot;]] Explanation: Notice that an &amp;#39;O&amp;#39; should not be flipped if: - It is on the border, or - It is adjacent to an &amp;#39;O&amp;#39; that should not be flipped. The bottom &amp;#39;O&amp;#39; is on the border, so it is not flipped. The other three &amp;#39;O&amp;#39; form a surrounded region, so they are flipped. Example 2: Input: board = [[&amp;quot;X&amp;quot;]] Output: [[&amp;quot;X&amp;quot;]] &amp;nbsp; Constraints: m == board.length n == board[i].length 1 &amp;lt;= m, n &amp;lt;= 200 board[i][j] is &amp;#39;X&amp;#39; or &amp;#39;O&amp;#39;. Solutions Java C++ Python Go TypeScript C# RenderScript class Solution { private char[][] board; private int m; private int n; public void solve(char[][] board) { m = board.length; n = board[0].length; this.board = board; for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { if ((i == 0 || i == m - 1 || j == 0 || j == n - 1) &amp;amp;&amp;amp; board[i][j] == 'O') { dfs(i, j); } } } for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { if (board[i][j] == '.') { board[i][j] = 'O'; } else if (board[i][j] == 'O') { board[i][j] = 'X'; } } } } private void dfs(int i, int j) { board[i][j] = '.'; int[] dirs = {-1, 0, 1, 0, -1}; for (int k = 0; k &amp;lt; 4; ++k) { int x = i + dirs[k]; int y = j + dirs[k + 1]; if (x &amp;gt;= 0 &amp;amp;&amp;amp; x &amp;lt; m &amp;amp;&amp;amp; y &amp;gt;= 0 &amp;amp;&amp;amp; y &amp;lt; n &amp;amp;&amp;amp; board[x][y] == 'O') { dfs(x, y); } } } } class Solution { public: void solve(vector&amp;lt;vector&amp;lt;char&amp;gt;&amp;gt;&amp;amp; board) { int m = board.size(), n = board[0].size(); for (int i = 0; i &amp;lt; m; ++i) for (int j = 0; j &amp;lt; n; ++j) if ((i == 0 || i == m - 1 || j == 0 || j == n - 1) &amp;amp;&amp;amp; board[i][j] == 'O') dfs(board, i, j); for (int i = 0; i &amp;lt; m; ++i) { for (int j = 0; j &amp;lt; n; ++j) { if (board[i][j] == '.') board[i][j] = 'O'; else if (board[i][j] == 'O') board[i][j] = 'X'; } } } void dfs(vector&amp;lt;vector&amp;lt;char&amp;gt;&amp;gt;&amp;amp; board, int i, int j) { board[i][j] = '.'; vector&amp;lt;int&amp;gt; dirs = {-1, 0, 1, 0, -1}; for (int k = 0; k &amp;lt; 4; ++k) { int x = i + dirs[k], y = j + dirs[k + 1]; if (x &amp;gt;= 0 &amp;amp;&amp;amp; x &amp;lt; board.size() &amp;amp;&amp;amp; y &amp;gt;= 0 &amp;amp;&amp;amp; y &amp;lt; board[0].size() &amp;amp;&amp;amp; board[x][y] == 'O') dfs(board, x, y); } } }; class Solution: def solve(self, board: List[List[str]]) -&amp;gt; None:..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    130 - Surrounded Regions | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="130 - Surrounded Regions" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-130.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-04-08-130-Surrounded-Regions/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-04-08T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"130 - Surrounded Regions","dateModified":"2016-04-08T00:00:00-07:00","datePublished":"2016-04-08T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-04-08-130-Surrounded-Regions/"},"url":"https://leetcode.ca/2016-04-08-130-Surrounded-Regions/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="130-surrounded-regions">
+       <a href="solution-130.html">
+        130. Surrounded Regions
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an
+       <code>
+        m x n
+       </code>
+       matrix
+       <code>
+        board
+       </code>
+       containing
+       <code>
+        'X'
+       </code>
+       and
+       <code>
+        'O'
+       </code>
+       ,
+       <em>
+        capture all regions that are 4-directionally surrounded by
+       </em>
+       <code>
+        'X'
+       </code>
+       .
+      </p>
+      <p>
+       A region is
+       <strong>
+        captured
+       </strong>
+       by flipping all
+       <code>
+        'O'
+       </code>
+       s into
+       <code>
+        'X'
+       </code>
+       s in that surrounded region.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0130.Surrounded%20Regions/images/xogrid.jpg" style="width: 550px; height: 237px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+<strong>Output:</strong> [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+<strong>Explanation:</strong> Notice that an 'O' should not be flipped if:
+- It is on the border, or
+- It is adjacent to an 'O' that should not be flipped.
+The bottom 'O' is on the border, so it is not flipped.
+The other three 'O' form a surrounded region, so they are flipped.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> board = [["X"]]
+<strong>Output:</strong> [["X"]]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == board.length
+        </code>
+       </li>
+       <li>
+        <code>
+         n == board[i].length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m, n &lt;= 200
+        </code>
+       </li>
+       <li>
+        <code>
+         board[i][j]
+        </code>
+        is
+        <code>
+         'X'
+        </code>
+        or
+        <code>
+         'O'
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#08ea259a-da99-4711-b227-0095eed63ce5'}">
+       <li class="uk-active">
+        <a href="solution-130.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-130.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-130.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-130.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-130.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-130.html">
+         C#
+        </a>
+       </li>
+       <li>
+        <a href="solution-130.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="08ea259a-da99-4711-b227-0095eed63ce5">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">m</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">solve</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">board</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">board</span> <span class="o">=</span> <span class="n">board</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'O'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">dfs</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'.'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'O'</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'O'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'X'</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'.'</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dirs</span> <span class="o">=</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'O'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="n">solve</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&amp;</span> <span class="n">board</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">board</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'O'</span><span class="p">)</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span><span class="p">)</span>
+                    <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'O'</span><span class="p">;</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'O'</span><span class="p">)</span>
+                    <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'X'</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">dfs</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&amp;</span> <span class="n">board</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'.'</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dirs</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">board</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'O'</span><span class="p">)</span>
+                <span class="n">dfs</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">"""
+        Do not return anything, modify board in-place instead.
+        """</span>
+
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+            <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="s">'.'</span>
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span>
+                <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">board</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="s">'O'</span><span class="p">:</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s">'O'</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="p">):</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s">'O'</span><span class="p">:</span>
+                    <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="s">'X'</span>
+                <span class="k">elif</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s">'.'</span><span class="p">:</span>
+                    <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="s">'O'</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">solve</span><span class="p">(</span><span class="n">board</span> <span class="p">[][]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'.'</span>
+		<span class="n">dirs</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">i</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">j</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'O'</span> <span class="p">{</span>
+				<span class="n">dfs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span><span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'O'</span> <span class="p">{</span>
+				<span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span> <span class="p">{</span>
+				<span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'O'</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'O'</span> <span class="p">{</span>
+				<span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'X'</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ Do not return anything, modify board in-place instead.
+ */</span>
+<span class="kd">function</span> <span class="nx">solve</span><span class="p">(</span><span class="nx">board</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][]):</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">board</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">.</span><span class="dl">'</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
+            <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">m</span> <span class="o">&amp;&amp;</span> <span class="nx">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="nx">board</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">O</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">dfs</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">board</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">((</span><span class="nx">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">i</span> <span class="o">==</span> <span class="nx">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">j</span> <span class="o">==</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">board</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">O</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">dfs</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">board</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">.</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">board</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">O</span><span class="dl">'</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">board</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">O</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">board</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">X</span><span class="dl">'</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="kt">int</span><span class="p">[,]</span> <span class="n">directions</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">4</span><span class="p">,</span> <span class="m">2</span><span class="p">]</span> <span class="p">{</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span> <span class="p">},</span> <span class="p">{</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span> <span class="p">},</span> <span class="p">{</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span> <span class="p">},</span> <span class="p">{</span> <span class="m">0</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span> <span class="p">}</span> <span class="p">};</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Solve</span><span class="p">(</span><span class="kt">char</span><span class="p">[][]</span> <span class="n">board</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">lenI</span> <span class="p">=</span> <span class="n">board</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">lenJ</span> <span class="p">=</span> <span class="n">lenI</span> <span class="p">==</span> <span class="m">0</span> <span class="p">?</span> <span class="m">0</span> <span class="p">:</span> <span class="n">board</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">Length</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">lenI</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">lenJ</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">==</span> <span class="sc">'O'</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="kt">var</span> <span class="n">marked</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;();</span>
+                    <span class="n">marked</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Tuple</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">));</span>
+                    <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="sc">'M'</span><span class="p">;</span>
+                    <span class="kt">bool</span> <span class="n">escaped</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">m</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">m</span> <span class="p">&lt;</span> <span class="n">marked</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="p">++</span><span class="n">m</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">k</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">k</span> <span class="p">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="p">++</span><span class="n">k</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="kt">var</span> <span class="n">newI</span> <span class="p">=</span> <span class="n">marked</span><span class="p">[</span><span class="n">m</span><span class="p">].</span><span class="n">Item1</span> <span class="p">+</span> <span class="n">directions</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="m">0</span><span class="p">];</span>
+                            <span class="kt">var</span> <span class="n">newJ</span> <span class="p">=</span> <span class="n">marked</span><span class="p">[</span><span class="n">m</span><span class="p">].</span><span class="n">Item2</span> <span class="p">+</span> <span class="n">directions</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="m">1</span><span class="p">];</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">newI</span> <span class="p">&lt;</span> <span class="m">0</span> <span class="p">||</span> <span class="n">newI</span> <span class="p">&gt;=</span> <span class="n">lenI</span> <span class="p">||</span> <span class="n">newJ</span> <span class="p">&lt;</span> <span class="m">0</span> <span class="p">||</span> <span class="n">newJ</span> <span class="p">&gt;=</span> <span class="n">lenJ</span><span class="p">)</span>
+                            <span class="p">{</span>
+                                <span class="n">escaped</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                            <span class="p">}</span>
+                            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">newI</span><span class="p">][</span><span class="n">newJ</span><span class="p">]</span> <span class="p">==</span> <span class="sc">'O'</span><span class="p">)</span>
+                            <span class="p">{</span>
+                                <span class="n">board</span><span class="p">[</span><span class="n">newI</span><span class="p">][</span><span class="n">newJ</span><span class="p">]</span> <span class="p">=</span> <span class="sc">'M'</span><span class="p">;</span>
+                                <span class="n">marked</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Tuple</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">newI</span><span class="p">,</span> <span class="n">newJ</span><span class="p">));</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+
+                    <span class="k">if</span> <span class="p">(!</span><span class="n">escaped</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">marked</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">board</span><span class="p">[</span><span class="n">item</span><span class="p">.</span><span class="n">Item1</span><span class="p">][</span><span class="n">item</span><span class="p">.</span><span class="n">Item2</span><span class="p">]</span> <span class="p">=</span> <span class="sc">'X'</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">lenI</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">lenJ</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">==</span> <span class="sc">'M'</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="sc">'O'</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">mark</span><span class="p">:</span> <span class="nb">char</span><span class="p">,</span> <span class="n">vis</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">bool</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">board</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">char</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">||</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">mark</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">mark</span><span class="p">,</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vis</span><span class="nf">.len</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">{</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">mark</span><span class="p">,</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mark</span><span class="p">,</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">vis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nf">.len</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">{</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mark</span><span class="p">,</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">solve</span><span class="p">(</span><span class="n">board</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">char</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">m</span> <span class="o">=</span> <span class="n">board</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">vis</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="nd">vec!</span><span class="p">[</span><span class="kc">false</span><span class="p">;</span> <span class="n">n</span><span class="p">];</span> <span class="n">m</span><span class="p">];</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">m</span> <span class="p">{</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">n</span> <span class="p">{</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">board</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">vis</span><span class="p">,</span> <span class="n">board</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">m</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">n</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'X'</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-130.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

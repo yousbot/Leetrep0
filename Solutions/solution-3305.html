@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3305.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3305.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3305 - Count of Substrings Containing Every Vowel and K Consonants I</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3305. Count of Substrings Containing Every Vowel and K Consonants I Description You are given a string word and a non-negative integer k. Return the total number of substrings of word that contain every vowel (&amp;#39;a&amp;#39;, &amp;#39;e&amp;#39;, &amp;#39;i&amp;#39;, &amp;#39;o&amp;#39;, and &amp;#39;u&amp;#39;) at least once and...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3305.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3305.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3305.html" rel="stylesheet"/>
+   <link href="solution-3305.html" rel="stylesheet"/>
+   <link href="solution-3305.html" rel="stylesheet"/>
+   <link href="solution-3305.html" rel="stylesheet"/>
+   <link href="solution-3305.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3305 - Count of Substrings Containing Every Vowel and K Consonants I" property="og:title"/>
+   <meta content="Leetcode 3305. Count of Substrings Containing Every Vowel and K Consonants I Description You are given a string word and a non-negative integer k. Return the total number of substrings of word that contain every vowel (&amp;#39;a&amp;#39;, &amp;#39;e&amp;#39;, &amp;#39;i&amp;#39;, &amp;#39;o&amp;#39;, and &amp;#39;u&amp;#39;) at least once and exactly k consonants. &amp;nbsp; Example 1: Input: word = &amp;quot;aeioqq&amp;quot;, k = 1 Output: 0 Explanation: There is no substring with every vowel. Example 2: Input: word = &amp;quot;aeiou&amp;quot;, k = 0 Output: 1 Explanation: The only substring with every vowel and zero consonants is word[0..4], which is &amp;quot;aeiou&amp;quot;. Example 3: Input: word = &amp;quot;ieaouqqieaouqq&amp;quot;, k = 1 Output: 3 Explanation: The substrings with every vowel and one consonant are: word[0..5], which is &amp;quot;ieaouq&amp;quot;. word[6..11], which is &amp;quot;qieaou&amp;quot;. word[7..12], which is &amp;quot;ieaouq&amp;quot;. &amp;nbsp; Constraints: 5 &amp;lt;= word.length &amp;lt;= 250 word consists only of lowercase English letters. 0 &amp;lt;= k &amp;lt;= word.length - 5 Solutions Solution 1: Problem Transformation + Sliding Window We can transform the problem into solving the following two subproblems: Find the total number of substrings where each vowel appears at least once and contains at least $k$ consonants, denoted as $\textit{f}(k)$; Find the total number of substrings where each vowel appears at least once and contains at least $k + 1$ consonants, denoted as $\textit{f}(k + 1)$. Then the answer is $\textit{f}(k) - \textit{f}(k + 1)$. Therefore, we design a function $\textit{f}(k)$ to count the total number of substrings where each vowel appears at least once and contains at least $k$ consonants. We can use a hash table $\textit{cnt}$ to count the occurrences of each vowel, a variable $\textit{ans}$ to store the answer, a variable $\textit{l}$ to record the left boundary of the sliding window, and a variable $\textit{x}$ to record the number of consonants in the current window. Traverse the string. If the current character is a vowel, add it to the hash table $\textit{cnt}$; otherwise, increment $\textit{x}$ by one. If $\textit{x} \ge k$ and the size of the hash table $\textit{cnt}$ is $5$, it means the current window meets the conditions. We then move the left boundary in a loop until the window no longer meets the conditions. At this point, all substrings ending at the right boundary $\textit{r}$ and with the left boundary in the range $[0, .. \textit{l} - 1]$ meet the conditions, totaling $\textit{l}$ substrings. We add $\textit{l}$ to the answer. Continue traversing the string until the end, and we get $\textit{f}(k)$. Finally, we return $\textit{f}(k) - \textit{f}(k + 1)$. The time complexity is $O(n)$, where $n$ is the length of the string $\textit{word}$. The space complexity is $O(1)$. Java C++ Go TypeScript class Solution { public int countOfSubstrings(String word, int k) { return f(word, k) - f(word, k + 1); } private int f(String word, int k) { int ans = 0; int l = 0, x = 0; Map&amp;lt;Character, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;(5); for (char c : word.toCharArray()) { if (vowel(c)) { cnt.merge(c, 1, Integer::sum); } else { ++x;..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-10-22T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-10-22-3305-Count-of-Substrings-Containing-Every-Vowel-and-K-Consonants-I/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3305.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3305 - Count of Substrings Containing Every Vowel and K Consonants I" property="twitter:title"/>
+   <meta content="Leetcode 3305. Count of Substrings Containing Every Vowel and K Consonants I Description You are given a string word and a non-negative integer k. Return the total number of substrings of word that contain every vowel (&amp;#39;a&amp;#39;, &amp;#39;e&amp;#39;, &amp;#39;i&amp;#39;, &amp;#39;o&amp;#39;, and &amp;#39;u&amp;#39;) at least once and exactly k consonants. &amp;nbsp; Example 1: Input: word = &amp;quot;aeioqq&amp;quot;, k = 1 Output: 0 Explanation: There is no substring with every vowel. Example 2: Input: word = &amp;quot;aeiou&amp;quot;, k = 0 Output: 1 Explanation: The only substring with every vowel and zero consonants is word[0..4], which is &amp;quot;aeiou&amp;quot;. Example 3: Input: word = &amp;quot;ieaouqqieaouqq&amp;quot;, k = 1 Output: 3 Explanation: The substrings with every vowel and one consonant are: word[0..5], which is &amp;quot;ieaouq&amp;quot;. word[6..11], which is &amp;quot;qieaou&amp;quot;. word[7..12], which is &amp;quot;ieaouq&amp;quot;. &amp;nbsp; Constraints: 5 &amp;lt;= word.length &amp;lt;= 250 word consists only of lowercase English letters. 0 &amp;lt;= k &amp;lt;= word.length - 5 Solutions Solution 1: Problem Transformation + Sliding Window We can transform the problem into solving the following two subproblems: Find the total number of substrings where each vowel appears at least once and contains at least $k$ consonants, denoted as $\textit{f}(k)$; Find the total number of substrings where each vowel appears at least once and contains at least $k + 1$ consonants, denoted as $\textit{f}(k + 1)$. Then the answer is $\textit{f}(k) - \textit{f}(k + 1)$. Therefore, we design a function $\textit{f}(k)$ to count the total number of substrings where each vowel appears at least once and contains at least $k$ consonants. We can use a hash table $\textit{cnt}$ to count the occurrences of each vowel, a variable $\textit{ans}$ to store the answer, a variable $\textit{l}$ to record the left boundary of the sliding window, and a variable $\textit{x}$ to record the number of consonants in the current window. Traverse the string. If the current character is a vowel, add it to the hash table $\textit{cnt}$; otherwise, increment $\textit{x}$ by one. If $\textit{x} \ge k$ and the size of the hash table $\textit{cnt}$ is $5$, it means the current window meets the conditions. We then move the left boundary in a loop until the window no longer meets the conditions. At this point, all substrings ending at the right boundary $\textit{r}$ and with the left boundary in the range $[0, .. \textit{l} - 1]$ meet the conditions, totaling $\textit{l}$ substrings. We add $\textit{l}$ to the answer. Continue traversing the string until the end, and we get $\textit{f}(k)$. Finally, we return $\textit{f}(k) - \textit{f}(k + 1)$. The time complexity is $O(n)$, where $n$ is the length of the string $\textit{word}$. The space complexity is $O(1)$. Java C++ Go TypeScript class Solution { public int countOfSubstrings(String word, int k) { return f(word, k) - f(word, k + 1); } private int f(String word, int k) { int ans = 0; int l = 0, x = 0; Map&amp;lt;Character, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;(5); for (char c : word.toCharArray()) { if (vowel(c)) { cnt.merge(c, 1, Integer::sum); } else { ++x;..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3305 - Count of Substrings Containing Every Vowel and K Consonants I | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3305 - Count of Substrings Containing Every Vowel and K Consonants I" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3305.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-10-22-3305-Count-of-Substrings-Containing-Every-Vowel-and-K-Consonants-I/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-10-22T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3305 - Count of Substrings Containing Every Vowel and K Consonants I","dateModified":"2024-10-22T00:00:00-07:00","datePublished":"2024-10-22T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-10-22-3305-Count-of-Substrings-Containing-Every-Vowel-and-K-Consonants-I/"},"url":"https://leetcode.ca/2024-10-22-3305-Count-of-Substrings-Containing-Every-Vowel-and-K-Consonants-I/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3305-count-of-substrings-containing-every-vowel-and-k-consonants-i">
+       <a href="solution-3305.html">
+        3305. Count of Substrings Containing Every Vowel and K Consonants I
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       You are given a string
+       <code>
+        word
+       </code>
+       and a
+       <strong>
+        non-negative
+       </strong>
+       integer
+       <code>
+        k
+       </code>
+       .
+      </p>
+      <p>
+       Return the total number of
+       <span data-keyword="substring-nonempty">
+        substrings
+       </span>
+       of
+       <code>
+        word
+       </code>
+       that contain every vowel (
+       <code>
+        'a'
+       </code>
+       ,
+       <code>
+        'e'
+       </code>
+       ,
+       <code>
+        'i'
+       </code>
+       ,
+       <code>
+        'o'
+       </code>
+       , and
+       <code>
+        'u'
+       </code>
+       )
+       <strong>
+        at least
+       </strong>
+       once and
+       <strong>
+        exactly
+       </strong>
+       <code>
+        k
+       </code>
+       consonants.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         word = "aeioqq", k = 1
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         0
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        There is no substring with every vowel.
+       </p>
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         word = "aeiou", k = 0
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         1
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        The only substring with every vowel and zero consonants is
+        <code>
+         word[0..4]
+        </code>
+        , which is
+        <code>
+         "aeiou"
+        </code>
+        .
+       </p>
+      </div>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         word = "
+        </span>
+        ieaouqqieaouqq
+        <span class="example-io">
+         ", k = 1
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        3
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        The substrings with every vowel and one consonant are:
+       </p>
+       <ul>
+        <li>
+         <code>
+          word[0..5]
+         </code>
+         , which is
+         <code>
+          "ieaouq"
+         </code>
+         .
+        </li>
+        <li>
+         <code>
+          word[6..11]
+         </code>
+         , which is
+         <code>
+          "qieaou"
+         </code>
+         .
+        </li>
+        <li>
+         <code>
+          word[7..12]
+         </code>
+         , which is
+         <code>
+          "ieaouq"
+         </code>
+         .
+        </li>
+       </ul>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         5 &lt;= word.length &lt;= 250
+        </code>
+       </li>
+       <li>
+        <code>
+         word
+        </code>
+        consists only of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         0 &lt;= k &lt;= word.length - 5
+        </code>
+       </li>
+      </ul>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1-problem-transformation--sliding-window">
+       Solution 1: Problem Transformation + Sliding Window
+      </h3>
+      <p>
+       We can transform the problem into solving the following two subproblems:
+      </p>
+      <ol>
+       <li>
+        Find the total number of substrings where each vowel appears at least once and contains at least $k$ consonants, denoted as $\textit{f}(k)$;
+       </li>
+       <li>
+        Find the total number of substrings where each vowel appears at least once and contains at least $k + 1$ consonants, denoted as $\textit{f}(k + 1)$.
+       </li>
+      </ol>
+      <p>
+       Then the answer is $\textit{f}(k) - \textit{f}(k + 1)$.
+      </p>
+      <p>
+       Therefore, we design a function $\textit{f}(k)$ to count the total number of substrings where each vowel appears at least once and contains at least $k$ consonants.
+      </p>
+      <p>
+       We can use a hash table $\textit{cnt}$ to count the occurrences of each vowel, a variable $\textit{ans}$ to store the answer, a variable $\textit{l}$ to record the left boundary of the sliding window, and a variable $\textit{x}$ to record the number of consonants in the current window.
+      </p>
+      <p>
+       Traverse the string. If the current character is a vowel, add it to the hash table $\textit{cnt}$; otherwise, increment $\textit{x}$ by one. If $\textit{x} \ge k$ and the size of the hash table $\textit{cnt}$ is $5$, it means the current window meets the conditions. We then move the left boundary in a loop until the window no longer meets the conditions. At this point, all substrings ending at the right boundary $\textit{r}$ and with the left boundary in the range $[0, .. \textit{l} - 1]$ meet the conditions, totaling $\textit{l}$ substrings. We add $\textit{l}$ to the answer. Continue traversing the string until the end, and we get $\textit{f}(k)$.
+      </p>
+      <p>
+       Finally, we return $\textit{f}(k) - \textit{f}(k + 1)$.
+      </p>
+      <p>
+       The time complexity is $O(n)$, where $n$ is the length of the string $\textit{word}$. The space complexity is $O(1)$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#ee36fab6-f19c-43d7-9238-4c51dffe75aa'}">
+       <li class="uk-active">
+        <a href="solution-3305.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3305.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3305.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3305.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="ee36fab6-f19c-43d7-9238-4c51dffe75aa">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">countOfSubstrings</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">f</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">k</span><span class="o">)</span> <span class="o">-</span> <span class="n">f</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">f</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;(</span><span class="mi">5</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">vowel</span><span class="o">(</span><span class="n">c</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">cnt</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">x</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">k</span> <span class="o">&amp;&amp;</span> <span class="n">cnt</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">5</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">char</span> <span class="n">d</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">l</span><span class="o">++);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">vowel</span><span class="o">(</span><span class="n">d</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">d</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">cnt</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">d</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="o">--</span><span class="n">x</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">l</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">vowel</span><span class="o">(</span><span class="kt">char</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'a'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'e'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'i'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'o'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'u'</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">countOfSubstrings</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">int</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">vowel</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'a'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'e'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'i'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'o'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'u'</span><span class="p">;</span>
+            <span class="p">};</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">vowel</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">cnt</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="o">++</span><span class="n">x</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">k</span> <span class="o">&amp;&amp;</span> <span class="n">cnt</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">char</span> <span class="n">d</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="n">l</span><span class="o">++</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">vowel</span><span class="p">(</span><span class="n">d</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">cnt</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="n">cnt</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="o">--</span><span class="n">x</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">l</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">countOfSubstrings</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="k">var</span> <span class="n">ans</span> <span class="kt">int</span> <span class="o">=</span> <span class="m">0</span>
+		<span class="n">l</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+		<span class="n">cnt</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">rune</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+		<span class="n">vowel</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">c</span> <span class="kt">rune</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'a'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'e'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'i'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'o'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'u'</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">vowel</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">cnt</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">++</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">x</span><span class="o">++</span>
+			<span class="p">}</span>
+			<span class="k">for</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">k</span> <span class="o">&amp;&amp;</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span> <span class="o">==</span> <span class="m">5</span> <span class="p">{</span>
+				<span class="n">d</span> <span class="o">:=</span> <span class="kt">rune</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">l</span><span class="p">])</span>
+				<span class="n">l</span><span class="o">++</span>
+				<span class="k">if</span> <span class="n">vowel</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">cnt</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">--</span>
+					<span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+						<span class="nb">delete</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+					<span class="p">}</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="n">x</span><span class="o">--</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">ans</span> <span class="o">+=</span> <span class="n">l</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">ans</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">countOfSubstrings</span><span class="p">(</span><span class="nx">word</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">(</span><span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="kd">const</span> <span class="nx">vowel</span> <span class="o">=</span> <span class="p">(</span><span class="na">c</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="nx">boolean</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">e</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">i</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">o</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">u</span><span class="dl">'</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">c</span> <span class="k">of</span> <span class="nx">word</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">vowel</span><span class="p">(</span><span class="nx">c</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">cnt</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="p">(</span><span class="nx">cnt</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">x</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">while</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&gt;=</span> <span class="nx">k</span> <span class="o">&amp;&amp;</span> <span class="nx">cnt</span><span class="p">.</span><span class="nx">size</span> <span class="o">===</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">const</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">word</span><span class="p">[</span><span class="nx">l</span><span class="o">++</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">vowel</span><span class="p">(</span><span class="nx">d</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="nx">cnt</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">cnt</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span><span class="o">!</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">cnt</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">cnt</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">x</span><span class="o">--</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="nx">ans</span> <span class="o">+=</span> <span class="nx">l</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nx">f</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span> <span class="o">-</span> <span class="nx">f</span><span class="p">(</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3305.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

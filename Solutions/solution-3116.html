@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3116.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3116.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3116 - Kth Smallest Amount With Single Denomination Combination</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3116. Kth Smallest Amount With Single Denomination Combination Description You are given an integer array coins representing coins of different denominations and an integer k. You have an infinite number of coins of each denomination. However, you are not allowed to combine coins of different...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3116.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3116.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3116.html" rel="stylesheet"/>
+   <link href="solution-3116.html" rel="stylesheet"/>
+   <link href="solution-3116.html" rel="stylesheet"/>
+   <link href="solution-3116.html" rel="stylesheet"/>
+   <link href="solution-3116.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3116 - Kth Smallest Amount With Single Denomination Combination" property="og:title"/>
+   <meta content="Leetcode 3116. Kth Smallest Amount With Single Denomination Combination Description You are given an integer array coins representing coins of different denominations and an integer k. You have an infinite number of coins of each denomination. However, you are not allowed to combine coins of different denominations. Return the kth smallest amount that can be made using these coins. &amp;nbsp; Example 1: Input: coins = [3,6,9], k = 3 Output: 9 Explanation: The given coins can make the following amounts: Coin 3 produces multiples of 3: 3, 6, 9, 12, 15, etc. Coin 6 produces multiples of 6: 6, 12, 18, 24, etc. Coin 9 produces multiples of 9: 9, 18, 27, 36, etc. All of the coins combined produce: 3, 6, 9, 12, 15, etc. Example 2: Input: coins = [5,2], k = 7 Output: 12 Explanation: The given coins can make the following amounts: Coin 5 produces multiples of 5: 5, 10, 15, 20, etc. Coin 2 produces multiples of 2: 2, 4, 6, 8, 10, 12, etc. All of the coins combined produce: 2, 4, 5, 6, 8, 10, 12, 14, 15, etc. &amp;nbsp; Constraints: 1 &amp;lt;= coins.length &amp;lt;= 15 1 &amp;lt;= coins[i] &amp;lt;= 25 1 &amp;lt;= k &amp;lt;= 2 * 109 coins contains pairwise distinct integers. Solutions Solution 1: Binary Search + Inclusion-Exclusion Principle We can transform the problem into: find the smallest positive integer $x$ such that the number of numbers less than or equal to $x$ and satisfying the condition is exactly $k$. If $x$ satisfies the condition, then for any $xâ &amp;gt; x$, $xâ$ also satisfies the condition. This shows monotonicity, so we can use binary search to find the smallest $x$ that satisfies the condition. We define a function check(x) to determine whether the number of numbers less than or equal to $x$ and satisfying the condition is greater than or equal to $k$. We need to calculate how many numbers can be obtained from the array $coins$. Suppose $coins = [a, b]$, according to the inclusion-exclusion principle, the number of numbers less than or equal to $x$ and satisfying the condition is: \[\left\lfloor \frac{x}{a} \right\rfloor + \left\lfloor \frac{x}{b} \right\rfloor - \left\lfloor \frac{x}{lcm(a, b)} \right\rfloor\] If $coins = [a, b, c]$, the number of numbers less than or equal to $x$ and satisfying the condition is: \[\left\lfloor \frac{x}{a} \right\rfloor + \left\lfloor \frac{x}{b} \right\rfloor + \left\lfloor \frac{x}{c} \right\rfloor - \left\lfloor \frac{x}{lcm(a, b)} \right\rfloor - \left\lfloor \frac{x}{lcm(a, c)} \right\rfloor - \left\lfloor \frac{x}{lcm(b, c)} \right\rfloor + \left\lfloor \frac{x}{lcm(a, b, c)} \right\rfloor\] As you can see, we need to add all cases with an odd number of elements and subtract all cases with an even number of elements. Since $n \leq 15$, we can use binary enumeration to enumerate all subsets and calculate the number of numbers that satisfy the condition, denoted as $cnt$. If $cnt \geq k$, then we need to find the smallest $x$ such that check(x) is true. At the start of the binary search, we define the left..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-05-06T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-05-06-3116-Kth-Smallest-Amount-With-Single-Denomination-Combination/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3116.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3116 - Kth Smallest Amount With Single Denomination Combination" property="twitter:title"/>
+   <meta content="Leetcode 3116. Kth Smallest Amount With Single Denomination Combination Description You are given an integer array coins representing coins of different denominations and an integer k. You have an infinite number of coins of each denomination. However, you are not allowed to combine coins of different denominations. Return the kth smallest amount that can be made using these coins. &amp;nbsp; Example 1: Input: coins = [3,6,9], k = 3 Output: 9 Explanation: The given coins can make the following amounts: Coin 3 produces multiples of 3: 3, 6, 9, 12, 15, etc. Coin 6 produces multiples of 6: 6, 12, 18, 24, etc. Coin 9 produces multiples of 9: 9, 18, 27, 36, etc. All of the coins combined produce: 3, 6, 9, 12, 15, etc. Example 2: Input: coins = [5,2], k = 7 Output: 12 Explanation: The given coins can make the following amounts: Coin 5 produces multiples of 5: 5, 10, 15, 20, etc. Coin 2 produces multiples of 2: 2, 4, 6, 8, 10, 12, etc. All of the coins combined produce: 2, 4, 5, 6, 8, 10, 12, 14, 15, etc. &amp;nbsp; Constraints: 1 &amp;lt;= coins.length &amp;lt;= 15 1 &amp;lt;= coins[i] &amp;lt;= 25 1 &amp;lt;= k &amp;lt;= 2 * 109 coins contains pairwise distinct integers. Solutions Solution 1: Binary Search + Inclusion-Exclusion Principle We can transform the problem into: find the smallest positive integer $x$ such that the number of numbers less than or equal to $x$ and satisfying the condition is exactly $k$. If $x$ satisfies the condition, then for any $xâ &amp;gt; x$, $xâ$ also satisfies the condition. This shows monotonicity, so we can use binary search to find the smallest $x$ that satisfies the condition. We define a function check(x) to determine whether the number of numbers less than or equal to $x$ and satisfying the condition is greater than or equal to $k$. We need to calculate how many numbers can be obtained from the array $coins$. Suppose $coins = [a, b]$, according to the inclusion-exclusion principle, the number of numbers less than or equal to $x$ and satisfying the condition is: \[\left\lfloor \frac{x}{a} \right\rfloor + \left\lfloor \frac{x}{b} \right\rfloor - \left\lfloor \frac{x}{lcm(a, b)} \right\rfloor\] If $coins = [a, b, c]$, the number of numbers less than or equal to $x$ and satisfying the condition is: \[\left\lfloor \frac{x}{a} \right\rfloor + \left\lfloor \frac{x}{b} \right\rfloor + \left\lfloor \frac{x}{c} \right\rfloor - \left\lfloor \frac{x}{lcm(a, b)} \right\rfloor - \left\lfloor \frac{x}{lcm(a, c)} \right\rfloor - \left\lfloor \frac{x}{lcm(b, c)} \right\rfloor + \left\lfloor \frac{x}{lcm(a, b, c)} \right\rfloor\] As you can see, we need to add all cases with an odd number of elements and subtract all cases with an even number of elements. Since $n \leq 15$, we can use binary enumeration to enumerate all subsets and calculate the number of numbers that satisfy the condition, denoted as $cnt$. If $cnt \geq k$, then we need to find the smallest $x$ such that check(x) is true. At the start of the binary search, we define the left..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3116 - Kth Smallest Amount With Single Denomination Combination | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3116 - Kth Smallest Amount With Single Denomination Combination" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3116.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-05-06-3116-Kth-Smallest-Amount-With-Single-Denomination-Combination/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-05-06T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3116 - Kth Smallest Amount With Single Denomination Combination","dateModified":"2024-05-06T00:00:00-07:00","datePublished":"2024-05-06T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-05-06-3116-Kth-Smallest-Amount-With-Single-Denomination-Combination/"},"url":"https://leetcode.ca/2024-05-06-3116-Kth-Smallest-Amount-With-Single-Denomination-Combination/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="3116-kth-smallest-amount-with-single-denomination-combination">
+       <a href="solution-3116.html">
+        3116. Kth Smallest Amount With Single Denomination Combination
+       </a>
+      </h1>
+      <!-- tags:Bit Manipulation,Array,Math,Binary Search,Combinatorics,Number Theory -->
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an integer array
+       <code>
+        coins
+       </code>
+       representing coins of different denominations and an integer
+       <code>
+        k
+       </code>
+       .
+      </p>
+      <p>
+       You have an infinite number of coins of each denomination. However, you are
+       <strong>
+        not allowed
+       </strong>
+       to combine coins of different denominations.
+      </p>
+      <p>
+       Return the
+       <code>
+        k
+        <sup>
+         th
+        </sup>
+       </code>
+       <strong>
+        smallest
+       </strong>
+       amount that can be made using these coins.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block" style="
+    border-color: var(--border-tertiary);
+    border-left-width: 2px;
+    color: var(--text-secondary);
+    font-size: .875rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    overflow: visible;
+    padding-left: 1rem;
+">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">
+         coins = [3,6,9], k = 3
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">
+         9
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+        The given coins can make the following amounts:
+        <br/>
+        Coin 3 produces multiples of 3: 3, 6, 9, 12, 15, etc.
+        <br/>
+        Coin 6 produces multiples of 6: 6, 12, 18, 24, etc.
+        <br/>
+        Coin 9 produces multiples of 9: 9, 18, 27, 36, etc.
+        <br/>
+        All of the coins combined produce: 3, 6,
+        <u>
+         <strong>
+          9
+         </strong>
+        </u>
+        , 12, 15, etc.
+       </p>
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block" style="
+    border-color: var(--border-tertiary);
+    border-left-width: 2px;
+    color: var(--text-secondary);
+    font-size: .875rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    overflow: visible;
+    padding-left: 1rem;
+">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">
+         coins = [5,2], k = 7
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">
+         12
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+        The given coins can make the following amounts:
+        <br/>
+        Coin 5 produces multiples of 5: 5, 10, 15, 20, etc.
+        <br/>
+        Coin 2 produces multiples of 2: 2, 4, 6, 8, 10, 12, etc.
+        <br/>
+        All of the coins combined produce: 2, 4, 5, 6, 8, 10,
+        <u>
+         <strong>
+          12
+         </strong>
+        </u>
+        , 14, 15, etc.
+       </p>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= coins.length &lt;= 15
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= coins[i] &lt;= 25
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= k &lt;= 2 * 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         coins
+        </code>
+        contains pairwise distinct integers.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <h3 id="solution-1-binary-search--inclusion-exclusion-principle">
+       Solution 1: Binary Search + Inclusion-Exclusion Principle
+      </h3>
+      <p>
+       We can transform the problem into: find the smallest positive integer $x$ such that the number of numbers less than or equal to $x$ and satisfying the condition is exactly $k$. If $x$ satisfies the condition, then for any $xâ &gt; x$, $xâ$ also satisfies the condition. This shows monotonicity, so we can use binary search to find the smallest $x$ that satisfies the condition.
+      </p>
+      <p>
+       We define a function
+       <code class="language-plaintext highlighter-rouge">
+        check(x)
+       </code>
+       to determine whether the number of numbers less than or equal to $x$ and satisfying the condition is greater than or equal to $k$. We need to calculate how many numbers can be obtained from the array $coins$.
+      </p>
+      <p>
+       Suppose $coins = [a, b]$, according to the inclusion-exclusion principle, the number of numbers less than or equal to $x$ and satisfying the condition is:
+      </p>
+      \[\left\lfloor \frac{x}{a} \right\rfloor + \left\lfloor \frac{x}{b} \right\rfloor - \left\lfloor \frac{x}{lcm(a, b)} \right\rfloor\]
+      <p>
+       If $coins = [a, b, c]$, the number of numbers less than or equal to $x$ and satisfying the condition is:
+      </p>
+      \[\left\lfloor \frac{x}{a} \right\rfloor + \left\lfloor \frac{x}{b} \right\rfloor + \left\lfloor \frac{x}{c} \right\rfloor - \left\lfloor \frac{x}{lcm(a, b)} \right\rfloor - \left\lfloor \frac{x}{lcm(a, c)} \right\rfloor - \left\lfloor \frac{x}{lcm(b, c)} \right\rfloor + \left\lfloor \frac{x}{lcm(a, b, c)} \right\rfloor\]
+      <p>
+       As you can see, we need to add all cases with an odd number of elements and subtract all cases with an even number of elements.
+      </p>
+      <p>
+       Since $n \leq 15$, we can use binary enumeration to enumerate all subsets and calculate the number of numbers that satisfy the condition, denoted as $cnt$. If $cnt \geq k$, then we need to find the smallest $x$ such that
+       <code class="language-plaintext highlighter-rouge">
+        check(x)
+       </code>
+       is true.
+      </p>
+      <p>
+       At the start of the binary search, we define the left boundary $l=1$ and the right boundary $r={10}^{11}$. Then we continuously substitute the middle value $mid$ into the
+       <code class="language-plaintext highlighter-rouge">
+        check
+       </code>
+       function. If
+       <code class="language-plaintext highlighter-rouge">
+        check(mid)
+       </code>
+       is true, then we update the right boundary $r$ to $mid$, otherwise we update the left boundary $l$ to $mid+1$. Finally, we return $l$.
+      </p>
+      <p>
+       The time complexity is $O(n \times 2^n \times \log (k \times M))$, where $n$ is the length of the array $coins$, and $M$ is the maximum value in the array.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#9c7739e7-483a-421f-9f23-199314f0d9dd'}">
+       <li class="uk-active">
+        <a href="solution-3116.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3116.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3116.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3116.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3116.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="9c7739e7-483a-421f-9f23-199314f0d9dd">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">coins</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">k</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">findKthSmallest</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">coins</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">coins</span> <span class="o">=</span> <span class="n">coins</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">;</span>
+        <span class="kt">long</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">r</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="mi">1</span><span class="n">e11</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">check</span><span class="o">(</span><span class="n">mid</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">l</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">check</span><span class="o">(</span><span class="kt">long</span> <span class="n">mx</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">coins</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">lcm</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">coins</span><span class="o">[</span><span class="n">j</span><span class="o">]);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">bitCount</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">m</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cnt</span> <span class="o">+=</span> <span class="n">mx</span> <span class="o">/</span> <span class="n">v</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">cnt</span> <span class="o">-=</span> <span class="n">mx</span> <span class="o">/</span> <span class="n">v</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">cnt</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">long</span> <span class="nf">lcm</span><span class="o">(</span><span class="kt">long</span> <span class="n">a</span><span class="o">,</span> <span class="kt">long</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">/</span> <span class="n">gcd</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">long</span> <span class="nf">gcd</span><span class="o">(</span><span class="kt">long</span> <span class="n">a</span><span class="o">,</span> <span class="kt">long</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">a</span> <span class="o">:</span> <span class="n">gcd</span><span class="o">(</span><span class="n">b</span><span class="o">,</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">findKthSmallest</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">coins</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="n">ll</span> <span class="o">=</span> <span class="kt">long</span> <span class="kt">long</span><span class="p">;</span>
+        <span class="n">ll</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mf">1e11</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">coins</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+        <span class="k">auto</span> <span class="n">check</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">ll</span> <span class="n">mx</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ll</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ll</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">v</span> <span class="o">=</span> <span class="n">lcm</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">coins</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">break</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">__builtin_popcount</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cnt</span> <span class="o">+=</span> <span class="n">mx</span> <span class="o">/</span> <span class="n">v</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">cnt</span> <span class="o">-=</span> <span class="n">mx</span> <span class="o">/</span> <span class="n">v</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">cnt</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ll</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">check</span><span class="p">(</span><span class="n">mid</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">l</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">findKthSmallest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coins</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">mx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">coins</span><span class="p">)):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coins</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">v</span> <span class="o">=</span> <span class="n">lcm</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">:</span>
+                            <span class="k">break</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">i</span><span class="p">.</span><span class="n">bit_count</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">m</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">cnt</span> <span class="o">+=</span> <span class="n">mx</span> <span class="o">//</span> <span class="n">v</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">cnt</span> <span class="o">-=</span> <span class="n">mx</span> <span class="o">//</span> <span class="n">v</span>
+            <span class="k">return</span> <span class="n">cnt</span> <span class="o">&gt;=</span> <span class="n">k</span>
+
+        <span class="k">return</span> <span class="n">bisect_left</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">11</span><span class="p">),</span> <span class="bp">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">check</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">findKthSmallest</span><span class="p">(</span><span class="n">coins</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int64</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">r</span> <span class="kt">int</span> <span class="o">=</span> <span class="m">1e11</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coins</span><span class="p">)</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="n">sort</span><span class="o">.</span><span class="n">Search</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">mx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="n">cnt</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">v</span> <span class="o">:=</span> <span class="m">1</span>
+			<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">coins</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">i</span><span class="o">&gt;&gt;</span><span class="n">j</span><span class="o">&amp;</span><span class="m">1</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+					<span class="n">v</span> <span class="o">=</span> <span class="n">lcm</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+					<span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">mx</span> <span class="p">{</span>
+						<span class="k">break</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">m</span> <span class="o">:=</span> <span class="n">bits</span><span class="o">.</span><span class="n">OnesCount</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+			<span class="k">if</span> <span class="n">m</span><span class="o">%</span><span class="m">2</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">cnt</span> <span class="o">+=</span> <span class="n">mx</span> <span class="o">/</span> <span class="n">v</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">cnt</span> <span class="o">-=</span> <span class="n">mx</span> <span class="o">/</span> <span class="n">v</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">cnt</span> <span class="o">&gt;=</span> <span class="n">k</span>
+	<span class="p">})</span>
+	<span class="k">return</span> <span class="kt">int64</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">a</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">%</span><span class="n">b</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">lcm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">/</span> <span class="n">gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">findKthSmallest</span><span class="p">(</span><span class="nx">coins</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="p">[</span><span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="nx">n</span><span class="p">,</span> <span class="nx">BigInt</span><span class="p">(</span><span class="mi">1</span><span class="nx">e11</span><span class="p">)];</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">coins</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">check</span> <span class="o">=</span> <span class="p">(</span><span class="nx">mx</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">):</span> <span class="nx">boolean</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="nx">n</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">let</span> <span class="nx">v</span> <span class="o">=</span> <span class="mi">1</span><span class="nx">n</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">((</span><span class="nx">i</span> <span class="o">&gt;&gt;</span> <span class="nx">j</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">v</span> <span class="o">=</span> <span class="nx">lcm</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="nx">BigInt</span><span class="p">(</span><span class="nx">coins</span><span class="p">[</span><span class="nx">j</span><span class="p">]));</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="o">&gt;</span> <span class="nx">mx</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">bitCount</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">m</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">cnt</span> <span class="o">+=</span> <span class="nx">mx</span> <span class="o">/</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">cnt</span> <span class="o">-=</span> <span class="nx">mx</span> <span class="o">/</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">cnt</span> <span class="o">&gt;=</span> <span class="nx">BigInt</span><span class="p">(</span><span class="nx">k</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&lt;</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="p">(</span><span class="nx">l</span> <span class="o">+</span> <span class="nx">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="nx">n</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">check</span><span class="p">(</span><span class="nx">mid</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">r</span> <span class="o">=</span> <span class="nx">mid</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">l</span> <span class="o">=</span> <span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="nx">n</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">l</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">gcd</span><span class="p">(</span><span class="nx">a</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">,</span> <span class="nx">b</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">):</span> <span class="nx">bigint</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">b</span> <span class="o">===</span> <span class="mi">0</span><span class="nx">n</span> <span class="p">?</span> <span class="nx">a</span> <span class="p">:</span> <span class="nx">gcd</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">a</span> <span class="o">%</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">lcm</span><span class="p">(</span><span class="nx">a</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">,</span> <span class="nx">b</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">):</span> <span class="nx">bigint</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">b</span><span class="p">)</span> <span class="o">/</span> <span class="nx">gcd</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">bitCount</span><span class="p">(</span><span class="nx">i</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">-</span> <span class="p">((</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x55555555</span><span class="p">);</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&amp;</span> <span class="mh">0x33333333</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x33333333</span><span class="p">);</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">4</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0x0f0f0f0f</span><span class="p">;</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">8</span><span class="p">);</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">16</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">i</span> <span class="o">&amp;</span> <span class="mh">0x3f</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3116.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

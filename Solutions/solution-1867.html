@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1867.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1867.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1867 - Orders With Maximum Quantity Above Average</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1867. Orders With Maximum Quantity Above Average Description Table: OrdersDetails +-------------+------+ | Column Name | Type | +-------------+------+ | order_id | int | | product_id | int | | quantity | int | +-------------+------+ (order_id, product_id) is the primary key (combination of columns with unique...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1867.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1867.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1867.html" rel="stylesheet"/>
+   <link href="solution-1867.html" rel="stylesheet"/>
+   <link href="solution-1867.html" rel="stylesheet"/>
+   <link href="solution-1867.html" rel="stylesheet"/>
+   <link href="solution-1867.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1867 - Orders With Maximum Quantity Above Average" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1867. Orders With Maximum Quantity Above Average
+
+Description
+
+Table: OrdersDetails
+
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| order_id    | int  |
+| product_id  | int  |
+| quantity    | int  |
++-------------+------+
+(order_id, product_id) is the primary key (combination of columns with unique values) for this table.
+A single order is represented as multiple rows, one row for each product in the order.
+Each row of this table contains the quantity ordered of the product product_id in the order order_id.
+
+
+&amp;nbsp;
+
+You are running an e-commerce site that is looking for imbalanced orders. An imbalanced order is one whose maximum quantity is strictly greater than the average quantity of every order (including itself).
+
+The average quantity of an order is calculated as (total quantity of all products in the order) / (number of different products in the order). The maximum quantity of an order is the highest quantity of any single product in the order.
+
+Write a solution to find the order_id of all imbalanced orders.
+
+Return the result table in any order.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+OrdersDetails table:
++----------+------------+----------+
+| order_id | product_id | quantity |
++----------+------------+----------+
+| 1        | 1          | 12       |
+| 1        | 2          | 10       |
+| 1        | 3          | 15       |
+| 2        | 1          | 8        |
+| 2        | 4          | 4        |
+| 2        | 5          | 6        |
+| 3        | 3          | 5        |
+| 3        | 4          | 18       |
+| 4        | 5          | 2        |
+| 4        | 6          | 8        |
+| 5        | 7          | 9        |
+| 5        | 8          | 9        |
+| 3        | 9          | 20       |
+| 2        | 9          | 4        |
++----------+------------+----------+
+Output: 
++----------+
+| order_id |
++----------+
+| 1        |
+| 3        |
++----------+
+Explanation: 
+The average quantity of each order is:
+- order_id=1: (12+10+15)/3 = 12.3333333
+- order_id=2: (8+4+6+4)/4 = 5.5
+- order_id=3: (5+18+20)/3 = 14.333333
+- order_id=4: (2+8)/2 = 5
+- order_id=5: (9+9)/2 = 9
+
+The maximum quantity of each order is:
+- order_id=1: max(12, 10, 15) = 15
+- order_id=2: max(8, 4, 6, 4) = 8
+- order_id=3: max(5, 18, 20) = 20
+- order_id=4: max(2, 8) = 8
+- order_id=5: max(9, 9) = 9
+
+Orders 1 and 3 are imbalanced because they have a maximum quantity that exceeds the average quantity of every order.
+
+
+Solutions
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            order_id,
+            MAX(quantity) AS max_quantity,
+            SUM(quantity) / COUNT(1) AS avg_quantity
+        FROM OrdersDetails
+        GROUP BY order_id
+    )
+SELECT order_id
+FROM t
+WHERE max_quantity &amp;gt; (SELECT MAX(avg_quantity) FROM t);
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-01-09T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-01-09-1867-Orders-With-Maximum-Quantity-Above-Average/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1867.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1867 - Orders With Maximum Quantity Above Average" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1867. Orders With Maximum Quantity Above Average
+
+Description
+
+Table: OrdersDetails
+
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| order_id    | int  |
+| product_id  | int  |
+| quantity    | int  |
++-------------+------+
+(order_id, product_id) is the primary key (combination of columns with unique values) for this table.
+A single order is represented as multiple rows, one row for each product in the order.
+Each row of this table contains the quantity ordered of the product product_id in the order order_id.
+
+
+&amp;nbsp;
+
+You are running an e-commerce site that is looking for imbalanced orders. An imbalanced order is one whose maximum quantity is strictly greater than the average quantity of every order (including itself).
+
+The average quantity of an order is calculated as (total quantity of all products in the order) / (number of different products in the order). The maximum quantity of an order is the highest quantity of any single product in the order.
+
+Write a solution to find the order_id of all imbalanced orders.
+
+Return the result table in any order.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+OrdersDetails table:
++----------+------------+----------+
+| order_id | product_id | quantity |
++----------+------------+----------+
+| 1        | 1          | 12       |
+| 1        | 2          | 10       |
+| 1        | 3          | 15       |
+| 2        | 1          | 8        |
+| 2        | 4          | 4        |
+| 2        | 5          | 6        |
+| 3        | 3          | 5        |
+| 3        | 4          | 18       |
+| 4        | 5          | 2        |
+| 4        | 6          | 8        |
+| 5        | 7          | 9        |
+| 5        | 8          | 9        |
+| 3        | 9          | 20       |
+| 2        | 9          | 4        |
++----------+------------+----------+
+Output: 
++----------+
+| order_id |
++----------+
+| 1        |
+| 3        |
++----------+
+Explanation: 
+The average quantity of each order is:
+- order_id=1: (12+10+15)/3 = 12.3333333
+- order_id=2: (8+4+6+4)/4 = 5.5
+- order_id=3: (5+18+20)/3 = 14.333333
+- order_id=4: (2+8)/2 = 5
+- order_id=5: (9+9)/2 = 9
+
+The maximum quantity of each order is:
+- order_id=1: max(12, 10, 15) = 15
+- order_id=2: max(8, 4, 6, 4) = 8
+- order_id=3: max(5, 18, 20) = 20
+- order_id=4: max(2, 8) = 8
+- order_id=5: max(9, 9) = 9
+
+Orders 1 and 3 are imbalanced because they have a maximum quantity that exceeds the average quantity of every order.
+
+
+Solutions
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            order_id,
+            MAX(quantity) AS max_quantity,
+            SUM(quantity) / COUNT(1) AS avg_quantity
+        FROM OrdersDetails
+        GROUP BY order_id
+    )
+SELECT order_id
+FROM t
+WHERE max_quantity &amp;gt; (SELECT MAX(avg_quantity) FROM t);
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1867 - Orders With Maximum Quantity Above Average | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1867 - Orders With Maximum Quantity Above Average" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1867.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-01-09-1867-Orders-With-Maximum-Quantity-Above-Average/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-01-09T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1867 - Orders With Maximum Quantity Above Average","dateModified":"2021-01-09T00:00:00-08:00","datePublished":"2021-01-09T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-01-09-1867-Orders-With-Maximum-Quantity-Above-Average/"},"url":"https://leetcode.ca/2021-01-09-1867-Orders-With-Maximum-Quantity-Above-Average/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1867-orders-with-maximum-quantity-above-average">
+       <a href="solution-1867.html">
+        1867. Orders With Maximum Quantity Above Average
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        OrdersDetails
+       </code>
+      </p>
+      <pre>
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| order_id    | int  |
+| product_id  | int  |
+| quantity    | int  |
++-------------+------+
+(order_id, product_id) is the primary key (combination of columns with unique values) for this table.
+A single order is represented as multiple rows, one row for each product in the order.
+Each row of this table contains the quantity ordered of the product product_id in the order order_id.
+</pre>
+      <p>
+      </p>
+      <p>
+       You are running an e-commerce site that is looking for
+       <strong>
+        imbalanced orders
+       </strong>
+       . An
+       <strong>
+        imbalanced order
+       </strong>
+       is one whose
+       <strong>
+        maximum
+       </strong>
+       quantity is
+       <strong>
+        strictly greater
+       </strong>
+       than the
+       <strong>
+        average
+       </strong>
+       quantity of
+       <strong>
+        every order (including itself)
+       </strong>
+       .
+      </p>
+      <p>
+       The
+       <strong>
+        average
+       </strong>
+       quantity of an order is calculated as
+       <code>
+        (total quantity of all products in the order) / (number of different products in the order)
+       </code>
+       . The
+       <strong>
+        maximum
+       </strong>
+       quantity of an order is the highest
+       <code>
+        quantity
+       </code>
+       of any single product in the order.
+      </p>
+      <p>
+       Write a solution to find the
+       <code>
+        order_id
+       </code>
+       of all
+       <strong>
+        imbalanced orders
+       </strong>
+       .
+      </p>
+      <p>
+       Return the result table in
+       <strong>
+        any order
+       </strong>
+       .
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+OrdersDetails table:
++----------+------------+----------+
+| order_id | product_id | quantity |
++----------+------------+----------+
+| 1        | 1          | 12       |
+| 1        | 2          | 10       |
+| 1        | 3          | 15       |
+| 2        | 1          | 8        |
+| 2        | 4          | 4        |
+| 2        | 5          | 6        |
+| 3        | 3          | 5        |
+| 3        | 4          | 18       |
+| 4        | 5          | 2        |
+| 4        | 6          | 8        |
+| 5        | 7          | 9        |
+| 5        | 8          | 9        |
+| 3        | 9          | 20       |
+| 2        | 9          | 4        |
++----------+------------+----------+
+<strong>Output:</strong> 
++----------+
+| order_id |
++----------+
+| 1        |
+| 3        |
++----------+
+<strong>Explanation:</strong> 
+The average quantity of each order is:
+- order_id=1: (12+10+15)/3 = 12.3333333
+- order_id=2: (8+4+6+4)/4 = 5.5
+- order_id=3: (5+18+20)/3 = 14.333333
+- order_id=4: (2+8)/2 = 5
+- order_id=5: (9+9)/2 = 9
+
+The maximum quantity of each order is:
+- order_id=1: max(12, 10, 15) = 15
+- order_id=2: max(8, 4, 6, 4) = 8
+- order_id=3: max(5, 18, 20) = 20
+- order_id=4: max(2, 8) = 8
+- order_id=5: max(9, 9) = 9
+
+Orders 1 and 3 are imbalanced because they have a maximum quantity that exceeds the average quantity of every order.
+</pre>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#f30c46a1-834a-4980-bffe-cfd7946e72cc'}">
+       <li class="uk-active">
+        <a href="solution-1867.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="f30c46a1-834a-4980-bffe-cfd7946e72cc">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">WITH</span>
+    <span class="n">t</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">order_id</span><span class="p">,</span>
+            <span class="k">MAX</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span> <span class="k">AS</span> <span class="n">max_quantity</span><span class="p">,</span>
+            <span class="k">SUM</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span> <span class="o">/</span> <span class="k">COUNT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">avg_quantity</span>
+        <span class="k">FROM</span> <span class="n">OrdersDetails</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">order_id</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">order_id</span>
+<span class="k">FROM</span> <span class="n">t</span>
+<span class="k">WHERE</span> <span class="n">max_quantity</span> <span class="o">&gt;</span> <span class="p">(</span><span class="k">SELECT</span> <span class="k">MAX</span><span class="p">(</span><span class="n">avg_quantity</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">t</span><span class="p">);</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1867.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

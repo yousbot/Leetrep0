@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1948.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1948.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1948 - Delete Duplicate Folders in System</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1948. Delete Duplicate Folders in System Description Due to a bug, there are many duplicate folders in a file system. You are given a 2D array paths, where paths[i] is an array representing an absolute path to the ith folder in the file system. For...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1948.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1948.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1948.html" rel="stylesheet"/>
+   <link href="solution-1948.html" rel="stylesheet"/>
+   <link href="solution-1948.html" rel="stylesheet"/>
+   <link href="solution-1948.html" rel="stylesheet"/>
+   <link href="solution-1948.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1948 - Delete Duplicate Folders in System" property="og:title"/>
+   <meta content='Leetcode 1948. Delete Duplicate Folders in System Description Due to a bug, there are many duplicate folders in a file system. You are given a 2D array paths, where paths[i] is an array representing an absolute path to the ith folder in the file system. For example, [&amp;quot;one&amp;quot;, &amp;quot;two&amp;quot;, &amp;quot;three&amp;quot;] represents the path &amp;quot;/one/two/three&amp;quot;. Two folders (not necessarily on the same level) are identical if they contain the same non-empty set of identical subfolders and underlying subfolder structure. The folders do not need to be at the root level to be identical. If two or more folders are identical, then mark the folders as well as all their subfolders. For example, folders &amp;quot;/a&amp;quot; and &amp;quot;/b&amp;quot; in the file structure below are identical. They (as well as their subfolders) should all be marked: /a /a/x /a/x/y /a/z /b /b/x /b/x/y /b/z However, if the file structure also included the path &amp;quot;/b/w&amp;quot;, then the folders &amp;quot;/a&amp;quot; and &amp;quot;/b&amp;quot; would not be identical. Note that &amp;quot;/a/x&amp;quot; and &amp;quot;/b/x&amp;quot; would still be considered identical even with the added folder. Once all the identical folders and their subfolders have been marked, the file system will delete all of them. The file system only runs the deletion once, so any folders that become identical after the initial deletion are not deleted. Return the 2D array ans containing the paths of the remaining folders after deleting all the marked folders. The paths may be returned in any order. &amp;nbsp; Example 1: Input: paths = [[&amp;quot;a&amp;quot;],[&amp;quot;c&amp;quot;],[&amp;quot;d&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;d&amp;quot;,&amp;quot;a&amp;quot;]] Output: [[&amp;quot;d&amp;quot;],[&amp;quot;d&amp;quot;,&amp;quot;a&amp;quot;]] Explanation: The file structure is as shown. Folders &amp;quot;/a&amp;quot; and &amp;quot;/c&amp;quot; (and their subfolders) are marked for deletion because they both contain an empty folder named &amp;quot;b&amp;quot;. Example 2: Input: paths = [[&amp;quot;a&amp;quot;],[&amp;quot;c&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;x&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;x&amp;quot;,&amp;quot;y&amp;quot;],[&amp;quot;w&amp;quot;],[&amp;quot;w&amp;quot;,&amp;quot;y&amp;quot;]] Output: [[&amp;quot;c&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;]] Explanation: The file structure is as shown. Folders &amp;quot;/a/b/x&amp;quot; and &amp;quot;/w&amp;quot; (and their subfolders) are marked for deletion because they both contain an empty folder named &amp;quot;y&amp;quot;. Note that folders &amp;quot;/a&amp;quot; and &amp;quot;/c&amp;quot; are identical after the deletion, but they are not deleted because they were not marked beforehand. Example 3: Input: paths = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;d&amp;quot;],[&amp;quot;c&amp;quot;],[&amp;quot;a&amp;quot;]] Output: [[&amp;quot;c&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;d&amp;quot;],[&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;]] Explanation: All folders are unique in the file system. Note that the returned array can be in a different order as the order does not matter. &amp;nbsp; Constraints: 1 &amp;lt;= paths.length &amp;lt;= 2 * 104 1 &amp;lt;= paths[i].length &amp;lt;= 500 1 &amp;lt;= paths[i][j].length &amp;lt;= 10 1 &amp;lt;= sum(paths[i][j].length) &amp;lt;= 2 * 105 path[i][j] consists of lowercase English letters. No two paths lead to the same folder. For any folder not at the root level, its parent folder will also be in the input. Solution Use a trie to represent the file system. In the trie, the root is "/" and each of the remaining nodes represent a folder. Then encode the folders and use a hash map to store each encodingâs number of occurrences. If an encoding occurs more than once, then it should be deleted. Finally, return the remaining folders. Java class Solution { public List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; deleteDuplicateFolder(List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; paths) { TrieNode root = new...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-03-31T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-03-31-1948-Delete-Duplicate-Folders-in-System/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1948.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1948 - Delete Duplicate Folders in System" property="twitter:title"/>
+   <meta content='Leetcode 1948. Delete Duplicate Folders in System Description Due to a bug, there are many duplicate folders in a file system. You are given a 2D array paths, where paths[i] is an array representing an absolute path to the ith folder in the file system. For example, [&amp;quot;one&amp;quot;, &amp;quot;two&amp;quot;, &amp;quot;three&amp;quot;] represents the path &amp;quot;/one/two/three&amp;quot;. Two folders (not necessarily on the same level) are identical if they contain the same non-empty set of identical subfolders and underlying subfolder structure. The folders do not need to be at the root level to be identical. If two or more folders are identical, then mark the folders as well as all their subfolders. For example, folders &amp;quot;/a&amp;quot; and &amp;quot;/b&amp;quot; in the file structure below are identical. They (as well as their subfolders) should all be marked: /a /a/x /a/x/y /a/z /b /b/x /b/x/y /b/z However, if the file structure also included the path &amp;quot;/b/w&amp;quot;, then the folders &amp;quot;/a&amp;quot; and &amp;quot;/b&amp;quot; would not be identical. Note that &amp;quot;/a/x&amp;quot; and &amp;quot;/b/x&amp;quot; would still be considered identical even with the added folder. Once all the identical folders and their subfolders have been marked, the file system will delete all of them. The file system only runs the deletion once, so any folders that become identical after the initial deletion are not deleted. Return the 2D array ans containing the paths of the remaining folders after deleting all the marked folders. The paths may be returned in any order. &amp;nbsp; Example 1: Input: paths = [[&amp;quot;a&amp;quot;],[&amp;quot;c&amp;quot;],[&amp;quot;d&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;d&amp;quot;,&amp;quot;a&amp;quot;]] Output: [[&amp;quot;d&amp;quot;],[&amp;quot;d&amp;quot;,&amp;quot;a&amp;quot;]] Explanation: The file structure is as shown. Folders &amp;quot;/a&amp;quot; and &amp;quot;/c&amp;quot; (and their subfolders) are marked for deletion because they both contain an empty folder named &amp;quot;b&amp;quot;. Example 2: Input: paths = [[&amp;quot;a&amp;quot;],[&amp;quot;c&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;x&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;x&amp;quot;,&amp;quot;y&amp;quot;],[&amp;quot;w&amp;quot;],[&amp;quot;w&amp;quot;,&amp;quot;y&amp;quot;]] Output: [[&amp;quot;c&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;]] Explanation: The file structure is as shown. Folders &amp;quot;/a/b/x&amp;quot; and &amp;quot;/w&amp;quot; (and their subfolders) are marked for deletion because they both contain an empty folder named &amp;quot;y&amp;quot;. Note that folders &amp;quot;/a&amp;quot; and &amp;quot;/c&amp;quot; are identical after the deletion, but they are not deleted because they were not marked beforehand. Example 3: Input: paths = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;d&amp;quot;],[&amp;quot;c&amp;quot;],[&amp;quot;a&amp;quot;]] Output: [[&amp;quot;c&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;d&amp;quot;],[&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;]] Explanation: All folders are unique in the file system. Note that the returned array can be in a different order as the order does not matter. &amp;nbsp; Constraints: 1 &amp;lt;= paths.length &amp;lt;= 2 * 104 1 &amp;lt;= paths[i].length &amp;lt;= 500 1 &amp;lt;= paths[i][j].length &amp;lt;= 10 1 &amp;lt;= sum(paths[i][j].length) &amp;lt;= 2 * 105 path[i][j] consists of lowercase English letters. No two paths lead to the same folder. For any folder not at the root level, its parent folder will also be in the input. Solution Use a trie to represent the file system. In the trie, the root is "/" and each of the remaining nodes represent a folder. Then encode the folders and use a hash map to store each encodingâs number of occurrences. If an encoding occurs more than once, then it should be deleted. Finally, return the remaining folders. Java class Solution { public List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; deleteDuplicateFolder(List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; paths) { TrieNode root = new...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1948 - Delete Duplicate Folders in System | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1948 - Delete Duplicate Folders in System" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1948.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-03-31-1948-Delete-Duplicate-Folders-in-System/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-03-31T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1948 - Delete Duplicate Folders in System","dateModified":"2021-03-31T00:00:00-07:00","datePublished":"2021-03-31T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-03-31-1948-Delete-Duplicate-Folders-in-System/"},"url":"https://leetcode.ca/2021-03-31-1948-Delete-Duplicate-Folders-in-System/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1948-delete-duplicate-folders-in-system">
+       <a href="solution-1948.html">
+        1948. Delete Duplicate Folders in System
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Due to a bug, there are many duplicate folders in a file system. You are given a 2D array
+       <code>
+        paths
+       </code>
+       , where
+       <code>
+        paths[i]
+       </code>
+       is an array representing an absolute path to the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       folder in the file system.
+      </p>
+      <ul>
+       <li>
+        For example,
+        <code>
+         ["one", "two", "three"]
+        </code>
+        represents the path
+        <code>
+         "/one/two/three"
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Two folders (not necessarily on the same level) are
+       <strong>
+        identical
+       </strong>
+       if they contain the
+       <strong>
+        same non-empty
+       </strong>
+       set of identical subfolders and underlying subfolder structure. The folders
+       <strong>
+        do not
+       </strong>
+       need to be at the root level to be identical. If two or more folders are
+       <strong>
+        identical
+       </strong>
+       , then
+       <strong>
+        mark
+       </strong>
+       the folders as well as all their subfolders.
+      </p>
+      <ul>
+       <li>
+        For example, folders
+        <code>
+         "/a"
+        </code>
+        and
+        <code>
+         "/b"
+        </code>
+        in the file structure below are identical. They (as well as their subfolders) should
+        <strong>
+         all
+        </strong>
+        be marked:
+        <ul>
+         <li>
+          <code>
+           /a
+          </code>
+         </li>
+         <li>
+          <code>
+           /a/x
+          </code>
+         </li>
+         <li>
+          <code>
+           /a/x/y
+          </code>
+         </li>
+         <li>
+          <code>
+           /a/z
+          </code>
+         </li>
+         <li>
+          <code>
+           /b
+          </code>
+         </li>
+         <li>
+          <code>
+           /b/x
+          </code>
+         </li>
+         <li>
+          <code>
+           /b/x/y
+          </code>
+         </li>
+         <li>
+          <code>
+           /b/z
+          </code>
+         </li>
+        </ul>
+       </li>
+       <li>
+        However, if the file structure also included the path
+        <code>
+         "/b/w"
+        </code>
+        , then the folders
+        <code>
+         "/a"
+        </code>
+        and
+        <code>
+         "/b"
+        </code>
+        would not be identical. Note that
+        <code>
+         "/a/x"
+        </code>
+        and
+        <code>
+         "/b/x"
+        </code>
+        would still be considered identical even with the added folder.
+       </li>
+      </ul>
+      <p>
+       Once all the identical folders and their subfolders have been marked, the file system will
+       <strong>
+        delete
+       </strong>
+       all of them. The file system only runs the deletion once, so any folders that become identical after the initial deletion are not deleted.
+      </p>
+      <p>
+       Return
+       <em>
+        the 2D array
+       </em>
+       <code>
+        ans
+       </code>
+       <em>
+        containing the paths of the
+        <strong>
+         remaining
+        </strong>
+        folders after deleting all the marked folders. The paths may be returned in
+        <strong>
+         any
+        </strong>
+        order
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1948.Delete%20Duplicate%20Folders%20in%20System/images/lc-dupfolder1.jpg" style="width: 200px; height: 218px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> paths = [["a"],["c"],["d"],["a","b"],["c","b"],["d","a"]]
+<strong>Output:</strong> [["d"],["d","a"]]
+<strong>Explanation:</strong> The file structure is as shown.
+Folders "/a" and "/c" (and their subfolders) are marked for deletion because they both contain an empty
+folder named "b".
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1948.Delete%20Duplicate%20Folders%20in%20System/images/lc-dupfolder2.jpg" style="width: 200px; height: 355px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> paths = [["a"],["c"],["a","b"],["c","b"],["a","b","x"],["a","b","x","y"],["w"],["w","y"]]
+<strong>Output:</strong> [["c"],["c","b"],["a"],["a","b"]]
+<strong>Explanation: </strong>The file structure is as shown. 
+Folders "/a/b/x" and "/w" (and their subfolders) are marked for deletion because they both contain an empty folder named "y".
+Note that folders "/a" and "/c" are identical after the deletion, but they are not deleted because they were not marked beforehand.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1948.Delete%20Duplicate%20Folders%20in%20System/images/lc-dupfolder3.jpg" style="width: 200px; height: 201px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> paths = [["a","b"],["c","d"],["c"],["a"]]
+<strong>Output:</strong> [["c"],["c","d"],["a"],["a","b"]]
+<strong>Explanation:</strong> All folders are unique in the file system.
+Note that the returned array can be in a different order as the order does not matter.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= paths.length &lt;= 2 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= paths[i].length &lt;= 500
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= paths[i][j].length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= sum(paths[i][j].length) &lt;= 2 * 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         path[i][j]
+        </code>
+        consists of lowercase English letters.
+       </li>
+       <li>
+        No two paths lead to the same folder.
+       </li>
+       <li>
+        For any folder not at the root level, its parent folder will also be in the input.
+       </li>
+      </ul>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       Use a trie to represent the file system. In the trie, the root is
+       <code class="language-plaintext highlighter-rouge">
+        "/"
+       </code>
+       and each of the remaining nodes represent a folder. Then encode the folders and use a hash map to store each encodingâs number of occurrences. If an encoding occurs more than once, then it should be deleted. Finally, return the remaining folders.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#1ddf8b66-cbd1-43a2-8a23-3b9056e70768'}">
+       <li class="uk-active">
+        <a href="solution-1948.html">
+         Java
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="1ddf8b66-cbd1-43a2-8a23-3b9056e70768">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="nf">deleteDuplicateFolder</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">paths</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">TrieNode</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TrieNode</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">path</span> <span class="o">:</span> <span class="n">paths</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">TrieNode</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">node</span> <span class="o">:</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">curr</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">node</span><span class="o">))</span>
+                    <span class="n">curr</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">node</span><span class="o">,</span> <span class="k">new</span> <span class="nc">TrieNode</span><span class="o">());</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">freq</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;();</span>
+        <span class="n">construct</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">freq</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">remaining</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">path</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+        <span class="n">operate</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">freq</span><span class="o">,</span> <span class="n">remaining</span><span class="o">,</span> <span class="n">path</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">remaining</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">construct</span><span class="o">(</span><span class="nc">TrieNode</span> <span class="n">node</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">freq</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">TrieNode</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">folder</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="nc">TrieNode</span> <span class="n">child</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="n">construct</span><span class="o">(</span><span class="n">child</span><span class="o">,</span> <span class="n">freq</span><span class="o">);</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s">"("</span> <span class="o">+</span> <span class="n">child</span><span class="o">.</span><span class="na">serial</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">serial</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">serialStr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">serial</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="n">freq</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">serialStr</span><span class="o">,</span> <span class="n">freq</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">serialStr</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">operate</span><span class="o">(</span><span class="nc">TrieNode</span> <span class="n">node</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">freq</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">remaining</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">freq</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">serial</span><span class="o">.</span><span class="na">toString</span><span class="o">(),</span> <span class="mi">0</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">path</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span>
+            <span class="n">remaining</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">path</span><span class="o">));</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">TrieNode</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">folder</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="nc">TrieNode</span> <span class="n">child</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="n">path</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">folder</span><span class="o">);</span>
+            <span class="n">operate</span><span class="o">(</span><span class="n">child</span><span class="o">,</span> <span class="n">freq</span><span class="o">,</span> <span class="n">remaining</span><span class="o">,</span> <span class="n">path</span><span class="o">);</span>
+            <span class="n">path</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">path</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">TrieNode</span> <span class="o">{</span>
+    <span class="nc">StringBuffer</span> <span class="n">serial</span><span class="o">;</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">TrieNode</span><span class="o">&gt;</span> <span class="n">children</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">TrieNode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">serial</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">();</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">TrieNode</span><span class="o">&gt;();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1948.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

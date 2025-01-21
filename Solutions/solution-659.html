@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-659.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-659.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>659 - Split Array into Consecutive Subsequences</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 659. Split Array into Consecutive Subsequences Description You are given an integer array nums that is sorted in non-decreasing order. Determine if it is possible to split nums into one or more subsequences such that both of the following conditions are true: Each subsequence is...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-659.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-659.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-659.html" rel="stylesheet"/>
+   <link href="solution-659.html" rel="stylesheet"/>
+   <link href="solution-659.html" rel="stylesheet"/>
+   <link href="solution-659.html" rel="stylesheet"/>
+   <link href="solution-659.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="659 - Split Array into Consecutive Subsequences" property="og:title"/>
+   <meta content="Leetcode 659. Split Array into Consecutive Subsequences Description You are given an integer array nums that is sorted in non-decreasing order. Determine if it is possible to split nums into one or more subsequences such that both of the following conditions are true: Each subsequence is a consecutive increasing sequence (i.e. each integer is exactly one more than the previous integer). All subsequences have a length of 3 or more. Return true if you can split nums according to the above conditions, or false otherwise. A subsequence of an array is a new array that is formed from the original array by deleting some (can be none) of the elements without disturbing the relative positions of the remaining elements. (i.e., [1,3,5] is a subsequence of [1,2,3,4,5] while [1,3,2] is not). &amp;nbsp; Example 1: Input: nums = [1,2,3,3,4,5] Output: true Explanation: nums can be split into the following subsequences: [1,2,3,3,4,5] --&amp;gt; 1, 2, 3 [1,2,3,3,4,5] --&amp;gt; 3, 4, 5 Example 2: Input: nums = [1,2,3,3,4,4,5,5] Output: true Explanation: nums can be split into the following subsequences: [1,2,3,3,4,4,5,5] --&amp;gt; 1, 2, 3, 4, 5 [1,2,3,3,4,4,5,5] --&amp;gt; 3, 4, 5 Example 3: Input: nums = [1,2,3,4,4,5] Output: false Explanation: It is impossible to split nums into consecutive increasing subsequences of length 3 or more. &amp;nbsp; Constraints: 1 &amp;lt;= nums.length &amp;lt;= 104 -1000 &amp;lt;= nums[i] &amp;lt;= 1000 nums is sorted in non-decreasing order. Solutions Java C++ Python Go class Solution { public boolean isPossible(int[] nums) { Map&amp;lt;Integer, PriorityQueue&amp;lt;Integer&amp;gt;&amp;gt; d = new HashMap&amp;lt;&amp;gt;(); for (int v : nums) { if (d.containsKey(v - 1)) { var q = d.get(v - 1); d.computeIfAbsent(v, k -&amp;gt; new PriorityQueue&amp;lt;&amp;gt;()).offer(q.poll() + 1); if (q.isEmpty()) { d.remove(v - 1); } } else { d.computeIfAbsent(v, k -&amp;gt; new PriorityQueue&amp;lt;&amp;gt;()).offer(1); } } for (var v : d.values()) { if (v.peek() &amp;lt; 3) { return false; } } return true; } } class Solution { public: bool isPossible(vector&amp;lt;int&amp;gt;&amp;amp; nums) { unordered_map&amp;lt;int, priority_queue&amp;lt;int, vector&amp;lt;int&amp;gt;, greater&amp;lt;int&amp;gt;&amp;gt;&amp;gt; d; for (int v : nums) { if (d.count(v - 1)) { auto&amp;amp; q = d[v - 1]; d[v].push(q.top() + 1); q.pop(); if (q.empty()) { d.erase(v - 1); } } else { d[v].push(1); } } for (auto&amp;amp; [_, v] : d) { if (v.top() &amp;lt; 3) { return false; } } return true; } }; class Solution: def isPossible(self, nums: List[int]) -&amp;gt; bool: d = defaultdict(list) for v in nums: if h := d[v - 1]: heappush(d[v], heappop(h) + 1) else: heappush(d[v], 1) return all(not v or v and v[0] &amp;gt; 2 for v in d.values()) func isPossible(nums []int) bool { d := map[int]*hp{} for _, v := range nums { if d[v] == nil { d[v] = new(hp) } if h := d[v-1]; h != nil { heap.Push(d[v], heap.Pop(h).(int)+1) if h.Len() == 0 { delete(d, v-1) } } else { heap.Push(d[v], 1) } } for _, q := range d { if q.IntSlice[0] &amp;lt; 3 { return false } } return true } type hp struct{ sort.IntSlice } func (h *hp) Push(v any) { h.IntSlice..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-09-19T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-09-19-659-Split-Array-into-Consecutive-Subsequences/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-659.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="659 - Split Array into Consecutive Subsequences" property="twitter:title"/>
+   <meta content="Leetcode 659. Split Array into Consecutive Subsequences Description You are given an integer array nums that is sorted in non-decreasing order. Determine if it is possible to split nums into one or more subsequences such that both of the following conditions are true: Each subsequence is a consecutive increasing sequence (i.e. each integer is exactly one more than the previous integer). All subsequences have a length of 3 or more. Return true if you can split nums according to the above conditions, or false otherwise. A subsequence of an array is a new array that is formed from the original array by deleting some (can be none) of the elements without disturbing the relative positions of the remaining elements. (i.e., [1,3,5] is a subsequence of [1,2,3,4,5] while [1,3,2] is not). &amp;nbsp; Example 1: Input: nums = [1,2,3,3,4,5] Output: true Explanation: nums can be split into the following subsequences: [1,2,3,3,4,5] --&amp;gt; 1, 2, 3 [1,2,3,3,4,5] --&amp;gt; 3, 4, 5 Example 2: Input: nums = [1,2,3,3,4,4,5,5] Output: true Explanation: nums can be split into the following subsequences: [1,2,3,3,4,4,5,5] --&amp;gt; 1, 2, 3, 4, 5 [1,2,3,3,4,4,5,5] --&amp;gt; 3, 4, 5 Example 3: Input: nums = [1,2,3,4,4,5] Output: false Explanation: It is impossible to split nums into consecutive increasing subsequences of length 3 or more. &amp;nbsp; Constraints: 1 &amp;lt;= nums.length &amp;lt;= 104 -1000 &amp;lt;= nums[i] &amp;lt;= 1000 nums is sorted in non-decreasing order. Solutions Java C++ Python Go class Solution { public boolean isPossible(int[] nums) { Map&amp;lt;Integer, PriorityQueue&amp;lt;Integer&amp;gt;&amp;gt; d = new HashMap&amp;lt;&amp;gt;(); for (int v : nums) { if (d.containsKey(v - 1)) { var q = d.get(v - 1); d.computeIfAbsent(v, k -&amp;gt; new PriorityQueue&amp;lt;&amp;gt;()).offer(q.poll() + 1); if (q.isEmpty()) { d.remove(v - 1); } } else { d.computeIfAbsent(v, k -&amp;gt; new PriorityQueue&amp;lt;&amp;gt;()).offer(1); } } for (var v : d.values()) { if (v.peek() &amp;lt; 3) { return false; } } return true; } } class Solution { public: bool isPossible(vector&amp;lt;int&amp;gt;&amp;amp; nums) { unordered_map&amp;lt;int, priority_queue&amp;lt;int, vector&amp;lt;int&amp;gt;, greater&amp;lt;int&amp;gt;&amp;gt;&amp;gt; d; for (int v : nums) { if (d.count(v - 1)) { auto&amp;amp; q = d[v - 1]; d[v].push(q.top() + 1); q.pop(); if (q.empty()) { d.erase(v - 1); } } else { d[v].push(1); } } for (auto&amp;amp; [_, v] : d) { if (v.top() &amp;lt; 3) { return false; } } return true; } }; class Solution: def isPossible(self, nums: List[int]) -&amp;gt; bool: d = defaultdict(list) for v in nums: if h := d[v - 1]: heappush(d[v], heappop(h) + 1) else: heappush(d[v], 1) return all(not v or v and v[0] &amp;gt; 2 for v in d.values()) func isPossible(nums []int) bool { d := map[int]*hp{} for _, v := range nums { if d[v] == nil { d[v] = new(hp) } if h := d[v-1]; h != nil { heap.Push(d[v], heap.Pop(h).(int)+1) if h.Len() == 0 { delete(d, v-1) } } else { heap.Push(d[v], 1) } } for _, q := range d { if q.IntSlice[0] &amp;lt; 3 { return false } } return true } type hp struct{ sort.IntSlice } func (h *hp) Push(v any) { h.IntSlice..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    659 - Split Array into Consecutive Subsequences | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="659 - Split Array into Consecutive Subsequences" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-659.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-09-19-659-Split-Array-into-Consecutive-Subsequences/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-09-19T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"659 - Split Array into Consecutive Subsequences","dateModified":"2017-09-19T00:00:00-07:00","datePublished":"2017-09-19T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-09-19-659-Split-Array-into-Consecutive-Subsequences/"},"url":"https://leetcode.ca/2017-09-19-659-Split-Array-into-Consecutive-Subsequences/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="659-split-array-into-consecutive-subsequences">
+       <a href="solution-659.html">
+        659. Split Array into Consecutive Subsequences
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an integer array
+       <code>
+        nums
+       </code>
+       that is
+       <strong>
+        sorted in non-decreasing order
+       </strong>
+       .
+      </p>
+      <p>
+       Determine if it is possible to split
+       <code>
+        nums
+       </code>
+       into
+       <strong>
+        one or more subsequences
+       </strong>
+       such that
+       <strong>
+        both
+       </strong>
+       of the following conditions are true:
+      </p>
+      <ul>
+       <li>
+        Each subsequence is a
+        <strong>
+         consecutive increasing sequence
+        </strong>
+        (i.e. each integer is
+        <strong>
+         exactly one
+        </strong>
+        more than the previous integer).
+       </li>
+       <li>
+        All subsequences have a length of
+        <code>
+         3
+        </code>
+        <strong>
+         or more
+        </strong>
+        .
+       </li>
+      </ul>
+      <p>
+       Return
+       <code>
+        true
+       </code>
+       <em>
+        if you can split
+       </em>
+       <code>
+        nums
+       </code>
+       <em>
+        according to the above conditions, or
+       </em>
+       <code>
+        false
+       </code>
+       <em>
+        otherwise
+       </em>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        subsequence
+       </strong>
+       of an array is a new array that is formed from the original array by deleting some (can be none) of the elements without disturbing the relative positions of the remaining elements. (i.e.,
+       <code>
+        [1,3,5]
+       </code>
+       is a subsequence of
+       <code>
+        [
+        <u>
+         1
+        </u>
+        ,2,
+        <u>
+         3
+        </u>
+        ,4,
+        <u>
+         5
+        </u>
+        ]
+       </code>
+       while
+       <code>
+        [1,3,2]
+       </code>
+       is not).
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [1,2,3,3,4,5]
+<strong>Output:</strong> true
+<strong>Explanation:</strong> nums can be split into the following subsequences:
+[<strong><u>1</u></strong>,<strong><u>2</u></strong>,<strong><u>3</u></strong>,3,4,5] --&gt; 1, 2, 3
+[1,2,3,<strong><u>3</u></strong>,<strong><u>4</u></strong>,<strong><u>5</u></strong>] --&gt; 3, 4, 5
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [1,2,3,3,4,4,5,5]
+<strong>Output:</strong> true
+<strong>Explanation:</strong> nums can be split into the following subsequences:
+[<strong><u>1</u></strong>,<strong><u>2</u></strong>,<strong><u>3</u></strong>,3,<strong><u>4</u></strong>,4,<strong><u>5</u></strong>,5] --&gt; 1, 2, 3, 4, 5
+[1,2,3,<strong><u>3</u></strong>,4,<strong><u>4</u></strong>,5,<strong><u>5</u></strong>] --&gt; 3, 4, 5
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [1,2,3,4,4,5]
+<strong>Output:</strong> false
+<strong>Explanation:</strong> It is impossible to split nums into consecutive increasing subsequences of length 3 or more.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= nums.length &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         -1000 &lt;= nums[i] &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         nums
+        </code>
+        is sorted in
+        <strong>
+         non-decreasing
+        </strong>
+        order.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#22107fdb-cb62-4c11-a8fe-9926af8b1096'}">
+       <li class="uk-active">
+        <a href="solution-659.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-659.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-659.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-659.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="22107fdb-cb62-4c11-a8fe-9926af8b1096">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPossible</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">d</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+                <span class="kt">var</span> <span class="n">q</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="n">d</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;()).</span><span class="na">offer</span><span class="o">(</span><span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="n">d</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">d</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;()).</span><span class="na">offer</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">v</span> <span class="o">:</span> <span class="n">d</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">v</span><span class="o">.</span><span class="na">peek</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">isPossible</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span> <span class="n">d</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">auto</span><span class="o">&amp;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">v</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">push</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">d</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">:</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isPossible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">h</span> <span class="p">:</span><span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">v</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">heappush</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">heappop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">heappush</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="n">v</span> <span class="ow">and</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="p">.</span><span class="n">values</span><span class="p">())</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">isPossible</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">d</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">hp</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nb">new</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">h</span> <span class="o">:=</span> <span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="n">h</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">Len</span><span class="p">()</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="nb">delete</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">v</span><span class="o">-</span><span class="m">1</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="m">1</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">q</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">d</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="m">3</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">hp</span> <span class="k">struct</span><span class="p">{</span> <span class="n">sort</span><span class="o">.</span><span class="n">IntSlice</span> <span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">v</span> <span class="n">any</span><span class="p">)</span> <span class="p">{</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span> <span class="p">{</span>
+	<span class="n">a</span> <span class="o">:=</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span>
+	<span class="n">v</span> <span class="o">:=</span> <span class="n">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">v</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-659.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

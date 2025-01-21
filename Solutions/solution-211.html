@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-211.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-211.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>211 - Design Add and Search Words Data Structure</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 211. Design Add and Search Words Data Structure Description Design a data structure that supports adding new words and finding if a string matches any previously added string. Implement the WordDictionary class: WordDictionary()&amp;nbsp;Initializes the object. void addWord(word) Adds word to the data structure, it can...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-211.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-211.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-211.html" rel="stylesheet"/>
+   <link href="solution-211.html" rel="stylesheet"/>
+   <link href="solution-211.html" rel="stylesheet"/>
+   <link href="solution-211.html" rel="stylesheet"/>
+   <link href="solution-211.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="211 - Design Add and Search Words Data Structure" property="og:title"/>
+   <meta content="Leetcode 211. Design Add and Search Words Data Structure Description Design a data structure that supports adding new words and finding if a string matches any previously added string. Implement the WordDictionary class: WordDictionary()&amp;nbsp;Initializes the object. void addWord(word) Adds word to the data structure, it can be matched later. bool search(word)&amp;nbsp;Returns true if there is any string in the data structure that matches word&amp;nbsp;or false otherwise. word may contain dots &amp;#39;.&amp;#39; where dots can be matched with any letter. &amp;nbsp; Example: Input [&amp;quot;WordDictionary&amp;quot;,&amp;quot;addWord&amp;quot;,&amp;quot;addWord&amp;quot;,&amp;quot;addWord&amp;quot;,&amp;quot;search&amp;quot;,&amp;quot;search&amp;quot;,&amp;quot;search&amp;quot;,&amp;quot;search&amp;quot;] [[],[&amp;quot;bad&amp;quot;],[&amp;quot;dad&amp;quot;],[&amp;quot;mad&amp;quot;],[&amp;quot;pad&amp;quot;],[&amp;quot;bad&amp;quot;],[&amp;quot;.ad&amp;quot;],[&amp;quot;b..&amp;quot;]] Output [null,null,null,null,false,true,true,true] Explanation WordDictionary wordDictionary = new WordDictionary(); wordDictionary.addWord(&amp;quot;bad&amp;quot;); wordDictionary.addWord(&amp;quot;dad&amp;quot;); wordDictionary.addWord(&amp;quot;mad&amp;quot;); wordDictionary.search(&amp;quot;pad&amp;quot;); // return False wordDictionary.search(&amp;quot;bad&amp;quot;); // return True wordDictionary.search(&amp;quot;.ad&amp;quot;); // return True wordDictionary.search(&amp;quot;b..&amp;quot;); // return True &amp;nbsp; Constraints: 1 &amp;lt;= word.length &amp;lt;= 25 word in addWord consists of lowercase English letters. word in search consist of &amp;#39;.&amp;#39; or lowercase English letters. There will be at most 2 dots in word for search queries. At most 104 calls will be made to addWord and search. Solutions With the structure of the Trie, the only difference is that the search function needs to be rewritten, compared with Trie problem. Because the . in this question can replace any character, once there is a ., all subtrees need to be searched. As long as one returns true, the entire search function returns true. Typical DFS problem. Java C++ Python Go C# class Trie { Trie[] children = new Trie[26]; boolean isEnd; } class WordDictionary { private Trie trie; /** Initialize your data structure here. */ public WordDictionary() { trie = new Trie(); } public void addWord(String word) { Trie node = trie; for (char c : word.toCharArray()) { int idx = c - 'a'; if (node.children[idx] == null) { node.children[idx] = new Trie(); } node = node.children[idx]; } node.isEnd = true; } public boolean search(String word) { return search(word, trie); } private boolean search(String word, Trie node) { for (int i = 0; i &amp;lt; word.length(); ++i) { char c = word.charAt(i); int idx = c - 'a'; if (c != '.' &amp;amp;&amp;amp; node.children[idx] == null) { return false; } if (c == '.') { for (Trie child : node.children) { if (child != null &amp;amp;&amp;amp; search(word.substring(i + 1), child)) { return true; } } return false; } node = node.children[idx]; } return node.isEnd; } } /** * Your WordDictionary object will be instantiated and called as such: * WordDictionary obj = new WordDictionary(); * obj.addWord(word); * boolean param_2 = obj.search(word); */ class trie { public: vector&amp;lt;trie*&amp;gt; children; bool is_end; trie() { children = vector&amp;lt;trie*&amp;gt;(26, nullptr); is_end = false; } void insert(const string&amp;amp; word) { trie* cur = this; for (char c : word) { c -= 'a'; if (cur-&amp;gt;children[c] == nullptr) { cur-&amp;gt;children[c] = new trie; } cur = cur-&amp;gt;children[c]; } cur-&amp;gt;is_end = true; } }; class WordDictionary { private: trie* root; public: WordDictionary() : root(new trie) {} void addWord(string word) { root-&amp;gt;insert(word); } bool search(string word) { return dfs(word, 0, root); } private: bool dfs(const string&amp;amp; word, int i, trie* cur) {..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-06-28T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-06-28-211-Design-Add-and-Search-Words-Data-Structure/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-211.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="211 - Design Add and Search Words Data Structure" property="twitter:title"/>
+   <meta content="Leetcode 211. Design Add and Search Words Data Structure Description Design a data structure that supports adding new words and finding if a string matches any previously added string. Implement the WordDictionary class: WordDictionary()&amp;nbsp;Initializes the object. void addWord(word) Adds word to the data structure, it can be matched later. bool search(word)&amp;nbsp;Returns true if there is any string in the data structure that matches word&amp;nbsp;or false otherwise. word may contain dots &amp;#39;.&amp;#39; where dots can be matched with any letter. &amp;nbsp; Example: Input [&amp;quot;WordDictionary&amp;quot;,&amp;quot;addWord&amp;quot;,&amp;quot;addWord&amp;quot;,&amp;quot;addWord&amp;quot;,&amp;quot;search&amp;quot;,&amp;quot;search&amp;quot;,&amp;quot;search&amp;quot;,&amp;quot;search&amp;quot;] [[],[&amp;quot;bad&amp;quot;],[&amp;quot;dad&amp;quot;],[&amp;quot;mad&amp;quot;],[&amp;quot;pad&amp;quot;],[&amp;quot;bad&amp;quot;],[&amp;quot;.ad&amp;quot;],[&amp;quot;b..&amp;quot;]] Output [null,null,null,null,false,true,true,true] Explanation WordDictionary wordDictionary = new WordDictionary(); wordDictionary.addWord(&amp;quot;bad&amp;quot;); wordDictionary.addWord(&amp;quot;dad&amp;quot;); wordDictionary.addWord(&amp;quot;mad&amp;quot;); wordDictionary.search(&amp;quot;pad&amp;quot;); // return False wordDictionary.search(&amp;quot;bad&amp;quot;); // return True wordDictionary.search(&amp;quot;.ad&amp;quot;); // return True wordDictionary.search(&amp;quot;b..&amp;quot;); // return True &amp;nbsp; Constraints: 1 &amp;lt;= word.length &amp;lt;= 25 word in addWord consists of lowercase English letters. word in search consist of &amp;#39;.&amp;#39; or lowercase English letters. There will be at most 2 dots in word for search queries. At most 104 calls will be made to addWord and search. Solutions With the structure of the Trie, the only difference is that the search function needs to be rewritten, compared with Trie problem. Because the . in this question can replace any character, once there is a ., all subtrees need to be searched. As long as one returns true, the entire search function returns true. Typical DFS problem. Java C++ Python Go C# class Trie { Trie[] children = new Trie[26]; boolean isEnd; } class WordDictionary { private Trie trie; /** Initialize your data structure here. */ public WordDictionary() { trie = new Trie(); } public void addWord(String word) { Trie node = trie; for (char c : word.toCharArray()) { int idx = c - 'a'; if (node.children[idx] == null) { node.children[idx] = new Trie(); } node = node.children[idx]; } node.isEnd = true; } public boolean search(String word) { return search(word, trie); } private boolean search(String word, Trie node) { for (int i = 0; i &amp;lt; word.length(); ++i) { char c = word.charAt(i); int idx = c - 'a'; if (c != '.' &amp;amp;&amp;amp; node.children[idx] == null) { return false; } if (c == '.') { for (Trie child : node.children) { if (child != null &amp;amp;&amp;amp; search(word.substring(i + 1), child)) { return true; } } return false; } node = node.children[idx]; } return node.isEnd; } } /** * Your WordDictionary object will be instantiated and called as such: * WordDictionary obj = new WordDictionary(); * obj.addWord(word); * boolean param_2 = obj.search(word); */ class trie { public: vector&amp;lt;trie*&amp;gt; children; bool is_end; trie() { children = vector&amp;lt;trie*&amp;gt;(26, nullptr); is_end = false; } void insert(const string&amp;amp; word) { trie* cur = this; for (char c : word) { c -= 'a'; if (cur-&amp;gt;children[c] == nullptr) { cur-&amp;gt;children[c] = new trie; } cur = cur-&amp;gt;children[c]; } cur-&amp;gt;is_end = true; } }; class WordDictionary { private: trie* root; public: WordDictionary() : root(new trie) {} void addWord(string word) { root-&amp;gt;insert(word); } bool search(string word) { return dfs(word, 0, root); } private: bool dfs(const string&amp;amp; word, int i, trie* cur) {..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    211 - Design Add and Search Words Data Structure | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="211 - Design Add and Search Words Data Structure" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-211.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-06-28-211-Design-Add-and-Search-Words-Data-Structure/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-06-28T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"211 - Design Add and Search Words Data Structure","dateModified":"2016-06-28T00:00:00-07:00","datePublished":"2016-06-28T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-06-28-211-Design-Add-and-Search-Words-Data-Structure/"},"url":"https://leetcode.ca/2016-06-28-211-Design-Add-and-Search-Words-Data-Structure/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="211-design-add-and-search-words-data-structure">
+       <a href="solution-211.html">
+        211. Design Add and Search Words Data Structure
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Design a data structure that supports adding new words and finding if a string matches any previously added string.
+      </p>
+      <p>
+       Implement the
+       <code>
+        WordDictionary
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         WordDictionary()
+        </code>
+        Initializes the object.
+       </li>
+       <li>
+        <code>
+         void addWord(word)
+        </code>
+        Adds
+        <code>
+         word
+        </code>
+        to the data structure, it can be matched later.
+       </li>
+       <li>
+        <code>
+         bool search(word)
+        </code>
+        Returns
+        <code>
+         true
+        </code>
+        if there is any string in the data structure that matches
+        <code>
+         word
+        </code>
+        or
+        <code>
+         false
+        </code>
+        otherwise.
+        <code>
+         word
+        </code>
+        may contain dots
+        <code>
+         '.'
+        </code>
+        where dots can be matched with any letter.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+<strong>Output</strong>
+[null,null,null,null,false,true,true,true]
+
+<strong>Explanation</strong>
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord("bad");
+wordDictionary.addWord("dad");
+wordDictionary.addWord("mad");
+wordDictionary.search("pad"); // return False
+wordDictionary.search("bad"); // return True
+wordDictionary.search(".ad"); // return True
+wordDictionary.search("b.."); // return True
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= word.length &lt;= 25
+        </code>
+       </li>
+       <li>
+        <code>
+         word
+        </code>
+        in
+        <code>
+         addWord
+        </code>
+        consists of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         word
+        </code>
+        in
+        <code>
+         search
+        </code>
+        consist of
+        <code>
+         '.'
+        </code>
+        or lowercase English letters.
+       </li>
+       <li>
+        There will be at most
+        <code>
+         2
+        </code>
+        dots in
+        <code>
+         word
+        </code>
+        for
+        <code>
+         search
+        </code>
+        queries.
+       </li>
+       <li>
+        At most
+        <code>
+         10
+         <sup>
+          4
+         </sup>
+        </code>
+        calls will be made to
+        <code>
+         addWord
+        </code>
+        and
+        <code>
+         search
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       With the structure of the
+       <code class="language-plaintext highlighter-rouge">
+        Trie
+       </code>
+       , the only difference is that the search function needs to be rewritten, compared with Trie problem.
+      </p>
+      <p>
+       Because the
+       <code class="language-plaintext highlighter-rouge">
+        .
+       </code>
+       in this question can replace any character, once there is a ., all subtrees need to be searched. As long as one returns true, the entire search function returns true.
+      </p>
+      <p>
+       Typical
+       <code class="language-plaintext highlighter-rouge">
+        DFS
+       </code>
+       problem.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#1a01698c-1c02-410e-95a5-a4992bd29b18'}">
+       <li class="uk-active">
+        <a href="solution-211.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-211.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-211.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-211.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-211.html">
+         C#
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="1a01698c-1c02-410e-95a5-a4992bd29b18">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Trie</span> <span class="o">{</span>
+    <span class="nc">Trie</span><span class="o">[]</span> <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+    <span class="kt">boolean</span> <span class="n">isEnd</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">WordDictionary</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Trie</span> <span class="n">trie</span><span class="o">;</span>
+
+    <span class="cm">/** Initialize your data structure here. */</span>
+    <span class="kd">public</span> <span class="nf">WordDictionary</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="n">trie</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">isEnd</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">search</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">search</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">trie</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">search</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">,</span> <span class="nc">Trie</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">!=</span> <span class="sc">'.'</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'.'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">Trie</span> <span class="n">child</span> <span class="o">:</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">child</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">search</span><span class="o">(</span><span class="n">word</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">),</span> <span class="n">child</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">isEnd</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">trie</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">trie</span><span class="o">*&gt;</span> <span class="n">children</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">is_end</span><span class="p">;</span>
+
+    <span class="n">trie</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">trie</span><span class="o">*&gt;</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
+        <span class="n">is_end</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">insert</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">trie</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cur</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">trie</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">cur</span><span class="o">-&gt;</span><span class="n">is_end</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">WordDictionary</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">trie</span><span class="o">*</span> <span class="n">root</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">WordDictionary</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">root</span><span class="p">(</span><span class="k">new</span> <span class="n">trie</span><span class="p">)</span> <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">addWord</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="n">word</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">search</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">bool</span> <span class="n">dfs</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">word</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">trie</span><span class="o">*</span> <span class="n">cur</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">is_end</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">!=</span> <span class="sc">'.'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">trie</span><span class="o">*</span> <span class="n">child</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">child</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">trie</span><span class="o">*</span> <span class="n">child</span> <span class="o">:</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">child</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj-&gt;addWord(word);
+ * bool param_2 = obj-&gt;search(word);
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Trie</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">26</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">is_end</span> <span class="o">=</span> <span class="bp">False</span>
+
+
+<span class="k">class</span> <span class="nc">WordDictionary</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">trie</span> <span class="o">=</span> <span class="n">Trie</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">addWord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">trie</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Trie</span><span class="p">()</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">is_end</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s">'.'</span> <span class="ow">and</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">'.'</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:],</span> <span class="n">child</span><span class="p">):</span>
+                            <span class="k">return</span> <span class="bp">True</span>
+                    <span class="k">return</span> <span class="bp">False</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">is_end</span>
+
+        <span class="k">return</span> <span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">trie</span><span class="p">)</span>
+
+
+<span class="c1"># Your WordDictionary object will be instantiated and called as such:
+# obj = WordDictionary()
+# obj.addWord(word)
+# param_2 = obj.search(word)
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">WordDictionary</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">root</span> <span class="o">*</span><span class="n">trie</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">WordDictionary</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">WordDictionary</span><span class="p">{</span><span class="nb">new</span><span class="p">(</span><span class="n">trie</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">WordDictionary</span><span class="p">)</span> <span class="n">AddWord</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">WordDictionary</span><span class="p">)</span> <span class="n">Search</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="o">*</span><span class="n">trie</span><span class="p">)</span> <span class="kt">bool</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cur</span> <span class="o">*</span><span class="n">trie</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">cur</span><span class="o">.</span><span class="n">isEnd</span>
+		<span class="p">}</span>
+		<span class="n">c</span> <span class="o">:=</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="sc">'.'</span> <span class="p">{</span>
+			<span class="n">child</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">child</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="no">true</span>
+			<span class="p">}</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">child</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">cur</span><span class="o">.</span><span class="n">children</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">child</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span> <span class="p">{</span>
+					<span class="k">return</span> <span class="no">true</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">trie</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">children</span> <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="o">*</span><span class="n">trie</span>
+	<span class="n">isEnd</span>    <span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">trie</span><span class="p">)</span> <span class="n">insert</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">cur</span> <span class="o">:=</span> <span class="n">t</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word</span> <span class="p">{</span>
+		<span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span>
+		<span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">cur</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="nb">new</span><span class="p">(</span><span class="n">trie</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="n">cur</span><span class="o">.</span><span class="n">isEnd</span> <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.AddWord(word);
+ * param_2 := obj.Search(word);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">TrieNode</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsEnd</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">TrieNode</span><span class="p">[]</span> <span class="n">Children</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="nf">TrieNode</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Children</span> <span class="p">=</span> <span class="k">new</span> <span class="n">TrieNode</span><span class="p">[</span><span class="m">26</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">WordDictionary</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="n">TrieNode</span> <span class="n">root</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">WordDictionary</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TrieNode</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddWord</span><span class="p">(</span><span class="kt">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">word</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">TrieNode</span> <span class="n">nextNode</span><span class="p">;</span>
+            <span class="kt">var</span> <span class="n">index</span> <span class="p">=</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">-</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="n">nextNode</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">Children</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nextNode</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">nextNode</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TrieNode</span><span class="p">();</span>
+                <span class="n">node</span><span class="p">.</span><span class="n">Children</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="p">=</span> <span class="n">nextNode</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">node</span> <span class="p">=</span> <span class="n">nextNode</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">IsEnd</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">Search</span><span class="p">(</span><span class="kt">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">queue</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Queue</span><span class="p">&lt;</span><span class="n">TrieNode</span><span class="p">&gt;();</span>
+        <span class="n">queue</span><span class="p">.</span><span class="nf">Enqueue</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">word</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">count</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">count</span><span class="p">--</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Dequeue</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">==</span> <span class="sc">'.'</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">nextNode</span> <span class="k">in</span> <span class="n">node</span><span class="p">.</span><span class="n">Children</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">nextNode</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">queue</span><span class="p">.</span><span class="nf">Enqueue</span><span class="p">(</span><span class="n">nextNode</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="kt">var</span> <span class="n">nextNode</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">Children</span><span class="p">[</span><span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">-</span> <span class="sc">'a'</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">nextNode</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">queue</span><span class="p">.</span><span class="nf">Enqueue</span><span class="p">(</span><span class="n">nextNode</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Any</span><span class="p">(</span><span class="n">n</span> <span class="p">=&gt;</span> <span class="n">n</span><span class="p">.</span><span class="n">IsEnd</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-211.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3369.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3369.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3369 - Design an Array Statistics Tracker</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3369. Design an Array Statistics Tracker ð Description Design a data structure that keeps track of the values in it and answers some queries regarding their mean, median, and mode. Implement the StatisticsTracker class. StatisticsTracker(): Initialize&amp;nbsp;the StatisticsTracker object with an empty array. void addNumber(int number):...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3369.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3369.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3369.html" rel="stylesheet"/>
+   <link href="solution-3369.html" rel="stylesheet"/>
+   <link href="solution-3369.html" rel="stylesheet"/>
+   <link href="solution-3369.html" rel="stylesheet"/>
+   <link href="solution-3369.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3369 - Design an Array Statistics Tracker" property="og:title"/>
+   <meta content="Leetcode 3369. Design an Array Statistics Tracker ð Description Design a data structure that keeps track of the values in it and answers some queries regarding their mean, median, and mode. Implement the StatisticsTracker class. StatisticsTracker(): Initialize&amp;nbsp;the StatisticsTracker object with an empty array. void addNumber(int number): Add&amp;nbsp;number to the data structure. void removeFirstAddedNumber(): Remove&amp;nbsp;the earliest added number from the data structure. int getMean(): Return&amp;nbsp;the floored mean of the numbers in the data structure. int getMedian(): Return&amp;nbsp;the median of the numbers in the data structure. int getMode(): Return&amp;nbsp;the mode of the numbers in the data structure. If there are multiple modes, return the smallest one. Note: The mean of an array is the sum of all the values divided by the number of values in the array. The median of an array is the middle element of the array when it is sorted in non-decreasing order. If there are two choices for a median, the larger of the two values is taken. The mode of an array is the element that appears most often in the array. &amp;nbsp; Example 1: Input: [&amp;quot;StatisticsTracker&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;getMean&amp;quot;, &amp;quot;getMedian&amp;quot;, &amp;quot;getMode&amp;quot;, &amp;quot;removeFirstAddedNumber&amp;quot;, &amp;quot;getMode&amp;quot;] [[], [4], [4], [2], [3], [], [], [], [], []] Output: [null, null, null, null, null, 3, 4, 4, null, 2] Explanation StatisticsTracker statisticsTracker = new StatisticsTracker(); statisticsTracker.addNumber(4); // The data structure now contains [4] statisticsTracker.addNumber(4); // The data structure now contains [4, 4] statisticsTracker.addNumber(2); // The data structure now contains [4, 4, 2] statisticsTracker.addNumber(3); // The data structure now contains [4, 4, 2, 3] statisticsTracker.getMean(); // return 3 statisticsTracker.getMedian(); // return 4 statisticsTracker.getMode(); // return 4 statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [4, 2, 3] statisticsTracker.getMode(); // return 2 Example 2: Input: [&amp;quot;StatisticsTracker&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;getMean&amp;quot;, &amp;quot;removeFirstAddedNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;removeFirstAddedNumber&amp;quot;, &amp;quot;getMedian&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;getMode&amp;quot;] [[], [9], [5], [], [], [5], [6], [], [], [8], []] Output: [null, null, null, 7, null, null, null, null, 6, null, 5] Explanation StatisticsTracker statisticsTracker = new StatisticsTracker(); statisticsTracker.addNumber(9); // The data structure now contains [9] statisticsTracker.addNumber(5); // The data structure now contains [9, 5] statisticsTracker.getMean(); // return 7 statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [5] statisticsTracker.addNumber(5); // The data structure now contains [5, 5] statisticsTracker.addNumber(6); // The data structure now contains [5, 5, 6] statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [5, 6] statisticsTracker.getMedian(); // return 6 statisticsTracker.addNumber(8); // The data structure now contains [5, 6, 8] statisticsTracker.getMode(); // return 5 &amp;nbsp; Constraints: 1 &amp;lt;= number &amp;lt;= 109 At most, 105 calls will be made to addNumber, removeFirstAddedNumber, getMean, getMedian, and getMode in total. removeFirstAddedNumber, getMean, getMedian, and getMode will be called only if there is at least one element in the data structure. Solutions Solution 1: Queue + Hash Table + Ordered Set We define a queue $\textit{q}$ to store the added numbers, a variable $\textit{s}$ to store the sum of all numbers, a hash table $\textit{cnt}$ to store the occurrence count of each number, an ordered set $\textit{sl}$ to store all numbers, and an ordered set..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-12-13T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-12-13-3369-Design-an-Array-Statistics-Tracker/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3369.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3369 - Design an Array Statistics Tracker" property="twitter:title"/>
+   <meta content="Leetcode 3369. Design an Array Statistics Tracker ð Description Design a data structure that keeps track of the values in it and answers some queries regarding their mean, median, and mode. Implement the StatisticsTracker class. StatisticsTracker(): Initialize&amp;nbsp;the StatisticsTracker object with an empty array. void addNumber(int number): Add&amp;nbsp;number to the data structure. void removeFirstAddedNumber(): Remove&amp;nbsp;the earliest added number from the data structure. int getMean(): Return&amp;nbsp;the floored mean of the numbers in the data structure. int getMedian(): Return&amp;nbsp;the median of the numbers in the data structure. int getMode(): Return&amp;nbsp;the mode of the numbers in the data structure. If there are multiple modes, return the smallest one. Note: The mean of an array is the sum of all the values divided by the number of values in the array. The median of an array is the middle element of the array when it is sorted in non-decreasing order. If there are two choices for a median, the larger of the two values is taken. The mode of an array is the element that appears most often in the array. &amp;nbsp; Example 1: Input: [&amp;quot;StatisticsTracker&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;getMean&amp;quot;, &amp;quot;getMedian&amp;quot;, &amp;quot;getMode&amp;quot;, &amp;quot;removeFirstAddedNumber&amp;quot;, &amp;quot;getMode&amp;quot;] [[], [4], [4], [2], [3], [], [], [], [], []] Output: [null, null, null, null, null, 3, 4, 4, null, 2] Explanation StatisticsTracker statisticsTracker = new StatisticsTracker(); statisticsTracker.addNumber(4); // The data structure now contains [4] statisticsTracker.addNumber(4); // The data structure now contains [4, 4] statisticsTracker.addNumber(2); // The data structure now contains [4, 4, 2] statisticsTracker.addNumber(3); // The data structure now contains [4, 4, 2, 3] statisticsTracker.getMean(); // return 3 statisticsTracker.getMedian(); // return 4 statisticsTracker.getMode(); // return 4 statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [4, 2, 3] statisticsTracker.getMode(); // return 2 Example 2: Input: [&amp;quot;StatisticsTracker&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;getMean&amp;quot;, &amp;quot;removeFirstAddedNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;removeFirstAddedNumber&amp;quot;, &amp;quot;getMedian&amp;quot;, &amp;quot;addNumber&amp;quot;, &amp;quot;getMode&amp;quot;] [[], [9], [5], [], [], [5], [6], [], [], [8], []] Output: [null, null, null, 7, null, null, null, null, 6, null, 5] Explanation StatisticsTracker statisticsTracker = new StatisticsTracker(); statisticsTracker.addNumber(9); // The data structure now contains [9] statisticsTracker.addNumber(5); // The data structure now contains [9, 5] statisticsTracker.getMean(); // return 7 statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [5] statisticsTracker.addNumber(5); // The data structure now contains [5, 5] statisticsTracker.addNumber(6); // The data structure now contains [5, 5, 6] statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [5, 6] statisticsTracker.getMedian(); // return 6 statisticsTracker.addNumber(8); // The data structure now contains [5, 6, 8] statisticsTracker.getMode(); // return 5 &amp;nbsp; Constraints: 1 &amp;lt;= number &amp;lt;= 109 At most, 105 calls will be made to addNumber, removeFirstAddedNumber, getMean, getMedian, and getMode in total. removeFirstAddedNumber, getMean, getMedian, and getMode will be called only if there is at least one element in the data structure. Solutions Solution 1: Queue + Hash Table + Ordered Set We define a queue $\textit{q}$ to store the added numbers, a variable $\textit{s}$ to store the sum of all numbers, a hash table $\textit{cnt}$ to store the occurrence count of each number, an ordered set $\textit{sl}$ to store all numbers, and an ordered set..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3369 - Design an Array Statistics Tracker | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3369 - Design an Array Statistics Tracker" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3369.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-12-13-3369-Design-an-Array-Statistics-Tracker/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-12-13T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3369 - Design an Array Statistics Tracker","dateModified":"2024-12-13T00:00:00-08:00","datePublished":"2024-12-13T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-12-13-3369-Design-an-Array-Statistics-Tracker/"},"url":"https://leetcode.ca/2024-12-13-3369-Design-an-Array-Statistics-Tracker/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3369-design-an-array-statistics-tracker-">
+       <a href="solution-3369.html">
+        3369. Design an Array Statistics Tracker ð
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       Design a data structure that keeps track of the values in it and answers some queries regarding their mean, median, and mode.
+      </p>
+      <p>
+       Implement the
+       <code>
+        StatisticsTracker
+       </code>
+       class.
+      </p>
+      <ul>
+       <li>
+        <code>
+         StatisticsTracker()
+        </code>
+        : Initialize the
+        <code>
+         StatisticsTracker
+        </code>
+        object with an empty array.
+       </li>
+       <li>
+        <code>
+         void addNumber(int number)
+        </code>
+        : Add
+        <code>
+         number
+        </code>
+        to the data structure.
+       </li>
+       <li>
+        <code>
+         void removeFirstAddedNumber()
+        </code>
+        : Remove the earliest added number from the data structure.
+       </li>
+       <li>
+        <code>
+         int getMean()
+        </code>
+        : Return the floored
+        <strong>
+         mean
+        </strong>
+        of the numbers in the data structure.
+       </li>
+       <li>
+        <code>
+         int getMedian()
+        </code>
+        : Return the
+        <strong>
+         median
+        </strong>
+        of the numbers in the data structure.
+       </li>
+       <li>
+        <code>
+         int getMode()
+        </code>
+        : Return the
+        <strong>
+         mode
+        </strong>
+        of the numbers in the data structure. If there are multiple modes, return the smallest one.
+       </li>
+      </ul>
+      <p>
+       <strong>
+        Note
+       </strong>
+       :
+      </p>
+      <ul>
+       <li>
+        The
+        <strong>
+         mean
+        </strong>
+        of an array is the sum of all the values divided by the number of values in the array.
+       </li>
+       <li>
+        The
+        <strong>
+         median
+        </strong>
+        of an array is the middle element of the array when it is sorted in non-decreasing order. If there are two choices for a median, the larger of the two values is taken.
+       </li>
+       <li>
+        The
+        <strong>
+         mode
+        </strong>
+        of an array is the element that appears most often in the array.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <br/>
+        <span class="example-io">
+         ["StatisticsTracker", "addNumber", "addNumber", "addNumber", "addNumber", "getMean", "getMedian", "getMode", "removeFirstAddedNumber", "getMode"]
+         <br/>
+         [[], [4], [4], [2], [3], [], [], [], [], []]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <br/>
+        <span class="example-io">
+         [null, null, null, null, null, 3, 4, 4, null, 2]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation
+        </strong>
+       </p>
+       StatisticsTracker statisticsTracker = new StatisticsTracker();
+       <br/>
+       statisticsTracker.addNumber(4); // The data structure now contains [4]
+       <br/>
+       statisticsTracker.addNumber(4); // The data structure now contains [4, 4]
+       <br/>
+       statisticsTracker.addNumber(2); // The data structure now contains [4, 4, 2]
+       <br/>
+       statisticsTracker.addNumber(3); // The data structure now contains [4, 4, 2, 3]
+       <br/>
+       statisticsTracker.getMean(); // return 3
+       <br/>
+       statisticsTracker.getMedian(); // return 4
+       <br/>
+       statisticsTracker.getMode(); // return 4
+       <br/>
+       statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [4, 2, 3]
+       <br/>
+       statisticsTracker.getMode(); // return 2
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <br/>
+        <span class="example-io">
+         ["StatisticsTracker", "addNumber", "addNumber", "getMean", "removeFirstAddedNumber", "addNumber", "addNumber", "removeFirstAddedNumber", "getMedian", "addNumber", "getMode"]
+         <br/>
+         [[], [9], [5], [], [], [5], [6], [], [], [8], []]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <br/>
+        <span class="example-io">
+         [null, null, null, 7, null, null, null, null, 6, null, 5]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation
+        </strong>
+       </p>
+       StatisticsTracker statisticsTracker = new StatisticsTracker();
+       <br/>
+       statisticsTracker.addNumber(9); // The data structure now contains [9]
+       <br/>
+       statisticsTracker.addNumber(5); // The data structure now contains [9, 5]
+       <br/>
+       statisticsTracker.getMean(); // return 7
+       <br/>
+       statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [5]
+       <br/>
+       statisticsTracker.addNumber(5); // The data structure now contains [5, 5]
+       <br/>
+       statisticsTracker.addNumber(6); // The data structure now contains [5, 5, 6]
+       <br/>
+       statisticsTracker.removeFirstAddedNumber(); // The data structure now contains [5, 6]
+       <br/>
+       statisticsTracker.getMedian(); // return 6
+       <br/>
+       statisticsTracker.addNumber(8); // The data structure now contains [5, 6, 8]
+       <br/>
+       statisticsTracker.getMode(); // return 5
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= number &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        At most,
+        <code>
+         10
+         <sup>
+          5
+         </sup>
+        </code>
+        calls will be made to
+        <code>
+         addNumber
+        </code>
+        ,
+        <code>
+         removeFirstAddedNumber
+        </code>
+        ,
+        <code>
+         getMean
+        </code>
+        ,
+        <code>
+         getMedian
+        </code>
+        , and
+        <code>
+         getMode
+        </code>
+        in total.
+       </li>
+       <li>
+        <code>
+         removeFirstAddedNumber
+        </code>
+        ,
+        <code>
+         getMean
+        </code>
+        ,
+        <code>
+         getMedian
+        </code>
+        , and
+        <code>
+         getMode
+        </code>
+        will be called only if there is at least one element in the data structure.
+       </li>
+      </ul>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1-queue--hash-table--ordered-set">
+       Solution 1: Queue + Hash Table + Ordered Set
+      </h3>
+      <p>
+       We define a queue $\textit{q}$ to store the added numbers, a variable $\textit{s}$ to store the sum of all numbers, a hash table $\textit{cnt}$ to store the occurrence count of each number, an ordered set $\textit{sl}$ to store all numbers, and an ordered set $\textit{sl2}$ to store all numbers and their occurrence counts, sorted by occurrence count in descending order and by value in ascending order.
+      </p>
+      <p>
+       In the
+       <code class="language-plaintext highlighter-rouge">
+        addNumber
+       </code>
+       method, we add the number to the queue $\textit{q}$, add the number to the ordered set $\textit{sl}$, then remove the number and its occurrence count from the ordered set $\textit{sl2}$, update the occurrence count of the number, and finally add the number and its updated occurrence count to the ordered set $\textit{sl2}$, and update the sum of all numbers. The time complexity is $O(\log n)$.
+      </p>
+      <p>
+       In the
+       <code class="language-plaintext highlighter-rouge">
+        removeFirstAddedNumber
+       </code>
+       method, we remove the earliest added number from the queue $\textit{q}$, remove the number from the ordered set $\textit{sl}$, then remove the number and its occurrence count from the ordered set $\textit{sl2}$, update the occurrence count of the number, and finally add the number and its updated occurrence count to the ordered set $\textit{sl2}$, and update the sum of all numbers. The time complexity is $O(\log n)$.
+      </p>
+      <p>
+       In the
+       <code class="language-plaintext highlighter-rouge">
+        getMean
+       </code>
+       method, we return the sum of all numbers divided by the number of numbers. The time complexity is $O(1)$.
+      </p>
+      <p>
+       In the
+       <code class="language-plaintext highlighter-rouge">
+        getMedian
+       </code>
+       method, we return the $\textit{len}(\textit{q}) / 2$-th number in the ordered set $\textit{sl}$. The time complexity is $O(1)$ or $O(\log n)$.
+      </p>
+      <p>
+       In the
+       <code class="language-plaintext highlighter-rouge">
+        getMode
+       </code>
+       method, we return the first number in the ordered set $\textit{sl2}$. The time complexity is $O(1)$.
+      </p>
+      <blockquote>
+       <p>
+        In Python, we can directly access elements in an ordered set by index. In other languages, we can implement this using a heap.
+       </p>
+      </blockquote>
+      <p>
+       The space complexity is $O(n)$, where $n$ is the number of added numbers.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#1e8002f0-0504-43d4-9b39-08be77b8df73'}">
+       <li class="uk-active">
+        <a href="solution-3369.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3369.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3369.html">
+         Python
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="1e8002f0-0504-43d4-9b39-08be77b8df73">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">MedianFinder</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">small</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;(</span><span class="nc">Comparator</span><span class="o">.</span><span class="na">reverseOrder</span><span class="o">());</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">large</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">delayed</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">smallSize</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">largeSize</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addNum</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">small</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">num</span> <span class="o">&lt;=</span> <span class="n">small</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">small</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+            <span class="o">++</span><span class="n">smallSize</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">large</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+            <span class="o">++</span><span class="n">largeSize</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">rebalance</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">findMedian</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">smallSize</span> <span class="o">==</span> <span class="n">largeSize</span> <span class="o">?</span> <span class="n">large</span><span class="o">.</span><span class="na">peek</span><span class="o">()</span> <span class="o">:</span> <span class="n">small</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">removeNum</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">delayed</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">&lt;=</span> <span class="n">small</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">{</span>
+            <span class="o">--</span><span class="n">smallSize</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">small</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">prune</span><span class="o">(</span><span class="n">small</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="o">--</span><span class="n">largeSize</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">large</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">prune</span><span class="o">(</span><span class="n">large</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">rebalance</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">prune</span><span class="o">(</span><span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">pq</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">pq</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">delayed</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">pq</span><span class="o">.</span><span class="na">peek</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">delayed</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">pq</span><span class="o">.</span><span class="na">peek</span><span class="o">(),</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">delayed</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">pq</span><span class="o">.</span><span class="na">peek</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="n">pq</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">rebalance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">smallSize</span> <span class="o">&gt;</span> <span class="n">largeSize</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">large</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">small</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span>
+            <span class="o">--</span><span class="n">smallSize</span><span class="o">;</span>
+            <span class="o">++</span><span class="n">largeSize</span><span class="o">;</span>
+            <span class="n">prune</span><span class="o">(</span><span class="n">small</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">smallSize</span> <span class="o">&lt;</span> <span class="n">largeSize</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">small</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">large</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span>
+            <span class="o">--</span><span class="n">largeSize</span><span class="o">;</span>
+            <span class="o">++</span><span class="n">smallSize</span><span class="o">;</span>
+            <span class="n">prune</span><span class="o">(</span><span class="n">large</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">StatisticsTracker</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">s</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">MedianFinder</span> <span class="n">medianFinder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MedianFinder</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">ts</span>
+        <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeSet</span><span class="o">&lt;&gt;((</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="n">b</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">?</span> <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">b</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+
+    <span class="kd">public</span> <span class="nf">StatisticsTracker</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addNumber</span><span class="o">(</span><span class="kt">int</span> <span class="n">number</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offerLast</span><span class="o">(</span><span class="n">number</span><span class="o">);</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">number</span><span class="o">;</span>
+        <span class="n">ts</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">number</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">number</span><span class="o">,</span> <span class="mi">0</span><span class="o">)});</span>
+        <span class="n">cnt</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">number</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">);</span>
+        <span class="n">medianFinder</span><span class="o">.</span><span class="na">addNum</span><span class="o">(</span><span class="n">number</span><span class="o">);</span>
+        <span class="n">ts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">number</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">number</span><span class="o">)});</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">removeFirstAddedNumber</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">number</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">();</span>
+        <span class="n">s</span> <span class="o">-=</span> <span class="n">number</span><span class="o">;</span>
+        <span class="n">ts</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">number</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">number</span><span class="o">)});</span>
+        <span class="n">cnt</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">number</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">sum</span><span class="o">);</span>
+        <span class="n">medianFinder</span><span class="o">.</span><span class="na">removeNum</span><span class="o">(</span><span class="n">number</span><span class="o">);</span>
+        <span class="n">ts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">number</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">number</span><span class="o">)});</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getMean</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">s</span> <span class="o">/</span> <span class="n">q</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getMedian</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">medianFinder</span><span class="o">.</span><span class="na">findMedian</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getMode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="na">first</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">MedianFinder</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="n">addNum</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">small</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">||</span> <span class="n">num</span> <span class="o">&lt;=</span> <span class="n">small</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">small</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+            <span class="o">++</span><span class="n">smallSize</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">large</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+            <span class="o">++</span><span class="n">largeSize</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">reblance</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">removeNum</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">++</span><span class="n">delayed</span><span class="p">[</span><span class="n">num</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&lt;=</span> <span class="n">small</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">smallSize</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">small</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">prune</span><span class="p">(</span><span class="n">small</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">largeSize</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">large</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">prune</span><span class="p">(</span><span class="n">large</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">reblance</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">findMedian</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">smallSize</span> <span class="o">==</span> <span class="n">largeSize</span> <span class="o">?</span> <span class="n">large</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">:</span> <span class="n">small</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">small</span><span class="p">;</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">large</span><span class="p">;</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">delayed</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">smallSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">largeSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+    <span class="kt">void</span> <span class="n">prune</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">pq</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">delayed</span><span class="p">[</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">delayed</span><span class="p">[</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">()]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">delayed</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+            <span class="p">}</span>
+            <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">reblance</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">smallSize</span> <span class="o">&gt;</span> <span class="n">largeSize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">large</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">small</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+            <span class="n">small</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="o">--</span><span class="n">smallSize</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">largeSize</span><span class="p">;</span>
+            <span class="n">prune</span><span class="p">(</span><span class="n">small</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">smallSize</span> <span class="o">&lt;</span> <span class="n">largeSize</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">small</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">large</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+            <span class="n">large</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="o">++</span><span class="n">smallSize</span><span class="p">;</span>
+            <span class="o">--</span><span class="n">largeSize</span><span class="p">;</span>
+            <span class="n">prune</span><span class="p">(</span><span class="n">large</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">StatisticsTracker</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+    <span class="n">MedianFinder</span> <span class="n">medianFinder</span><span class="p">;</span>
+    <span class="n">set</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ts</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">StatisticsTracker</span><span class="p">()</span> <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">addNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">number</span><span class="p">);</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">number</span><span class="p">;</span>
+        <span class="n">ts</span><span class="p">.</span><span class="n">erase</span><span class="p">({</span><span class="o">-</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">],</span> <span class="n">number</span><span class="p">});</span>
+        <span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">medianFinder</span><span class="p">.</span><span class="n">addNum</span><span class="p">(</span><span class="n">number</span><span class="p">);</span>
+        <span class="n">ts</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="o">-</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">],</span> <span class="n">number</span><span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">removeFirstAddedNumber</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">number</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="n">s</span> <span class="o">-=</span> <span class="n">number</span><span class="p">;</span>
+        <span class="n">ts</span><span class="p">.</span><span class="n">erase</span><span class="p">({</span><span class="o">-</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">],</span> <span class="n">number</span><span class="p">});</span>
+        <span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ts</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="o">-</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">],</span> <span class="n">number</span><span class="p">});</span>
+        <span class="p">}</span>
+        <span class="n">medianFinder</span><span class="p">.</span><span class="n">removeNum</span><span class="p">(</span><span class="n">number</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">getMean</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s</span> <span class="o">/</span> <span class="n">q</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">getMedian</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">medianFinder</span><span class="p">.</span><span class="n">findMedian</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">getMode</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">from</span> <span class="nn">sortedcontainers</span> <span class="kn">import</span> <span class="n">SortedList</span>
+
+
+<span class="k">class</span> <span class="nc">StatisticsTracker</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl</span> <span class="o">=</span> <span class="n">SortedList</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl2</span> <span class="o">=</span> <span class="n">SortedList</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="k">def</span> <span class="nf">addNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl2</span><span class="p">.</span><span class="n">discard</span><span class="p">((</span><span class="n">number</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl2</span><span class="p">.</span><span class="n">add</span><span class="p">((</span><span class="n">number</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">s</span> <span class="o">+=</span> <span class="n">number</span>
+
+    <span class="k">def</span> <span class="nf">removeFirstAddedNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">q</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl2</span><span class="p">.</span><span class="n">discard</span><span class="p">((</span><span class="n">number</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sl2</span><span class="p">.</span><span class="n">add</span><span class="p">((</span><span class="n">number</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span><span class="p">[</span><span class="n">number</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">s</span> <span class="o">-=</span> <span class="n">number</span>
+
+    <span class="k">def</span> <span class="nf">getMean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">s</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">q</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getMedian</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">sl</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">q</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">getMode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">sl2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="c1"># Your StatisticsTracker object will be instantiated and called as such:
+# obj = StatisticsTracker()
+# obj.addNumber(number)
+# obj.removeFirstAddedNumber()
+# param_3 = obj.getMean()
+# param_4 = obj.getMedian()
+# param_5 = obj.getMode()
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3369.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

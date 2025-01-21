@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-893.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-893.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>893 - Groups of Special-Equivalent Strings</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 893. Groups of Special-Equivalent Strings Description You are given an array of strings of the same length words. In one move, you can swap any two even indexed characters or any two odd indexed characters of a string words[i]. Two strings words[i] and words[j] are...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-893.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-893.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-893.html" rel="stylesheet"/>
+   <link href="solution-893.html" rel="stylesheet"/>
+   <link href="solution-893.html" rel="stylesheet"/>
+   <link href="solution-893.html" rel="stylesheet"/>
+   <link href="solution-893.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="893 - Groups of Special-Equivalent Strings" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+893. Groups of Special-Equivalent Strings
+
+Description
+
+You are given an array of strings of the same length words.
+
+In one move, you can swap any two even indexed characters or any two odd indexed characters of a string words[i].
+
+Two strings words[i] and words[j] are special-equivalent if after any number of moves, words[i] == words[j].
+
+
+	For example, words[i] = &amp;quot;zzxy&amp;quot; and words[j] = &amp;quot;xyzz&amp;quot; are special-equivalent because we may make the moves &amp;quot;zzxy&amp;quot; -&amp;gt; &amp;quot;xzzy&amp;quot; -&amp;gt; &amp;quot;xyzz&amp;quot;.
+
+
+A group of special-equivalent strings from words is a non-empty subset of words such that:
+
+
+	Every pair of strings in the group are special equivalent, and
+	The group is the largest size possible (i.e., there is not a string words[i] not in the group such that words[i] is special-equivalent to every string in the group).
+
+
+Return the number of groups of special-equivalent strings from words.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: words = [&amp;quot;abcd&amp;quot;,&amp;quot;cdab&amp;quot;,&amp;quot;cbad&amp;quot;,&amp;quot;xyzz&amp;quot;,&amp;quot;zzxy&amp;quot;,&amp;quot;zzyx&amp;quot;]
+Output: 3
+Explanation: 
+One group is [&amp;quot;abcd&amp;quot;, &amp;quot;cdab&amp;quot;, &amp;quot;cbad&amp;quot;], since they are all pairwise special equivalent, and none of the other strings is all pairwise special equivalent to these.
+The other two groups are [&amp;quot;xyzz&amp;quot;, &amp;quot;zzxy&amp;quot;] and [&amp;quot;zzyx&amp;quot;].
+Note that in particular, &amp;quot;zzxy&amp;quot; is not special equivalent to &amp;quot;zzyx&amp;quot;.
+
+
+Example 2:
+
+
+Input: words = [&amp;quot;abc&amp;quot;,&amp;quot;acb&amp;quot;,&amp;quot;bac&amp;quot;,&amp;quot;bca&amp;quot;,&amp;quot;cab&amp;quot;,&amp;quot;cba&amp;quot;]
+Output: 3
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= words.length &amp;lt;= 1000
+	1 &amp;lt;= words[i].length &amp;lt;= 20
+	words[i] consist of lowercase English letters.
+	All the strings are of the same length.
+
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+
+
+
+
+	
+class Solution {
+    public int numSpecialEquivGroups(String[] words) {
+        Set&amp;lt;String&amp;gt; s = new HashSet&amp;lt;&amp;gt;();
+        for (String word : words) {
+            s.add(convert(word));
+        }
+        return s.size();
+    }
+
+    private String convert(String word) {
+        List&amp;lt;Character&amp;gt; a = new ArrayList&amp;lt;&amp;gt;();
+        List&amp;lt;Character&amp;gt; b = new ArrayList&amp;lt;&amp;gt;();
+        for (int i = 0; i &amp;lt; word.length(); ++i) {
+            char ch = word.charAt(i);
+            if (i % 2 == 0) {
+                a.add(ch);
+            } else {
+                b.add(ch);
+            }
+        }
+        Collections.sort(a);
+        Collections.sort(b);
+        StringBuilder sb = new StringBuilder();
+        for (char c : a) {
+            sb.append(c);
+        }
+        for (char c : b) {
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    int numSpecialEquivGroups(vector&amp;lt;string&amp;gt;&amp;amp; words) {
+        unordered_set&amp;lt;string&amp;gt; s;
+        for (auto&amp;amp; word : words) {
+            string a = &quot;&quot;, b = &quot;&quot;;
+            for (int i = 0; i &amp;lt; word.size(); ++i) {
+                if (i &amp;amp; 1)
+                    a += word[i];
+                else
+                    b += word[i];
+            }
+            sort(a.begin(), a.end());
+            sort(b.begin(), b.end());
+            s.insert(a + b);
+        }
+        return s.size();
+    }
+};
+
+
+
+	
+class Solution:
+    def numSpecialEquivGroups(self, words: List[str]) -&amp;gt; int:
+        s = {''.join(sorted(word[::2]) + sorted(word[1::2])) for word in words}
+        return len(s)
+
+
+
+
+	
+func numSpecialEquivGroups(words []string) int {
+	s := map[string]bool{}
+	for _, word := range words {
+		a, b := []rune{}, []rune{}
+		for i, c := range word {
+			if i&amp;amp;1 == 1 {
+				a = append(a, c)
+			} else {
+				b = append(b, c)
+			}
+		}
+		sort.Slice(a, func(i, j int) bool {
+			return a[i] &amp;lt; a[j]
+		})
+		sort.Slice(b, func(i, j int) bool {
+			return b[i] &amp;lt; b[j]
+		})
+		s[string(a)+string(b)] = true
+	}
+	return len(s)
+}
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-05-11T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-05-11-893-Groups-of-Special-Equivalent-Strings/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-893.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="893 - Groups of Special-Equivalent Strings" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+893. Groups of Special-Equivalent Strings
+
+Description
+
+You are given an array of strings of the same length words.
+
+In one move, you can swap any two even indexed characters or any two odd indexed characters of a string words[i].
+
+Two strings words[i] and words[j] are special-equivalent if after any number of moves, words[i] == words[j].
+
+
+	For example, words[i] = &amp;quot;zzxy&amp;quot; and words[j] = &amp;quot;xyzz&amp;quot; are special-equivalent because we may make the moves &amp;quot;zzxy&amp;quot; -&amp;gt; &amp;quot;xzzy&amp;quot; -&amp;gt; &amp;quot;xyzz&amp;quot;.
+
+
+A group of special-equivalent strings from words is a non-empty subset of words such that:
+
+
+	Every pair of strings in the group are special equivalent, and
+	The group is the largest size possible (i.e., there is not a string words[i] not in the group such that words[i] is special-equivalent to every string in the group).
+
+
+Return the number of groups of special-equivalent strings from words.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: words = [&amp;quot;abcd&amp;quot;,&amp;quot;cdab&amp;quot;,&amp;quot;cbad&amp;quot;,&amp;quot;xyzz&amp;quot;,&amp;quot;zzxy&amp;quot;,&amp;quot;zzyx&amp;quot;]
+Output: 3
+Explanation: 
+One group is [&amp;quot;abcd&amp;quot;, &amp;quot;cdab&amp;quot;, &amp;quot;cbad&amp;quot;], since they are all pairwise special equivalent, and none of the other strings is all pairwise special equivalent to these.
+The other two groups are [&amp;quot;xyzz&amp;quot;, &amp;quot;zzxy&amp;quot;] and [&amp;quot;zzyx&amp;quot;].
+Note that in particular, &amp;quot;zzxy&amp;quot; is not special equivalent to &amp;quot;zzyx&amp;quot;.
+
+
+Example 2:
+
+
+Input: words = [&amp;quot;abc&amp;quot;,&amp;quot;acb&amp;quot;,&amp;quot;bac&amp;quot;,&amp;quot;bca&amp;quot;,&amp;quot;cab&amp;quot;,&amp;quot;cba&amp;quot;]
+Output: 3
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= words.length &amp;lt;= 1000
+	1 &amp;lt;= words[i].length &amp;lt;= 20
+	words[i] consist of lowercase English letters.
+	All the strings are of the same length.
+
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+
+
+
+
+	
+class Solution {
+    public int numSpecialEquivGroups(String[] words) {
+        Set&amp;lt;String&amp;gt; s = new HashSet&amp;lt;&amp;gt;();
+        for (String word : words) {
+            s.add(convert(word));
+        }
+        return s.size();
+    }
+
+    private String convert(String word) {
+        List&amp;lt;Character&amp;gt; a = new ArrayList&amp;lt;&amp;gt;();
+        List&amp;lt;Character&amp;gt; b = new ArrayList&amp;lt;&amp;gt;();
+        for (int i = 0; i &amp;lt; word.length(); ++i) {
+            char ch = word.charAt(i);
+            if (i % 2 == 0) {
+                a.add(ch);
+            } else {
+                b.add(ch);
+            }
+        }
+        Collections.sort(a);
+        Collections.sort(b);
+        StringBuilder sb = new StringBuilder();
+        for (char c : a) {
+            sb.append(c);
+        }
+        for (char c : b) {
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    int numSpecialEquivGroups(vector&amp;lt;string&amp;gt;&amp;amp; words) {
+        unordered_set&amp;lt;string&amp;gt; s;
+        for (auto&amp;amp; word : words) {
+            string a = &quot;&quot;, b = &quot;&quot;;
+            for (int i = 0; i &amp;lt; word.size(); ++i) {
+                if (i &amp;amp; 1)
+                    a += word[i];
+                else
+                    b += word[i];
+            }
+            sort(a.begin(), a.end());
+            sort(b.begin(), b.end());
+            s.insert(a + b);
+        }
+        return s.size();
+    }
+};
+
+
+
+	
+class Solution:
+    def numSpecialEquivGroups(self, words: List[str]) -&amp;gt; int:
+        s = {''.join(sorted(word[::2]) + sorted(word[1::2])) for word in words}
+        return len(s)
+
+
+
+
+	
+func numSpecialEquivGroups(words []string) int {
+	s := map[string]bool{}
+	for _, word := range words {
+		a, b := []rune{}, []rune{}
+		for i, c := range word {
+			if i&amp;amp;1 == 1 {
+				a = append(a, c)
+			} else {
+				b = append(b, c)
+			}
+		}
+		sort.Slice(a, func(i, j int) bool {
+			return a[i] &amp;lt; a[j]
+		})
+		sort.Slice(b, func(i, j int) bool {
+			return b[i] &amp;lt; b[j]
+		})
+		s[string(a)+string(b)] = true
+	}
+	return len(s)
+}
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    893 - Groups of Special-Equivalent Strings | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="893 - Groups of Special-Equivalent Strings" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-893.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-05-11-893-Groups-of-Special-Equivalent-Strings/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-05-11T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"893 - Groups of Special-Equivalent Strings","dateModified":"2018-05-11T00:00:00-07:00","datePublished":"2018-05-11T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-05-11-893-Groups-of-Special-Equivalent-Strings/"},"url":"https://leetcode.ca/2018-05-11-893-Groups-of-Special-Equivalent-Strings/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="893-groups-of-special-equivalent-strings">
+       <a href="solution-893.html">
+        893. Groups of Special-Equivalent Strings
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an array of strings of the same length
+       <code>
+        words
+       </code>
+       .
+      </p>
+      <p>
+       In one
+       <strong>
+        move
+       </strong>
+       , you can swap any two even indexed characters or any two odd indexed characters of a string
+       <code>
+        words[i]
+       </code>
+       .
+      </p>
+      <p>
+       Two strings
+       <code>
+        words[i]
+       </code>
+       and
+       <code>
+        words[j]
+       </code>
+       are
+       <strong>
+        special-equivalent
+       </strong>
+       if after any number of moves,
+       <code>
+        words[i] == words[j]
+       </code>
+       .
+      </p>
+      <ul>
+       <li>
+        For example,
+        <code>
+         words[i] = "zzxy"
+        </code>
+        and
+        <code>
+         words[j] = "xyzz"
+        </code>
+        are
+        <strong>
+         special-equivalent
+        </strong>
+        because we may make the moves
+        <code>
+         "zzxy" -&gt; "xzzy" -&gt; "xyzz"
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       A
+       <strong>
+        group of special-equivalent strings
+       </strong>
+       from
+       <code>
+        words
+       </code>
+       is a non-empty subset of words such that:
+      </p>
+      <ul>
+       <li>
+        Every pair of strings in the group are special equivalent, and
+       </li>
+       <li>
+        The group is the largest size possible (i.e., there is not a string
+        <code>
+         words[i]
+        </code>
+        not in the group such that
+        <code>
+         words[i]
+        </code>
+        is special-equivalent to every string in the group).
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the number of
+        <strong>
+         groups of special-equivalent strings
+        </strong>
+        from
+       </em>
+       <code>
+        words
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["abcd","cdab","cbad","xyzz","zzxy","zzyx"]
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> 
+One group is ["abcd", "cdab", "cbad"], since they are all pairwise special equivalent, and none of the other strings is all pairwise special equivalent to these.
+The other two groups are ["xyzz", "zzxy"] and ["zzyx"].
+Note that in particular, "zzxy" is not special equivalent to "zzyx".
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["abc","acb","bac","bca","cab","cba"]
+<strong>Output:</strong> 3
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= words.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= words[i].length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         words[i]
+        </code>
+        consist of lowercase English letters.
+       </li>
+       <li>
+        All the strings are of the same length.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#c2f75820-3969-4e92-bbc1-fbfd119cb663'}">
+       <li class="uk-active">
+        <a href="solution-893.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-893.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-893.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-893.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="c2f75820-3969-4e92-bbc1-fbfd119cb663">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">numSpecialEquivGroups</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">word</span> <span class="o">:</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">s</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">convert</span><span class="o">(</span><span class="n">word</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="nf">convert</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">a</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ch</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">b</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ch</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+        <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">numSpecialEquivGroups</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">word</span> <span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">string</span> <span class="n">a</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">a</span> <span class="o">+=</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="k">else</span>
+                    <span class="n">b</span> <span class="o">+=</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">a</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="n">sort</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">b</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">numSpecialEquivGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">{</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">word</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]))</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">}</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">numSpecialEquivGroups</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">s</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+		<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">rune</span><span class="p">{},</span> <span class="p">[]</span><span class="kt">rune</span><span class="p">{}</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">i</span><span class="o">&amp;</span><span class="m">1</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">a</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">b</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+		<span class="p">})</span>
+		<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+		<span class="p">})</span>
+		<span class="n">s</span><span class="p">[</span><span class="kt">string</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">+</span><span class="kt">string</span><span class="p">(</span><span class="n">b</span><span class="p">)]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-893.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

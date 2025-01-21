@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3390.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3390.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3390 - Longest Team Pass Streak</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3390. Longest Team Pass Streak ð Description Table: Teams +-++ \| player_id \| int \| \| team_name \| varchar \| +-++ \| Column Name \| Type \| +-++ (pass_from, time_stamp) is the unique key for this table. pass_from is a foreign key to player_id from...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3390.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3390.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3390.html" rel="stylesheet"/>
+   <link href="solution-3390.html" rel="stylesheet"/>
+   <link href="solution-3390.html" rel="stylesheet"/>
+   <link href="solution-3390.html" rel="stylesheet"/>
+   <link href="solution-3390.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3390 - Longest Team Pass Streak" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+
+
+3390. Longest Team Pass Streak ð
+
+Description
+
+
+
+Table: Teams
+
+
++-++
+\| player_id   \| int     \|
+\| team_name   \| varchar \| 
++-++
+\| Column Name \| Type    \|
++-++
+(pass_from, time_stamp) is the unique key for this table.
+pass_from is a foreign key to player_id from Teams table.
+Each row represents a pass made during a match, time_stamp represents the time in minutes (00:00-90:00) when the pass was made,
+pass_to is the player_id of the player receiving the pass.
+
+
+Write a solution to find the longest successful pass streak for each team during the match. The rules are as follows:
+
+
+	A successful pass streak is defined as consecutive passes where:
+	
+		Both the pass_from and pass_to players belong to the same team
+	
+	
+	A streak breaks when either:
+	
+		The pass is intercepted (received by a player from the opposing team)
+	
+	
+
+
+Return the result table ordered by team_name in ascending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example:
+
+
+Input:
+
+Teams table:
+
+
++--+
+\| player_id \| team_name \|
++--+
+\| 1         \| Arsenal   \|
+\| 2         \| Arsenal   \|
+\| 3         \| Arsenal   \|
+\| 4         \| Arsenal   \|
+\| 5         \| Chelsea   \|
+\| 6         \| Chelsea   \|
+\| 7         \| Chelsea   \|
+\| 8         \| Chelsea   \|
++--+
+
+
+Passes table:
+
+
+++
+\| pass_from \| time_stamp \| pass_to \|
+++
+\| 1         \| 00:05      \| 2       \|
+\| 2         \| 00:07      \| 3       \|
+\| 3         \| 00:08      \| 4       \|
+\| 4         \| 00:10      \| 5       \|
+\| 6         \| 00:15      \| 7       \|
+\| 7         \| 00:17      \| 8       \|
+\| 8         \| 00:20      \| 6       \|
+\| 6         \| 00:22      \| 5       \|
+\| 1         \| 00:25      \| 2       \|
+\| 2         \| 00:27      \| 3       \|
+++
+
+
+Output:
+
+
++-+
+\| team_name \| longest_streak \|
++-+
+\| Arsenal   \| 3              \|
+\| Chelsea   \| 4              \|
++-+
+
+
+Explanation:
+
+
+	Arsenal&amp;#39;s streaks:
+
+    
+    	First streak: 3 passes (1&amp;rarr;2&amp;rarr;3&amp;rarr;4) ended when player 4 passed to Chelsea&amp;#39;s player 5
+    	Second streak: 2 passes (1&amp;rarr;2&amp;rarr;3)
+    	Longest streak = 3
+    
+    
+    Chelsea&amp;#39;s streaks:
+    
+    	First streak: 3 passes (6&amp;rarr;7&amp;rarr;8&amp;rarr;6&amp;rarr;5)
+    	Longest streak = 4
+    
+    
+
+
+
+
+
+
+Solutions
+
+
+
+Solution 1
+
+
+
+	SQL
+
+
+
+
+
+	
+WITH
+    PassesWithTeams AS (
+        SELECT
+            p.pass_from,
+            p.pass_to,
+            t1.team_name AS team_from,
+            t2.team_name AS team_to,
+            IF(t1.team_name = t2.team_name, 1, 0) same_team_flag,
+            p.time_stamp
+        FROM
+            Passes p
+            JOIN Teams t1 ON p.pass_from = t1.player_id
+            JOIN Teams t2 ON p.pass_to = t2.player_id
+    ),
+    StreakGroups AS (
+        SELECT
+            team_from AS team_name,
+            time_stamp,
+            same_team_flag,
+            SUM(
+                CASE
+                    WHEN same_team_flag = 0 THEN 1
+                    ELSE 0
+                END
+            ) OVER (
+                PARTITION BY team_from
+                ORDER BY time_stamp
+            ) AS group_id
+        FROM PassesWithTeams
+    ),
+    StreakLengths AS (
+        SELECT
+            team_name,
+            group_id,
+            COUNT(*) AS streak_length
+        FROM StreakGroups
+        WHERE same_team_flag = 1
+        GROUP BY 1, 2
+    ),
+    LongestStreaks AS (
+        SELECT
+            team_name,
+            MAX(streak_length) AS longest_streak
+        FROM StreakLengths
+        GROUP BY 1
+    )
+SELECT
+    team_name,
+    longest_streak
+FROM LongestStreaks
+ORDER BY 1;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2025-01-03T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2025-01-03-3390-Longest-Team-Pass-Streak/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3390.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3390 - Longest Team Pass Streak" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+
+
+3390. Longest Team Pass Streak ð
+
+Description
+
+
+
+Table: Teams
+
+
++-++
+\| player_id   \| int     \|
+\| team_name   \| varchar \| 
++-++
+\| Column Name \| Type    \|
++-++
+(pass_from, time_stamp) is the unique key for this table.
+pass_from is a foreign key to player_id from Teams table.
+Each row represents a pass made during a match, time_stamp represents the time in minutes (00:00-90:00) when the pass was made,
+pass_to is the player_id of the player receiving the pass.
+
+
+Write a solution to find the longest successful pass streak for each team during the match. The rules are as follows:
+
+
+	A successful pass streak is defined as consecutive passes where:
+	
+		Both the pass_from and pass_to players belong to the same team
+	
+	
+	A streak breaks when either:
+	
+		The pass is intercepted (received by a player from the opposing team)
+	
+	
+
+
+Return the result table ordered by team_name in ascending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example:
+
+
+Input:
+
+Teams table:
+
+
++--+
+\| player_id \| team_name \|
++--+
+\| 1         \| Arsenal   \|
+\| 2         \| Arsenal   \|
+\| 3         \| Arsenal   \|
+\| 4         \| Arsenal   \|
+\| 5         \| Chelsea   \|
+\| 6         \| Chelsea   \|
+\| 7         \| Chelsea   \|
+\| 8         \| Chelsea   \|
++--+
+
+
+Passes table:
+
+
+++
+\| pass_from \| time_stamp \| pass_to \|
+++
+\| 1         \| 00:05      \| 2       \|
+\| 2         \| 00:07      \| 3       \|
+\| 3         \| 00:08      \| 4       \|
+\| 4         \| 00:10      \| 5       \|
+\| 6         \| 00:15      \| 7       \|
+\| 7         \| 00:17      \| 8       \|
+\| 8         \| 00:20      \| 6       \|
+\| 6         \| 00:22      \| 5       \|
+\| 1         \| 00:25      \| 2       \|
+\| 2         \| 00:27      \| 3       \|
+++
+
+
+Output:
+
+
++-+
+\| team_name \| longest_streak \|
++-+
+\| Arsenal   \| 3              \|
+\| Chelsea   \| 4              \|
++-+
+
+
+Explanation:
+
+
+	Arsenal&amp;#39;s streaks:
+
+    
+    	First streak: 3 passes (1&amp;rarr;2&amp;rarr;3&amp;rarr;4) ended when player 4 passed to Chelsea&amp;#39;s player 5
+    	Second streak: 2 passes (1&amp;rarr;2&amp;rarr;3)
+    	Longest streak = 3
+    
+    
+    Chelsea&amp;#39;s streaks:
+    
+    	First streak: 3 passes (6&amp;rarr;7&amp;rarr;8&amp;rarr;6&amp;rarr;5)
+    	Longest streak = 4
+    
+    
+
+
+
+
+
+
+Solutions
+
+
+
+Solution 1
+
+
+
+	SQL
+
+
+
+
+
+	
+WITH
+    PassesWithTeams AS (
+        SELECT
+            p.pass_from,
+            p.pass_to,
+            t1.team_name AS team_from,
+            t2.team_name AS team_to,
+            IF(t1.team_name = t2.team_name, 1, 0) same_team_flag,
+            p.time_stamp
+        FROM
+            Passes p
+            JOIN Teams t1 ON p.pass_from = t1.player_id
+            JOIN Teams t2 ON p.pass_to = t2.player_id
+    ),
+    StreakGroups AS (
+        SELECT
+            team_from AS team_name,
+            time_stamp,
+            same_team_flag,
+            SUM(
+                CASE
+                    WHEN same_team_flag = 0 THEN 1
+                    ELSE 0
+                END
+            ) OVER (
+                PARTITION BY team_from
+                ORDER BY time_stamp
+            ) AS group_id
+        FROM PassesWithTeams
+    ),
+    StreakLengths AS (
+        SELECT
+            team_name,
+            group_id,
+            COUNT(*) AS streak_length
+        FROM StreakGroups
+        WHERE same_team_flag = 1
+        GROUP BY 1, 2
+    ),
+    LongestStreaks AS (
+        SELECT
+            team_name,
+            MAX(streak_length) AS longest_streak
+        FROM StreakLengths
+        GROUP BY 1
+    )
+SELECT
+    team_name,
+    longest_streak
+FROM LongestStreaks
+ORDER BY 1;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3390 - Longest Team Pass Streak | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3390 - Longest Team Pass Streak" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3390.html" rel="canonical">
+          <meta content="https://leetcode.ca/2025-01-03-3390-Longest-Team-Pass-Streak/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2025-01-03T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3390 - Longest Team Pass Streak","dateModified":"2025-01-03T00:00:00-08:00","datePublished":"2025-01-03T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2025-01-03-3390-Longest-Team-Pass-Streak/"},"url":"https://leetcode.ca/2025-01-03-3390-Longest-Team-Pass-Streak/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3390-longest-team-pass-streak-">
+       <a href="solution-3390.html">
+        3390. Longest Team Pass Streak ð
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       Table:
+       <code>
+        Teams
+       </code>
+      </p>
+      <pre>
++-++
+\| player_id   \| int     \|
+\| team_name   \| varchar \| 
++-++
+\| Column Name \| Type    \|
++-++
+(pass_from, time_stamp) is the unique key for this table.
+pass_from is a foreign key to player_id from Teams table.
+Each row represents a pass made during a match, time_stamp represents the time in minutes (00:00-90:00) when the pass was made,
+pass_to is the player_id of the player receiving the pass.
+</pre>
+      <p>
+       Write a solution to find the
+       <strong>
+        longest successful pass streak
+       </strong>
+       for
+       <strong>
+        each team
+       </strong>
+       during the match. The rules are as follows:
+      </p>
+      <ul>
+       <li>
+        A successful pass streak is defined as consecutive passes where:
+        <ul>
+         <li>
+          Both the
+          <code>
+           pass_from
+          </code>
+          and
+          <code>
+           pass_to
+          </code>
+          players belong to the same team
+         </li>
+        </ul>
+       </li>
+       <li>
+        A streak breaks when either:
+        <ul>
+         <li>
+          The pass is intercepted (received by a player from the opposing team)
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the result table ordered by
+       </em>
+       <code>
+        team_name
+       </code>
+       <em>
+        in
+        <strong>
+         ascending
+        </strong>
+        order
+       </em>
+       .
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+       </p>
+       <p>
+        Teams table:
+       </p>
+       <pre>
++--+
+\| player_id \| team_name \|
++--+
+\| 1         \| Arsenal   \|
+\| 2         \| Arsenal   \|
+\| 3         \| Arsenal   \|
+\| 4         \| Arsenal   \|
+\| 5         \| Chelsea   \|
+\| 6         \| Chelsea   \|
+\| 7         \| Chelsea   \|
+\| 8         \| Chelsea   \|
++--+
+</pre>
+       <p>
+        Passes table:
+       </p>
+       <pre>
+++
+\| pass_from \| time_stamp \| pass_to \|
+++
+\| 1         \| 00:05      \| 2       \|
+\| 2         \| 00:07      \| 3       \|
+\| 3         \| 00:08      \| 4       \|
+\| 4         \| 00:10      \| 5       \|
+\| 6         \| 00:15      \| 7       \|
+\| 7         \| 00:17      \| 8       \|
+\| 8         \| 00:20      \| 6       \|
+\| 6         \| 00:22      \| 5       \|
+\| 1         \| 00:25      \| 2       \|
+\| 2         \| 00:27      \| 3       \|
+++
+</pre>
+       <p>
+        <strong>
+         Output:
+        </strong>
+       </p>
+       <pre>
++-+
+\| team_name \| longest_streak \|
++-+
+\| Arsenal   \| 3              \|
+\| Chelsea   \| 4              \|
++-+
+</pre>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <ul>
+        <li>
+         <strong>
+          Arsenal
+         </strong>
+         's streaks:
+         <ul>
+          <li>
+           First streak: 3 passes (1→2→3→4) ended when player 4 passed to Chelsea's player 5
+          </li>
+          <li>
+           Second streak: 2 passes (1→2→3)
+          </li>
+          <li>
+           Longest streak = 3
+          </li>
+         </ul>
+        </li>
+        <li>
+         <strong>
+          Chelsea
+         </strong>
+         's streaks:
+         <ul>
+          <li>
+           First streak: 3 passes (6→7→8→6→5)
+          </li>
+          <li>
+           Longest streak = 4
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1">
+       Solution 1
+      </h3>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8cfc2e5e-bf54-4630-9a95-5f634e2e7e0d'}">
+       <li class="uk-active">
+        <a href="solution-3390.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8cfc2e5e-bf54-4630-9a95-5f634e2e7e0d">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">WITH</span>
+    <span class="n">PassesWithTeams</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">pass_from</span><span class="p">,</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">pass_to</span><span class="p">,</span>
+            <span class="n">t1</span><span class="p">.</span><span class="n">team_name</span> <span class="k">AS</span> <span class="n">team_from</span><span class="p">,</span>
+            <span class="n">t2</span><span class="p">.</span><span class="n">team_name</span> <span class="k">AS</span> <span class="n">team_to</span><span class="p">,</span>
+            <span class="n">IF</span><span class="p">(</span><span class="n">t1</span><span class="p">.</span><span class="n">team_name</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">team_name</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">same_team_flag</span><span class="p">,</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">time_stamp</span>
+        <span class="k">FROM</span>
+            <span class="n">Passes</span> <span class="n">p</span>
+            <span class="k">JOIN</span> <span class="n">Teams</span> <span class="n">t1</span> <span class="k">ON</span> <span class="n">p</span><span class="p">.</span><span class="n">pass_from</span> <span class="o">=</span> <span class="n">t1</span><span class="p">.</span><span class="n">player_id</span>
+            <span class="k">JOIN</span> <span class="n">Teams</span> <span class="n">t2</span> <span class="k">ON</span> <span class="n">p</span><span class="p">.</span><span class="n">pass_to</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">player_id</span>
+    <span class="p">),</span>
+    <span class="n">StreakGroups</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">team_from</span> <span class="k">AS</span> <span class="n">team_name</span><span class="p">,</span>
+            <span class="n">time_stamp</span><span class="p">,</span>
+            <span class="n">same_team_flag</span><span class="p">,</span>
+            <span class="k">SUM</span><span class="p">(</span>
+                <span class="k">CASE</span>
+                    <span class="k">WHEN</span> <span class="n">same_team_flag</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">THEN</span> <span class="mi">1</span>
+                    <span class="k">ELSE</span> <span class="mi">0</span>
+                <span class="k">END</span>
+            <span class="p">)</span> <span class="n">OVER</span> <span class="p">(</span>
+                <span class="k">PARTITION</span> <span class="k">BY</span> <span class="n">team_from</span>
+                <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">time_stamp</span>
+            <span class="p">)</span> <span class="k">AS</span> <span class="n">group_id</span>
+        <span class="k">FROM</span> <span class="n">PassesWithTeams</span>
+    <span class="p">),</span>
+    <span class="n">StreakLengths</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">team_name</span><span class="p">,</span>
+            <span class="n">group_id</span><span class="p">,</span>
+            <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">streak_length</span>
+        <span class="k">FROM</span> <span class="n">StreakGroups</span>
+        <span class="k">WHERE</span> <span class="n">same_team_flag</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="p">),</span>
+    <span class="n">LongestStreaks</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">team_name</span><span class="p">,</span>
+            <span class="k">MAX</span><span class="p">(</span><span class="n">streak_length</span><span class="p">)</span> <span class="k">AS</span> <span class="n">longest_streak</span>
+        <span class="k">FROM</span> <span class="n">StreakLengths</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span>
+    <span class="n">team_name</span><span class="p">,</span>
+    <span class="n">longest_streak</span>
+<span class="k">FROM</span> <span class="n">LongestStreaks</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3390.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

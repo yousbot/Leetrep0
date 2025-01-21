@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1348.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1348.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1348 - Tweet Counts Per Frequency</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1348. Tweet Counts Per Frequency Description A social media company is trying to monitor activity on their site by analyzing the number of tweets that occur in select periods of time. These periods can be partitioned into smaller time chunks based on a certain frequency...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1348.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1348.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1348.html" rel="stylesheet"/>
+   <link href="solution-1348.html" rel="stylesheet"/>
+   <link href="solution-1348.html" rel="stylesheet"/>
+   <link href="solution-1348.html" rel="stylesheet"/>
+   <link href="solution-1348.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1348 - Tweet Counts Per Frequency" property="og:title"/>
+   <meta content='Leetcode 1348. Tweet Counts Per Frequency Description A social media company is trying to monitor activity on their site by analyzing the number of tweets that occur in select periods of time. These periods can be partitioned into smaller time chunks based on a certain frequency (every minute, hour, or day). For example, the period [10, 10000] (in seconds) would be partitioned into the following time chunks with these frequencies: Every minute (60-second chunks): [10,69], [70,129], [130,189], ..., [9970,10000] Every hour (3600-second chunks): [10,3609], [3610,7209], [7210,10000] Every day (86400-second chunks): [10,10000] Notice that the last chunk may be shorter than the specified frequency&amp;#39;s chunk size and will always end with the end time of the period (10000 in the above example). Design and implement an API to help the company with their analysis. Implement the TweetCounts class: TweetCounts() Initializes the TweetCounts object. void recordTweet(String tweetName, int time) Stores the tweetName at the recorded time (in seconds). List&amp;lt;Integer&amp;gt; getTweetCountsPerFrequency(String freq, String tweetName, int startTime, int endTime) Returns a list of integers representing the number of tweets with tweetName in each time chunk for the given period of time [startTime, endTime] (in seconds) and frequency freq. freq is one of &amp;quot;minute&amp;quot;, &amp;quot;hour&amp;quot;, or &amp;quot;day&amp;quot; representing a frequency of every minute, hour, or day respectively. &amp;nbsp; Example: Input [&amp;quot;TweetCounts&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;getTweetCountsPerFrequency&amp;quot;,&amp;quot;getTweetCountsPerFrequency&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;getTweetCountsPerFrequency&amp;quot;] [[],[&amp;quot;tweet3&amp;quot;,0],[&amp;quot;tweet3&amp;quot;,60],[&amp;quot;tweet3&amp;quot;,10],[&amp;quot;minute&amp;quot;,&amp;quot;tweet3&amp;quot;,0,59],[&amp;quot;minute&amp;quot;,&amp;quot;tweet3&amp;quot;,0,60],[&amp;quot;tweet3&amp;quot;,120],[&amp;quot;hour&amp;quot;,&amp;quot;tweet3&amp;quot;,0,210]] Output [null,null,null,null,[2],[2,1],null,[4]] Explanation TweetCounts tweetCounts = new TweetCounts(); tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 0); // New tweet &amp;quot;tweet3&amp;quot; at time 0 tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 60); // New tweet &amp;quot;tweet3&amp;quot; at time 60 tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 10); // New tweet &amp;quot;tweet3&amp;quot; at time 10 tweetCounts.getTweetCountsPerFrequency(&amp;quot;minute&amp;quot;, &amp;quot;tweet3&amp;quot;, 0, 59); // return [2]; chunk [0,59] had 2 tweets tweetCounts.getTweetCountsPerFrequency(&amp;quot;minute&amp;quot;, &amp;quot;tweet3&amp;quot;, 0, 60); // return [2,1]; chunk [0,59] had 2 tweets, chunk [60,60] had 1 tweet tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 120); // New tweet &amp;quot;tweet3&amp;quot; at time 120 tweetCounts.getTweetCountsPerFrequency(&amp;quot;hour&amp;quot;, &amp;quot;tweet3&amp;quot;, 0, 210); // return [4]; chunk [0,210] had 4 tweets &amp;nbsp; Constraints: 0 &amp;lt;= time, startTime, endTime &amp;lt;= 109 0 &amp;lt;= endTime - startTime &amp;lt;= 104 There will be at most 104 calls in total to recordTweet and getTweetCountsPerFrequency. Solutions Java C++ Python class TweetCounts { private Map&amp;lt;String, TreeMap&amp;lt;Integer, Integer&amp;gt;&amp;gt; data = new HashMap&amp;lt;&amp;gt;(); public TweetCounts() { } public void recordTweet(String tweetName, int time) { data.putIfAbsent(tweetName, new TreeMap&amp;lt;&amp;gt;()); var tm = data.get(tweetName); tm.put(time, tm.getOrDefault(time, 0) + 1); } public List&amp;lt;Integer&amp;gt; getTweetCountsPerFrequency( String freq, String tweetName, int startTime, int endTime) { int f = 60; if ("hour".equals(freq)) { f = 3600; } else if ("day".equals(freq)) { f = 86400; } var tm = data.get(tweetName); List&amp;lt;Integer&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int i = startTime; i &amp;lt;= endTime; i += f) { int s = 0; int end = Math.min(i + f, endTime + 1); for (int v : tm.subMap(i, end).values()) { s += v; } ans.add(s); } return ans; } } /** * Your TweetCounts object will be instantiated and called as such: * TweetCounts obj = new TweetCounts(); * obj.recordTweet(tweetName,time); * List&amp;lt;Integer&amp;gt; param_2 = obj.getTweetCountsPerFrequency(freq,tweetName,startTime,endTime); */ class TweetCounts { public: TweetCounts() { } void recordTweet(string tweetName, int time) { data[tweetName].insert(time); } vector&amp;lt;int&amp;gt; getTweetCountsPerFrequency(string freq,...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-08-09T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-08-09-1348-Tweet-Counts-Per-Frequency/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1348.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1348 - Tweet Counts Per Frequency" property="twitter:title"/>
+   <meta content='Leetcode 1348. Tweet Counts Per Frequency Description A social media company is trying to monitor activity on their site by analyzing the number of tweets that occur in select periods of time. These periods can be partitioned into smaller time chunks based on a certain frequency (every minute, hour, or day). For example, the period [10, 10000] (in seconds) would be partitioned into the following time chunks with these frequencies: Every minute (60-second chunks): [10,69], [70,129], [130,189], ..., [9970,10000] Every hour (3600-second chunks): [10,3609], [3610,7209], [7210,10000] Every day (86400-second chunks): [10,10000] Notice that the last chunk may be shorter than the specified frequency&amp;#39;s chunk size and will always end with the end time of the period (10000 in the above example). Design and implement an API to help the company with their analysis. Implement the TweetCounts class: TweetCounts() Initializes the TweetCounts object. void recordTweet(String tweetName, int time) Stores the tweetName at the recorded time (in seconds). List&amp;lt;Integer&amp;gt; getTweetCountsPerFrequency(String freq, String tweetName, int startTime, int endTime) Returns a list of integers representing the number of tweets with tweetName in each time chunk for the given period of time [startTime, endTime] (in seconds) and frequency freq. freq is one of &amp;quot;minute&amp;quot;, &amp;quot;hour&amp;quot;, or &amp;quot;day&amp;quot; representing a frequency of every minute, hour, or day respectively. &amp;nbsp; Example: Input [&amp;quot;TweetCounts&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;getTweetCountsPerFrequency&amp;quot;,&amp;quot;getTweetCountsPerFrequency&amp;quot;,&amp;quot;recordTweet&amp;quot;,&amp;quot;getTweetCountsPerFrequency&amp;quot;] [[],[&amp;quot;tweet3&amp;quot;,0],[&amp;quot;tweet3&amp;quot;,60],[&amp;quot;tweet3&amp;quot;,10],[&amp;quot;minute&amp;quot;,&amp;quot;tweet3&amp;quot;,0,59],[&amp;quot;minute&amp;quot;,&amp;quot;tweet3&amp;quot;,0,60],[&amp;quot;tweet3&amp;quot;,120],[&amp;quot;hour&amp;quot;,&amp;quot;tweet3&amp;quot;,0,210]] Output [null,null,null,null,[2],[2,1],null,[4]] Explanation TweetCounts tweetCounts = new TweetCounts(); tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 0); // New tweet &amp;quot;tweet3&amp;quot; at time 0 tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 60); // New tweet &amp;quot;tweet3&amp;quot; at time 60 tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 10); // New tweet &amp;quot;tweet3&amp;quot; at time 10 tweetCounts.getTweetCountsPerFrequency(&amp;quot;minute&amp;quot;, &amp;quot;tweet3&amp;quot;, 0, 59); // return [2]; chunk [0,59] had 2 tweets tweetCounts.getTweetCountsPerFrequency(&amp;quot;minute&amp;quot;, &amp;quot;tweet3&amp;quot;, 0, 60); // return [2,1]; chunk [0,59] had 2 tweets, chunk [60,60] had 1 tweet tweetCounts.recordTweet(&amp;quot;tweet3&amp;quot;, 120); // New tweet &amp;quot;tweet3&amp;quot; at time 120 tweetCounts.getTweetCountsPerFrequency(&amp;quot;hour&amp;quot;, &amp;quot;tweet3&amp;quot;, 0, 210); // return [4]; chunk [0,210] had 4 tweets &amp;nbsp; Constraints: 0 &amp;lt;= time, startTime, endTime &amp;lt;= 109 0 &amp;lt;= endTime - startTime &amp;lt;= 104 There will be at most 104 calls in total to recordTweet and getTweetCountsPerFrequency. Solutions Java C++ Python class TweetCounts { private Map&amp;lt;String, TreeMap&amp;lt;Integer, Integer&amp;gt;&amp;gt; data = new HashMap&amp;lt;&amp;gt;(); public TweetCounts() { } public void recordTweet(String tweetName, int time) { data.putIfAbsent(tweetName, new TreeMap&amp;lt;&amp;gt;()); var tm = data.get(tweetName); tm.put(time, tm.getOrDefault(time, 0) + 1); } public List&amp;lt;Integer&amp;gt; getTweetCountsPerFrequency( String freq, String tweetName, int startTime, int endTime) { int f = 60; if ("hour".equals(freq)) { f = 3600; } else if ("day".equals(freq)) { f = 86400; } var tm = data.get(tweetName); List&amp;lt;Integer&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int i = startTime; i &amp;lt;= endTime; i += f) { int s = 0; int end = Math.min(i + f, endTime + 1); for (int v : tm.subMap(i, end).values()) { s += v; } ans.add(s); } return ans; } } /** * Your TweetCounts object will be instantiated and called as such: * TweetCounts obj = new TweetCounts(); * obj.recordTweet(tweetName,time); * List&amp;lt;Integer&amp;gt; param_2 = obj.getTweetCountsPerFrequency(freq,tweetName,startTime,endTime); */ class TweetCounts { public: TweetCounts() { } void recordTweet(string tweetName, int time) { data[tweetName].insert(time); } vector&amp;lt;int&amp;gt; getTweetCountsPerFrequency(string freq,...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1348 - Tweet Counts Per Frequency | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1348 - Tweet Counts Per Frequency" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1348.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-08-09-1348-Tweet-Counts-Per-Frequency/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-08-09T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1348 - Tweet Counts Per Frequency","dateModified":"2019-08-09T00:00:00-07:00","datePublished":"2019-08-09T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-08-09-1348-Tweet-Counts-Per-Frequency/"},"url":"https://leetcode.ca/2019-08-09-1348-Tweet-Counts-Per-Frequency/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1348-tweet-counts-per-frequency">
+       <a href="solution-1348.html">
+        1348. Tweet Counts Per Frequency
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       A social media company is trying to monitor activity on their site by analyzing the number of tweets that occur in select periods of time. These periods can be partitioned into smaller
+       <strong>
+        time chunks
+       </strong>
+       based on a certain frequency (every
+       <strong>
+        minute
+       </strong>
+       ,
+       <strong>
+        hour
+       </strong>
+       , or
+       <strong>
+        day
+       </strong>
+       ).
+      </p>
+      <p>
+       For example, the period
+       <code>
+        [10, 10000]
+       </code>
+       (in
+       <strong>
+        seconds
+       </strong>
+       ) would be partitioned into the following
+       <strong>
+        time chunks
+       </strong>
+       with these frequencies:
+      </p>
+      <ul>
+       <li>
+        Every
+        <strong>
+         minute
+        </strong>
+        (60-second chunks):
+        <code>
+         [10,69]
+        </code>
+        ,
+        <code>
+         [70,129]
+        </code>
+        ,
+        <code>
+         [130,189]
+        </code>
+        ,
+        <code>
+         ...
+        </code>
+        ,
+        <code>
+         [9970,10000]
+        </code>
+       </li>
+       <li>
+        Every
+        <strong>
+         hour
+        </strong>
+        (3600-second chunks):
+        <code>
+         [10,3609]
+        </code>
+        ,
+        <code>
+         [3610,7209]
+        </code>
+        ,
+        <code>
+         [7210,10000]
+        </code>
+       </li>
+       <li>
+        Every
+        <strong>
+         day
+        </strong>
+        (86400-second chunks):
+        <code>
+         [10,10000]
+        </code>
+       </li>
+      </ul>
+      <p>
+       Notice that the last chunk may be shorter than the specified frequency's chunk size and will always end with the end time of the period (
+       <code>
+        10000
+       </code>
+       in the above example).
+      </p>
+      <p>
+       Design and implement an API to help the company with their analysis.
+      </p>
+      <p>
+       Implement the
+       <code>
+        TweetCounts
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         TweetCounts()
+        </code>
+        Initializes the
+        <code>
+         TweetCounts
+        </code>
+        object.
+       </li>
+       <li>
+        <code>
+         void recordTweet(String tweetName, int time)
+        </code>
+        Stores the
+        <code>
+         tweetName
+        </code>
+        at the recorded
+        <code>
+         time
+        </code>
+        (in
+        <strong>
+         seconds
+        </strong>
+        ).
+       </li>
+       <li>
+        <code>
+         List&lt;Integer&gt; getTweetCountsPerFrequency(String freq, String tweetName, int startTime, int endTime)
+        </code>
+        Returns a list of integers representing the number of tweets with
+        <code>
+         tweetName
+        </code>
+        in each
+        <strong>
+         time chunk
+        </strong>
+        for the given period of time
+        <code>
+         [startTime, endTime]
+        </code>
+        (in
+        <strong>
+         seconds
+        </strong>
+        ) and frequency
+        <code>
+         freq
+        </code>
+        .
+        <ul>
+         <li>
+          <code>
+           freq
+          </code>
+          is one of
+          <code>
+           "minute"
+          </code>
+          ,
+          <code>
+           "hour"
+          </code>
+          , or
+          <code>
+           "day"
+          </code>
+          representing a frequency of every
+          <strong>
+           minute
+          </strong>
+          ,
+          <strong>
+           hour
+          </strong>
+          , or
+          <strong>
+           day
+          </strong>
+          respectively.
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["TweetCounts","recordTweet","recordTweet","recordTweet","getTweetCountsPerFrequency","getTweetCountsPerFrequency","recordTweet","getTweetCountsPerFrequency"]
+[[],["tweet3",0],["tweet3",60],["tweet3",10],["minute","tweet3",0,59],["minute","tweet3",0,60],["tweet3",120],["hour","tweet3",0,210]]
+
+<strong>Output</strong>
+[null,null,null,null,[2],[2,1],null,[4]]
+
+<strong>Explanation</strong>
+TweetCounts tweetCounts = new TweetCounts();
+tweetCounts.recordTweet("tweet3", 0);                              // New tweet "tweet3" at time 0
+tweetCounts.recordTweet("tweet3", 60);                             // New tweet "tweet3" at time 60
+tweetCounts.recordTweet("tweet3", 10);                             // New tweet "tweet3" at time 10
+tweetCounts.getTweetCountsPerFrequency("minute", "tweet3", 0, 59); // return [2]; chunk [0,59] had 2 tweets
+tweetCounts.getTweetCountsPerFrequency("minute", "tweet3", 0, 60); // return [2,1]; chunk [0,59] had 2 tweets, chunk [60,60] had 1 tweet
+tweetCounts.recordTweet("tweet3", 120);                            // New tweet "tweet3" at time 120
+tweetCounts.getTweetCountsPerFrequency("hour", "tweet3", 0, 210);  // return [4]; chunk [0,210] had 4 tweets
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= time, startTime, endTime &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= endTime - startTime &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        There will be at most
+        <code>
+         10
+         <sup>
+          4
+         </sup>
+        </code>
+        calls
+        <strong>
+         in total
+        </strong>
+        to
+        <code>
+         recordTweet
+        </code>
+        and
+        <code>
+         getTweetCountsPerFrequency
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#a595c721-1dfa-4851-802c-2a2a478fd0fa'}">
+       <li class="uk-active">
+        <a href="solution-1348.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1348.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1348.html">
+         Python
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="a595c721-1dfa-4851-802c-2a2a478fd0fa">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">TweetCounts</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">TreeMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nf">TweetCounts</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">recordTweet</span><span class="o">(</span><span class="nc">String</span> <span class="n">tweetName</span><span class="o">,</span> <span class="kt">int</span> <span class="n">time</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">putIfAbsent</span><span class="o">(</span><span class="n">tweetName</span><span class="o">,</span> <span class="k">new</span> <span class="nc">TreeMap</span><span class="o">&lt;&gt;());</span>
+        <span class="kt">var</span> <span class="n">tm</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tweetName</span><span class="o">);</span>
+        <span class="n">tm</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">time</span><span class="o">,</span> <span class="n">tm</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">time</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">getTweetCountsPerFrequency</span><span class="o">(</span>
+        <span class="nc">String</span> <span class="n">freq</span><span class="o">,</span> <span class="nc">String</span> <span class="n">tweetName</span><span class="o">,</span> <span class="kt">int</span> <span class="n">startTime</span><span class="o">,</span> <span class="kt">int</span> <span class="n">endTime</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">60</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="s">"hour"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">freq</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="mi">3600</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"day"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">freq</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="mi">86400</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">var</span> <span class="n">tm</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tweetName</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startTime</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">endTime</span><span class="o">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">f</span><span class="o">,</span> <span class="n">endTime</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">tm</span><span class="o">.</span><span class="na">subMap</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">end</span><span class="o">).</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="n">v</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your TweetCounts object will be instantiated and called as such:
+ * TweetCounts obj = new TweetCounts();
+ * obj.recordTweet(tweetName,time);
+ * List&lt;Integer&gt; param_2 = obj.getTweetCountsPerFrequency(freq,tweetName,startTime,endTime);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">TweetCounts</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">TweetCounts</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">recordTweet</span><span class="p">(</span><span class="n">string</span> <span class="n">tweetName</span><span class="p">,</span> <span class="kt">int</span> <span class="n">time</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">tweetName</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">getTweetCountsPerFrequency</span><span class="p">(</span><span class="n">string</span> <span class="n">freq</span><span class="p">,</span> <span class="n">string</span> <span class="n">tweetName</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startTime</span><span class="p">,</span> <span class="kt">int</span> <span class="n">endTime</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">60</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">freq</span> <span class="o">==</span> <span class="s">"hour"</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="mi">3600</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">freq</span> <span class="o">==</span> <span class="s">"day"</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="mi">86400</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">((</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">l</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">tweetName</span><span class="p">].</span><span class="n">lower_bound</span><span class="p">(</span><span class="n">startTime</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">r</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">tweetName</span><span class="p">].</span><span class="n">upper_bound</span><span class="p">(</span><span class="n">endTime</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">l</span> <span class="o">!=</span> <span class="n">r</span><span class="p">;</span> <span class="o">++</span><span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">ans</span><span class="p">[(</span><span class="o">*</span><span class="n">l</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">multiset</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your TweetCounts object will be instantiated and called as such:
+ * TweetCounts* obj = new TweetCounts();
+ * obj-&gt;recordTweet(tweetName,time);
+ * vector&lt;int&gt; param_2 = obj-&gt;getTweetCountsPerFrequency(freq,tweetName,startTime,endTime);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">from</span> <span class="nn">sortedcontainers</span> <span class="kn">import</span> <span class="n">SortedList</span>
+
+
+<span class="k">class</span> <span class="nc">TweetCounts</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">"minute"</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="s">"hour"</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="s">"day"</span><span class="p">:</span> <span class="mi">86400</span><span class="p">}</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">SortedList</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">recordTweet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tweetName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">tweetName</span><span class="p">].</span><span class="n">add</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getTweetCountsPerFrequency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tweetName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">startTime</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">endTime</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span>
+        <span class="n">tweets</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">tweetName</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">startTime</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">endTime</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">tweets</span><span class="p">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">tweets</span><span class="p">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">f</span><span class="p">,</span> <span class="n">endTime</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span><span class="p">)</span>
+            <span class="n">t</span> <span class="o">+=</span> <span class="n">f</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+
+<span class="c1"># Your TweetCounts object will be instantiated and called as such:
+# obj = TweetCounts()
+# obj.recordTweet(tweetName,time)
+# param_2 = obj.getTweetCountsPerFrequency(freq,tweetName,startTime,endTime)
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1348.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

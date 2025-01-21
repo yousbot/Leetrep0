@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-465.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-465.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>465 - Optimal Account Balancing</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 465. Optimal Account Balancing Description You are given an array of transactions transactions where transactions[i] = [fromi, toi, amounti] indicates that the person with ID = fromi gave amounti to the person with ID = toi. Return the minimum number of transactions required to settle...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-465.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-465.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-465.html" rel="stylesheet"/>
+   <link href="solution-465.html" rel="stylesheet"/>
+   <link href="solution-465.html" rel="stylesheet"/>
+   <link href="solution-465.html" rel="stylesheet"/>
+   <link href="solution-465.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="465 - Optimal Account Balancing" property="og:title"/>
+   <meta content="Leetcode 465. Optimal Account Balancing Description You are given an array of transactions transactions where transactions[i] = [fromi, toi, amounti] indicates that the person with ID = fromi gave amounti to the person with ID = toi. Return the minimum number of transactions required to settle the debt. &amp;nbsp; Example 1: Input: transactions = [[0,1,10],[2,0,5]] Output: 2 Explanation: Person #0 gave person #1 10. Person #2 gave person #0 5. Two transactions are needed. One way to settle the debt is person #1 pays person #0 and #2 5 each. Example 2: Input: transactions = [[0,1,10],[1,0,1],[1,2,5],[2,0,5]] Output: 1 Explanation: Person #0 gave person #1 10. Person #1 gave person #0 1. Person #1 gave person #2 5. Person #2 gave person #0 5. Therefore, person #1 only need to give person #0 4, and all debt is settled. &amp;nbsp; Constraints: 1 &amp;lt;= transactions.length &amp;lt;= 8 transactions[i].length == 3 0 &amp;lt;= fromi, toi &amp;lt; 12 fromi != toi 1 &amp;lt;= amounti &amp;lt;= 100 Solutions Java C++ Python Go TypeScript class Solution { public int minTransfers(int[][] transactions) { int[] g = new int[12]; for (var t : transactions) { g[t[0]] -= t[2]; g[t[1]] += t[2]; } List&amp;lt;Integer&amp;gt; nums = new ArrayList&amp;lt;&amp;gt;(); for (int x : g) { if (x != 0) { nums.add(x); } } int m = nums.size(); int[] f = new int[1 &amp;lt;&amp;lt; m]; Arrays.fill(f, 1 &amp;lt;&amp;lt; 29); f[0] = 0; for (int i = 1; i &amp;lt; 1 &amp;lt;&amp;lt; m; ++i) { int s = 0; for (int j = 0; j &amp;lt; m; ++j) { if ((i &amp;gt;&amp;gt; j &amp;amp; 1) == 1) { s += nums.get(j); } } if (s == 0) { f[i] = Integer.bitCount(i) - 1; for (int j = (i - 1) &amp;amp; i; j &amp;gt; 0; j = (j - 1) &amp;amp; i) { f[i] = Math.min(f[i], f[j] + f[i ^ j]); } } } return f[(1 &amp;lt;&amp;lt; m) - 1]; } } class Solution { public: int minTransfers(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; transactions) { int g[12]{}; for (auto&amp;amp; t : transactions) { g[t[0]] -= t[2]; g[t[1]] += t[2]; } vector&amp;lt;int&amp;gt; nums; for (int x : g) { if (x) { nums.push_back(x); } } int m = nums.size(); int f[1 &amp;lt;&amp;lt; m]; memset(f, 0x3f, sizeof(f)); f[0] = 0; for (int i = 1; i &amp;lt; 1 &amp;lt;&amp;lt; m; ++i) { int s = 0; for (int j = 0; j &amp;lt; m; ++j) { if (i &amp;gt;&amp;gt; j &amp;amp; 1) { s += nums[j]; } } if (s == 0) { f[i] = __builtin_popcount(i) - 1; for (int j = (i - 1) &amp;amp; i; j; j = (j - 1) &amp;amp; i) { f[i] = min(f[i], f[j] + f[i ^ j]); } } } return f[(1 &amp;lt;&amp;lt; m) - 1]; } }; class Solution: def minTransfers(self, transactions: List[List[int]]) -&amp;gt; int: g = defaultdict(int) for f, t, x in transactions: g[f] -= x g[t] += x nums = [x for x in g.values() if x] m = len(nums) f = [inf] * (1..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-03-09T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-03-09-465-Optimal-Account-Balancing/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-465.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="465 - Optimal Account Balancing" property="twitter:title"/>
+   <meta content="Leetcode 465. Optimal Account Balancing Description You are given an array of transactions transactions where transactions[i] = [fromi, toi, amounti] indicates that the person with ID = fromi gave amounti to the person with ID = toi. Return the minimum number of transactions required to settle the debt. &amp;nbsp; Example 1: Input: transactions = [[0,1,10],[2,0,5]] Output: 2 Explanation: Person #0 gave person #1 10. Person #2 gave person #0 5. Two transactions are needed. One way to settle the debt is person #1 pays person #0 and #2 5 each. Example 2: Input: transactions = [[0,1,10],[1,0,1],[1,2,5],[2,0,5]] Output: 1 Explanation: Person #0 gave person #1 10. Person #1 gave person #0 1. Person #1 gave person #2 5. Person #2 gave person #0 5. Therefore, person #1 only need to give person #0 4, and all debt is settled. &amp;nbsp; Constraints: 1 &amp;lt;= transactions.length &amp;lt;= 8 transactions[i].length == 3 0 &amp;lt;= fromi, toi &amp;lt; 12 fromi != toi 1 &amp;lt;= amounti &amp;lt;= 100 Solutions Java C++ Python Go TypeScript class Solution { public int minTransfers(int[][] transactions) { int[] g = new int[12]; for (var t : transactions) { g[t[0]] -= t[2]; g[t[1]] += t[2]; } List&amp;lt;Integer&amp;gt; nums = new ArrayList&amp;lt;&amp;gt;(); for (int x : g) { if (x != 0) { nums.add(x); } } int m = nums.size(); int[] f = new int[1 &amp;lt;&amp;lt; m]; Arrays.fill(f, 1 &amp;lt;&amp;lt; 29); f[0] = 0; for (int i = 1; i &amp;lt; 1 &amp;lt;&amp;lt; m; ++i) { int s = 0; for (int j = 0; j &amp;lt; m; ++j) { if ((i &amp;gt;&amp;gt; j &amp;amp; 1) == 1) { s += nums.get(j); } } if (s == 0) { f[i] = Integer.bitCount(i) - 1; for (int j = (i - 1) &amp;amp; i; j &amp;gt; 0; j = (j - 1) &amp;amp; i) { f[i] = Math.min(f[i], f[j] + f[i ^ j]); } } } return f[(1 &amp;lt;&amp;lt; m) - 1]; } } class Solution { public: int minTransfers(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; transactions) { int g[12]{}; for (auto&amp;amp; t : transactions) { g[t[0]] -= t[2]; g[t[1]] += t[2]; } vector&amp;lt;int&amp;gt; nums; for (int x : g) { if (x) { nums.push_back(x); } } int m = nums.size(); int f[1 &amp;lt;&amp;lt; m]; memset(f, 0x3f, sizeof(f)); f[0] = 0; for (int i = 1; i &amp;lt; 1 &amp;lt;&amp;lt; m; ++i) { int s = 0; for (int j = 0; j &amp;lt; m; ++j) { if (i &amp;gt;&amp;gt; j &amp;amp; 1) { s += nums[j]; } } if (s == 0) { f[i] = __builtin_popcount(i) - 1; for (int j = (i - 1) &amp;amp; i; j; j = (j - 1) &amp;amp; i) { f[i] = min(f[i], f[j] + f[i ^ j]); } } } return f[(1 &amp;lt;&amp;lt; m) - 1]; } }; class Solution: def minTransfers(self, transactions: List[List[int]]) -&amp;gt; int: g = defaultdict(int) for f, t, x in transactions: g[f] -= x g[t] += x nums = [x for x in g.values() if x] m = len(nums) f = [inf] * (1..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    465 - Optimal Account Balancing | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="465 - Optimal Account Balancing" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-465.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-03-09-465-Optimal-Account-Balancing/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-03-09T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"465 - Optimal Account Balancing","dateModified":"2017-03-09T00:00:00-08:00","datePublished":"2017-03-09T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-03-09-465-Optimal-Account-Balancing/"},"url":"https://leetcode.ca/2017-03-09-465-Optimal-Account-Balancing/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="465-optimal-account-balancing">
+       <a href="solution-465.html">
+        465. Optimal Account Balancing
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an array of transactions
+       <code>
+        transactions
+       </code>
+       where
+       <code>
+        transactions[i] = [from
+        <sub>
+         i
+        </sub>
+        , to
+        <sub>
+         i
+        </sub>
+        , amount
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       indicates that the person with
+       <code>
+        ID = from
+        <sub>
+         i
+        </sub>
+       </code>
+       gave
+       <code>
+        amount
+        <sub>
+         i
+        </sub>
+       </code>
+       to the person with
+       <code>
+        ID = to
+        <sub>
+         i
+        </sub>
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the minimum number of transactions required to settle the debt
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> transactions = [[0,1,10],[2,0,5]]
+<strong>Output:</strong> 2
+<strong>Explanation:</strong>
+Person #0 gave person #1 10.
+Person #2 gave person #0 5.
+Two transactions are needed. One way to settle the debt is person #1 pays person #0 and #2 5 each.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> transactions = [[0,1,10],[1,0,1],[1,2,5],[2,0,5]]
+<strong>Output:</strong> 1
+<strong>Explanation:</strong>
+Person #0 gave person #1 10.
+Person #1 gave person #0 1.
+Person #1 gave person #2 5.
+Person #2 gave person #0 5.
+Therefore, person #1 only need to give person #0 4, and all debt is settled.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= transactions.length &lt;= 8
+        </code>
+       </li>
+       <li>
+        <code>
+         transactions[i].length == 3
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= from
+         <sub>
+          i
+         </sub>
+         , to
+         <sub>
+          i
+         </sub>
+         &lt; 12
+        </code>
+       </li>
+       <li>
+        <code>
+         from
+         <sub>
+          i
+         </sub>
+         != to
+         <sub>
+          i
+         </sub>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= amount
+         <sub>
+          i
+         </sub>
+         &lt;= 100
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#7a6745b8-bc34-4f89-a0e7-3157f808d3d9'}">
+       <li class="uk-active">
+        <a href="solution-465.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-465.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-465.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-465.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-465.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="7a6745b8-bc34-4f89-a0e7-3157f808d3d9">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minTransfers</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">transactions</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">12</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">t</span> <span class="o">:</span> <span class="n">transactions</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">t</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="o">-=</span> <span class="n">t</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">t</span><span class="o">[</span><span class="mi">1</span><span class="o">]]</span> <span class="o">+=</span> <span class="n">t</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">29</span><span class="o">);</span>
+        <span class="n">f</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="n">nums</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">bitCount</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">=</span> <span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">f</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span> <span class="o">^</span> <span class="n">j</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">[(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">minTransfers</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">transactions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">g</span><span class="p">[</span><span class="mi">12</span><span class="p">]{};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">t</span> <span class="o">:</span> <span class="n">transactions</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-=</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">nums</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">g</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">nums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mh">0x3f</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">__builtin_popcount</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="p">;</span> <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">^</span> <span class="n">j</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minTransfers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">:</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">-=</span> <span class="n">x</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">g</span><span class="p">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="n">x</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">.</span><span class="n">bit_count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">i</span>
+                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">^</span> <span class="n">j</span><span class="p">])</span>
+                    <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">i</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minTransfers</span><span class="p">(</span><span class="n">transactions</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="p">[</span><span class="m">12</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">transactions</span> <span class="p">{</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="m">0</span><span class="p">]]</span> <span class="o">-=</span> <span class="n">t</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">t</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="n">nums</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">nums</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="n">m</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">29</span>
+		<span class="n">s</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">i</span><span class="o">&gt;&gt;</span><span class="n">j</span><span class="o">&amp;</span><span class="m">1</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">s</span> <span class="o">+=</span> <span class="n">x</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">bits</span><span class="o">.</span><span class="n">OnesCount</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">-</span> <span class="m">1</span>
+			<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">i</span> <span class="p">{</span>
+				<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">^</span><span class="n">j</span><span class="p">])</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="m">1</span><span class="o">&lt;&lt;</span><span class="n">m</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minTransfers</span><span class="p">(</span><span class="nx">transactions</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">g</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">12</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">f</span><span class="p">,</span> <span class="nx">t</span><span class="p">,</span> <span class="nx">x</span><span class="p">]</span> <span class="k">of</span> <span class="nx">transactions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">f</span><span class="p">]</span> <span class="o">-=</span> <span class="nx">x</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">t</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">nums</span> <span class="o">=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nx">m</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">29</span><span class="p">);</span>
+    <span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(((</span><span class="nx">i</span> <span class="o">&gt;&gt;</span> <span class="nx">j</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">s</span> <span class="o">+=</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">s</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">bitCount</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nx">i</span><span class="p">;</span> <span class="nx">j</span><span class="p">;</span> <span class="nx">j</span> <span class="o">=</span> <span class="p">(</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">f</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span> <span class="o">^</span> <span class="nx">j</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">[(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nx">m</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">bitCount</span><span class="p">(</span><span class="nx">i</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">-</span> <span class="p">((</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x55555555</span><span class="p">);</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&amp;</span> <span class="mh">0x33333333</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x33333333</span><span class="p">);</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">4</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0x0f0f0f0f</span><span class="p">;</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">8</span><span class="p">);</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">16</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">i</span> <span class="o">&amp;</span> <span class="mh">0x3f</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-465.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2179.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2179.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2179 - Count Good Triplets in an Array</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2179. Count Good Triplets in an Array Description You are given two 0-indexed arrays nums1 and nums2 of length n, both of which are permutations of [0, 1, ..., n - 1]. A good triplet is a set of 3 distinct values which are present...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2179.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2179.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2179.html" rel="stylesheet"/>
+   <link href="solution-2179.html" rel="stylesheet"/>
+   <link href="solution-2179.html" rel="stylesheet"/>
+   <link href="solution-2179.html" rel="stylesheet"/>
+   <link href="solution-2179.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2179 - Count Good Triplets in an Array" property="og:title"/>
+   <meta content="Leetcode 2179. Count Good Triplets in an Array Description You are given two 0-indexed arrays nums1 and nums2 of length n, both of which are permutations of [0, 1, ..., n - 1]. A good triplet is a set of 3 distinct values which are present in increasing order by position both in nums1 and nums2. In other words, if we consider pos1v as the index of the value v in nums1 and pos2v as the index of the value v in nums2, then a good triplet will be a set (x, y, z) where 0 &amp;lt;= x, y, z &amp;lt;= n - 1, such that pos1x &amp;lt; pos1y &amp;lt; pos1z and pos2x &amp;lt; pos2y &amp;lt; pos2z. Return the total number of good triplets. &amp;nbsp; Example 1: Input: nums1 = [2,0,1,3], nums2 = [0,1,2,3] Output: 1 Explanation: There are 4 triplets (x,y,z) such that pos1x &amp;lt; pos1y &amp;lt; pos1z. They are (2,0,1), (2,0,3), (2,1,3), and (0,1,3). Out of those triplets, only the triplet (0,1,3) satisfies pos2x &amp;lt; pos2y &amp;lt; pos2z. Hence, there is only 1 good triplet. Example 2: Input: nums1 = [4,0,1,3,2], nums2 = [4,1,0,2,3] Output: 4 Explanation: The 4 good triplets are (4,0,3), (4,0,2), (4,1,3), and (4,1,2). &amp;nbsp; Constraints: n == nums1.length == nums2.length 3 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= nums1[i], nums2[i] &amp;lt;= n - 1 nums1 and nums2 are permutations of [0, 1, ..., n - 1]. Solutions Binary Indexed Tree or Segment Tree. Java C++ Python Go class Solution { public long goodTriplets(int[] nums1, int[] nums2) { int n = nums1.length; int[] pos = new int[n]; BinaryIndexedTree tree = new BinaryIndexedTree(n); for (int i = 0; i &amp;lt; n; ++i) { pos[nums2[i]] = i + 1; } long ans = 0; for (int num : nums1) { int p = pos[num]; long left = tree.query(p); long right = n - p - (tree.query(n) - tree.query(p)); ans += left * right; tree.update(p, 1); } return ans; } } class BinaryIndexedTree { private int n; private int[] c; public BinaryIndexedTree(int n) { this.n = n; c = new int[n + 1]; } public void update(int x, int delta) { while (x &amp;lt;= n) { c[x] += delta; x += lowbit(x); } } public int query(int x) { int s = 0; while (x &amp;gt; 0) { s += c[x]; x -= lowbit(x); } return s; } public static int lowbit(int x) { return x &amp;amp; -x; } } class BinaryIndexedTree { public: int n; vector&amp;lt;int&amp;gt; c; BinaryIndexedTree(int _n) : n(_n) , c(_n + 1) {} void update(int x, int delta) { while (x &amp;lt;= n) { c[x] += delta; x += lowbit(x); } } int query(int x) { int s = 0; while (x &amp;gt; 0) { s += c[x]; x -= lowbit(x); } return s; } int lowbit(int x) { return x &amp;amp; -x; } }; class Solution { public: long long goodTriplets(vector&amp;lt;int&amp;gt;&amp;amp; nums1, vector&amp;lt;int&amp;gt;&amp;amp; nums2) { int n = nums1.size(); vector&amp;lt;int&amp;gt; pos(n); for (int i = 0; i &amp;lt; n; ++i)..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-11-17T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-11-17-2179-Count-Good-Triplets-in-an-Array/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2179.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2179 - Count Good Triplets in an Array" property="twitter:title"/>
+   <meta content="Leetcode 2179. Count Good Triplets in an Array Description You are given two 0-indexed arrays nums1 and nums2 of length n, both of which are permutations of [0, 1, ..., n - 1]. A good triplet is a set of 3 distinct values which are present in increasing order by position both in nums1 and nums2. In other words, if we consider pos1v as the index of the value v in nums1 and pos2v as the index of the value v in nums2, then a good triplet will be a set (x, y, z) where 0 &amp;lt;= x, y, z &amp;lt;= n - 1, such that pos1x &amp;lt; pos1y &amp;lt; pos1z and pos2x &amp;lt; pos2y &amp;lt; pos2z. Return the total number of good triplets. &amp;nbsp; Example 1: Input: nums1 = [2,0,1,3], nums2 = [0,1,2,3] Output: 1 Explanation: There are 4 triplets (x,y,z) such that pos1x &amp;lt; pos1y &amp;lt; pos1z. They are (2,0,1), (2,0,3), (2,1,3), and (0,1,3). Out of those triplets, only the triplet (0,1,3) satisfies pos2x &amp;lt; pos2y &amp;lt; pos2z. Hence, there is only 1 good triplet. Example 2: Input: nums1 = [4,0,1,3,2], nums2 = [4,1,0,2,3] Output: 4 Explanation: The 4 good triplets are (4,0,3), (4,0,2), (4,1,3), and (4,1,2). &amp;nbsp; Constraints: n == nums1.length == nums2.length 3 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= nums1[i], nums2[i] &amp;lt;= n - 1 nums1 and nums2 are permutations of [0, 1, ..., n - 1]. Solutions Binary Indexed Tree or Segment Tree. Java C++ Python Go class Solution { public long goodTriplets(int[] nums1, int[] nums2) { int n = nums1.length; int[] pos = new int[n]; BinaryIndexedTree tree = new BinaryIndexedTree(n); for (int i = 0; i &amp;lt; n; ++i) { pos[nums2[i]] = i + 1; } long ans = 0; for (int num : nums1) { int p = pos[num]; long left = tree.query(p); long right = n - p - (tree.query(n) - tree.query(p)); ans += left * right; tree.update(p, 1); } return ans; } } class BinaryIndexedTree { private int n; private int[] c; public BinaryIndexedTree(int n) { this.n = n; c = new int[n + 1]; } public void update(int x, int delta) { while (x &amp;lt;= n) { c[x] += delta; x += lowbit(x); } } public int query(int x) { int s = 0; while (x &amp;gt; 0) { s += c[x]; x -= lowbit(x); } return s; } public static int lowbit(int x) { return x &amp;amp; -x; } } class BinaryIndexedTree { public: int n; vector&amp;lt;int&amp;gt; c; BinaryIndexedTree(int _n) : n(_n) , c(_n + 1) {} void update(int x, int delta) { while (x &amp;lt;= n) { c[x] += delta; x += lowbit(x); } } int query(int x) { int s = 0; while (x &amp;gt; 0) { s += c[x]; x -= lowbit(x); } return s; } int lowbit(int x) { return x &amp;amp; -x; } }; class Solution { public: long long goodTriplets(vector&amp;lt;int&amp;gt;&amp;amp; nums1, vector&amp;lt;int&amp;gt;&amp;amp; nums2) { int n = nums1.size(); vector&amp;lt;int&amp;gt; pos(n); for (int i = 0; i &amp;lt; n; ++i)..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2179 - Count Good Triplets in an Array | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2179 - Count Good Triplets in an Array" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2179.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-11-17-2179-Count-Good-Triplets-in-an-Array/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-11-17T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2179 - Count Good Triplets in an Array","dateModified":"2021-11-17T00:00:00-08:00","datePublished":"2021-11-17T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-11-17-2179-Count-Good-Triplets-in-an-Array/"},"url":"https://leetcode.ca/2021-11-17-2179-Count-Good-Triplets-in-an-Array/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2179-count-good-triplets-in-an-array">
+       <a href="solution-2179.html">
+        2179. Count Good Triplets in an Array
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given two
+       <strong>
+        0-indexed
+       </strong>
+       arrays
+       <code>
+        nums1
+       </code>
+       and
+       <code>
+        nums2
+       </code>
+       of length
+       <code>
+        n
+       </code>
+       , both of which are
+       <strong>
+        permutations
+       </strong>
+       of
+       <code>
+        [0, 1, ..., n - 1]
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        good triplet
+       </strong>
+       is a set of
+       <code>
+        3
+       </code>
+       <strong>
+        distinct
+       </strong>
+       values which are present in
+       <strong>
+        increasing order
+       </strong>
+       by position both in
+       <code>
+        nums1
+       </code>
+       and
+       <code>
+        nums2
+       </code>
+       . In other words, if we consider
+       <code>
+        pos1
+        <sub>
+         v
+        </sub>
+       </code>
+       as the index of the value
+       <code>
+        v
+       </code>
+       in
+       <code>
+        nums1
+       </code>
+       and
+       <code>
+        pos2
+        <sub>
+         v
+        </sub>
+       </code>
+       as the index of the value
+       <code>
+        v
+       </code>
+       in
+       <code>
+        nums2
+       </code>
+       , then a good triplet will be a set
+       <code>
+        (x, y, z)
+       </code>
+       where
+       <code>
+        0 &lt;= x, y, z &lt;= n - 1
+       </code>
+       , such that
+       <code>
+        pos1
+        <sub>
+         x
+        </sub>
+        &lt; pos1
+        <sub>
+         y
+        </sub>
+        &lt; pos1
+        <sub>
+         z
+        </sub>
+       </code>
+       and
+       <code>
+        pos2
+        <sub>
+         x
+        </sub>
+        &lt; pos2
+        <sub>
+         y
+        </sub>
+        &lt; pos2
+        <sub>
+         z
+        </sub>
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         total number
+        </strong>
+        of good triplets
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums1 = [2,0,1,3], nums2 = [0,1,2,3]
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> 
+There are 4 triplets (x,y,z) such that pos1<sub>x</sub> &lt; pos1<sub>y</sub> &lt; pos1<sub>z</sub>. They are (2,0,1), (2,0,3), (2,1,3), and (0,1,3). 
+Out of those triplets, only the triplet (0,1,3) satisfies pos2<sub>x</sub> &lt; pos2<sub>y</sub> &lt; pos2<sub>z</sub>. Hence, there is only 1 good triplet.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums1 = [4,0,1,3,2], nums2 = [4,1,0,2,3]
+<strong>Output:</strong> 4
+<strong>Explanation:</strong> The 4 good triplets are (4,0,3), (4,0,2), (4,1,3), and (4,1,2).
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         n == nums1.length == nums2.length
+        </code>
+       </li>
+       <li>
+        <code>
+         3 &lt;= n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= nums1[i], nums2[i] &lt;= n - 1
+        </code>
+       </li>
+       <li>
+        <code>
+         nums1
+        </code>
+        and
+        <code>
+         nums2
+        </code>
+        are permutations of
+        <code>
+         [0, 1, ..., n - 1]
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       Binary Indexed Tree or Segment Tree.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#396c1dca-b942-40ad-bded-11c5a73242fc'}">
+       <li class="uk-active">
+        <a href="solution-2179.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2179.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2179.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2179.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="396c1dca-b942-40ad-bded-11c5a73242fc">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">goodTriplets</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums1</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">pos</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">BinaryIndexedTree</span> <span class="n">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BinaryIndexedTree</span><span class="o">(</span><span class="n">n</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">pos</span><span class="o">[</span><span class="n">nums2</span><span class="o">[</span><span class="n">i</span><span class="o">]]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pos</span><span class="o">[</span><span class="n">num</span><span class="o">];</span>
+            <span class="kt">long</span> <span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">p</span><span class="o">);</span>
+            <span class="kt">long</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">p</span> <span class="o">-</span> <span class="o">(</span><span class="n">tree</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="o">-</span> <span class="n">tree</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">p</span><span class="o">));</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">left</span> <span class="o">*</span> <span class="n">right</span><span class="o">;</span>
+            <span class="n">tree</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">BinaryIndexedTree</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">c</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">BinaryIndexedTree</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">delta</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">c</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">+=</span> <span class="n">delta</span><span class="o">;</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">lowbit</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">c</span><span class="o">[</span><span class="n">x</span><span class="o">];</span>
+            <span class="n">x</span> <span class="o">-=</span> <span class="n">lowbit</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">lowbit</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">BinaryIndexedTree</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">c</span><span class="p">;</span>
+
+    <span class="n">BinaryIndexedTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">_n</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">n</span><span class="p">(</span><span class="n">_n</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">c</span><span class="p">(</span><span class="n">_n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">delta</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">delta</span><span class="p">;</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+            <span class="n">x</span> <span class="o">-=</span> <span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">lowbit</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">goodTriplets</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums1</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pos</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">pos</span><span class="p">[</span><span class="n">nums2</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">BinaryIndexedTree</span><span class="o">*</span> <span class="n">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BinaryIndexedTree</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="n">num</span><span class="p">];</span>
+            <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">query</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">p</span> <span class="o">-</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">query</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">query</span><span class="p">(</span><span class="n">p</span><span class="p">));</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="mi">1ll</span> <span class="o">*</span> <span class="n">left</span> <span class="o">*</span> <span class="n">right</span><span class="p">;</span>
+            <span class="n">tree</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">BinaryIndexedTree</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="nb">staticmethod</span>
+    <span class="k">def</span> <span class="nf">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+        <span class="k">while</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="p">.</span><span class="n">n</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">delta</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">BinaryIndexedTree</span><span class="p">.</span><span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="p">.</span><span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+            <span class="n">x</span> <span class="o">-=</span> <span class="n">BinaryIndexedTree</span><span class="p">.</span><span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">goodTriplets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">nums2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">BinaryIndexedTree</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums1</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="n">num</span><span class="p">]</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">p</span> <span class="o">-</span> <span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">tree</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">left</span> <span class="o">*</span> <span class="n">right</span>
+            <span class="n">tree</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">BinaryIndexedTree</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="kt">int</span>
+	<span class="n">c</span> <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newBinaryIndexedTree</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">BinaryIndexedTree</span> <span class="p">{</span>
+	<span class="n">c</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">BinaryIndexedTree</span><span class="p">{</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">BinaryIndexedTree</span><span class="p">)</span> <span class="n">lowbit</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">BinaryIndexedTree</span><span class="p">)</span> <span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">delta</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">this</span><span class="o">.</span><span class="n">n</span> <span class="p">{</span>
+		<span class="n">this</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">delta</span>
+		<span class="n">x</span> <span class="o">+=</span> <span class="n">this</span><span class="o">.</span><span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">BinaryIndexedTree</span><span class="p">)</span> <span class="n">query</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">s</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">s</span> <span class="o">+=</span> <span class="n">this</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+		<span class="n">x</span> <span class="o">-=</span> <span class="n">this</span><span class="o">.</span><span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">s</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">goodTriplets</span><span class="p">(</span><span class="n">nums1</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">nums2</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int64</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span>
+	<span class="n">pos</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums2</span> <span class="p">{</span>
+		<span class="n">pos</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span>
+	<span class="p">}</span>
+	<span class="n">tree</span> <span class="o">:=</span> <span class="n">newBinaryIndexedTree</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">var</span> <span class="n">ans</span> <span class="kt">int64</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums1</span> <span class="p">{</span>
+		<span class="n">p</span> <span class="o">:=</span> <span class="n">pos</span><span class="p">[</span><span class="n">num</span><span class="p">]</span>
+		<span class="n">left</span> <span class="o">:=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+		<span class="n">right</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">p</span> <span class="o">-</span> <span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+		<span class="n">ans</span> <span class="o">+=</span> <span class="kt">int64</span><span class="p">(</span><span class="n">left</span><span class="p">)</span> <span class="o">*</span> <span class="kt">int64</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+		<span class="n">tree</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2179.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

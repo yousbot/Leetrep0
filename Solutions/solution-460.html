@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-460.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-460.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>460 - LFU Cache</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/460.html 460. LFU Cache Level Hard Description Design and implement a data structure for Least Frequently Used (LFU) cache. It should support the following operations: get and put. get(key) - Get the value (will always be positive) of the key if the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-460.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-460.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-460.html" rel="stylesheet"/>
+   <link href="solution-460.html" rel="stylesheet"/>
+   <link href="solution-460.html" rel="stylesheet"/>
+   <link href="solution-460.html" rel="stylesheet"/>
+   <link href="solution-460.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="460 - LFU Cache" property="og:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/460.html 460. LFU Cache Level Hard Description Design and implement a data structure for Least Frequently Used (LFU) cache. It should support the following operations: get and put. get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1. put(key, value) - Set or insert the value if the key is not already present. When the cache reaches its capacity, it should invalidate the least frequently used item before inserting a new item. For the purpose of this problem, when there is a tie (i.e., two or more keys that have the same frequency), the least recently used key would be evicted. Note that the number of times an item is used is the number of calls to the get and put functions for that item since it was inserted. This number is set to zero when the item is removed. Follow up: Could you do both operations in O(1) time complexity? Example: LFUCache cache = new LFUCache( 2 /* capacity */ ); cache.put(1, 1); cache.put(2, 2); cache.get(1); // returns 1 cache.put(3, 3); // evicts key 2 cache.get(2); // returns -1 (not found) cache.get(3); // returns 3. cache.put(4, 4); // evicts key 1. cache.get(1); // returns -1 (not found) cache.get(3); // returns 3 cache.get(4); // returns 4 Solution Create two classes Node and DoublyLinkedList. Each object of Node has a key, a value, a frequency, the previous node and the next node. Each object of DoublyLinkedList has a size, a head and a tail. In class LFUCache, maintain two maps cache and frequencyMap, which stores each key and the corresponding node, and stores each frequency and the corresponding doubly linked lists, respectively. Also maintain size, capacity and minCapacity. For the constructor, initialize the two maps and the capacity. For method get, get the node from cache. If the node exists, update the nodeâs frequency and return the nodeâs value. Otherwise, return -1. For method put, check whether the node of the key already exists. If the node already exists, update the nodeâs value and update the nodeâs frequency. Otherwise, if size already reaches compacity, obtain the minimum frequency list using minFrequency and remove the last node, and decreasesize by 1. Then create a new node using key and value, update the maps, increase size by 1 and set minFrequency = 1. Java Python Go RenderScript C++ public class LFU_Cache { public class LFUCache { // Save the key, value HashMap&amp;lt;Integer, Integer&amp;gt; vals; // Save the key to the value of the number of visits HashMap&amp;lt;Integer, Integer&amp;gt; counts; // é¢çåä¸ä¸ªéé¢æækeyé½æ¯å½åé¢ççlistä¹é´çæ å° HashMap&amp;lt;Integer, LinkedHashSet&amp;lt;Integer&amp;gt;&amp;gt; lists; int capacity; // Initialize the frequency of data occurrences int min = -1; public LFUCache(int cap) { capacity = cap; vals = new HashMap&amp;lt;&amp;gt;(); counts = new HashMap&amp;lt;&amp;gt;(); lists = new HashMap&amp;lt;&amp;gt;(); } public int get(int key) { if (!vals.containsKey(key)) return -1; int count = counts.get(key); counts.put(key, count + 1); lists.get(count).remove(key); // Determine whether min should add 1 if..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-03-04T21:21:01-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-03-04-460-LFU-Cache/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-460.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="460 - LFU Cache" property="twitter:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/460.html 460. LFU Cache Level Hard Description Design and implement a data structure for Least Frequently Used (LFU) cache. It should support the following operations: get and put. get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1. put(key, value) - Set or insert the value if the key is not already present. When the cache reaches its capacity, it should invalidate the least frequently used item before inserting a new item. For the purpose of this problem, when there is a tie (i.e., two or more keys that have the same frequency), the least recently used key would be evicted. Note that the number of times an item is used is the number of calls to the get and put functions for that item since it was inserted. This number is set to zero when the item is removed. Follow up: Could you do both operations in O(1) time complexity? Example: LFUCache cache = new LFUCache( 2 /* capacity */ ); cache.put(1, 1); cache.put(2, 2); cache.get(1); // returns 1 cache.put(3, 3); // evicts key 2 cache.get(2); // returns -1 (not found) cache.get(3); // returns 3. cache.put(4, 4); // evicts key 1. cache.get(1); // returns -1 (not found) cache.get(3); // returns 3 cache.get(4); // returns 4 Solution Create two classes Node and DoublyLinkedList. Each object of Node has a key, a value, a frequency, the previous node and the next node. Each object of DoublyLinkedList has a size, a head and a tail. In class LFUCache, maintain two maps cache and frequencyMap, which stores each key and the corresponding node, and stores each frequency and the corresponding doubly linked lists, respectively. Also maintain size, capacity and minCapacity. For the constructor, initialize the two maps and the capacity. For method get, get the node from cache. If the node exists, update the nodeâs frequency and return the nodeâs value. Otherwise, return -1. For method put, check whether the node of the key already exists. If the node already exists, update the nodeâs value and update the nodeâs frequency. Otherwise, if size already reaches compacity, obtain the minimum frequency list using minFrequency and remove the last node, and decreasesize by 1. Then create a new node using key and value, update the maps, increase size by 1 and set minFrequency = 1. Java Python Go RenderScript C++ public class LFU_Cache { public class LFUCache { // Save the key, value HashMap&amp;lt;Integer, Integer&amp;gt; vals; // Save the key to the value of the number of visits HashMap&amp;lt;Integer, Integer&amp;gt; counts; // é¢çåä¸ä¸ªéé¢æækeyé½æ¯å½åé¢ççlistä¹é´çæ å° HashMap&amp;lt;Integer, LinkedHashSet&amp;lt;Integer&amp;gt;&amp;gt; lists; int capacity; // Initialize the frequency of data occurrences int min = -1; public LFUCache(int cap) { capacity = cap; vals = new HashMap&amp;lt;&amp;gt;(); counts = new HashMap&amp;lt;&amp;gt;(); lists = new HashMap&amp;lt;&amp;gt;(); } public int get(int key) { if (!vals.containsKey(key)) return -1; int count = counts.get(key); counts.put(key, count + 1); lists.get(count).remove(key); // Determine whether min should add 1 if..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    460 - LFU Cache | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="460 - LFU Cache" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-460.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-03-04-460-LFU-Cache/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-03-04T21:21:01-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"460 - LFU Cache","dateModified":"2017-03-04T21:21:01-08:00","datePublished":"2017-03-04T21:21:01-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-03-04-460-LFU-Cache/"},"url":"https://leetcode.ca/2017-03-04-460-LFU-Cache/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-460.html">
+        https://leetcode.ca/all/460.html
+       </a>
+      </p>
+      <h1 id="460-lfu-cache">
+       460. LFU Cache
+      </h1>
+      <h2 id="level">
+       Level
+      </h2>
+      <p>
+       Hard
+      </p>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Design and implement a data structure for
+       <a href="solution-460.html">
+        Least Frequently Used (LFU)
+       </a>
+       cache. It should support the following operations:
+       <code class="language-plaintext highlighter-rouge">
+        get
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        put
+       </code>
+       .
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         get(key)
+        </code>
+        - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         put(key, value)
+        </code>
+        - Set or insert the value if the key is not already present. When the cache reaches its capacity, it should invalidate the least frequently used item before inserting a new item. For the purpose of this problem, when there is a tie (i.e., two or more keys that have the same frequency), the least
+        <strong>
+         recently
+        </strong>
+        used key would be evicted.
+       </li>
+      </ul>
+      <p>
+       Note that the number of times an item is used is the number of calls to the
+       <code class="language-plaintext highlighter-rouge">
+        get
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        put
+       </code>
+       functions for that item since it was inserted. This number is set to zero when the item is removed.
+      </p>
+      <p>
+       <strong>
+        Follow up:
+       </strong>
+      </p>
+      <p>
+       Could you do both operations in
+       <strong>
+        O(1)
+       </strong>
+       time complexity?
+      </p>
+      <p>
+       <strong>
+        Example:
+       </strong>
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>LFUCache cache = new LFUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.get(3);       // returns 3.
+cache.put(4, 4);    // evicts key 1.
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+</code></pre>
+       </div>
+      </div>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       Create two classes
+       <code class="language-plaintext highlighter-rouge">
+        Node
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        DoublyLinkedList
+       </code>
+       . Each object of
+       <code class="language-plaintext highlighter-rouge">
+        Node
+       </code>
+       has a key, a value, a frequency, the previous node and the next node. Each object of
+       <code class="language-plaintext highlighter-rouge">
+        DoublyLinkedList
+       </code>
+       has a size, a head and a tail.
+      </p>
+      <p>
+       In class
+       <code class="language-plaintext highlighter-rouge">
+        LFUCache
+       </code>
+       , maintain two maps
+       <code class="language-plaintext highlighter-rouge">
+        cache
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        frequencyMap
+       </code>
+       , which stores each key and the corresponding node, and stores each frequency and the corresponding doubly linked lists, respectively. Also maintain
+       <code class="language-plaintext highlighter-rouge">
+        size
+       </code>
+       ,
+       <code class="language-plaintext highlighter-rouge">
+        capacity
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        minCapacity
+       </code>
+       .
+      </p>
+      <p>
+       For the constructor, initialize the two maps and the capacity.
+      </p>
+      <p>
+       For method
+       <code class="language-plaintext highlighter-rouge">
+        get
+       </code>
+       , get the node from
+       <code class="language-plaintext highlighter-rouge">
+        cache
+       </code>
+       . If the node exists, update the nodeâs frequency and return the nodeâs value. Otherwise, return -1.
+      </p>
+      <p>
+       For method
+       <code class="language-plaintext highlighter-rouge">
+        put
+       </code>
+       , check whether the node of the key already exists. If the node already exists, update the nodeâs value and update the nodeâs frequency. Otherwise, if
+       <code class="language-plaintext highlighter-rouge">
+        size
+       </code>
+       already reaches
+       <code class="language-plaintext highlighter-rouge">
+        compacity
+       </code>
+       , obtain the minimum frequency list using
+       <code class="language-plaintext highlighter-rouge">
+        minFrequency
+       </code>
+       and remove the last node, and decrease
+       <code class="language-plaintext highlighter-rouge">
+        size
+       </code>
+       by 1. Then create a new node using
+       <code class="language-plaintext highlighter-rouge">
+        key
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        value
+       </code>
+       , update the maps, increase
+       <code class="language-plaintext highlighter-rouge">
+        size
+       </code>
+       by 1 and set
+       <code class="language-plaintext highlighter-rouge">
+        minFrequency = 1
+       </code>
+       .
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#53130a60-913a-4df5-9155-d4d3e15e63b4'}">
+       <li class="uk-active">
+        <a href="solution-460.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-460.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-460.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-460.html">
+         RenderScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-460.html">
+         C++
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="53130a60-913a-4df5-9155-d4d3e15e63b4">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LFU_Cache</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LFUCache</span> <span class="o">{</span>
+
+        <span class="c1">// Save the key, value</span>
+        <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">vals</span><span class="o">;</span>
+
+        <span class="c1">// Save the key to the value of the number of visits</span>
+        <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">counts</span><span class="o">;</span>
+
+        <span class="c1">// é¢çåä¸ä¸ªéé¢æækeyé½æ¯å½åé¢ççlistä¹é´çæ å°</span>
+        <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">LinkedHashSet</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">lists</span><span class="o">;</span>
+
+        <span class="kt">int</span> <span class="n">capacity</span><span class="o">;</span>
+
+        <span class="c1">// Initialize the frequency of data occurrences</span>
+        <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">LFUCache</span><span class="o">(</span><span class="kt">int</span> <span class="n">cap</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">capacity</span> <span class="o">=</span> <span class="n">cap</span><span class="o">;</span>
+            <span class="n">vals</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+            <span class="n">counts</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+            <span class="n">lists</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">vals</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+
+            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">counts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">lists</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">count</span><span class="o">).</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+
+            <span class="c1">// Determine whether min should add 1</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">min</span> <span class="o">&amp;&amp;</span> <span class="n">lists</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">count</span><span class="o">).</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">min</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="n">lists</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">lists</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="k">new</span> <span class="nc">LinkedHashSet</span><span class="o">&lt;&gt;());</span>
+            <span class="o">}</span>
+
+            <span class="n">lists</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">).</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">vals</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">capacity</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span>
+                <span class="k">return</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">vals</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">vals</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+                <span class="n">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">vals</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;=</span> <span class="n">capacity</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">minFreKey</span> <span class="o">=</span> <span class="n">lists</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">min</span><span class="o">).</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">();</span>
+                <span class="n">lists</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">min</span><span class="o">).</span><span class="na">remove</span><span class="o">(</span><span class="n">minFreKey</span><span class="o">);</span>
+                <span class="n">vals</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">minFreKey</span><span class="o">);</span>
+                <span class="n">counts</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">minFreKey</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="n">vals</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+            <span class="n">counts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">min</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">lists</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">lists</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="k">new</span> <span class="nc">LinkedHashSet</span><span class="o">&lt;&gt;());</span>
+            <span class="o">}</span>
+            <span class="n">lists</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="err">############</span>
+
+<span class="kd">class</span> <span class="nc">LFUCache</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Node</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">DoublyLinkedList</span><span class="o">&gt;</span> <span class="n">freqMap</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">capacity</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">minFreq</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">LFUCache</span><span class="o">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">capacity</span> <span class="o">=</span> <span class="n">capacity</span><span class="o">;</span>
+        <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;(</span><span class="n">capacity</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="n">freqMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">capacity</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="n">incrFreq</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">capacity</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+            <span class="n">incrFreq</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">capacity</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">DoublyLinkedList</span> <span class="n">list</span> <span class="o">=</span> <span class="n">freqMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">minFreq</span><span class="o">);</span>
+            <span class="n">map</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">removeLast</span><span class="o">().</span><span class="na">key</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+        <span class="n">addNode</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">node</span><span class="o">);</span>
+        <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">incrFreq</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">freq</span><span class="o">;</span>
+        <span class="nc">DoublyLinkedList</span> <span class="n">list</span> <span class="o">=</span> <span class="n">freqMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">freq</span><span class="o">);</span>
+        <span class="n">list</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">freqMap</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">freq</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">freq</span> <span class="o">==</span> <span class="n">minFreq</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">minFreq</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">freq</span><span class="o">++;</span>
+        <span class="n">addNode</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">addNode</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">freq</span><span class="o">;</span>
+        <span class="nc">DoublyLinkedList</span> <span class="n">list</span> <span class="o">=</span> <span class="n">freqMap</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">freq</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DoublyLinkedList</span><span class="o">());</span>
+        <span class="n">list</span><span class="o">.</span><span class="na">addFirst</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="n">freqMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">freq</span><span class="o">,</span> <span class="n">list</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">key</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">freq</span><span class="o">;</span>
+        <span class="nc">Node</span> <span class="n">prev</span><span class="o">;</span>
+        <span class="nc">Node</span> <span class="n">next</span><span class="o">;</span>
+
+        <span class="nc">Node</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">freq</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">DoublyLinkedList</span> <span class="o">{</span>
+
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Node</span> <span class="n">head</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Node</span> <span class="n">tail</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">DoublyLinkedList</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(-</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+            <span class="n">tail</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(-</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+            <span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">tail</span><span class="o">;</span>
+            <span class="n">tail</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addFirst</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+            <span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Node</span> <span class="nf">remove</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">prev</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">prev</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Node</span> <span class="nf">removeLast</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">remove</span><span class="o">(</span><span class="n">tail</span><span class="o">.</span><span class="na">prev</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isEmpty</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="n">tail</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="k">class</span> <span class="nc">LFUCache</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">key_to_freq</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">freq_to_keys</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># Update the frequency
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">_update_frequency</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span><span class="p">:</span>
+            <span class="c1"># Update the value and frequency
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_update_frequency</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span><span class="p">:</span>
+                <span class="c1"># Evict the least frequently used key
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">_evict</span><span class="p">()</span>
+
+            <span class="c1"># Add the new key-value pair
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">key_to_freq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">freq_to_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_update_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">key_to_freq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">freq_to_keys</span><span class="p">[</span><span class="n">freq</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">.</span><span class="n">freq_to_keys</span><span class="p">[</span><span class="n">freq</span><span class="p">]:</span>
+            <span class="c1"># If there are no keys with the previous frequency, update min_freq
+</span>            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span> <span class="o">==</span> <span class="n">freq</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">freq_to_keys</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span>
+
+        <span class="n">freq</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">key_to_freq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">freq_to_keys</span><span class="p">[</span><span class="n">freq</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_evict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">freq_to_keys</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span><span class="p">]</span>
+        <span class="n">evict_key</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">keys</span><span class="p">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">evict_key</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">key_to_freq</span><span class="p">[</span><span class="n">evict_key</span><span class="p">]</span>
+
+<span class="c1"># Your LFUCache object will be instantiated and called as such:
+# obj = LFUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+</span>
+
+<span class="c1">##########
+</span>
+<span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">freq</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+<span class="k">class</span> <span class="nc">DoublyLinkedList</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+
+    <span class="k">def</span> <span class="nf">add_first</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">prev</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="nb">next</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="nf">remove_last</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span>
+
+
+<span class="k">class</span> <span class="nc">LFUCache</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">freq_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">DoublyLinkedList</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="nb">map</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="nb">map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">incr_freq</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="nb">map</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="nb">map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">incr_freq</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="nb">map</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span><span class="p">:</span>
+            <span class="n">ls</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">freq_map</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span><span class="p">]</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">ls</span><span class="p">.</span><span class="n">remove_last</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">.</span><span class="nb">map</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">incr_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">freq</span>
+        <span class="n">ls</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">freq_map</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span>
+        <span class="n">ls</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ls</span><span class="p">.</span><span class="n">is_empty</span><span class="p">():</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">freq_map</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">freq</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">min_freq</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">freq</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">freq</span>
+        <span class="n">ls</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">freq_map</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span>
+        <span class="n">ls</span><span class="p">.</span><span class="n">add_first</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">freq_map</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span> <span class="o">=</span> <span class="n">ls</span>
+
+
+<span class="c1"># Your LFUCache object will be instantiated and called as such:
+# obj = LFUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">LFUCache</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">cache</span>    <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">node</span>
+	<span class="n">freqMap</span>  <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">list</span>
+	<span class="n">minFreq</span>  <span class="kt">int</span>
+	<span class="n">capacity</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">capacity</span> <span class="kt">int</span><span class="p">)</span> <span class="n">LFUCache</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">LFUCache</span><span class="p">{</span>
+		<span class="n">cache</span><span class="o">:</span>    <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">node</span><span class="p">),</span>
+		<span class="n">freqMap</span><span class="o">:</span>  <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">list</span><span class="p">),</span>
+		<span class="n">capacity</span><span class="o">:</span> <span class="n">capacity</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LFUCache</span><span class="p">)</span> <span class="n">Get</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">this</span><span class="o">.</span><span class="n">capacity</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+
+	<span class="n">n</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+	<span class="k">if</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+
+	<span class="n">this</span><span class="o">.</span><span class="n">incrFreq</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">n</span><span class="o">.</span><span class="n">val</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LFUCache</span><span class="p">)</span> <span class="n">Put</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">,</span> <span class="n">value</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">this</span><span class="o">.</span><span class="n">capacity</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="n">n</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">ok</span> <span class="p">{</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">value</span>
+		<span class="n">this</span><span class="o">.</span><span class="n">incrFreq</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">)</span> <span class="o">==</span> <span class="n">this</span><span class="o">.</span><span class="n">capacity</span> <span class="p">{</span>
+		<span class="n">l</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">freqMap</span><span class="p">[</span><span class="n">this</span><span class="o">.</span><span class="n">minFreq</span><span class="p">]</span>
+		<span class="nb">delete</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">l</span><span class="o">.</span><span class="n">removeBack</span><span class="p">()</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">n</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">node</span><span class="p">{</span><span class="n">key</span><span class="o">:</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="o">:</span> <span class="n">value</span><span class="p">,</span> <span class="n">freq</span><span class="o">:</span> <span class="m">1</span><span class="p">}</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">addNode</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">minFreq</span> <span class="o">=</span> <span class="m">1</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LFUCache</span><span class="p">)</span> <span class="n">incrFreq</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">l</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">freqMap</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">freq</span><span class="p">]</span>
+	<span class="n">l</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nb">delete</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">freqMap</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">freq</span> <span class="o">==</span> <span class="n">this</span><span class="o">.</span><span class="n">minFreq</span> <span class="p">{</span>
+			<span class="n">this</span><span class="o">.</span><span class="n">minFreq</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">freq</span><span class="o">++</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">addNode</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LFUCache</span><span class="p">)</span> <span class="n">addNode</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">l</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">freqMap</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">freq</span><span class="p">]</span>
+	<span class="k">if</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+		<span class="n">l</span> <span class="o">=</span> <span class="n">newList</span><span class="p">()</span>
+		<span class="n">this</span><span class="o">.</span><span class="n">freqMap</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">freq</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+	<span class="p">}</span>
+	<span class="n">l</span><span class="o">.</span><span class="n">pushFront</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">node</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">key</span>  <span class="kt">int</span>
+	<span class="n">val</span>  <span class="kt">int</span>
+	<span class="n">freq</span> <span class="kt">int</span>
+	<span class="n">prev</span> <span class="o">*</span><span class="n">node</span>
+	<span class="n">next</span> <span class="o">*</span><span class="n">node</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">list</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">head</span> <span class="o">*</span><span class="n">node</span>
+	<span class="n">tail</span> <span class="o">*</span><span class="n">node</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newList</span><span class="p">()</span> <span class="o">*</span><span class="n">list</span> <span class="p">{</span>
+	<span class="n">head</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+	<span class="n">tail</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+	<span class="n">head</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">tail</span>
+	<span class="n">tail</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">head</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">list</span><span class="p">{</span>
+		<span class="n">head</span><span class="o">:</span> <span class="n">head</span><span class="p">,</span>
+		<span class="n">tail</span><span class="o">:</span> <span class="n">tail</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">l</span> <span class="o">*</span><span class="n">list</span><span class="p">)</span> <span class="n">pushFront</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">head</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span>
+	<span class="n">l</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">n</span>
+	<span class="n">l</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">n</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">l</span> <span class="o">*</span><span class="n">list</span><span class="p">)</span> <span class="n">remove</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">prev</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">next</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">prev</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="no">nil</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="no">nil</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">l</span> <span class="o">*</span><span class="n">list</span><span class="p">)</span> <span class="n">removeBack</span><span class="p">()</span> <span class="o">*</span><span class="n">node</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="n">l</span><span class="o">.</span><span class="n">tail</span><span class="o">.</span><span class="n">prev</span>
+	<span class="n">l</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">n</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">l</span> <span class="o">*</span><span class="n">list</span><span class="p">)</span> <span class="n">empty</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span> <span class="o">==</span> <span class="n">l</span><span class="o">.</span><span class="n">tail</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">cell</span><span class="p">::</span><span class="n">RefCell</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">collections</span><span class="p">::</span><span class="n">HashMap</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">rc</span><span class="p">::</span><span class="nb">Rc</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+    <span class="n">freq</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+    <span class="n">prev</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;&gt;</span><span class="p">,</span>
+    <span class="n">next</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">Self</span> <span class="p">{</span>
+        <span class="k">Self</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">,</span>
+            <span class="n">value</span><span class="p">,</span>
+            <span class="n">freq</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">prev</span><span class="p">:</span> <span class="nb">None</span><span class="p">,</span>
+            <span class="n">next</span><span class="p">:</span> <span class="nb">None</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span> <span class="n">LinkedList</span> <span class="p">{</span>
+    <span class="n">head</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;&gt;</span><span class="p">,</span>
+    <span class="n">tail</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">LinkedList</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="k">Self</span> <span class="p">{</span>
+        <span class="k">Self</span> <span class="p">{</span>
+            <span class="n">head</span><span class="p">:</span> <span class="nb">None</span><span class="p">,</span>
+            <span class="n">tail</span><span class="p">:</span> <span class="nb">None</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">push_front</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">match</span> <span class="k">self</span><span class="py">.head</span><span class="nf">.take</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">(</span><span class="n">head</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="n">head</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.prev</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+                <span class="n">node</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.prev</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+                <span class="n">node</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.next</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
+                <span class="k">self</span><span class="py">.head</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+            <span class="p">}</span>
+            <span class="nb">None</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="n">node</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.prev</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+                <span class="n">node</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.next</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+                <span class="k">self</span><span class="py">.head</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+                <span class="k">self</span><span class="py">.tail</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">remove</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">match</span> <span class="p">(</span><span class="n">node</span><span class="nf">.borrow</span><span class="p">()</span><span class="py">.prev</span><span class="nf">.as_ref</span><span class="p">(),</span> <span class="n">node</span><span class="nf">.borrow</span><span class="p">()</span><span class="py">.next</span><span class="nf">.as_ref</span><span class="p">())</span> <span class="p">{</span>
+            <span class="p">(</span><span class="nb">None</span><span class="p">,</span> <span class="nb">None</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.head</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+                <span class="k">self</span><span class="py">.tail</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="p">(</span><span class="nb">None</span><span class="p">,</span> <span class="nf">Some</span><span class="p">(</span><span class="n">next</span><span class="p">))</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.head</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">next</span><span class="p">));</span>
+                <span class="n">next</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.prev</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="p">(</span><span class="nf">Some</span><span class="p">(</span><span class="n">prev</span><span class="p">),</span> <span class="nb">None</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.tail</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">prev</span><span class="p">));</span>
+                <span class="n">prev</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.next</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="p">(</span><span class="nf">Some</span><span class="p">(</span><span class="n">prev</span><span class="p">),</span> <span class="nf">Some</span><span class="p">(</span><span class="n">next</span><span class="p">))</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="n">next</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.prev</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">prev</span><span class="p">));</span>
+                <span class="n">prev</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.next</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">next</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">pop_back</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;&gt;</span> <span class="p">{</span>
+        <span class="k">match</span> <span class="k">self</span><span class="py">.tail</span><span class="nf">.take</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="nf">.remove</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tail</span><span class="p">);</span>
+                <span class="nf">Some</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="nb">None</span> <span class="k">=&gt;</span> <span class="nb">None</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">is_empty</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.head</span><span class="nf">.is_none</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span> <span class="n">LFUCache</span> <span class="p">{</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="nb">i32</span><span class="p">,</span> <span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;&gt;</span><span class="p">,</span>
+    <span class="n">freq_map</span><span class="p">:</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="nb">i32</span><span class="p">,</span> <span class="n">LinkedList</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">min_freq</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+    <span class="n">capacity</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="cd">/**
+ * `&amp;self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&amp;mut self` instead.
+ */</span>
+<span class="k">impl</span> <span class="n">LFUCache</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">capacity</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">Self</span> <span class="p">{</span>
+        <span class="k">Self</span> <span class="p">{</span>
+            <span class="n">cache</span><span class="p">:</span> <span class="nn">HashMap</span><span class="p">::</span><span class="nf">new</span><span class="p">(),</span>
+            <span class="n">freq_map</span><span class="p">:</span> <span class="nn">HashMap</span><span class="p">::</span><span class="nf">new</span><span class="p">(),</span>
+            <span class="n">min_freq</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">capacity</span><span class="p">:</span> <span class="n">capacity</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">get</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">self</span><span class="py">.capacity</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">match</span> <span class="k">self</span><span class="py">.cache</span><span class="nf">.get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="n">node</span> <span class="o">=</span> <span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+                <span class="k">self</span><span class="nf">.incr_freq</span><span class="p">(</span><span class="o">&amp;</span><span class="n">node</span><span class="p">);</span>
+                <span class="k">let</span> <span class="n">value</span> <span class="o">=</span> <span class="n">node</span><span class="nf">.borrow</span><span class="p">()</span><span class="py">.value</span><span class="p">;</span>
+                <span class="n">value</span>
+            <span class="p">}</span>
+            <span class="nb">None</span> <span class="k">=&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">put</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">self</span><span class="py">.capacity</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">match</span> <span class="k">self</span><span class="py">.cache</span><span class="nf">.get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="n">node</span> <span class="o">=</span> <span class="nn">Rc</span><span class="p">::</span><span class="nf">clone</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+                <span class="n">node</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+                <span class="k">self</span><span class="nf">.incr_freq</span><span class="p">(</span><span class="o">&amp;</span><span class="n">node</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="nb">None</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="k">self</span><span class="py">.cache</span><span class="nf">.len</span><span class="p">()</span> <span class="o">==</span> <span class="k">self</span><span class="py">.capacity</span> <span class="p">{</span>
+                    <span class="k">let</span> <span class="n">list</span> <span class="o">=</span> <span class="k">self</span><span class="py">.freq_map</span><span class="nf">.get_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.min_freq</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">();</span>
+                    <span class="k">self</span><span class="py">.cache</span><span class="nf">.remove</span><span class="p">(</span><span class="o">&amp;</span><span class="n">list</span><span class="nf">.pop_back</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">()</span><span class="nf">.borrow</span><span class="p">()</span><span class="py">.key</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">let</span> <span class="n">node</span> <span class="o">=</span> <span class="nn">Rc</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">RefCell</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Node</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)));</span>
+                <span class="k">self</span><span class="nf">.add_node</span><span class="p">(</span><span class="o">&amp;</span><span class="n">node</span><span class="p">);</span>
+                <span class="k">self</span><span class="py">.cache</span><span class="nf">.insert</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+                <span class="k">self</span><span class="py">.min_freq</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">incr_freq</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="nf">.borrow</span><span class="p">()</span><span class="py">.freq</span><span class="p">;</span>
+        <span class="k">let</span> <span class="n">list</span> <span class="o">=</span> <span class="k">self</span><span class="py">.freq_map</span><span class="nf">.get_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="n">freq</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="n">list</span><span class="nf">.remove</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="n">list</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">self</span><span class="py">.freq_map</span><span class="nf">.remove</span><span class="p">(</span><span class="o">&amp;</span><span class="n">freq</span><span class="p">);</span>
+            <span class="k">if</span> <span class="n">freq</span> <span class="o">==</span> <span class="k">self</span><span class="py">.min_freq</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.min_freq</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="nf">.borrow_mut</span><span class="p">()</span><span class="py">.freq</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">self</span><span class="nf">.add_node</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">add_node</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="nf">.borrow</span><span class="p">()</span><span class="py">.freq</span><span class="p">;</span>
+        <span class="k">match</span> <span class="k">self</span><span class="py">.freq_map</span><span class="nf">.get_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="n">freq</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">(</span><span class="n">list</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="n">list</span><span class="nf">.push_front</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="nb">None</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="k">mut</span> <span class="n">list</span> <span class="o">=</span> <span class="nn">LinkedList</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+                <span class="n">list</span><span class="nf">.push_front</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+                <span class="k">self</span><span class="py">.freq_map</span><span class="nf">.insert</span><span class="p">(</span><span class="n">node</span><span class="nf">.borrow</span><span class="p">()</span><span class="py">.freq</span><span class="p">,</span> <span class="n">list</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cd">/**
+ * Your LFUCache object will be instantiated and called as such:
+ * let obj = LFUCache::new(capacity);
+ * let ret_1: i32 = obj.get(key);
+ * obj.put(key, value);
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">key</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">freq</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">prev</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>
+    <span class="n">Node</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">freq</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">prev</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">DoublyLinkedList</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">head</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">tail</span><span class="p">;</span>
+    <span class="n">DoublyLinkedList</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">tail</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">tail</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">tail</span><span class="o">-&gt;</span><span class="n">prev</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">addFirst</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">prev</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">remove</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">prev</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">prev</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">prev</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">removeLast</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">remove</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">tail</span><span class="o">-&gt;</span><span class="n">prev</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">tail</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">LFUCache</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">LFUCache</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">minFreq</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">get</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">capacity</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+        <span class="n">incrFreq</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">put</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">capacity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">!=</span> <span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">map</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+            <span class="n">incrFreq</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">capacity</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">DoublyLinkedList</span><span class="o">*</span> <span class="n">list</span> <span class="o">=</span> <span class="n">freqMap</span><span class="p">[</span><span class="n">minFreq</span><span class="p">];</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">list</span><span class="o">-&gt;</span><span class="n">removeLast</span><span class="p">();</span>
+            <span class="n">map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+        <span class="n">addNode</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="n">map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">capacity</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">minFreq</span><span class="p">;</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Node</span><span class="o">*&gt;</span> <span class="n">map</span><span class="p">;</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">DoublyLinkedList</span><span class="o">*&gt;</span> <span class="n">freqMap</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">incrFreq</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">freq</span><span class="p">;</span>
+        <span class="n">DoublyLinkedList</span><span class="o">*</span> <span class="n">list</span> <span class="o">=</span> <span class="n">freqMap</span><span class="p">[</span><span class="n">freq</span><span class="p">];</span>
+        <span class="n">list</span><span class="o">-&gt;</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">list</span><span class="o">-&gt;</span><span class="n">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">freqMap</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">freq</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">freq</span> <span class="o">==</span> <span class="n">minFreq</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">minFreq</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">freq</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">addNode</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">addNode</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">freq</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">freqMap</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span> <span class="o">==</span> <span class="n">freqMap</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">freqMap</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DoublyLinkedList</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">DoublyLinkedList</span><span class="o">*</span> <span class="n">list</span> <span class="o">=</span> <span class="n">freqMap</span><span class="p">[</span><span class="n">freq</span><span class="p">];</span>
+        <span class="n">list</span><span class="o">-&gt;</span><span class="n">addFirst</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="n">freqMap</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span> <span class="o">=</span> <span class="n">list</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj-&gt;get(key);
+ * obj-&gt;put(key,value);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-460.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

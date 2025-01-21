@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1087.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1087.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1087 - Brace Expansion</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1087. Brace Expansion Description You are given a string s representing a list of words. Each letter in the word has one or more options. If there is one option, the letter is represented as is. If there is more than one option, then curly...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1087.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1087.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1087.html" rel="stylesheet"/>
+   <link href="solution-1087.html" rel="stylesheet"/>
+   <link href="solution-1087.html" rel="stylesheet"/>
+   <link href="solution-1087.html" rel="stylesheet"/>
+   <link href="solution-1087.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1087 - Brace Expansion" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1087. Brace Expansion
+
+Description
+
+You are given a string s representing a list of words. Each letter in the word has one or more options.
+
+
+	If there is one option, the letter is represented as is.
+	If there is more than one option, then curly braces delimit the options. For example, &amp;quot;{a,b,c}&amp;quot; represents options [&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;].
+
+
+For example, if s = &amp;quot;a{b,c}&amp;quot;, the first character is always &amp;#39;a&amp;#39;, but the second character can be &amp;#39;b&amp;#39; or &amp;#39;c&amp;#39;. The original list is [&amp;quot;ab&amp;quot;, &amp;quot;ac&amp;quot;].
+
+Return all words that can be formed in this manner, sorted in lexicographical order.
+
+&amp;nbsp;
+Example 1:
+Input: s = &quot;{a,b}c{d,e}f&quot;
+Output: [&quot;acdf&quot;,&quot;acef&quot;,&quot;bcdf&quot;,&quot;bcef&quot;]
+
+Example 2:
+Input: s = &quot;abcd&quot;
+Output: [&quot;abcd&quot;]
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= s.length &amp;lt;= 50
+	s consists of curly brackets &amp;#39;{}&amp;#39;, commas&amp;nbsp;&amp;#39;,&amp;#39;, and lowercase English letters.
+	s is guaranteed to be a valid input.
+	There are no nested curly brackets.
+	All characters inside a pair of consecutive opening and ending curly brackets are different.
+
+
+Solutions
+
+
+
+	Java
+
+	Python
+
+
+
+
+
+	
+class Solution {
+    private List&amp;lt;String&amp;gt; ans;
+    private List&amp;lt;String[]&amp;gt; items;
+
+    public String[] expand(String s) {
+        ans = new ArrayList&amp;lt;&amp;gt;();
+        items = new ArrayList&amp;lt;&amp;gt;();
+        convert(s);
+        dfs(0, new ArrayList&amp;lt;&amp;gt;());
+        Collections.sort(ans);
+        return ans.toArray(new String[0]);
+    }
+
+    private void convert(String s) {
+        if (&quot;&quot;.equals(s)) {
+            return;
+        }
+        if (s.charAt(0) == '{') {
+            int j = s.indexOf(&quot;}&quot;);
+            items.add(s.substring(1, j).split(&quot;,&quot;));
+            convert(s.substring(j + 1));
+        } else {
+            int j = s.indexOf(&quot;{&quot;);
+            if (j != -1) {
+                items.add(s.substring(0, j).split(&quot;,&quot;));
+                convert(s.substring(j));
+            } else {
+                items.add(s.split(&quot;,&quot;));
+            }
+        }
+    }
+
+    private void dfs(int i, List&amp;lt;String&amp;gt; t) {
+        if (i == items.size()) {
+            ans.add(String.join(&quot;&quot;, t));
+            return;
+        }
+        for (String c : items.get(i)) {
+            t.add(c);
+            dfs(i + 1, t);
+            t.remove(t.size() - 1);
+        }
+    }
+}
+
+
+
+	
+class Solution:
+    def expand(self, s: str) -&amp;gt; List[str]:
+        def convert(s):
+            if not s:
+                return
+            if s[0] == '{':
+                j = s.find('}')
+                items.append(s[1:j].split(','))
+                convert(s[j + 1 :])
+            else:
+                j = s.find('{')
+                if j != -1:
+                    items.append(s[:j].split(','))
+                    convert(s[j:])
+                else:
+                    items.append(s.split(','))
+
+        def dfs(i, t):
+            if i == len(items):
+                ans.append(''.join(t))
+                return
+            for c in items[i]:
+                t.append(c)
+                dfs(i + 1, t)
+                t.pop()
+
+        items = []
+        convert(s)
+        ans = []
+        dfs(0, [])
+        ans.sort()
+        return ans
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-11-21T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-11-21-1087-Brace-Expansion/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1087.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1087 - Brace Expansion" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1087. Brace Expansion
+
+Description
+
+You are given a string s representing a list of words. Each letter in the word has one or more options.
+
+
+	If there is one option, the letter is represented as is.
+	If there is more than one option, then curly braces delimit the options. For example, &amp;quot;{a,b,c}&amp;quot; represents options [&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;].
+
+
+For example, if s = &amp;quot;a{b,c}&amp;quot;, the first character is always &amp;#39;a&amp;#39;, but the second character can be &amp;#39;b&amp;#39; or &amp;#39;c&amp;#39;. The original list is [&amp;quot;ab&amp;quot;, &amp;quot;ac&amp;quot;].
+
+Return all words that can be formed in this manner, sorted in lexicographical order.
+
+&amp;nbsp;
+Example 1:
+Input: s = &quot;{a,b}c{d,e}f&quot;
+Output: [&quot;acdf&quot;,&quot;acef&quot;,&quot;bcdf&quot;,&quot;bcef&quot;]
+
+Example 2:
+Input: s = &quot;abcd&quot;
+Output: [&quot;abcd&quot;]
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= s.length &amp;lt;= 50
+	s consists of curly brackets &amp;#39;{}&amp;#39;, commas&amp;nbsp;&amp;#39;,&amp;#39;, and lowercase English letters.
+	s is guaranteed to be a valid input.
+	There are no nested curly brackets.
+	All characters inside a pair of consecutive opening and ending curly brackets are different.
+
+
+Solutions
+
+
+
+	Java
+
+	Python
+
+
+
+
+
+	
+class Solution {
+    private List&amp;lt;String&amp;gt; ans;
+    private List&amp;lt;String[]&amp;gt; items;
+
+    public String[] expand(String s) {
+        ans = new ArrayList&amp;lt;&amp;gt;();
+        items = new ArrayList&amp;lt;&amp;gt;();
+        convert(s);
+        dfs(0, new ArrayList&amp;lt;&amp;gt;());
+        Collections.sort(ans);
+        return ans.toArray(new String[0]);
+    }
+
+    private void convert(String s) {
+        if (&quot;&quot;.equals(s)) {
+            return;
+        }
+        if (s.charAt(0) == '{') {
+            int j = s.indexOf(&quot;}&quot;);
+            items.add(s.substring(1, j).split(&quot;,&quot;));
+            convert(s.substring(j + 1));
+        } else {
+            int j = s.indexOf(&quot;{&quot;);
+            if (j != -1) {
+                items.add(s.substring(0, j).split(&quot;,&quot;));
+                convert(s.substring(j));
+            } else {
+                items.add(s.split(&quot;,&quot;));
+            }
+        }
+    }
+
+    private void dfs(int i, List&amp;lt;String&amp;gt; t) {
+        if (i == items.size()) {
+            ans.add(String.join(&quot;&quot;, t));
+            return;
+        }
+        for (String c : items.get(i)) {
+            t.add(c);
+            dfs(i + 1, t);
+            t.remove(t.size() - 1);
+        }
+    }
+}
+
+
+
+	
+class Solution:
+    def expand(self, s: str) -&amp;gt; List[str]:
+        def convert(s):
+            if not s:
+                return
+            if s[0] == '{':
+                j = s.find('}')
+                items.append(s[1:j].split(','))
+                convert(s[j + 1 :])
+            else:
+                j = s.find('{')
+                if j != -1:
+                    items.append(s[:j].split(','))
+                    convert(s[j:])
+                else:
+                    items.append(s.split(','))
+
+        def dfs(i, t):
+            if i == len(items):
+                ans.append(''.join(t))
+                return
+            for c in items[i]:
+                t.append(c)
+                dfs(i + 1, t)
+                t.pop()
+
+        items = []
+        convert(s)
+        ans = []
+        dfs(0, [])
+        ans.sort()
+        return ans
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1087 - Brace Expansion | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1087 - Brace Expansion" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1087.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-11-21-1087-Brace-Expansion/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-11-21T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1087 - Brace Expansion","dateModified":"2018-11-21T00:00:00-08:00","datePublished":"2018-11-21T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-11-21-1087-Brace-Expansion/"},"url":"https://leetcode.ca/2018-11-21-1087-Brace-Expansion/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1087-brace-expansion">
+       <a href="solution-1087.html">
+        1087. Brace Expansion
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a string
+       <code>
+        s
+       </code>
+       representing a list of words. Each letter in the word has one or more options.
+      </p>
+      <ul>
+       <li>
+        If there is one option, the letter is represented as is.
+       </li>
+       <li>
+        If there is more than one option, then curly braces delimit the options. For example,
+        <code>
+         "{a,b,c}"
+        </code>
+        represents options
+        <code>
+         ["a", "b", "c"]
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       For example, if
+       <code>
+        s = "a{b,c}"
+       </code>
+       , the first character is always
+       <code>
+        'a'
+       </code>
+       , but the second character can be
+       <code>
+        'b'
+       </code>
+       or
+       <code>
+        'c'
+       </code>
+       . The original list is
+       <code>
+        ["ab", "ac"]
+       </code>
+       .
+      </p>
+      <p>
+       Return all words that can be formed in this manner,
+       <strong>
+        sorted
+       </strong>
+       in lexicographical order.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre><strong>Input:</strong> s = "{a,b}c{d,e}f"
+<strong>Output:</strong> ["acdf","acef","bcdf","bcef"]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre><strong>Input:</strong> s = "abcd"
+<strong>Output:</strong> ["abcd"]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 50
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists of curly brackets
+        <code>
+         '{}'
+        </code>
+        , commas
+        <code>
+         ','
+        </code>
+        , and lowercase English letters.
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        is guaranteed to be a valid input.
+       </li>
+       <li>
+        There are no nested curly brackets.
+       </li>
+       <li>
+        All characters inside a pair of consecutive opening and ending curly brackets are different.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#3a1ef886-42cc-490f-84b9-756a16ed3f76'}">
+       <li class="uk-active">
+        <a href="solution-1087.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1087.html">
+         Python
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="3a1ef886-42cc-490f-84b9-756a16ed3f76">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">[]&gt;</span> <span class="n">items</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span><span class="o">[]</span> <span class="nf">expand</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">convert</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">ans</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">convert</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="s">""</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">s</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'{'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="s">"}"</span><span class="o">);</span>
+            <span class="n">items</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">j</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">));</span>
+            <span class="n">convert</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="s">"{"</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">items</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">j</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">));</span>
+                <span class="n">convert</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">j</span><span class="o">));</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">items</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">items</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="n">t</span><span class="o">));</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">c</span> <span class="o">:</span> <span class="n">items</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">t</span><span class="o">);</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">'{'</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">'}'</span><span class="p">)</span>
+                <span class="n">items</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">j</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">))</span>
+                <span class="n">convert</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">'{'</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">items</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span><span class="n">j</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">))</span>
+                    <span class="n">convert</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">:])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">items</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+                <span class="k">return</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">convert</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">ans</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1087.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

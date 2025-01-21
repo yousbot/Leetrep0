@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3045.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3045.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3045 - Count Prefix and Suffix Pairs II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3045. Count Prefix and Suffix Pairs II Description You are given a 0-indexed string array words. Let&amp;#39;s define a boolean function isPrefixAndSuffix that takes two strings, str1 and str2: isPrefixAndSuffix(str1, str2) returns true if str1 is both a prefix and a suffix of str2, and...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3045.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3045.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3045.html" rel="stylesheet"/>
+   <link href="solution-3045.html" rel="stylesheet"/>
+   <link href="solution-3045.html" rel="stylesheet"/>
+   <link href="solution-3045.html" rel="stylesheet"/>
+   <link href="solution-3045.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3045 - Count Prefix and Suffix Pairs II" property="og:title"/>
+   <meta content="Leetcode 3045. Count Prefix and Suffix Pairs II Description You are given a 0-indexed string array words. Let&amp;#39;s define a boolean function isPrefixAndSuffix that takes two strings, str1 and str2: isPrefixAndSuffix(str1, str2) returns true if str1 is both a prefix and a suffix of str2, and false otherwise. For example, isPrefixAndSuffix(&amp;quot;aba&amp;quot;, &amp;quot;ababa&amp;quot;) is true because &amp;quot;aba&amp;quot; is a prefix of &amp;quot;ababa&amp;quot; and also a suffix, but isPrefixAndSuffix(&amp;quot;abc&amp;quot;, &amp;quot;abcd&amp;quot;) is false. Return an integer denoting the number of index pairs (i, j) such that i &amp;lt; j, and isPrefixAndSuffix(words[i], words[j]) is true. &amp;nbsp; Example 1: Input: words = [&amp;quot;a&amp;quot;,&amp;quot;aba&amp;quot;,&amp;quot;ababa&amp;quot;,&amp;quot;aa&amp;quot;] Output: 4 Explanation: In this example, the counted index pairs are: i = 0 and j = 1 because isPrefixAndSuffix(&amp;quot;a&amp;quot;, &amp;quot;aba&amp;quot;) is true. i = 0 and j = 2 because isPrefixAndSuffix(&amp;quot;a&amp;quot;, &amp;quot;ababa&amp;quot;) is true. i = 0 and j = 3 because isPrefixAndSuffix(&amp;quot;a&amp;quot;, &amp;quot;aa&amp;quot;) is true. i = 1 and j = 2 because isPrefixAndSuffix(&amp;quot;aba&amp;quot;, &amp;quot;ababa&amp;quot;) is true. Therefore, the answer is 4. Example 2: Input: words = [&amp;quot;pa&amp;quot;,&amp;quot;papa&amp;quot;,&amp;quot;ma&amp;quot;,&amp;quot;mama&amp;quot;] Output: 2 Explanation: In this example, the counted index pairs are: i = 0 and j = 1 because isPrefixAndSuffix(&amp;quot;pa&amp;quot;, &amp;quot;papa&amp;quot;) is true. i = 2 and j = 3 because isPrefixAndSuffix(&amp;quot;ma&amp;quot;, &amp;quot;mama&amp;quot;) is true. Therefore, the answer is 2. Example 3: Input: words = [&amp;quot;abab&amp;quot;,&amp;quot;ab&amp;quot;] Output: 0 Explanation: In this example, the only valid index pair is i = 0 and j = 1, and isPrefixAndSuffix(&amp;quot;abab&amp;quot;, &amp;quot;ab&amp;quot;) is false. Therefore, the answer is 0. &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 105 1 &amp;lt;= words[i].length &amp;lt;= 105 words[i] consists only of lowercase English letters. The sum of the lengths of all words[i] does not exceed 5 * 105. Solutions Solution 1: Trie We can treat each string $s$ in the string array as a list of character pairs, where each character pair $(s[i], s[m - i - 1])$ represents the $i$th character pair of the prefix and suffix of string $s$. We can use a trie to store all the character pairs, and then for each string $s$, we search for all the character pairs $(s[i], s[m - i - 1])$ in the trie, and add their counts to the answer. The time complexity is $O(n \times m)$, and the space complexity is $O(n \times m)$. Here, $n$ and $m$ are the lengths of words and the maximum length of the strings, respectively. Java C++ Python Go TypeScript class Node { Map&amp;lt;Integer, Node&amp;gt; children = new HashMap&amp;lt;&amp;gt;(); int cnt; } class Solution { public long countPrefixSuffixPairs(String[] words) { long ans = 0; Node trie = new Node(); for (String s : words) { Node node = trie; int m = s.length(); for (int i = 0; i &amp;lt; m; ++i) { int p = s.charAt(i) * 32 + s.charAt(m - i - 1); node.children.putIfAbsent(p, new Node()); node = node.children.get(p); ans += node.cnt; } ++node.cnt; } return ans; } } class Node { public: unordered_map&amp;lt;int, Node*&amp;gt; children; int cnt; Node() : cnt(0) {} }; class Solution { public: long..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-02-25T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-02-25-3045-Count-Prefix-and-Suffix-Pairs-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3045.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3045 - Count Prefix and Suffix Pairs II" property="twitter:title"/>
+   <meta content="Leetcode 3045. Count Prefix and Suffix Pairs II Description You are given a 0-indexed string array words. Let&amp;#39;s define a boolean function isPrefixAndSuffix that takes two strings, str1 and str2: isPrefixAndSuffix(str1, str2) returns true if str1 is both a prefix and a suffix of str2, and false otherwise. For example, isPrefixAndSuffix(&amp;quot;aba&amp;quot;, &amp;quot;ababa&amp;quot;) is true because &amp;quot;aba&amp;quot; is a prefix of &amp;quot;ababa&amp;quot; and also a suffix, but isPrefixAndSuffix(&amp;quot;abc&amp;quot;, &amp;quot;abcd&amp;quot;) is false. Return an integer denoting the number of index pairs (i, j) such that i &amp;lt; j, and isPrefixAndSuffix(words[i], words[j]) is true. &amp;nbsp; Example 1: Input: words = [&amp;quot;a&amp;quot;,&amp;quot;aba&amp;quot;,&amp;quot;ababa&amp;quot;,&amp;quot;aa&amp;quot;] Output: 4 Explanation: In this example, the counted index pairs are: i = 0 and j = 1 because isPrefixAndSuffix(&amp;quot;a&amp;quot;, &amp;quot;aba&amp;quot;) is true. i = 0 and j = 2 because isPrefixAndSuffix(&amp;quot;a&amp;quot;, &amp;quot;ababa&amp;quot;) is true. i = 0 and j = 3 because isPrefixAndSuffix(&amp;quot;a&amp;quot;, &amp;quot;aa&amp;quot;) is true. i = 1 and j = 2 because isPrefixAndSuffix(&amp;quot;aba&amp;quot;, &amp;quot;ababa&amp;quot;) is true. Therefore, the answer is 4. Example 2: Input: words = [&amp;quot;pa&amp;quot;,&amp;quot;papa&amp;quot;,&amp;quot;ma&amp;quot;,&amp;quot;mama&amp;quot;] Output: 2 Explanation: In this example, the counted index pairs are: i = 0 and j = 1 because isPrefixAndSuffix(&amp;quot;pa&amp;quot;, &amp;quot;papa&amp;quot;) is true. i = 2 and j = 3 because isPrefixAndSuffix(&amp;quot;ma&amp;quot;, &amp;quot;mama&amp;quot;) is true. Therefore, the answer is 2. Example 3: Input: words = [&amp;quot;abab&amp;quot;,&amp;quot;ab&amp;quot;] Output: 0 Explanation: In this example, the only valid index pair is i = 0 and j = 1, and isPrefixAndSuffix(&amp;quot;abab&amp;quot;, &amp;quot;ab&amp;quot;) is false. Therefore, the answer is 0. &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 105 1 &amp;lt;= words[i].length &amp;lt;= 105 words[i] consists only of lowercase English letters. The sum of the lengths of all words[i] does not exceed 5 * 105. Solutions Solution 1: Trie We can treat each string $s$ in the string array as a list of character pairs, where each character pair $(s[i], s[m - i - 1])$ represents the $i$th character pair of the prefix and suffix of string $s$. We can use a trie to store all the character pairs, and then for each string $s$, we search for all the character pairs $(s[i], s[m - i - 1])$ in the trie, and add their counts to the answer. The time complexity is $O(n \times m)$, and the space complexity is $O(n \times m)$. Here, $n$ and $m$ are the lengths of words and the maximum length of the strings, respectively. Java C++ Python Go TypeScript class Node { Map&amp;lt;Integer, Node&amp;gt; children = new HashMap&amp;lt;&amp;gt;(); int cnt; } class Solution { public long countPrefixSuffixPairs(String[] words) { long ans = 0; Node trie = new Node(); for (String s : words) { Node node = trie; int m = s.length(); for (int i = 0; i &amp;lt; m; ++i) { int p = s.charAt(i) * 32 + s.charAt(m - i - 1); node.children.putIfAbsent(p, new Node()); node = node.children.get(p); ans += node.cnt; } ++node.cnt; } return ans; } } class Node { public: unordered_map&amp;lt;int, Node*&amp;gt; children; int cnt; Node() : cnt(0) {} }; class Solution { public: long..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3045 - Count Prefix and Suffix Pairs II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3045 - Count Prefix and Suffix Pairs II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3045.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-02-25-3045-Count-Prefix-and-Suffix-Pairs-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-02-25T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3045 - Count Prefix and Suffix Pairs II","dateModified":"2024-02-25T00:00:00-08:00","datePublished":"2024-02-25T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-02-25-3045-Count-Prefix-and-Suffix-Pairs-II/"},"url":"https://leetcode.ca/2024-02-25-3045-Count-Prefix-and-Suffix-Pairs-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="3045-count-prefix-and-suffix-pairs-ii">
+       <a href="solution-3045.html">
+        3045. Count Prefix and Suffix Pairs II
+       </a>
+      </h1>
+      <!-- tags:Trie,Array,String,String Matching,Hash Function,Rolling Hash -->
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a
+       <strong>
+        0-indexed
+       </strong>
+       string array
+       <code>
+        words
+       </code>
+       .
+      </p>
+      <p>
+       Let's define a
+       <strong>
+        boolean
+       </strong>
+       function
+       <code>
+        isPrefixAndSuffix
+       </code>
+       that takes two strings,
+       <code>
+        str1
+       </code>
+       and
+       <code>
+        str2
+       </code>
+       :
+      </p>
+      <ul>
+       <li>
+        <code>
+         isPrefixAndSuffix(str1, str2)
+        </code>
+        returns
+        <code>
+         true
+        </code>
+        if
+        <code>
+         str1
+        </code>
+        is
+        <strong>
+         both
+        </strong>
+        a
+        <span data-keyword="string-prefix">
+         prefix
+        </span>
+        and a
+        <span data-keyword="string-suffix">
+         suffix
+        </span>
+        of
+        <code>
+         str2
+        </code>
+        , and
+        <code>
+         false
+        </code>
+        otherwise.
+       </li>
+      </ul>
+      <p>
+       For example,
+       <code>
+        isPrefixAndSuffix("aba", "ababa")
+       </code>
+       is
+       <code>
+        true
+       </code>
+       because
+       <code>
+        "aba"
+       </code>
+       is a prefix of
+       <code>
+        "ababa"
+       </code>
+       and also a suffix, but
+       <code>
+        isPrefixAndSuffix("abc", "abcd")
+       </code>
+       is
+       <code>
+        false
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        an integer denoting the
+        <strong>
+         number
+        </strong>
+        of index pairs
+       </em>
+       <code>
+        (i
+        <em>
+         ,
+        </em>
+        j)
+       </code>
+       <em>
+        such that
+       </em>
+       <code>
+        i &lt; j
+       </code>
+       <em>
+        , and
+       </em>
+       <code>
+        isPrefixAndSuffix(words[i], words[j])
+       </code>
+       <em>
+        is
+       </em>
+       <code>
+        true
+       </code>
+       <em>
+        .
+       </em>
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["a","aba","ababa","aa"]
+<strong>Output:</strong> 4
+<strong>Explanation:</strong> In this example, the counted index pairs are:
+i = 0 and j = 1 because isPrefixAndSuffix("a", "aba") is true.
+i = 0 and j = 2 because isPrefixAndSuffix("a", "ababa") is true.
+i = 0 and j = 3 because isPrefixAndSuffix("a", "aa") is true.
+i = 1 and j = 2 because isPrefixAndSuffix("aba", "ababa") is true.
+Therefore, the answer is 4.</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["pa","papa","ma","mama"]
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> In this example, the counted index pairs are:
+i = 0 and j = 1 because isPrefixAndSuffix("pa", "papa") is true.
+i = 2 and j = 3 because isPrefixAndSuffix("ma", "mama") is true.
+Therefore, the answer is 2.  </pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["abab","ab"]
+<strong>Output:</strong> 0
+<strong>Explanation: </strong>In this example, the only valid index pair is i = 0 and j = 1, and isPrefixAndSuffix("abab", "ab") is false.
+Therefore, the answer is 0.</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= words.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= words[i].length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         words[i]
+        </code>
+        consists only of lowercase English letters.
+       </li>
+       <li>
+        The sum of the lengths of all
+        <code>
+         words[i]
+        </code>
+        does not exceed
+        <code>
+         5 * 10
+         <sup>
+          5
+         </sup>
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <h3 id="solution-1-trie">
+       Solution 1: Trie
+      </h3>
+      <p>
+       We can treat each string $s$ in the string array as a list of character pairs, where each character pair $(s[i], s[m - i - 1])$ represents the $i$th character pair of the prefix and suffix of string $s$.
+      </p>
+      <p>
+       We can use a trie to store all the character pairs, and then for each string $s$, we search for all the character pairs $(s[i], s[m - i - 1])$ in the trie, and add their counts to the answer.
+      </p>
+      <p>
+       The time complexity is $O(n \times m)$, and the space complexity is $O(n \times m)$. Here, $n$ and $m$ are the lengths of
+       <code class="language-plaintext highlighter-rouge">
+        words
+       </code>
+       and the maximum length of the strings, respectively.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#7add1d8b-62f5-4728-9787-708b58afe339'}">
+       <li class="uk-active">
+        <a href="solution-3045.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3045.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3045.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3045.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3045.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="7add1d8b-62f5-4728-9787-708b58afe339">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Node</span><span class="o">&gt;</span> <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="kt">int</span> <span class="n">cnt</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">countPrefixSuffixPairs</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Node</span> <span class="n">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">trie</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">putIfAbsent</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">());</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">p</span><span class="o">);</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">cnt</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="o">++</span><span class="n">node</span><span class="o">.</span><span class="na">cnt</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Node</span><span class="o">*&gt;</span> <span class="n">children</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
+
+    <span class="n">Node</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">cnt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">countPrefixSuffixPairs</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span> <span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">trie</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">p</span><span class="p">];</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">cnt</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="o">++</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">cnt</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s">"children"</span><span class="p">,</span> <span class="s">"cnt"</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">countPrefixSuffixPairs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">trie</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">trie</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">:</span>
+                    <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">cnt</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">Node</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">children</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">Node</span>
+	<span class="n">cnt</span>      <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">countPrefixSuffixPairs</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int64</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">trie</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Node</span><span class="p">{</span><span class="n">children</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">Node</span><span class="p">)}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+		<span class="n">node</span> <span class="o">:=</span> <span class="n">trie</span>
+		<span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">p</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="m">32</span> <span class="o">+</span> <span class="kt">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">])</span>
+			<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">p</span><span class="p">];</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+				<span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Node</span><span class="p">{</span><span class="n">children</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">Node</span><span class="p">)}</span>
+			<span class="p">}</span>
+			<span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+			<span class="n">ans</span> <span class="o">+=</span> <span class="kt">int64</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">cnt</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">cnt</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">Node</span> <span class="p">{</span>
+    <span class="nl">children</span><span class="p">:</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">number</span><span class="p">,</span> <span class="nx">Node</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">number</span><span class="p">,</span> <span class="nx">Node</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="nl">cnt</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">countPrefixSuffixPairs</span><span class="p">(</span><span class="nx">words</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">trie</span><span class="p">:</span> <span class="nx">Node</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">s</span> <span class="k">of</span> <span class="nx">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">node</span><span class="p">:</span> <span class="nx">Node</span> <span class="o">=</span> <span class="nx">trie</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">m</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">p</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">m</span> <span class="o">-</span> <span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">p</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">());</span>
+            <span class="p">}</span>
+            <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span><span class="o">!</span><span class="p">;</span>
+            <span class="nx">ans</span> <span class="o">+=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">cnt</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="nx">node</span><span class="p">.</span><span class="nx">cnt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3045.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

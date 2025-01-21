@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-846.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-846.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>846 - Hand of Straights</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 846. Hand of Straights Description Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards. Given an integer array hand where hand[i] is the value written...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-846.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-846.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-846.html" rel="stylesheet"/>
+   <link href="solution-846.html" rel="stylesheet"/>
+   <link href="solution-846.html" rel="stylesheet"/>
+   <link href="solution-846.html" rel="stylesheet"/>
+   <link href="solution-846.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="846 - Hand of Straights" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+846. Hand of Straights
+
+Description
+
+Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards.
+
+Given an integer array hand where hand[i] is the value written on the ith card and an integer groupSize, return true if she can rearrange the cards, or false otherwise.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: hand = [1,2,3,6,2,3,4,7,8], groupSize = 3
+Output: true
+Explanation: Alice&amp;#39;s hand can be rearranged as [1,2,3],[2,3,4],[6,7,8]
+
+
+Example 2:
+
+
+Input: hand = [1,2,3,4,5], groupSize = 4
+Output: false
+Explanation: Alice&amp;#39;s hand can not be rearranged into groups of 4.
+
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= hand.length &amp;lt;= 104
+	0 &amp;lt;= hand[i] &amp;lt;= 109
+	1 &amp;lt;= groupSize &amp;lt;= hand.length
+
+
+&amp;nbsp;
+Note: This question is the same as 1296: https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        Map&amp;lt;Integer, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;();
+        for (int v : hand) {
+            cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+        }
+        Arrays.sort(hand);
+        for (int v : hand) {
+            if (cnt.containsKey(v)) {
+                for (int x = v; x &amp;lt; v + groupSize; ++x) {
+                    if (!cnt.containsKey(x)) {
+                        return false;
+                    }
+                    cnt.put(x, cnt.get(x) - 1);
+                    if (cnt.get(x) == 0) {
+                        cnt.remove(x);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    bool isNStraightHand(vector&amp;lt;int&amp;gt;&amp;amp; hand, int groupSize) {
+        unordered_map&amp;lt;int, int&amp;gt; cnt;
+        for (int&amp;amp; v : hand) ++cnt[v];
+        sort(hand.begin(), hand.end());
+        for (int&amp;amp; v : hand) {
+            if (cnt.count(v)) {
+                for (int x = v; x &amp;lt; v + groupSize; ++x) {
+                    if (!cnt.count(x)) {
+                        return false;
+                    }
+                    if (--cnt[x] == 0) {
+                        cnt.erase(x);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
+
+
+
+	
+class Solution:
+    def isNStraightHand(self, hand: List[int], groupSize: int) -&amp;gt; bool:
+        cnt = Counter(hand)
+        for v in sorted(hand):
+            if cnt[v]:
+                for x in range(v, v + groupSize):
+                    if cnt[x] == 0:
+                        return False
+                    cnt[x] -= 1
+                    if cnt[x] == 0:
+                        cnt.pop(x)
+        return True
+
+
+
+
+	
+func isNStraightHand(hand []int, groupSize int) bool {
+	cnt := map[int]int{}
+	for _, v := range hand {
+		cnt[v]++
+	}
+	sort.Ints(hand)
+	for _, v := range hand {
+		if _, ok := cnt[v]; ok {
+			for x := v; x &amp;lt; v+groupSize; x++ {
+				if _, ok := cnt[x]; !ok {
+					return false
+				}
+				cnt[x]--
+				if cnt[x] == 0 {
+					delete(cnt, x)
+				}
+			}
+		}
+	}
+	return true
+}
+
+
+
+	
+function isNStraightHand(hand: number[], groupSize: number) {
+    const cnt: Record&amp;lt;number, number&amp;gt; = {};
+    for (const i of hand) {
+        cnt[i] = (cnt[i] ?? 0) + 1;
+    }
+
+    const keys = Object.keys(cnt).map(Number);
+    for (const i of keys) {
+        while (cnt[i]) {
+            for (let j = i; j &amp;lt; groupSize + i; j++) {
+                if (!cnt[j]) {
+                    return false;
+                }
+                cnt[j]--;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-03-25T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-03-25-846-Hand-of-Straights/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-846.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="846 - Hand of Straights" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+846. Hand of Straights
+
+Description
+
+Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards.
+
+Given an integer array hand where hand[i] is the value written on the ith card and an integer groupSize, return true if she can rearrange the cards, or false otherwise.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: hand = [1,2,3,6,2,3,4,7,8], groupSize = 3
+Output: true
+Explanation: Alice&amp;#39;s hand can be rearranged as [1,2,3],[2,3,4],[6,7,8]
+
+
+Example 2:
+
+
+Input: hand = [1,2,3,4,5], groupSize = 4
+Output: false
+Explanation: Alice&amp;#39;s hand can not be rearranged into groups of 4.
+
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= hand.length &amp;lt;= 104
+	0 &amp;lt;= hand[i] &amp;lt;= 109
+	1 &amp;lt;= groupSize &amp;lt;= hand.length
+
+
+&amp;nbsp;
+Note: This question is the same as 1296: https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/
+
+Solutions
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        Map&amp;lt;Integer, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;();
+        for (int v : hand) {
+            cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+        }
+        Arrays.sort(hand);
+        for (int v : hand) {
+            if (cnt.containsKey(v)) {
+                for (int x = v; x &amp;lt; v + groupSize; ++x) {
+                    if (!cnt.containsKey(x)) {
+                        return false;
+                    }
+                    cnt.put(x, cnt.get(x) - 1);
+                    if (cnt.get(x) == 0) {
+                        cnt.remove(x);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    bool isNStraightHand(vector&amp;lt;int&amp;gt;&amp;amp; hand, int groupSize) {
+        unordered_map&amp;lt;int, int&amp;gt; cnt;
+        for (int&amp;amp; v : hand) ++cnt[v];
+        sort(hand.begin(), hand.end());
+        for (int&amp;amp; v : hand) {
+            if (cnt.count(v)) {
+                for (int x = v; x &amp;lt; v + groupSize; ++x) {
+                    if (!cnt.count(x)) {
+                        return false;
+                    }
+                    if (--cnt[x] == 0) {
+                        cnt.erase(x);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
+
+
+
+	
+class Solution:
+    def isNStraightHand(self, hand: List[int], groupSize: int) -&amp;gt; bool:
+        cnt = Counter(hand)
+        for v in sorted(hand):
+            if cnt[v]:
+                for x in range(v, v + groupSize):
+                    if cnt[x] == 0:
+                        return False
+                    cnt[x] -= 1
+                    if cnt[x] == 0:
+                        cnt.pop(x)
+        return True
+
+
+
+
+	
+func isNStraightHand(hand []int, groupSize int) bool {
+	cnt := map[int]int{}
+	for _, v := range hand {
+		cnt[v]++
+	}
+	sort.Ints(hand)
+	for _, v := range hand {
+		if _, ok := cnt[v]; ok {
+			for x := v; x &amp;lt; v+groupSize; x++ {
+				if _, ok := cnt[x]; !ok {
+					return false
+				}
+				cnt[x]--
+				if cnt[x] == 0 {
+					delete(cnt, x)
+				}
+			}
+		}
+	}
+	return true
+}
+
+
+
+	
+function isNStraightHand(hand: number[], groupSize: number) {
+    const cnt: Record&amp;lt;number, number&amp;gt; = {};
+    for (const i of hand) {
+        cnt[i] = (cnt[i] ?? 0) + 1;
+    }
+
+    const keys = Object.keys(cnt).map(Number);
+    for (const i of keys) {
+        while (cnt[i]) {
+            for (let j = i; j &amp;lt; groupSize + i; j++) {
+                if (!cnt[j]) {
+                    return false;
+                }
+                cnt[j]--;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    846 - Hand of Straights | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="846 - Hand of Straights" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-846.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-03-25-846-Hand-of-Straights/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-03-25T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"846 - Hand of Straights","dateModified":"2018-03-25T00:00:00-07:00","datePublished":"2018-03-25T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-03-25-846-Hand-of-Straights/"},"url":"https://leetcode.ca/2018-03-25-846-Hand-of-Straights/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="846-hand-of-straights">
+       <a href="solution-846.html">
+        846. Hand of Straights
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size
+       <code>
+        groupSize
+       </code>
+       , and consists of
+       <code>
+        groupSize
+       </code>
+       consecutive cards.
+      </p>
+      <p>
+       Given an integer array
+       <code>
+        hand
+       </code>
+       where
+       <code>
+        hand[i]
+       </code>
+       is the value written on the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       card and an integer
+       <code>
+        groupSize
+       </code>
+       , return
+       <code>
+        true
+       </code>
+       if she can rearrange the cards, or
+       <code>
+        false
+       </code>
+       otherwise.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> hand = [1,2,3,6,2,3,4,7,8], groupSize = 3
+<strong>Output:</strong> true
+<strong>Explanation:</strong> Alice's hand can be rearranged as [1,2,3],[2,3,4],[6,7,8]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> hand = [1,2,3,4,5], groupSize = 4
+<strong>Output:</strong> false
+<strong>Explanation:</strong> Alice's hand can not be rearranged into groups of 4.
+
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= hand.length &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= hand[i] &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= groupSize &lt;= hand.length
+        </code>
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       This question is the same as 1296:
+       <a href="solution-846.html" target="_blank">
+        https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/
+       </a>
+      </p>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#299be493-d254-4d56-8ccb-ca2221ef6d20'}">
+       <li class="uk-active">
+        <a href="solution-846.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-846.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-846.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-846.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-846.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="299be493-d254-4d56-8ccb-ca2221ef6d20">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isNStraightHand</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">hand</span><span class="o">,</span> <span class="kt">int</span> <span class="n">groupSize</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">hand</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">hand</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">hand</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">v</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="n">groupSize</span><span class="o">;</span> <span class="o">++</span><span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">cnt</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">x</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">cnt</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">isNStraightHand</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">hand</span><span class="p">,</span> <span class="kt">int</span> <span class="n">groupSize</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">v</span> <span class="o">:</span> <span class="n">hand</span><span class="p">)</span> <span class="o">++</span><span class="n">cnt</span><span class="p">[</span><span class="n">v</span><span class="p">];</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">hand</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">hand</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">v</span> <span class="o">:</span> <span class="n">hand</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="n">groupSize</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cnt</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">cnt</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isNStraightHand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hand</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">groupSize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">hand</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span> <span class="o">+</span> <span class="n">groupSize</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">False</span>
+                    <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">cnt</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">isNStraightHand</span><span class="p">(</span><span class="n">hand</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">groupSize</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">hand</span> <span class="p">{</span>
+		<span class="n">cnt</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">hand</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">hand</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">cnt</span><span class="p">[</span><span class="n">v</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">x</span> <span class="o">:=</span> <span class="n">v</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">v</span><span class="o">+</span><span class="n">groupSize</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">];</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+					<span class="k">return</span> <span class="no">false</span>
+				<span class="p">}</span>
+				<span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">--</span>
+				<span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+					<span class="nb">delete</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">isNStraightHand</span><span class="p">(</span><span class="nx">hand</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">groupSize</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">cnt</span><span class="p">:</span> <span class="nb">Record</span><span class="o">&lt;</span><span class="kr">number</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">i</span> <span class="k">of</span> <span class="nx">hand</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cnt</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">cnt</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">??</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">keys</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">cnt</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">i</span> <span class="k">of</span> <span class="nx">keys</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">cnt</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">groupSize</span> <span class="o">+</span> <span class="nx">i</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">cnt</span><span class="p">[</span><span class="nx">j</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">cnt</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-846.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

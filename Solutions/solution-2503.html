@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2503.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2503.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2503 - Maximum Number of Points From Grid Queries</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2503. Maximum Number of Points From Grid Queries Description You are given an m x n integer matrix grid and an array queries of size k. Find an array answer of size k such that for each integer queries[i] you start in the top left...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2503.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2503.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2503.html" rel="stylesheet"/>
+   <link href="solution-2503.html" rel="stylesheet"/>
+   <link href="solution-2503.html" rel="stylesheet"/>
+   <link href="solution-2503.html" rel="stylesheet"/>
+   <link href="solution-2503.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2503 - Maximum Number of Points From Grid Queries" property="og:title"/>
+   <meta content="Leetcode 2503. Maximum Number of Points From Grid Queries Description You are given an m x n integer matrix grid and an array queries of size k. Find an array answer of size k such that for each integer queries[i] you start in the top left cell of the matrix and repeat the following process: If queries[i] is strictly greater than the value of the current cell that you are in, then you get one point if it is your first time visiting this cell, and you can move to any adjacent cell in all 4 directions: up, down, left, and right. Otherwise, you do not get any points, and you end this process. After the process, answer[i] is the maximum number of points you can get. Note that for each query you are allowed to visit the same cell multiple times. Return the resulting array answer. &amp;nbsp; Example 1: Input: grid = [[1,2,3],[2,5,7],[3,5,1]], queries = [5,6,2] Output: [5,8,1] Explanation: The diagrams above show which cells we visit to get points for each query. Example 2: Input: grid = [[5,2,1],[1,1,2]], queries = [3] Output: [0] Explanation: We can not get any points because the value of the top left cell is already greater than or equal to 3. &amp;nbsp; Constraints: m == grid.length n == grid[i].length 2 &amp;lt;= m, n &amp;lt;= 1000 4 &amp;lt;= m * n &amp;lt;= 105 k == queries.length 1 &amp;lt;= k &amp;lt;= 104 1 &amp;lt;= grid[i][j], queries[i] &amp;lt;= 106 Solutions Java C++ Python Go class Solution { public int[] maxPoints(int[][] grid, int[] queries) { int k = queries.length; int[][] qs = new int[k][2]; for (int i = 0; i &amp;lt; k; ++i) { qs[i] = new int[] {queries[i], i}; } Arrays.sort(qs, (a, b) -&amp;gt; a[0] - b[0]); int[] ans = new int[k]; int m = grid.length, n = grid[0].length; boolean[][] vis = new boolean[m][n]; vis[0][0] = true; PriorityQueue&amp;lt;int[]&amp;gt; q = new PriorityQueue&amp;lt;&amp;gt;((a, b) -&amp;gt; a[0] - b[0]); q.offer(new int[] {grid[0][0], 0, 0}); int[] dirs = new int[] {-1, 0, 1, 0, -1}; int cnt = 0; for (var e : qs) { int v = e[0]; k = e[1]; while (!q.isEmpty() &amp;amp;&amp;amp; q.peek()[0] &amp;lt; v) { var p = q.poll(); ++cnt; for (int h = 0; h &amp;lt; 4; ++h) { int x = p[1] + dirs[h], y = p[2] + dirs[h + 1]; if (x &amp;gt;= 0 &amp;amp;&amp;amp; x &amp;lt; m &amp;amp;&amp;amp; y &amp;gt;= 0 &amp;amp;&amp;amp; y &amp;lt; n &amp;amp;&amp;amp; !vis[x][y]) { vis[x][y] = true; q.offer(new int[] {grid[x][y], x, y}); } } } ans[k] = cnt; } return ans; } } class Solution { public: const int dirs[5] = {-1, 0, 1, 0, -1}; vector&amp;lt;int&amp;gt; maxPoints(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; grid, vector&amp;lt;int&amp;gt;&amp;amp; queries) { int k = queries.size(); vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; qs(k); for (int i = 0; i &amp;lt; k; ++i) qs[i] = {queries[i], i}; sort(qs.begin(), qs.end()); vector&amp;lt;int&amp;gt; ans(k); int m = grid.size(), n = grid[0].size(); bool vis[m][n]; memset(vis, 0, sizeof vis); vis[0][0] = true; priority_queue&amp;lt;tuple&amp;lt;int, int, int&amp;gt;, vector&amp;lt;tuple&amp;lt;int, int, int&amp;gt;&amp;gt;, greater&amp;lt;tuple&amp;lt;int, int, int&amp;gt;&amp;gt;&amp;gt; q; q.push({grid[0][0],..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2022-10-07T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2022-10-07-2503-Maximum-Number-of-Points-From-Grid-Queries/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2503.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2503 - Maximum Number of Points From Grid Queries" property="twitter:title"/>
+   <meta content="Leetcode 2503. Maximum Number of Points From Grid Queries Description You are given an m x n integer matrix grid and an array queries of size k. Find an array answer of size k such that for each integer queries[i] you start in the top left cell of the matrix and repeat the following process: If queries[i] is strictly greater than the value of the current cell that you are in, then you get one point if it is your first time visiting this cell, and you can move to any adjacent cell in all 4 directions: up, down, left, and right. Otherwise, you do not get any points, and you end this process. After the process, answer[i] is the maximum number of points you can get. Note that for each query you are allowed to visit the same cell multiple times. Return the resulting array answer. &amp;nbsp; Example 1: Input: grid = [[1,2,3],[2,5,7],[3,5,1]], queries = [5,6,2] Output: [5,8,1] Explanation: The diagrams above show which cells we visit to get points for each query. Example 2: Input: grid = [[5,2,1],[1,1,2]], queries = [3] Output: [0] Explanation: We can not get any points because the value of the top left cell is already greater than or equal to 3. &amp;nbsp; Constraints: m == grid.length n == grid[i].length 2 &amp;lt;= m, n &amp;lt;= 1000 4 &amp;lt;= m * n &amp;lt;= 105 k == queries.length 1 &amp;lt;= k &amp;lt;= 104 1 &amp;lt;= grid[i][j], queries[i] &amp;lt;= 106 Solutions Java C++ Python Go class Solution { public int[] maxPoints(int[][] grid, int[] queries) { int k = queries.length; int[][] qs = new int[k][2]; for (int i = 0; i &amp;lt; k; ++i) { qs[i] = new int[] {queries[i], i}; } Arrays.sort(qs, (a, b) -&amp;gt; a[0] - b[0]); int[] ans = new int[k]; int m = grid.length, n = grid[0].length; boolean[][] vis = new boolean[m][n]; vis[0][0] = true; PriorityQueue&amp;lt;int[]&amp;gt; q = new PriorityQueue&amp;lt;&amp;gt;((a, b) -&amp;gt; a[0] - b[0]); q.offer(new int[] {grid[0][0], 0, 0}); int[] dirs = new int[] {-1, 0, 1, 0, -1}; int cnt = 0; for (var e : qs) { int v = e[0]; k = e[1]; while (!q.isEmpty() &amp;amp;&amp;amp; q.peek()[0] &amp;lt; v) { var p = q.poll(); ++cnt; for (int h = 0; h &amp;lt; 4; ++h) { int x = p[1] + dirs[h], y = p[2] + dirs[h + 1]; if (x &amp;gt;= 0 &amp;amp;&amp;amp; x &amp;lt; m &amp;amp;&amp;amp; y &amp;gt;= 0 &amp;amp;&amp;amp; y &amp;lt; n &amp;amp;&amp;amp; !vis[x][y]) { vis[x][y] = true; q.offer(new int[] {grid[x][y], x, y}); } } } ans[k] = cnt; } return ans; } } class Solution { public: const int dirs[5] = {-1, 0, 1, 0, -1}; vector&amp;lt;int&amp;gt; maxPoints(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; grid, vector&amp;lt;int&amp;gt;&amp;amp; queries) { int k = queries.size(); vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; qs(k); for (int i = 0; i &amp;lt; k; ++i) qs[i] = {queries[i], i}; sort(qs.begin(), qs.end()); vector&amp;lt;int&amp;gt; ans(k); int m = grid.size(), n = grid[0].size(); bool vis[m][n]; memset(vis, 0, sizeof vis); vis[0][0] = true; priority_queue&amp;lt;tuple&amp;lt;int, int, int&amp;gt;, vector&amp;lt;tuple&amp;lt;int, int, int&amp;gt;&amp;gt;, greater&amp;lt;tuple&amp;lt;int, int, int&amp;gt;&amp;gt;&amp;gt; q; q.push({grid[0][0],..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2503 - Maximum Number of Points From Grid Queries | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2503 - Maximum Number of Points From Grid Queries" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2503.html" rel="canonical">
+          <meta content="https://leetcode.ca/2022-10-07-2503-Maximum-Number-of-Points-From-Grid-Queries/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2022-10-07T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2503 - Maximum Number of Points From Grid Queries","dateModified":"2022-10-07T00:00:00-07:00","datePublished":"2022-10-07T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2022-10-07-2503-Maximum-Number-of-Points-From-Grid-Queries/"},"url":"https://leetcode.ca/2022-10-07-2503-Maximum-Number-of-Points-From-Grid-Queries/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2503-maximum-number-of-points-from-grid-queries">
+       <a href="solution-2503.html">
+        2503. Maximum Number of Points From Grid Queries
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an
+       <code>
+        m x n
+       </code>
+       integer matrix
+       <code>
+        grid
+       </code>
+       and an array
+       <code>
+        queries
+       </code>
+       of size
+       <code>
+        k
+       </code>
+       .
+      </p>
+      <p>
+       Find an array
+       <code>
+        answer
+       </code>
+       of size
+       <code>
+        k
+       </code>
+       such that for each integer
+       <code>
+        queries[i]
+       </code>
+       you start in the
+       <strong>
+        top left
+       </strong>
+       cell of the matrix and repeat the following process:
+      </p>
+      <ul>
+       <li>
+        If
+        <code>
+         queries[i]
+        </code>
+        is
+        <strong>
+         strictly
+        </strong>
+        greater than the value of the current cell that you are in, then you get one point if it is your first time visiting this cell, and you can move to any
+        <strong>
+         adjacent
+        </strong>
+        cell in all
+        <code>
+         4
+        </code>
+        directions: up, down, left, and right.
+       </li>
+       <li>
+        Otherwise, you do not get any points, and you end this process.
+       </li>
+      </ul>
+      <p>
+       After the process,
+       <code>
+        answer[i]
+       </code>
+       is the
+       <strong>
+        maximum
+       </strong>
+       number of points you can get.
+       <strong>
+        Note
+       </strong>
+       that for each query you are allowed to visit the same cell
+       <strong>
+        multiple
+       </strong>
+       times.
+      </p>
+      <p>
+       Return
+       <em>
+        the resulting array
+       </em>
+       <code>
+        answer
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2500-2599/2503.Maximum%20Number%20of%20Points%20From%20Grid%20Queries/images/yetgriddrawio.png" style="width: 571px; height: 151px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> grid = [[1,2,3],[2,5,7],[3,5,1]], queries = [5,6,2]
+<strong>Output:</strong> [5,8,1]
+<strong>Explanation:</strong> The diagrams above show which cells we visit to get points for each query.</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2500-2599/2503.Maximum%20Number%20of%20Points%20From%20Grid%20Queries/images/yetgriddrawio-2.png"/>
+      </p>
+      <pre>
+<strong>Input:</strong> grid = [[5,2,1],[1,1,2]], queries = [3]
+<strong>Output:</strong> [0]
+<strong>Explanation:</strong> We can not get any points because the value of the top left cell is already greater than or equal to 3.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == grid.length
+        </code>
+       </li>
+       <li>
+        <code>
+         n == grid[i].length
+        </code>
+       </li>
+       <li>
+        <code>
+         2 &lt;= m, n &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         4 &lt;= m * n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         k == queries.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= k &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= grid[i][j], queries[i] &lt;= 10
+         <sup>
+          6
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#18ad4358-85e6-41d4-898d-ecd4eaaa9f2d'}">
+       <li class="uk-active">
+        <a href="solution-2503.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2503.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2503.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2503.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="18ad4358-85e6-41d4-898d-ecd4eaaa9f2d">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">maxPoints</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">grid</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">queries</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">queries</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">qs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">qs</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">queries</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">i</span><span class="o">};</span>
+        <span class="o">}</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">qs</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">vis</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">m</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">vis</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">grid</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">],</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">});</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dirs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">qs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">q</span><span class="o">.</span><span class="na">peek</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">var</span> <span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                <span class="o">++</span><span class="n">cnt</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="o">++</span><span class="n">h</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">h</span><span class="o">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">vis</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="n">vis</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">grid</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">],</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">});</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">cnt</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">dirs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">grid</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">queries</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">queries</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">qs</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">qs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">};</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">qs</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">qs</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="n">vis</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">vis</span><span class="p">);</span>
+        <span class="n">vis</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">});</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">qs</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+                <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">h</span><span class="p">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">});</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">maxPoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">queries</span><span class="p">))</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="p">[(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">vis</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">)]</span>
+        <span class="n">vis</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">qs</span><span class="p">:</span>
+            <span class="k">while</span> <span class="n">q</span> <span class="ow">and</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+                <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span>
+                    <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]:</span>
+                        <span class="n">heappush</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+                        <span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">maxPoints</span><span class="p">(</span><span class="n">grid</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">queries</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">k</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span>
+	<span class="n">qs</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="n">pair</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">queries</span> <span class="p">{</span>
+		<span class="n">qs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair</span><span class="p">{</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">qs</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">qs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">qs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="p">})</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="n">q</span> <span class="o">:=</span> <span class="n">hp</span><span class="p">{}</span>
+	<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">grid</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="m">0</span><span class="p">],</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">})</span>
+	<span class="n">dirs</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+	<span class="n">vis</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">bool</span><span class="p">{</span><span class="m">0</span><span class="o">:</span> <span class="no">true</span><span class="p">}</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">qs</span> <span class="p">{</span>
+		<span class="n">v</span> <span class="o">:=</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span>
+		<span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">i</span>
+		<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">v</span> <span class="p">{</span>
+			<span class="n">p</span> <span class="o">:=</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="o">&amp;</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">tuple</span><span class="p">)</span>
+			<span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">j</span>
+			<span class="n">cnt</span><span class="o">++</span>
+			<span class="k">for</span> <span class="n">h</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">h</span><span class="o">++</span> <span class="p">{</span>
+				<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">i</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">h</span><span class="p">],</span> <span class="n">j</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">h</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="n">y</span><span class="p">]</span> <span class="p">{</span>
+					<span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+					<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">q</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">})</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">ans</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">pair</span> <span class="k">struct</span><span class="p">{</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="kt">int</span> <span class="p">}</span>
+
+<span class="k">type</span> <span class="n">tuple</span> <span class="k">struct</span><span class="p">{</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span> <span class="p">}</span>
+<span class="k">type</span> <span class="n">hp</span> <span class="p">[]</span><span class="n">tuple</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="kt">int</span>           <span class="p">{</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span>      <span class="p">{</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">v</span> <span class="n">any</span><span class="p">)</span>        <span class="p">{</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="p">(</span><span class="n">tuple</span><span class="p">))</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span>          <span class="p">{</span> <span class="n">a</span> <span class="o">:=</span> <span class="o">*</span><span class="n">h</span><span class="p">;</span> <span class="n">v</span> <span class="o">:=</span> <span class="n">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="k">return</span> <span class="n">v</span> <span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2503.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

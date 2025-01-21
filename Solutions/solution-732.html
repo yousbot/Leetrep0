@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-732.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-732.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>732 - My Calendar III</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 732. My Calendar III Description A k-booking happens when k events have some non-empty intersection (i.e., there is some time that is common to all k events.) You are given some events [startTime, endTime), after each given event, return an integer k representing the maximum...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-732.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-732.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-732.html" rel="stylesheet"/>
+   <link href="solution-732.html" rel="stylesheet"/>
+   <link href="solution-732.html" rel="stylesheet"/>
+   <link href="solution-732.html" rel="stylesheet"/>
+   <link href="solution-732.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="732 - My Calendar III" property="og:title"/>
+   <meta content="Leetcode 732. My Calendar III Description A k-booking happens when k events have some non-empty intersection (i.e., there is some time that is common to all k events.) You are given some events [startTime, endTime), after each given event, return an integer k representing the maximum k-booking between all the previous events. Implement the MyCalendarThree class: MyCalendarThree() Initializes the object. int book(int startTime, int endTime) Returns an integer k representing the largest integer such that there exists a k-booking in the calendar. &amp;nbsp; Example 1: Input [&amp;quot;MyCalendarThree&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;] [[], [10, 20], [50, 60], [10, 40], [5, 15], [5, 10], [25, 55]] Output [null, 1, 1, 2, 3, 3, 3] Explanation MyCalendarThree myCalendarThree = new MyCalendarThree(); myCalendarThree.book(10, 20); // return 1 myCalendarThree.book(50, 60); // return 1 myCalendarThree.book(10, 40); // return 2 myCalendarThree.book(5, 15); // return 3 myCalendarThree.book(5, 10); // return 3 myCalendarThree.book(25, 55); // return 3 &amp;nbsp; Constraints: 0 &amp;lt;= startTime &amp;lt; endTime &amp;lt;= 109 At most 400 calls will be made to book. Solutions Same as https://leetcode.ca/2017-11-30-731-My-Calendar-II/, just changing from 2 to k. Java C++ Python Go TypeScript class Node { Node left; Node right; int l; int r; int mid; int v; int add; public Node(int l, int r) { this.l = l; this.r = r; this.mid = (l + r) &amp;gt;&amp;gt; 1; } } class SegmentTree { private Node root = new Node(1, (int) 1e9 + 1); public SegmentTree() { } public void modify(int l, int r, int v) { modify(l, r, v, root); } public void modify(int l, int r, int v, Node node) { if (l &amp;gt; r) { return; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { node.v += v; node.add += v; return; } pushdown(node); if (l &amp;lt;= node.mid) { modify(l, r, v, node.left); } if (r &amp;gt; node.mid) { modify(l, r, v, node.right); } pushup(node); } public int query(int l, int r) { return query(l, r, root); } public int query(int l, int r, Node node) { if (l &amp;gt; r) { return 0; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { return node.v; } pushdown(node); int v = 0; if (l &amp;lt;= node.mid) { v = Math.max(v, query(l, r, node.left)); } if (r &amp;gt; node.mid) { v = Math.max(v, query(l, r, node.right)); } return v; } public void pushup(Node node) { node.v = Math.max(node.left.v, node.right.v); } public void pushdown(Node node) { if (node.left == null) { node.left = new Node(node.l, node.mid); } if (node.right == null) { node.right = new Node(node.mid + 1, node.r); } if (node.add != 0) { Node left = node.left, right = node.right; left.add += node.add; right.add += node.add; left.v += node.add; right.v += node.add; node.add = 0; } } } class MyCalendarThree { private SegmentTree tree = new SegmentTree(); public MyCalendarThree() { } public int book(int start, int end) { tree.modify(start + 1, end, 1); return tree.query(1, (int) 1e9 + 1); } } /** * Your MyCalendarThree object will be instantiated and called as..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-12-01T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-12-01-732-My-Calendar-III/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-732.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="732 - My Calendar III" property="twitter:title"/>
+   <meta content="Leetcode 732. My Calendar III Description A k-booking happens when k events have some non-empty intersection (i.e., there is some time that is common to all k events.) You are given some events [startTime, endTime), after each given event, return an integer k representing the maximum k-booking between all the previous events. Implement the MyCalendarThree class: MyCalendarThree() Initializes the object. int book(int startTime, int endTime) Returns an integer k representing the largest integer such that there exists a k-booking in the calendar. &amp;nbsp; Example 1: Input [&amp;quot;MyCalendarThree&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;, &amp;quot;book&amp;quot;] [[], [10, 20], [50, 60], [10, 40], [5, 15], [5, 10], [25, 55]] Output [null, 1, 1, 2, 3, 3, 3] Explanation MyCalendarThree myCalendarThree = new MyCalendarThree(); myCalendarThree.book(10, 20); // return 1 myCalendarThree.book(50, 60); // return 1 myCalendarThree.book(10, 40); // return 2 myCalendarThree.book(5, 15); // return 3 myCalendarThree.book(5, 10); // return 3 myCalendarThree.book(25, 55); // return 3 &amp;nbsp; Constraints: 0 &amp;lt;= startTime &amp;lt; endTime &amp;lt;= 109 At most 400 calls will be made to book. Solutions Same as https://leetcode.ca/2017-11-30-731-My-Calendar-II/, just changing from 2 to k. Java C++ Python Go TypeScript class Node { Node left; Node right; int l; int r; int mid; int v; int add; public Node(int l, int r) { this.l = l; this.r = r; this.mid = (l + r) &amp;gt;&amp;gt; 1; } } class SegmentTree { private Node root = new Node(1, (int) 1e9 + 1); public SegmentTree() { } public void modify(int l, int r, int v) { modify(l, r, v, root); } public void modify(int l, int r, int v, Node node) { if (l &amp;gt; r) { return; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { node.v += v; node.add += v; return; } pushdown(node); if (l &amp;lt;= node.mid) { modify(l, r, v, node.left); } if (r &amp;gt; node.mid) { modify(l, r, v, node.right); } pushup(node); } public int query(int l, int r) { return query(l, r, root); } public int query(int l, int r, Node node) { if (l &amp;gt; r) { return 0; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { return node.v; } pushdown(node); int v = 0; if (l &amp;lt;= node.mid) { v = Math.max(v, query(l, r, node.left)); } if (r &amp;gt; node.mid) { v = Math.max(v, query(l, r, node.right)); } return v; } public void pushup(Node node) { node.v = Math.max(node.left.v, node.right.v); } public void pushdown(Node node) { if (node.left == null) { node.left = new Node(node.l, node.mid); } if (node.right == null) { node.right = new Node(node.mid + 1, node.r); } if (node.add != 0) { Node left = node.left, right = node.right; left.add += node.add; right.add += node.add; left.v += node.add; right.v += node.add; node.add = 0; } } } class MyCalendarThree { private SegmentTree tree = new SegmentTree(); public MyCalendarThree() { } public int book(int start, int end) { tree.modify(start + 1, end, 1); return tree.query(1, (int) 1e9 + 1); } } /** * Your MyCalendarThree object will be instantiated and called as..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    732 - My Calendar III | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="732 - My Calendar III" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-732.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-12-01-732-My-Calendar-III/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-12-01T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"732 - My Calendar III","dateModified":"2017-12-01T00:00:00-08:00","datePublished":"2017-12-01T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-12-01-732-My-Calendar-III/"},"url":"https://leetcode.ca/2017-12-01-732-My-Calendar-III/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="732-my-calendar-iii">
+       <a href="solution-732.html">
+        732. My Calendar III
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       A
+       <code>
+        k
+       </code>
+       -booking happens when
+       <code>
+        k
+       </code>
+       events have some non-empty intersection (i.e., there is some time that is common to all
+       <code>
+        k
+       </code>
+       events.)
+      </p>
+      <p>
+       You are given some events
+       <code>
+        [startTime, endTime)
+       </code>
+       , after each given event, return an integer
+       <code>
+        k
+       </code>
+       representing the maximum
+       <code>
+        k
+       </code>
+       -booking between all the previous events.
+      </p>
+      <p>
+       Implement the
+       <code>
+        MyCalendarThree
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         MyCalendarThree()
+        </code>
+        Initializes the object.
+       </li>
+       <li>
+        <code>
+         int book(int startTime, int endTime)
+        </code>
+        Returns an integer
+        <code>
+         k
+        </code>
+        representing the largest integer such that there exists a
+        <code>
+         k
+        </code>
+        -booking in the calendar.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["MyCalendarThree", "book", "book", "book", "book", "book", "book"]
+[[], [10, 20], [50, 60], [10, 40], [5, 15], [5, 10], [25, 55]]
+<strong>Output</strong>
+[null, 1, 1, 2, 3, 3, 3]
+
+<strong>Explanation</strong>
+MyCalendarThree myCalendarThree = new MyCalendarThree();
+myCalendarThree.book(10, 20); // return 1
+myCalendarThree.book(50, 60); // return 1
+myCalendarThree.book(10, 40); // return 2
+myCalendarThree.book(5, 15); // return 3
+myCalendarThree.book(5, 10); // return 3
+myCalendarThree.book(25, 55); // return 3
+
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= startTime &lt; endTime &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        At most
+        <code>
+         400
+        </code>
+        calls will be made to
+        <code>
+         book
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       Same as
+       <a href="solution-732.html">
+        https://leetcode.ca/2017-11-30-731-My-Calendar-II/
+       </a>
+       , just changing from
+       <code class="language-plaintext highlighter-rouge">
+        2
+       </code>
+       to
+       <code class="language-plaintext highlighter-rouge">
+        k
+       </code>
+       .
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#2a2b50f7-b8bc-43d6-aeb7-149e15c2a796'}">
+       <li class="uk-active">
+        <a href="solution-732.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-732.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-732.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-732.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-732.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="2a2b50f7-b8bc-43d6-aeb7-149e15c2a796">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+    <span class="nc">Node</span> <span class="n">left</span><span class="o">;</span>
+    <span class="nc">Node</span> <span class="n">right</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">l</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">r</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">mid</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">v</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">add</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Node</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">l</span> <span class="o">=</span> <span class="n">l</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">SegmentTree</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nf">SegmentTree</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">modify</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">modify</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">v</span><span class="o">,</span> <span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">modify</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">v</span><span class="o">,</span> <span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">v</span> <span class="o">+=</span> <span class="n">v</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">add</span> <span class="o">+=</span> <span class="n">v</span><span class="o">;</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">pushdown</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">modify</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">v</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">modify</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">v</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">pushup</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">query</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">v</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">pushdown</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">query</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">query</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pushup</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">v</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">v</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">.</span><span class="na">v</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pushdown</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">l</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">r</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">add</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+            <span class="n">left</span><span class="o">.</span><span class="na">add</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">add</span><span class="o">;</span>
+            <span class="n">right</span><span class="o">.</span><span class="na">add</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">add</span><span class="o">;</span>
+            <span class="n">left</span><span class="o">.</span><span class="na">v</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">add</span><span class="o">;</span>
+            <span class="n">right</span><span class="o">.</span><span class="na">v</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">add</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">add</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">MyCalendarThree</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">SegmentTree</span> <span class="n">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SegmentTree</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="nf">MyCalendarThree</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">book</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">tree</span><span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">end</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * MyCalendarThree obj = new MyCalendarThree();
+ * int param_1 = obj.book(start,end);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">right</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">l</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">r</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">mid</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">v</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">add</span><span class="p">;</span>
+
+    <span class="n">Node</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">add</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">SegmentTree</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">root</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">SegmentTree</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1e9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">modify</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">modify</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">+=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">+=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="n">pushup</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="k">return</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">;</span>
+        <span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="n">v</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="n">v</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">pushup</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">pushdown</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="n">left</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">+=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">;</span>
+            <span class="n">right</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">+=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">;</span>
+            <span class="n">left</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">+=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">;</span>
+            <span class="n">right</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">+=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">;</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">MyCalendarThree</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">SegmentTree</span><span class="o">*</span> <span class="n">tree</span><span class="p">;</span>
+
+    <span class="n">MyCalendarThree</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SegmentTree</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">book</span><span class="p">(</span><span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">modify</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1e9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * MyCalendarThree* obj = new MyCalendarThree();
+ * int param_1 = obj-&gt;book(start,end);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">from</span> <span class="nn">sortedcontainers</span> <span class="kn">import</span> <span class="n">SortedDict</span>
+
+<span class="k">class</span> <span class="nc">MyCalendarThree</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">timeline</span> <span class="o">=</span> <span class="n">SortedDict</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">book</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">timeline</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">timeline</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">timeline</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">timeline</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">accumulate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">timeline</span><span class="p">.</span><span class="n">values</span><span class="p">())))</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">v</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">add</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">class</span> <span class="nc">SegmentTree</span><span class="p">:</span> <span class="c1"># &lt;===
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">modify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">root</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="ow">and</span> <span class="n">node</span><span class="p">.</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">v</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">add</span> <span class="o">+=</span> <span class="n">v</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="p">.</span><span class="n">mid</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="p">.</span><span class="n">mid</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">pushup</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">root</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="ow">and</span> <span class="n">node</span><span class="p">.</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">v</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="p">.</span><span class="n">mid</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="p">.</span><span class="n">mid</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">pushup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">v</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pushdown</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">l</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">mid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">add</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">add</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">add</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">add</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">add</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">add</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">add</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">add</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">class</span> <span class="nc">MyCalendarThree</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">SegmentTree</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">book</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tree</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">tree</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+
+<span class="c1"># Your MyCalendarThree object will be instantiated and called as such:
+# obj = MyCalendarThree()
+# param_1 = obj.book(start,end)
+</span>
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">class</span> <span class="nc">MyCalendarThree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">root</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">maxK</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">book_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="n">root</span><span class="p">.</span><span class="n">end</span><span class="p">:</span>
+            <span class="c1">#ä¸è½åæreturn self.boook_helper()ï¼å ä¸ºè¦è¿è¡æ çæå»ºåä¿®æ¹ï¼ä¸å®è¦èµå¼ç»root.right
+</span>            <span class="n">root</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">book_helper</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">end</span> <span class="o">&lt;=</span> <span class="n">root</span><span class="p">.</span><span class="n">start</span><span class="p">:</span>
+            <span class="n">root</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">book_helper</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">intervals</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">root</span><span class="p">.</span><span class="n">start</span><span class="p">,</span> <span class="n">root</span><span class="p">.</span><span class="n">end</span><span class="p">])</span>
+            <span class="n">root_l</span><span class="p">,</span> <span class="n">root_r</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="n">start</span><span class="p">,</span> <span class="n">root</span><span class="p">.</span><span class="n">end</span>
+            <span class="n">root</span><span class="p">.</span><span class="n">start</span><span class="p">,</span> <span class="n">root</span><span class="p">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">intervals</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">intervals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">root</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">book_helper</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">intervals</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span> <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="n">root_l</span> <span class="k">else</span> <span class="n">root</span><span class="p">.</span><span class="n">count</span><span class="p">)</span>
+            <span class="n">root</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">book_helper</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">intervals</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span> <span class="k">if</span> <span class="n">end</span> <span class="o">&gt;=</span> <span class="n">root_r</span> <span class="k">else</span> <span class="n">root</span><span class="p">.</span><span class="n">count</span><span class="p">)</span>
+            <span class="n">root</span><span class="p">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">c</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">maxK</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">maxK</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">root</span>
+
+    <span class="k">def</span> <span class="nf">book</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="s">"""
+        :type start: int
+        :type end: int
+        :rtype: int
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">book_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">root</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">maxK</span>
+
+
+<span class="c1"># Your MyCalendarThree object will be instantiated and called as such:
+# obj = MyCalendarThree()
+# param_1 = obj.book(start,end)
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">node</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">left</span>      <span class="o">*</span><span class="n">node</span>
+	<span class="n">right</span>     <span class="o">*</span><span class="n">node</span>
+	<span class="n">l</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span>
+	<span class="n">v</span><span class="p">,</span> <span class="n">add</span>    <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newNode</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">node</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">node</span><span class="p">{</span>
+		<span class="n">l</span><span class="o">:</span>   <span class="n">l</span><span class="p">,</span>
+		<span class="n">r</span><span class="o">:</span>   <span class="n">r</span><span class="p">,</span>
+		<span class="n">mid</span><span class="o">:</span> <span class="kt">int</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="m">1</span><span class="p">),</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">segmentTree</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">root</span> <span class="o">*</span><span class="n">node</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newSegmentTree</span><span class="p">()</span> <span class="o">*</span><span class="n">segmentTree</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">segmentTree</span><span class="p">{</span>
+		<span class="n">root</span><span class="o">:</span> <span class="n">newNode</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">1e9</span><span class="o">+</span><span class="m">1</span><span class="p">),</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">segmentTree</span><span class="p">)</span> <span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="kt">int</span><span class="p">,</span> <span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">n</span><span class="o">.</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">v</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">add</span> <span class="o">+=</span> <span class="n">v</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">pushdown</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">n</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">pushup</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">segmentTree</span><span class="p">)</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span><span class="p">,</span> <span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="m">0</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">n</span><span class="o">.</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">n</span><span class="o">.</span><span class="n">v</span>
+	<span class="p">}</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">pushdown</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="n">v</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">left</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">n</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">right</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">v</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">segmentTree</span><span class="p">)</span> <span class="n">pushup</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">segmentTree</span><span class="p">)</span> <span class="n">pushdown</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">left</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">newNode</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">mid</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">right</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">newNode</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">mid</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">n</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">add</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">add</span> <span class="o">+=</span> <span class="n">n</span><span class="o">.</span><span class="n">add</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">add</span> <span class="o">+=</span> <span class="n">n</span><span class="o">.</span><span class="n">add</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">n</span><span class="o">.</span><span class="n">add</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">n</span><span class="o">.</span><span class="n">add</span>
+		<span class="n">n</span><span class="o">.</span><span class="n">add</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">MyCalendarThree</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">tree</span> <span class="o">*</span><span class="n">segmentTree</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">MyCalendarThree</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">MyCalendarThree</span><span class="p">{</span><span class="n">newSegmentTree</span><span class="p">()}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MyCalendarThree</span><span class="p">)</span> <span class="n">Book</span><span class="p">(</span><span class="n">start</span> <span class="kt">int</span><span class="p">,</span> <span class="n">end</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">modify</span><span class="p">(</span><span class="n">start</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="kt">int</span><span class="p">(</span><span class="m">1e9</span><span class="p">)</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * obj := Constructor();
+ * param_1 := obj.Book(start,end);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">Node</span> <span class="p">{</span>
+    <span class="nl">left</span><span class="p">:</span> <span class="nx">Node</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nl">right</span><span class="p">:</span> <span class="nx">Node</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nl">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">mid</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">v</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nl">add</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">l</span> <span class="o">=</span> <span class="nx">l</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">mid</span> <span class="o">=</span> <span class="p">(</span><span class="nx">l</span> <span class="o">+</span> <span class="nx">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">SegmentTree</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">root</span><span class="p">:</span> <span class="nx">Node</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="nx">e9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{}</span>
+
+    <span class="nx">modify</span><span class="p">(</span><span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">v</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">node</span><span class="p">:</span> <span class="nx">Node</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&gt;</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">l</span> <span class="o">&gt;=</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">r</span> <span class="o">&lt;=</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">v</span> <span class="o">+=</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">add</span> <span class="o">+=</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">pushdown</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&lt;=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">modify</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">left</span><span class="o">!</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">r</span> <span class="o">&gt;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">modify</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">right</span><span class="o">!</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">pushup</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">query</span><span class="p">(</span><span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">node</span><span class="p">:</span> <span class="nx">Node</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&gt;</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">l</span> <span class="o">&gt;=</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">r</span> <span class="o">&lt;=</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">v</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">pushdown</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">v</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&lt;=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">v</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">left</span><span class="o">!</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">r</span> <span class="o">&gt;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">v</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">right</span><span class="o">!</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">v</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="nx">pushup</span><span class="p">(</span><span class="nx">node</span><span class="p">:</span> <span class="nx">Node</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">v</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">left</span><span class="o">!</span><span class="p">.</span><span class="nx">v</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">right</span><span class="o">!</span><span class="p">.</span><span class="nx">v</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="nx">pushdown</span><span class="p">(</span><span class="nx">node</span><span class="p">:</span> <span class="nx">Node</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">left</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">l</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">mid</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">right</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">r</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">add</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">left</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">left</span><span class="o">!</span><span class="p">;</span>
+            <span class="kd">const</span> <span class="nx">right</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">right</span><span class="o">!</span><span class="p">;</span>
+            <span class="nx">left</span><span class="p">.</span><span class="nx">add</span> <span class="o">+=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">add</span><span class="p">;</span>
+            <span class="nx">right</span><span class="p">.</span><span class="nx">add</span> <span class="o">+=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">add</span><span class="p">;</span>
+            <span class="nx">left</span><span class="p">.</span><span class="nx">v</span> <span class="o">+=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">add</span><span class="p">;</span>
+            <span class="nx">right</span><span class="p">.</span><span class="nx">v</span> <span class="o">+=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">add</span><span class="p">;</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">MyCalendarThree</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">tree</span><span class="p">:</span> <span class="nx">SegmentTree</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SegmentTree</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="nx">book</span><span class="p">(</span><span class="nx">start</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">end</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">modify</span><span class="p">(</span><span class="nx">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="nx">e9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * var obj = new MyCalendarThree()
+ * var param_1 = obj.book(startTime, endTime)
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-732.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

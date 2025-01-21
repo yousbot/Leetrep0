@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3292.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3292.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3292 - Minimum Number of Valid Strings to Form Target II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3292. Minimum Number of Valid Strings to Form Target II Description You are given an array of strings words and a string target. A string x is called valid if x is a prefix of any string in words. Return the minimum number of valid...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3292.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3292.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3292.html" rel="stylesheet"/>
+   <link href="solution-3292.html" rel="stylesheet"/>
+   <link href="solution-3292.html" rel="stylesheet"/>
+   <link href="solution-3292.html" rel="stylesheet"/>
+   <link href="solution-3292.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3292 - Minimum Number of Valid Strings to Form Target II" property="og:title"/>
+   <meta content="Leetcode 3292. Minimum Number of Valid Strings to Form Target II Description You are given an array of strings words and a string target. A string x is called valid if x is a prefix of any string in words. Return the minimum number of valid strings that can be concatenated to form target. If it is not possible to form target, return -1. &amp;nbsp; Example 1: Input: words = [&amp;quot;abc&amp;quot;,&amp;quot;aaaaa&amp;quot;,&amp;quot;bcdef&amp;quot;], target = &amp;quot;aabcdabc&amp;quot; Output: 3 Explanation: The target string can be formed by concatenating: Prefix of length 2 of words[1], i.e. &amp;quot;aa&amp;quot;. Prefix of length 3 of words[2], i.e. &amp;quot;bcd&amp;quot;. Prefix of length 3 of words[0], i.e. &amp;quot;abc&amp;quot;. Example 2: Input: words = [&amp;quot;abababab&amp;quot;,&amp;quot;ab&amp;quot;], target = &amp;quot;ababaababa&amp;quot; Output: 2 Explanation: The target string can be formed by concatenating: Prefix of length 5 of words[0], i.e. &amp;quot;ababa&amp;quot;. Prefix of length 5 of words[0], i.e. &amp;quot;ababa&amp;quot;. Example 3: Input: words = [&amp;quot;abcdef&amp;quot;], target = &amp;quot;xyz&amp;quot; Output: -1 &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 100 1 &amp;lt;= words[i].length &amp;lt;= 5 * 104 The input is generated such that sum(words[i].length) &amp;lt;= 105. words[i] consists only of lowercase English letters. 1 &amp;lt;= target.length &amp;lt;= 5 * 104 target consists only of lowercase English letters. Solutions Solution 1 Java C++ Python Go class Hashing { private final long[] p; private final long[] h; private final long mod; public Hashing(String word, long base, int mod) { int n = word.length(); p = new long[n + 1]; h = new long[n + 1]; p[0] = 1; this.mod = mod; for (int i = 1; i &amp;lt;= n; i++) { p[i] = p[i - 1] * base % mod; h[i] = (h[i - 1] * base + word.charAt(i - 1)) % mod; } } public long query(int l, int r) { return (h[r] - h[l - 1] * p[r - l + 1] % mod + mod) % mod; } } class Solution { private Hashing hashing; private Set&amp;lt;Long&amp;gt;[] s; public int minValidStrings(String[] words, String target) { int base = 13331, mod = 998244353; hashing = new Hashing(target, base, mod); int m = Arrays.stream(words).mapToInt(String::length).max().orElse(0); s = new Set[m + 1]; Arrays.setAll(s, k -&amp;gt; new HashSet&amp;lt;&amp;gt;()); for (String w : words) { long h = 0; for (int j = 0; j &amp;lt; w.length(); j++) { h = (h * base + w.charAt(j)) % mod; s[j + 1].add(h); } } int ans = 0; int last = 0; int mx = 0; int n = target.length(); for (int i = 0; i &amp;lt; n; i++) { int dist = f(i, n, m); mx = Math.max(mx, i + dist); if (i == last) { if (i == mx) { return -1; } last = mx; ans++; } } return ans; } private int f(int i, int n, int m) { int l = 0, r = Math.min(n - i, m); while (l &amp;lt; r) { int mid = (l + r + 1) &amp;gt;&amp;gt; 1; long sub = hashing.query(i + 1, i + mid); if (s[mid].contains(sub))..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-10-09T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-10-09-3292-Minimum-Number-of-Valid-Strings-to-Form-Target-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3292.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3292 - Minimum Number of Valid Strings to Form Target II" property="twitter:title"/>
+   <meta content="Leetcode 3292. Minimum Number of Valid Strings to Form Target II Description You are given an array of strings words and a string target. A string x is called valid if x is a prefix of any string in words. Return the minimum number of valid strings that can be concatenated to form target. If it is not possible to form target, return -1. &amp;nbsp; Example 1: Input: words = [&amp;quot;abc&amp;quot;,&amp;quot;aaaaa&amp;quot;,&amp;quot;bcdef&amp;quot;], target = &amp;quot;aabcdabc&amp;quot; Output: 3 Explanation: The target string can be formed by concatenating: Prefix of length 2 of words[1], i.e. &amp;quot;aa&amp;quot;. Prefix of length 3 of words[2], i.e. &amp;quot;bcd&amp;quot;. Prefix of length 3 of words[0], i.e. &amp;quot;abc&amp;quot;. Example 2: Input: words = [&amp;quot;abababab&amp;quot;,&amp;quot;ab&amp;quot;], target = &amp;quot;ababaababa&amp;quot; Output: 2 Explanation: The target string can be formed by concatenating: Prefix of length 5 of words[0], i.e. &amp;quot;ababa&amp;quot;. Prefix of length 5 of words[0], i.e. &amp;quot;ababa&amp;quot;. Example 3: Input: words = [&amp;quot;abcdef&amp;quot;], target = &amp;quot;xyz&amp;quot; Output: -1 &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 100 1 &amp;lt;= words[i].length &amp;lt;= 5 * 104 The input is generated such that sum(words[i].length) &amp;lt;= 105. words[i] consists only of lowercase English letters. 1 &amp;lt;= target.length &amp;lt;= 5 * 104 target consists only of lowercase English letters. Solutions Solution 1 Java C++ Python Go class Hashing { private final long[] p; private final long[] h; private final long mod; public Hashing(String word, long base, int mod) { int n = word.length(); p = new long[n + 1]; h = new long[n + 1]; p[0] = 1; this.mod = mod; for (int i = 1; i &amp;lt;= n; i++) { p[i] = p[i - 1] * base % mod; h[i] = (h[i - 1] * base + word.charAt(i - 1)) % mod; } } public long query(int l, int r) { return (h[r] - h[l - 1] * p[r - l + 1] % mod + mod) % mod; } } class Solution { private Hashing hashing; private Set&amp;lt;Long&amp;gt;[] s; public int minValidStrings(String[] words, String target) { int base = 13331, mod = 998244353; hashing = new Hashing(target, base, mod); int m = Arrays.stream(words).mapToInt(String::length).max().orElse(0); s = new Set[m + 1]; Arrays.setAll(s, k -&amp;gt; new HashSet&amp;lt;&amp;gt;()); for (String w : words) { long h = 0; for (int j = 0; j &amp;lt; w.length(); j++) { h = (h * base + w.charAt(j)) % mod; s[j + 1].add(h); } } int ans = 0; int last = 0; int mx = 0; int n = target.length(); for (int i = 0; i &amp;lt; n; i++) { int dist = f(i, n, m); mx = Math.max(mx, i + dist); if (i == last) { if (i == mx) { return -1; } last = mx; ans++; } } return ans; } private int f(int i, int n, int m) { int l = 0, r = Math.min(n - i, m); while (l &amp;lt; r) { int mid = (l + r + 1) &amp;gt;&amp;gt; 1; long sub = hashing.query(i + 1, i + mid); if (s[mid].contains(sub))..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3292 - Minimum Number of Valid Strings to Form Target II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3292 - Minimum Number of Valid Strings to Form Target II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3292.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-10-09-3292-Minimum-Number-of-Valid-Strings-to-Form-Target-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-10-09T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3292 - Minimum Number of Valid Strings to Form Target II","dateModified":"2024-10-09T00:00:00-07:00","datePublished":"2024-10-09T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-10-09-3292-Minimum-Number-of-Valid-Strings-to-Form-Target-II/"},"url":"https://leetcode.ca/2024-10-09-3292-Minimum-Number-of-Valid-Strings-to-Form-Target-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3292-minimum-number-of-valid-strings-to-form-target-ii">
+       <a href="solution-3292.html">
+        3292. Minimum Number of Valid Strings to Form Target II
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       You are given an array of strings
+       <code>
+        words
+       </code>
+       and a string
+       <code>
+        target
+       </code>
+       .
+      </p>
+      <p>
+       A string
+       <code>
+        x
+       </code>
+       is called
+       <strong>
+        valid
+       </strong>
+       if
+       <code>
+        x
+       </code>
+       is a
+       <span data-keyword="string-prefix">
+        prefix
+       </span>
+       of
+       <strong>
+        any
+       </strong>
+       string in
+       <code>
+        words
+       </code>
+       .
+      </p>
+      <p>
+       Return the
+       <strong>
+        minimum
+       </strong>
+       number of
+       <strong>
+        valid
+       </strong>
+       strings that can be
+       <em>
+        concatenated
+       </em>
+       to form
+       <code>
+        target
+       </code>
+       . If it is
+       <strong>
+        not
+       </strong>
+       possible to form
+       <code>
+        target
+       </code>
+       , return
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         words = ["abc","aaaaa","bcdef"], target = "aabcdabc"
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         3
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        The target string can be formed by concatenating:
+       </p>
+       <ul>
+        <li>
+         Prefix of length 2 of
+         <code>
+          words[1]
+         </code>
+         , i.e.
+         <code>
+          "aa"
+         </code>
+         .
+        </li>
+        <li>
+         Prefix of length 3 of
+         <code>
+          words[2]
+         </code>
+         , i.e.
+         <code>
+          "bcd"
+         </code>
+         .
+        </li>
+        <li>
+         Prefix of length 3 of
+         <code>
+          words[0]
+         </code>
+         , i.e.
+         <code>
+          "abc"
+         </code>
+         .
+        </li>
+       </ul>
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         words = ["abababab","ab"], target = "ababaababa"
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         2
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        The target string can be formed by concatenating:
+       </p>
+       <ul>
+        <li>
+         Prefix of length 5 of
+         <code>
+          words[0]
+         </code>
+         , i.e.
+         <code>
+          "ababa"
+         </code>
+         .
+        </li>
+        <li>
+         Prefix of length 5 of
+         <code>
+          words[0]
+         </code>
+         , i.e.
+         <code>
+          "ababa"
+         </code>
+         .
+        </li>
+       </ul>
+      </div>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         words = ["abcdef"], target = "xyz"
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         -1
+        </span>
+       </p>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= words.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= words[i].length &lt;= 5 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        The input is generated such that
+        <code>
+         sum(words[i].length) &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         words[i]
+        </code>
+        consists only of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         1 &lt;= target.length &lt;= 5 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         target
+        </code>
+        consists only of lowercase English letters.
+       </li>
+      </ul>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1">
+       Solution 1
+      </h3>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#114f31fc-f9ed-43af-838b-94cbd959c362'}">
+       <li class="uk-active">
+        <a href="solution-3292.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3292.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3292.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3292.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="114f31fc-f9ed-43af-838b-94cbd959c362">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Hashing</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">long</span><span class="o">[]</span> <span class="n">p</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">long</span><span class="o">[]</span> <span class="n">h</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">mod</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Hashing</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">,</span> <span class="kt">long</span> <span class="n">base</span><span class="o">,</span> <span class="kt">int</span> <span class="n">mod</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">p</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">mod</span> <span class="o">=</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">*</span> <span class="n">base</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+            <span class="n">h</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">h</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">h</span><span class="o">[</span><span class="n">r</span><span class="o">]</span> <span class="o">-</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">*</span> <span class="n">p</span><span class="o">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">%</span> <span class="n">mod</span> <span class="o">+</span> <span class="n">mod</span><span class="o">)</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Hashing</span> <span class="n">hashing</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;[]</span> <span class="n">s</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minValidStrings</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">,</span> <span class="nc">String</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">base</span> <span class="o">=</span> <span class="mi">13331</span><span class="o">,</span> <span class="n">mod</span> <span class="o">=</span> <span class="mi">998244353</span><span class="o">;</span>
+        <span class="n">hashing</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hashing</span><span class="o">(</span><span class="n">target</span><span class="o">,</span> <span class="n">base</span><span class="o">,</span> <span class="n">mod</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">words</span><span class="o">).</span><span class="na">mapToInt</span><span class="o">(</span><span class="nl">String:</span><span class="o">:</span><span class="n">length</span><span class="o">).</span><span class="na">max</span><span class="o">().</span><span class="na">orElse</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Set</span><span class="o">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">setAll</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;());</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">w</span> <span class="o">:</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">w</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="o">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="n">w</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">))</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+                <span class="n">s</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="n">h</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">f</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">n</span><span class="o">,</span> <span class="n">m</span><span class="o">);</span>
+            <span class="n">mx</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">mx</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dist</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">last</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">mx</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">mx</span><span class="o">;</span>
+                <span class="n">ans</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">f</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">r</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span><span class="o">,</span> <span class="n">m</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">hashing</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">mid</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">[</span><span class="n">mid</span><span class="o">].</span><span class="na">contains</span><span class="o">(</span><span class="n">sub</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">l</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Hashing</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="n">h</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">mod</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">Hashing</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">word</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">base</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mod</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">h</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">mod</span> <span class="o">=</span> <span class="n">mod</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">base</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span><span class="p">[</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="n">mod</span> <span class="o">+</span> <span class="n">mod</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">minValidStrings</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">,</span> <span class="n">string</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">base</span> <span class="o">=</span> <span class="mi">13331</span><span class="p">,</span> <span class="n">mod</span> <span class="o">=</span> <span class="mi">998244353</span><span class="p">;</span>
+        <span class="n">Hashing</span> <span class="n">hashing</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">mod</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">target</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">word</span> <span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">w</span> <span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">long</span> <span class="kt">long</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">w</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">h</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">int</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="kt">long</span> <span class="kt">long</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">hashing</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">mid</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">mid</span><span class="p">].</span><span class="n">count</span><span class="p">(</span><span class="n">sub</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">l</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="n">mx</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">mx</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dist</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">last</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">mx</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">mx</span><span class="p">;</span>
+                <span class="n">ans</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Hashing</span><span class="p">:</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s">"mod"</span><span class="p">,</span> <span class="s">"h"</span><span class="p">,</span> <span class="s">"p"</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">base</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mod</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">mod</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span> <span class="o">%</span> <span class="n">mod</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">base</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">h</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">h</span><span class="p">[</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">mod</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minValidStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">:</span>
+                <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+                <span class="n">sub</span> <span class="o">=</span> <span class="n">hashing</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">mid</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="n">mid</span><span class="p">]:</span>
+                    <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">l</span>
+
+        <span class="n">base</span><span class="p">,</span> <span class="n">mod</span> <span class="o">=</span> <span class="mi">13331</span><span class="p">,</span> <span class="mi">998244353</span>
+        <span class="n">hashing</span> <span class="o">=</span> <span class="n">Hashing</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="o">%</span> <span class="n">mod</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">add</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">last</span> <span class="o">=</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">mx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">mx</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dist</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">last</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">mx</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">mx</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">Hashing</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">p</span>   <span class="p">[]</span><span class="kt">int64</span>
+	<span class="n">h</span>   <span class="p">[]</span><span class="kt">int64</span>
+	<span class="n">mod</span> <span class="kt">int64</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">NewHashing</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">,</span> <span class="n">base</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">mod</span> <span class="kt">int64</span><span class="p">)</span> <span class="o">*</span><span class="n">Hashing</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+	<span class="n">p</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">h</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">base</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="n">base</span> <span class="o">+</span> <span class="kt">int64</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]))</span> <span class="o">%</span> <span class="n">mod</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">Hashing</span><span class="p">{</span><span class="n">p</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">mod</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">hashing</span> <span class="o">*</span><span class="n">Hashing</span><span class="p">)</span> <span class="n">Query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int64</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">hashing</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">-</span> <span class="n">hashing</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">l</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="n">hashing</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">r</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="m">1</span><span class="p">]</span><span class="o">%</span><span class="n">hashing</span><span class="o">.</span><span class="n">mod</span> <span class="o">+</span> <span class="n">hashing</span><span class="o">.</span><span class="n">mod</span><span class="p">)</span> <span class="o">%</span> <span class="n">hashing</span><span class="o">.</span><span class="n">mod</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">minValidStrings</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="n">target</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">base</span><span class="p">,</span> <span class="n">mod</span> <span class="o">:=</span> <span class="kt">int64</span><span class="p">(</span><span class="m">13331</span><span class="p">),</span> <span class="kt">int64</span><span class="p">(</span><span class="m">998244353</span><span class="p">)</span>
+	<span class="n">hashing</span> <span class="o">:=</span> <span class="n">NewHashing</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span>
+
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+		<span class="n">m</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+	<span class="p">}</span>
+
+	<span class="n">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="k">map</span><span class="p">[</span><span class="kt">int64</span><span class="p">]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+
+	<span class="n">f</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="kt">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">Min</span><span class="p">(</span><span class="kt">float64</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">i</span><span class="p">),</span> <span class="kt">float64</span><span class="p">(</span><span class="n">m</span><span class="p">)))</span>
+		<span class="k">for</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="p">{</span>
+			<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="m">1</span>
+			<span class="n">sub</span> <span class="o">:=</span> <span class="n">hashing</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">mid</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">mid</span><span class="p">][</span><span class="n">sub</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">l</span> <span class="o">=</span> <span class="n">mid</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="m">1</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">l</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+		<span class="n">h</span> <span class="o">:=</span> <span class="kt">int64</span><span class="p">(</span><span class="m">0</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">);</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span><span class="o">*</span><span class="n">base</span> <span class="o">+</span> <span class="kt">int64</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="o">%</span> <span class="n">mod</span>
+			<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int64</span><span class="p">]</span><span class="kt">bool</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">var</span> <span class="n">last</span><span class="p">,</span> <span class="n">mx</span> <span class="kt">int</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">dist</span> <span class="o">:=</span> <span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">mx</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">mx</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">dist</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">last</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">mx</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+			<span class="p">}</span>
+			<span class="n">last</span> <span class="o">=</span> <span class="n">mx</span>
+			<span class="n">ans</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3292.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

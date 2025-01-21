@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3286.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3286.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3286 - Find a Safe Walk Through a Grid</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3286. Find a Safe Walk Through a Grid Description You are given an m x n binary matrix grid and an integer health. You start on the upper-left corner (0, 0) and would like to get to the lower-right corner (m - 1, n -...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3286.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3286.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3286.html" rel="stylesheet"/>
+   <link href="solution-3286.html" rel="stylesheet"/>
+   <link href="solution-3286.html" rel="stylesheet"/>
+   <link href="solution-3286.html" rel="stylesheet"/>
+   <link href="solution-3286.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3286 - Find a Safe Walk Through a Grid" property="og:title"/>
+   <meta content="Leetcode 3286. Find a Safe Walk Through a Grid Description You are given an m x n binary matrix grid and an integer health. You start on the upper-left corner (0, 0) and would like to get to the lower-right corner (m - 1, n - 1). You can move up, down, left, or right from one cell to another adjacent cell as long as your health remains positive. Cells (i, j) with grid[i][j] = 1 are considered unsafe and reduce your health by 1. Return true if you can reach the final cell with a health value of 1 or more, and false otherwise. &amp;nbsp; Example 1: Input: grid = [[0,1,0,0,0],[0,1,0,1,0],[0,0,0,1,0]], health = 1 Output: true Explanation: The final cell can be reached safely by walking along the gray cells below. Example 2: Input: grid = [[0,1,1,0,0,0],[1,0,1,0,0,0],[0,1,1,1,0,1],[0,0,1,0,1,0]], health = 3 Output: false Explanation: A minimum of 4 health points is needed to reach the final cell safely. Example 3: Input: grid = [[1,1,1],[1,0,1],[1,1,1]], health = 5 Output: true Explanation: The final cell can be reached safely by walking along the gray cells below. Any path that does not go through the cell (1, 1) is unsafe since your health will drop to 0 when reaching the final cell. &amp;nbsp; Constraints: m == grid.length n == grid[i].length 1 &amp;lt;= m, n &amp;lt;= 50 2 &amp;lt;= m * n 1 &amp;lt;= health &amp;lt;= m + n grid[i][j] is either 0 or 1. Solutions Solution 1: BFS We define a 2D array $\textit{dist}$, where $\textit{dist}[i][j]$ represents the minimum health value required to reach position $(i, j)$ from the top-left corner. Initially, we set $\textit{dist}[0][0]$ to $\textit{grid}[0][0]$ and add $(0, 0)$ to the queue $\textit{q}$. Then, we continuously take elements $(x, y)$ from the queue and try to move in four directions. If we move to a valid position $(nx, ny)$ and the health value required to move from $(x, y)$ to $(nx, ny)$ is smaller, we update $\textit{dist}[nx][ny] = \textit{dist}[x][y] + \textit{grid}[nx][ny]$ and add $(nx, ny)$ to the queue $\textit{q}$. Finally, when the queue is empty, we obtain $\textit{dist}[m-1][n-1]$, which is the minimum health value required to reach the bottom-right corner from the top-left corner. If this value is less than $\textit{health}$, then we can reach the bottom-right corner; otherwise, we cannot. The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Here, $m$ and $n$ are the number of rows and columns of the grid, respectively. Java C++ Python Go TypeScript class Solution { public boolean findSafeWalk(List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; grid, int health) { int m = grid.size(); int n = grid.get(0).size(); int[][] dist = new int[m][n]; for (int[] row : dist) { Arrays.fill(row, Integer.MAX_VALUE); } dist[0][0] = grid.get(0).get(0); Deque&amp;lt;int[]&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); q.offer(new int[] {0, 0}); final int[] dirs = {-1, 0, 1, 0, -1}; while (!q.isEmpty()) { int[] curr = q.poll(); int x = curr[0], y = curr[1]; for (int i = 0; i &amp;lt; 4; i++) { int nx = x..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-10-03T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-10-03-3286-Find-a-Safe-Walk-Through-a-Grid/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3286.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3286 - Find a Safe Walk Through a Grid" property="twitter:title"/>
+   <meta content="Leetcode 3286. Find a Safe Walk Through a Grid Description You are given an m x n binary matrix grid and an integer health. You start on the upper-left corner (0, 0) and would like to get to the lower-right corner (m - 1, n - 1). You can move up, down, left, or right from one cell to another adjacent cell as long as your health remains positive. Cells (i, j) with grid[i][j] = 1 are considered unsafe and reduce your health by 1. Return true if you can reach the final cell with a health value of 1 or more, and false otherwise. &amp;nbsp; Example 1: Input: grid = [[0,1,0,0,0],[0,1,0,1,0],[0,0,0,1,0]], health = 1 Output: true Explanation: The final cell can be reached safely by walking along the gray cells below. Example 2: Input: grid = [[0,1,1,0,0,0],[1,0,1,0,0,0],[0,1,1,1,0,1],[0,0,1,0,1,0]], health = 3 Output: false Explanation: A minimum of 4 health points is needed to reach the final cell safely. Example 3: Input: grid = [[1,1,1],[1,0,1],[1,1,1]], health = 5 Output: true Explanation: The final cell can be reached safely by walking along the gray cells below. Any path that does not go through the cell (1, 1) is unsafe since your health will drop to 0 when reaching the final cell. &amp;nbsp; Constraints: m == grid.length n == grid[i].length 1 &amp;lt;= m, n &amp;lt;= 50 2 &amp;lt;= m * n 1 &amp;lt;= health &amp;lt;= m + n grid[i][j] is either 0 or 1. Solutions Solution 1: BFS We define a 2D array $\textit{dist}$, where $\textit{dist}[i][j]$ represents the minimum health value required to reach position $(i, j)$ from the top-left corner. Initially, we set $\textit{dist}[0][0]$ to $\textit{grid}[0][0]$ and add $(0, 0)$ to the queue $\textit{q}$. Then, we continuously take elements $(x, y)$ from the queue and try to move in four directions. If we move to a valid position $(nx, ny)$ and the health value required to move from $(x, y)$ to $(nx, ny)$ is smaller, we update $\textit{dist}[nx][ny] = \textit{dist}[x][y] + \textit{grid}[nx][ny]$ and add $(nx, ny)$ to the queue $\textit{q}$. Finally, when the queue is empty, we obtain $\textit{dist}[m-1][n-1]$, which is the minimum health value required to reach the bottom-right corner from the top-left corner. If this value is less than $\textit{health}$, then we can reach the bottom-right corner; otherwise, we cannot. The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Here, $m$ and $n$ are the number of rows and columns of the grid, respectively. Java C++ Python Go TypeScript class Solution { public boolean findSafeWalk(List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; grid, int health) { int m = grid.size(); int n = grid.get(0).size(); int[][] dist = new int[m][n]; for (int[] row : dist) { Arrays.fill(row, Integer.MAX_VALUE); } dist[0][0] = grid.get(0).get(0); Deque&amp;lt;int[]&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); q.offer(new int[] {0, 0}); final int[] dirs = {-1, 0, 1, 0, -1}; while (!q.isEmpty()) { int[] curr = q.poll(); int x = curr[0], y = curr[1]; for (int i = 0; i &amp;lt; 4; i++) { int nx = x..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3286 - Find a Safe Walk Through a Grid | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3286 - Find a Safe Walk Through a Grid" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3286.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-10-03-3286-Find-a-Safe-Walk-Through-a-Grid/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-10-03T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3286 - Find a Safe Walk Through a Grid","dateModified":"2024-10-03T00:00:00-07:00","datePublished":"2024-10-03T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-10-03-3286-Find-a-Safe-Walk-Through-a-Grid/"},"url":"https://leetcode.ca/2024-10-03-3286-Find-a-Safe-Walk-Through-a-Grid/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3286-find-a-safe-walk-through-a-grid">
+       <a href="solution-3286.html">
+        3286. Find a Safe Walk Through a Grid
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       You are given an
+       <code>
+        m x n
+       </code>
+       binary matrix
+       <code>
+        grid
+       </code>
+       and an integer
+       <code>
+        health
+       </code>
+       .
+      </p>
+      <p>
+       You start on the upper-left corner
+       <code>
+        (0, 0)
+       </code>
+       and would like to get to the lower-right corner
+       <code>
+        (m - 1, n - 1)
+       </code>
+       .
+      </p>
+      <p>
+       You can move up, down, left, or right from one cell to another adjacent cell as long as your health
+       <em>
+        remains
+       </em>
+       <strong>
+        positive
+       </strong>
+       .
+      </p>
+      <p>
+       Cells
+       <code>
+        (i, j)
+       </code>
+       with
+       <code>
+        grid[i][j] = 1
+       </code>
+       are considered
+       <strong>
+        unsafe
+       </strong>
+       and reduce your health by 1.
+      </p>
+      <p>
+       Return
+       <code>
+        true
+       </code>
+       if you can reach the final cell with a health value of 1 or more, and
+       <code>
+        false
+       </code>
+       otherwise.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         grid = [[0,1,0,0,0],[0,1,0,1,0],[0,0,0,1,0]], health = 1
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         true
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        The final cell can be reached safely by walking along the gray cells below.
+       </p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/3200-3299/3286.Find%20a%20Safe%20Walk%20Through%20a%20Grid/images/3868_examples_1drawio.png" style="width: 301px; height: 121px;"/>
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         grid = [[0,1,1,0,0,0],[1,0,1,0,0,0],[0,1,1,1,0,1],[0,0,1,0,1,0]], health = 3
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         false
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        A minimum of 4 health points is needed to reach the final cell safely.
+       </p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/3200-3299/3286.Find%20a%20Safe%20Walk%20Through%20a%20Grid/images/3868_examples_2drawio.png" style="width: 361px; height: 161px;"/>
+      </div>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         grid = [[1,1,1],[1,0,1],[1,1,1]], health = 5
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         true
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        The final cell can be reached safely by walking along the gray cells below.
+       </p>
+       <p>
+        <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/3200-3299/3286.Find%20a%20Safe%20Walk%20Through%20a%20Grid/images/3868_examples_3drawio.png" style="width: 181px; height: 121px;"/>
+       </p>
+       <p>
+        Any path that does not go through the cell
+        <code>
+         (1, 1)
+        </code>
+        is unsafe since your health will drop to 0 when reaching the final cell.
+       </p>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == grid.length
+        </code>
+       </li>
+       <li>
+        <code>
+         n == grid[i].length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m, n &lt;= 50
+        </code>
+       </li>
+       <li>
+        <code>
+         <font face="monospace">
+          2 &lt;= m * n
+         </font>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= health &lt;= m + n
+        </code>
+       </li>
+       <li>
+        <code>
+         grid[i][j]
+        </code>
+        is either 0 or 1.
+       </li>
+      </ul>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1-bfs">
+       Solution 1: BFS
+      </h3>
+      <p>
+       We define a 2D array $\textit{dist}$, where $\textit{dist}[i][j]$ represents the minimum health value required to reach position $(i, j)$ from the top-left corner. Initially, we set $\textit{dist}[0][0]$ to $\textit{grid}[0][0]$ and add $(0, 0)$ to the queue $\textit{q}$.
+      </p>
+      <p>
+       Then, we continuously take elements $(x, y)$ from the queue and try to move in four directions. If we move to a valid position $(nx, ny)$ and the health value required to move from $(x, y)$ to $(nx, ny)$ is smaller, we update $\textit{dist}[nx][ny] = \textit{dist}[x][y] + \textit{grid}[nx][ny]$ and add $(nx, ny)$ to the queue $\textit{q}$.
+      </p>
+      <p>
+       Finally, when the queue is empty, we obtain $\textit{dist}[m-1][n-1]$, which is the minimum health value required to reach the bottom-right corner from the top-left corner. If this value is less than $\textit{health}$, then we can reach the bottom-right corner; otherwise, we cannot.
+      </p>
+      <p>
+       The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Here, $m$ and $n$ are the number of rows and columns of the grid, respectively.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#dbc09235-fe0d-467a-9c65-214e44f3ae35'}">
+       <li class="uk-active">
+        <a href="solution-3286.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3286.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3286.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3286.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3286.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="dbc09235-fe0d-467a-9c65-214e44f3ae35">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">findSafeWalk</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">grid</span><span class="o">,</span> <span class="kt">int</span> <span class="n">health</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">size</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">row</span> <span class="o">:</span> <span class="n">dist</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">row</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">dist</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">});</span>
+        <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">dirs</span> <span class="o">=</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">curr</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">curr</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">nx</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="n">n</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">dist</span><span class="o">[</span><span class="n">nx</span><span class="o">][</span><span class="n">ny</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">+</span> <span class="n">grid</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">nx</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="n">ny</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">nx</span><span class="o">][</span><span class="n">ny</span><span class="o">]</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">+</span> <span class="n">grid</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">nx</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="n">ny</span><span class="o">);</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">nx</span><span class="o">,</span> <span class="n">ny</span><span class="o">});</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dist</span><span class="o">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">health</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">findSafeWalk</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">grid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">health</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">));</span>
+        <span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">queue</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">dirs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">nx</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">];</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dist</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">health</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">findSafeWalk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">health</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="p">[[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">)]</span>
+        <span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+        <span class="n">dirs</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">(</span><span class="n">dirs</span><span class="p">):</span>
+                <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="n">m</span>
+                    <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="n">n</span>
+                    <span class="ow">and</span> <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span>
+                <span class="p">):</span>
+                    <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">dist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">health</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">findSafeWalk</span><span class="p">(</span><span class="n">grid</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">health</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="n">dist</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dist</span> <span class="p">{</span>
+		<span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">MaxInt32</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">dist</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="m">0</span><span class="p">]</span>
+	<span class="n">q</span> <span class="o">:=</span> <span class="p">[][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span> <span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">}</span> <span class="p">}</span>
+	<span class="n">dirs</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">curr</span> <span class="o">:=</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+		<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">curr</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">curr</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">:=</span> <span class="n">x</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">+</span><span class="n">grid</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span>
+				<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">})</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">dist</span><span class="p">[</span><span class="n">m</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">health</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">findSafeWalk</span><span class="p">(</span><span class="nx">grid</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][],</span> <span class="nx">health</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">dist</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">m</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">Infinity</span><span class="p">));</span>
+    <span class="nx">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+    <span class="kd">const</span> <span class="nx">q</span><span class="p">:</span> <span class="p">[</span><span class="kr">number</span><span class="p">,</span> <span class="kr">number</span><span class="p">][]</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]];</span>
+    <span class="kd">const</span> <span class="nx">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span><span class="o">!</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">nx</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="kd">const</span> <span class="nx">ny</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nx">nx</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
+                <span class="nx">nx</span> <span class="o">&lt;</span> <span class="nx">m</span> <span class="o">&amp;&amp;</span>
+                <span class="nx">ny</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
+                <span class="nx">ny</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span>
+                <span class="nx">dist</span><span class="p">[</span><span class="nx">nx</span><span class="p">][</span><span class="nx">ny</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">dist</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">+</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">nx</span><span class="p">][</span><span class="nx">ny</span><span class="p">]</span>
+            <span class="p">)</span> <span class="p">{</span>
+                <span class="nx">dist</span><span class="p">[</span><span class="nx">nx</span><span class="p">][</span><span class="nx">ny</span><span class="p">]</span> <span class="o">=</span> <span class="nx">dist</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">+</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">nx</span><span class="p">][</span><span class="nx">ny</span><span class="p">];</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">nx</span><span class="p">,</span> <span class="nx">ny</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">dist</span><span class="p">[</span><span class="nx">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">health</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3286.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

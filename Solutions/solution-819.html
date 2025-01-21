@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-819.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-819.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>819 - Most Common Word</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 819. Most Common Word Description Given a string paragraph and a string array of the banned words banned, return the most frequent word that is not banned. It is guaranteed there is at least one word that is not banned, and that the answer is...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-819.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-819.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-819.html" rel="stylesheet"/>
+   <link href="solution-819.html" rel="stylesheet"/>
+   <link href="solution-819.html" rel="stylesheet"/>
+   <link href="solution-819.html" rel="stylesheet"/>
+   <link href="solution-819.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="819 - Most Common Word" property="og:title"/>
+   <meta content="Leetcode 819. Most Common Word Description Given a string paragraph and a string array of the banned words banned, return the most frequent word that is not banned. It is guaranteed there is at least one word that is not banned, and that the answer is unique. The words in paragraph are case-insensitive and the answer should be returned in lowercase. &amp;nbsp; Example 1: Input: paragraph = &amp;quot;Bob hit a ball, the hit BALL flew far after it was hit.&amp;quot;, banned = [&amp;quot;hit&amp;quot;] Output: &amp;quot;ball&amp;quot; Explanation: &amp;quot;hit&amp;quot; occurs 3 times, but it is a banned word. &amp;quot;ball&amp;quot; occurs twice (and no other word does), so it is the most frequent non-banned word in the paragraph. Note that words in the paragraph are not case sensitive, that punctuation is ignored (even if adjacent to words, such as &amp;quot;ball,&amp;quot;), and that &amp;quot;hit&amp;quot; isn&amp;#39;t the answer even though it occurs more because it is banned. Example 2: Input: paragraph = &amp;quot;a.&amp;quot;, banned = [] Output: &amp;quot;a&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= paragraph.length &amp;lt;= 1000 paragraph consists of English letters, space &amp;#39; &amp;#39;, or one of the symbols: &amp;quot;!?&amp;#39;,;.&amp;quot;. 0 &amp;lt;= banned.length &amp;lt;= 100 1 &amp;lt;= banned[i].length &amp;lt;= 10 banned[i] consists of only lowercase English letters. Solutions Java C++ Python Go TypeScript RenderScript import java.util.regex.Matcher; import java.util.regex.Pattern; class Solution { private static Pattern pattern = Pattern.compile(&quot;[a-z]+&quot;); public String mostCommonWord(String paragraph, String[] banned) { Set&amp;lt;String&amp;gt; bannedWords = new HashSet&amp;lt;&amp;gt;(); for (String word : banned) { bannedWords.add(word); } Map&amp;lt;String, Integer&amp;gt; counter = new HashMap&amp;lt;&amp;gt;(); Matcher matcher = pattern.matcher(paragraph.toLowerCase()); while (matcher.find()) { String word = matcher.group(); if (bannedWords.contains(word)) { continue; } counter.put(word, counter.getOrDefault(word, 0) + 1); } int max = Integer.MIN_VALUE; String ans = null; for (Map.Entry&amp;lt;String, Integer&amp;gt; entry : counter.entrySet()) { if (entry.getValue() &amp;gt; max) { max = entry.getValue(); ans = entry.getKey(); } } return ans; } } class Solution { public: string mostCommonWord(string paragraph, vector&amp;lt;string&amp;gt;&amp;amp; banned) { unordered_set&amp;lt;string&amp;gt; s(banned.begin(), banned.end()); unordered_map&amp;lt;string, int&amp;gt; counter; string ans; for (int i = 0, mx = 0, n = paragraph.size(); i &amp;lt; n;) { if (!isalpha(paragraph[i]) &amp;amp;&amp;amp; (++i &amp;gt; 0)) continue; int j = i; string word; while (j &amp;lt; n &amp;amp;&amp;amp; isalpha(paragraph[j])) { word.push_back(tolower(paragraph[j])); ++j; } i = j + 1; if (s.count(word)) continue; ++counter[word]; if (counter[word] &amp;gt; mx) { ans = word; mx = counter[word]; } } return ans; } }; class Solution: def mostCommonWord(self, paragraph: str, banned: List[str]) -&amp;gt; str: s = set(banned) p = Counter(re.findall('[a-z]+', paragraph.lower())) return next(word for word, _ in p.most_common() if word not in s) func mostCommonWord(paragraph string, banned []string) string { s := make(map[string]bool) for _, w := range banned { s[w] = true } counter := make(map[string]int) var ans string for i, mx, n := 0, 0, len(paragraph); i &amp;lt; n; { if !unicode.IsLetter(rune(paragraph[i])) { i++ continue } j := i var word []byte for j &amp;lt; n &amp;amp;&amp;amp; unicode.IsLetter(rune(paragraph[j])) { word = append(word, byte(unicode.ToLower(rune(paragraph[j])))) j++ } i = j + 1 t := string(word) if s[t] { continue } counter[t]++ if counter[t] &amp;gt; mx { ans..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-02-26T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-02-26-819-Most-Common-Word/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-819.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="819 - Most Common Word" property="twitter:title"/>
+   <meta content="Leetcode 819. Most Common Word Description Given a string paragraph and a string array of the banned words banned, return the most frequent word that is not banned. It is guaranteed there is at least one word that is not banned, and that the answer is unique. The words in paragraph are case-insensitive and the answer should be returned in lowercase. &amp;nbsp; Example 1: Input: paragraph = &amp;quot;Bob hit a ball, the hit BALL flew far after it was hit.&amp;quot;, banned = [&amp;quot;hit&amp;quot;] Output: &amp;quot;ball&amp;quot; Explanation: &amp;quot;hit&amp;quot; occurs 3 times, but it is a banned word. &amp;quot;ball&amp;quot; occurs twice (and no other word does), so it is the most frequent non-banned word in the paragraph. Note that words in the paragraph are not case sensitive, that punctuation is ignored (even if adjacent to words, such as &amp;quot;ball,&amp;quot;), and that &amp;quot;hit&amp;quot; isn&amp;#39;t the answer even though it occurs more because it is banned. Example 2: Input: paragraph = &amp;quot;a.&amp;quot;, banned = [] Output: &amp;quot;a&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= paragraph.length &amp;lt;= 1000 paragraph consists of English letters, space &amp;#39; &amp;#39;, or one of the symbols: &amp;quot;!?&amp;#39;,;.&amp;quot;. 0 &amp;lt;= banned.length &amp;lt;= 100 1 &amp;lt;= banned[i].length &amp;lt;= 10 banned[i] consists of only lowercase English letters. Solutions Java C++ Python Go TypeScript RenderScript import java.util.regex.Matcher; import java.util.regex.Pattern; class Solution { private static Pattern pattern = Pattern.compile(&quot;[a-z]+&quot;); public String mostCommonWord(String paragraph, String[] banned) { Set&amp;lt;String&amp;gt; bannedWords = new HashSet&amp;lt;&amp;gt;(); for (String word : banned) { bannedWords.add(word); } Map&amp;lt;String, Integer&amp;gt; counter = new HashMap&amp;lt;&amp;gt;(); Matcher matcher = pattern.matcher(paragraph.toLowerCase()); while (matcher.find()) { String word = matcher.group(); if (bannedWords.contains(word)) { continue; } counter.put(word, counter.getOrDefault(word, 0) + 1); } int max = Integer.MIN_VALUE; String ans = null; for (Map.Entry&amp;lt;String, Integer&amp;gt; entry : counter.entrySet()) { if (entry.getValue() &amp;gt; max) { max = entry.getValue(); ans = entry.getKey(); } } return ans; } } class Solution { public: string mostCommonWord(string paragraph, vector&amp;lt;string&amp;gt;&amp;amp; banned) { unordered_set&amp;lt;string&amp;gt; s(banned.begin(), banned.end()); unordered_map&amp;lt;string, int&amp;gt; counter; string ans; for (int i = 0, mx = 0, n = paragraph.size(); i &amp;lt; n;) { if (!isalpha(paragraph[i]) &amp;amp;&amp;amp; (++i &amp;gt; 0)) continue; int j = i; string word; while (j &amp;lt; n &amp;amp;&amp;amp; isalpha(paragraph[j])) { word.push_back(tolower(paragraph[j])); ++j; } i = j + 1; if (s.count(word)) continue; ++counter[word]; if (counter[word] &amp;gt; mx) { ans = word; mx = counter[word]; } } return ans; } }; class Solution: def mostCommonWord(self, paragraph: str, banned: List[str]) -&amp;gt; str: s = set(banned) p = Counter(re.findall('[a-z]+', paragraph.lower())) return next(word for word, _ in p.most_common() if word not in s) func mostCommonWord(paragraph string, banned []string) string { s := make(map[string]bool) for _, w := range banned { s[w] = true } counter := make(map[string]int) var ans string for i, mx, n := 0, 0, len(paragraph); i &amp;lt; n; { if !unicode.IsLetter(rune(paragraph[i])) { i++ continue } j := i var word []byte for j &amp;lt; n &amp;amp;&amp;amp; unicode.IsLetter(rune(paragraph[j])) { word = append(word, byte(unicode.ToLower(rune(paragraph[j])))) j++ } i = j + 1 t := string(word) if s[t] { continue } counter[t]++ if counter[t] &amp;gt; mx { ans..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    819 - Most Common Word | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="819 - Most Common Word" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-819.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-02-26-819-Most-Common-Word/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-02-26T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"819 - Most Common Word","dateModified":"2018-02-26T00:00:00-08:00","datePublished":"2018-02-26T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-02-26-819-Most-Common-Word/"},"url":"https://leetcode.ca/2018-02-26-819-Most-Common-Word/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="819-most-common-word">
+       <a href="solution-819.html">
+        819. Most Common Word
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string
+       <code>
+        paragraph
+       </code>
+       and a string array of the banned words
+       <code>
+        banned
+       </code>
+       , return
+       <em>
+        the most frequent word that is not banned
+       </em>
+       . It is
+       <strong>
+        guaranteed
+       </strong>
+       there is
+       <strong>
+        at least one word
+       </strong>
+       that is not banned, and that the answer is
+       <strong>
+        unique
+       </strong>
+       .
+      </p>
+      <p>
+       The words in
+       <code>
+        paragraph
+       </code>
+       are
+       <strong>
+        case-insensitive
+       </strong>
+       and the answer should be returned in
+       <strong>
+        lowercase
+       </strong>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.", banned = ["hit"]
+<strong>Output:</strong> "ball"
+<strong>Explanation:</strong> 
+"hit" occurs 3 times, but it is a banned word.
+"ball" occurs twice (and no other word does), so it is the most frequent non-banned word in the paragraph. 
+Note that words in the paragraph are not case sensitive,
+that punctuation is ignored (even if adjacent to words, such as "ball,"), 
+and that "hit" isn't the answer even though it occurs more because it is banned.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> paragraph = "a.", banned = []
+<strong>Output:</strong> "a"
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= paragraph.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        paragraph consists of English letters, space
+        <code>
+         ' '
+        </code>
+        , or one of the symbols:
+        <code>
+         "!?',;."
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         0 &lt;= banned.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= banned[i].length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         banned[i]
+        </code>
+        consists of only lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#5e0cf87f-1968-40b5-8dbb-e162f2cc22f3'}">
+       <li class="uk-active">
+        <a href="solution-819.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-819.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-819.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-819.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-819.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-819.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="5e0cf87f-1968-40b5-8dbb-e162f2cc22f3">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.regex.Matcher</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.regex.Pattern</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">Pattern</span> <span class="n">pattern</span> <span class="o">=</span> <span class="nc">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="s">"[a-z]+"</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">mostCommonWord</span><span class="o">(</span><span class="nc">String</span> <span class="n">paragraph</span><span class="o">,</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">banned</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">bannedWords</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">word</span> <span class="o">:</span> <span class="n">banned</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">bannedWords</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">counter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Matcher</span> <span class="n">matcher</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="na">matcher</span><span class="o">(</span><span class="n">paragraph</span><span class="o">.</span><span class="na">toLowerCase</span><span class="o">());</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">matcher</span><span class="o">.</span><span class="na">find</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">word</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="na">group</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">bannedWords</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">word</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">counter</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">counter</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span>
+        <span class="nc">String</span> <span class="n">ans</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">counter</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">max</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">max</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">string</span> <span class="n">mostCommonWord</span><span class="p">(</span><span class="n">string</span> <span class="n">paragraph</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">banned</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">(</span><span class="n">banned</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">banned</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">counter</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">paragraph</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isalpha</span><span class="p">(</span><span class="n">paragraph</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">++</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">string</span> <span class="n">word</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">isalpha</span><span class="p">(</span><span class="n">paragraph</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="p">{</span>
+                <span class="n">word</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tolower</span><span class="p">(</span><span class="n">paragraph</span><span class="p">[</span><span class="n">j</span><span class="p">]));</span>
+                <span class="o">++</span><span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">word</span><span class="p">))</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">counter</span><span class="p">[</span><span class="n">word</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">counter</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">word</span><span class="p">;</span>
+                <span class="n">mx</span> <span class="o">=</span> <span class="n">counter</span><span class="p">[</span><span class="n">word</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">mostCommonWord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paragraph</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">banned</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">banned</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="s">'[a-z]+'</span><span class="p">,</span> <span class="n">paragraph</span><span class="p">.</span><span class="n">lower</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">p</span><span class="p">.</span><span class="n">most_common</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">mostCommonWord</span><span class="p">(</span><span class="n">paragraph</span> <span class="kt">string</span><span class="p">,</span> <span class="n">banned</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="n">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">banned</span> <span class="p">{</span>
+		<span class="n">s</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="p">}</span>
+	<span class="n">counter</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+	<span class="k">var</span> <span class="n">ans</span> <span class="kt">string</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mx</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">paragraph</span><span class="p">);</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="o">!</span><span class="n">unicode</span><span class="o">.</span><span class="n">IsLetter</span><span class="p">(</span><span class="kt">rune</span><span class="p">(</span><span class="n">paragraph</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
+			<span class="n">i</span><span class="o">++</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="n">j</span> <span class="o">:=</span> <span class="n">i</span>
+		<span class="k">var</span> <span class="n">word</span> <span class="p">[]</span><span class="kt">byte</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">unicode</span><span class="o">.</span><span class="n">IsLetter</span><span class="p">(</span><span class="kt">rune</span><span class="p">(</span><span class="n">paragraph</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="p">{</span>
+			<span class="n">word</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="kt">byte</span><span class="p">(</span><span class="n">unicode</span><span class="o">.</span><span class="n">ToLower</span><span class="p">(</span><span class="kt">rune</span><span class="p">(</span><span class="n">paragraph</span><span class="p">[</span><span class="n">j</span><span class="p">]))))</span>
+			<span class="n">j</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="n">t</span> <span class="o">:=</span> <span class="kt">string</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="n">counter</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">++</span>
+		<span class="k">if</span> <span class="n">counter</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mx</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="n">t</span>
+			<span class="n">mx</span> <span class="o">=</span> <span class="n">counter</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">mostCommonWord</span><span class="p">(</span><span class="nx">paragraph</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">banned</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]):</span> <span class="kr">string</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">paragraph</span><span class="p">.</span><span class="nx">toLocaleLowerCase</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">banned</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">word</span> <span class="k">of</span> <span class="nx">s</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/</span><span class="se">[^</span><span class="sr">A-z</span><span class="se">]</span><span class="sr">/</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">word</span> <span class="o">===</span> <span class="dl">''</span> <span class="o">||</span> <span class="kd">set</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">word</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">map</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">word</span><span class="p">,</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">word</span><span class="p">)</span> <span class="o">??</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">[...</span><span class="nx">map</span><span class="p">.</span><span class="nx">entries</span><span class="p">()].</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">r</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">?</span> <span class="nx">v</span> <span class="p">:</span> <span class="nx">r</span><span class="p">),</span> <span class="p">[</span><span class="dl">''</span><span class="p">,</span> <span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">collections</span><span class="p">::{</span> <span class="n">HashMap</span><span class="p">,</span> <span class="n">HashSet</span> <span class="p">};</span>
+<span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">most_common_word</span><span class="p">(</span><span class="k">mut</span> <span class="n">paragraph</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">banned</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">String</span> <span class="p">{</span>
+        <span class="n">paragraph</span><span class="nf">.make_ascii_lowercase</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">banned</span><span class="p">:</span> <span class="n">HashSet</span><span class="o">&lt;&amp;</span><span class="nb">str</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">banned</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.map</span><span class="p">(</span><span class="nn">String</span><span class="p">::</span><span class="n">as_str</span><span class="p">)</span><span class="nf">.collect</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">map</span> <span class="o">=</span> <span class="nn">HashMap</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="k">in</span> <span class="n">paragraph</span><span class="nf">.split</span><span class="p">(|</span><span class="n">c</span><span class="p">|</span> <span class="o">!</span><span class="nd">matches!</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sc">'a'</span><span class="o">..=</span><span class="sc">'z'</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">word</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="p">||</span> <span class="n">banned</span><span class="nf">.contains</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">let</span> <span class="n">val</span> <span class="o">=</span> <span class="n">map</span><span class="nf">.get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">word</span><span class="p">)</span><span class="nf">.unwrap_or</span><span class="p">(</span><span class="o">&amp;</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">map</span><span class="nf">.insert</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">map</span><span class="nf">.into_iter</span><span class="p">()</span>
+            <span class="nf">.max_by_key</span><span class="p">(|</span><span class="o">&amp;</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">)|</span> <span class="n">v</span><span class="p">)</span>
+            <span class="nf">.unwrap</span><span class="p">()</span>
+            <span class="na">.0</span><span class="nf">.to_string</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-819.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

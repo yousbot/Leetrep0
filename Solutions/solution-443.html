@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-443.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-443.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>443 - String Compression</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 443. String Compression Description Given an array of characters chars, compress it using the following algorithm: Begin with an empty string s. For each group of consecutive repeating characters in chars: If the group&amp;#39;s length is 1, append the character to s. Otherwise, append the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-443.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-443.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-443.html" rel="stylesheet"/>
+   <link href="solution-443.html" rel="stylesheet"/>
+   <link href="solution-443.html" rel="stylesheet"/>
+   <link href="solution-443.html" rel="stylesheet"/>
+   <link href="solution-443.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="443 - String Compression" property="og:title"/>
+   <meta content="Leetcode 443. String Compression Description Given an array of characters chars, compress it using the following algorithm: Begin with an empty string s. For each group of consecutive repeating characters in chars: If the group&amp;#39;s length is 1, append the character to s. Otherwise, append the character followed by the group&amp;#39;s length. The compressed string s should not be returned separately, but instead, be stored in the input character array chars. Note that group lengths that are 10 or longer will be split into multiple characters in chars. After you are done modifying the input array, return the new length of the array. You must write an algorithm that uses only constant extra space. &amp;nbsp; Example 1: Input: chars = [&amp;quot;a&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;c&amp;quot;] Output: Return 6, and the first 6 characters of the input array should be: [&amp;quot;a&amp;quot;,&amp;quot;2&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;2&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;3&amp;quot;] Explanation: The groups are &amp;quot;aa&amp;quot;, &amp;quot;bb&amp;quot;, and &amp;quot;ccc&amp;quot;. This compresses to &amp;quot;a2b2c3&amp;quot;. Example 2: Input: chars = [&amp;quot;a&amp;quot;] Output: Return 1, and the first character of the input array should be: [&amp;quot;a&amp;quot;] Explanation: The only group is &amp;quot;a&amp;quot;, which remains uncompressed since it&amp;#39;s a single character. Example 3: Input: chars = [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;] Output: Return 4, and the first 4 characters of the input array should be: [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;]. Explanation: The groups are &amp;quot;a&amp;quot; and &amp;quot;bbbbbbbbbbbb&amp;quot;. This compresses to &amp;quot;ab12&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= chars.length &amp;lt;= 2000 chars[i] is a lowercase English letter, uppercase English letter, digit, or symbol. Solutions Initialization: i is the read pointer, starting at the beginning of the array. k is the write pointer, indicating where the next compressed character should be written. n is the total number of characters in the input array. Iteration Over Characters: The outer while loop iterates over the characters in the array with i serving as the starting index for each sequence of identical characters. Counting Identical Characters: For each character at position i, the inner while loop counts how many times the character repeats by incrementing j until it finds a different character or reaches the end of the array. Writing the Character: The character at the current sequence start (chars[i]) is written to the k-th position in the array. Writing the Count (if applicable): If the count of the current character (j - i) is greater than 1, the code converts this count to a string (cnt) and iterates over each character in this string, writing them sequentially to the array starting from the current k position. Updating Pointers: After processing a sequence of identical characters, i is updated to j (the index following the last identical character), and the process repeats. k is incremented as characters (and counts, when applicable) are written to the array. Returning the Length: After all characters have been processed, k represents the new length of the compressed character array, which is returned as the solution. Example Given an input array [&quot;a&quot;,&quot;a&quot;,&quot;b&quot;,&quot;b&quot;,&quot;c&quot;,&quot;c&quot;,&quot;c&quot;], the function works as follows: Start with i = 0 and k = 0. Count aâs: Two aâs found, write 'a' to chars[0],..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-02-15T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-02-15-443-String-Compression/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-443.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="443 - String Compression" property="twitter:title"/>
+   <meta content="Leetcode 443. String Compression Description Given an array of characters chars, compress it using the following algorithm: Begin with an empty string s. For each group of consecutive repeating characters in chars: If the group&amp;#39;s length is 1, append the character to s. Otherwise, append the character followed by the group&amp;#39;s length. The compressed string s should not be returned separately, but instead, be stored in the input character array chars. Note that group lengths that are 10 or longer will be split into multiple characters in chars. After you are done modifying the input array, return the new length of the array. You must write an algorithm that uses only constant extra space. &amp;nbsp; Example 1: Input: chars = [&amp;quot;a&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;c&amp;quot;] Output: Return 6, and the first 6 characters of the input array should be: [&amp;quot;a&amp;quot;,&amp;quot;2&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;2&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;3&amp;quot;] Explanation: The groups are &amp;quot;aa&amp;quot;, &amp;quot;bb&amp;quot;, and &amp;quot;ccc&amp;quot;. This compresses to &amp;quot;a2b2c3&amp;quot;. Example 2: Input: chars = [&amp;quot;a&amp;quot;] Output: Return 1, and the first character of the input array should be: [&amp;quot;a&amp;quot;] Explanation: The only group is &amp;quot;a&amp;quot;, which remains uncompressed since it&amp;#39;s a single character. Example 3: Input: chars = [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;b&amp;quot;] Output: Return 4, and the first 4 characters of the input array should be: [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;]. Explanation: The groups are &amp;quot;a&amp;quot; and &amp;quot;bbbbbbbbbbbb&amp;quot;. This compresses to &amp;quot;ab12&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= chars.length &amp;lt;= 2000 chars[i] is a lowercase English letter, uppercase English letter, digit, or symbol. Solutions Initialization: i is the read pointer, starting at the beginning of the array. k is the write pointer, indicating where the next compressed character should be written. n is the total number of characters in the input array. Iteration Over Characters: The outer while loop iterates over the characters in the array with i serving as the starting index for each sequence of identical characters. Counting Identical Characters: For each character at position i, the inner while loop counts how many times the character repeats by incrementing j until it finds a different character or reaches the end of the array. Writing the Character: The character at the current sequence start (chars[i]) is written to the k-th position in the array. Writing the Count (if applicable): If the count of the current character (j - i) is greater than 1, the code converts this count to a string (cnt) and iterates over each character in this string, writing them sequentially to the array starting from the current k position. Updating Pointers: After processing a sequence of identical characters, i is updated to j (the index following the last identical character), and the process repeats. k is incremented as characters (and counts, when applicable) are written to the array. Returning the Length: After all characters have been processed, k represents the new length of the compressed character array, which is returned as the solution. Example Given an input array [&quot;a&quot;,&quot;a&quot;,&quot;b&quot;,&quot;b&quot;,&quot;c&quot;,&quot;c&quot;,&quot;c&quot;], the function works as follows: Start with i = 0 and k = 0. Count aâs: Two aâs found, write 'a' to chars[0],..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    443 - String Compression | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="443 - String Compression" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-443.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-02-15-443-String-Compression/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-02-15T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"443 - String Compression","dateModified":"2017-02-15T00:00:00-08:00","datePublished":"2017-02-15T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-02-15-443-String-Compression/"},"url":"https://leetcode.ca/2017-02-15-443-String-Compression/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="443-string-compression">
+       <a href="solution-443.html">
+        443. String Compression
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an array of characters
+       <code>
+        chars
+       </code>
+       , compress it using the following algorithm:
+      </p>
+      <p>
+       Begin with an empty string
+       <code>
+        s
+       </code>
+       . For each group of
+       <strong>
+        consecutive repeating characters
+       </strong>
+       in
+       <code>
+        chars
+       </code>
+       :
+      </p>
+      <ul>
+       <li>
+        If the group's length is
+        <code>
+         1
+        </code>
+        , append the character to
+        <code>
+         s
+        </code>
+        .
+       </li>
+       <li>
+        Otherwise, append the character followed by the group's length.
+       </li>
+      </ul>
+      <p>
+       The compressed string
+       <code>
+        s
+       </code>
+       <strong>
+        should not be returned separately
+       </strong>
+       , but instead, be stored
+       <strong>
+        in the input character array
+        <code>
+         chars
+        </code>
+       </strong>
+       . Note that group lengths that are
+       <code>
+        10
+       </code>
+       or longer will be split into multiple characters in
+       <code>
+        chars
+       </code>
+       .
+      </p>
+      <p>
+       After you are done
+       <strong>
+        modifying the input array,
+       </strong>
+       return
+       <em>
+        the new length of the array
+       </em>
+       .
+      </p>
+      <p>
+       You must write an algorithm that uses only constant extra space.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> chars = ["a","a","b","b","c","c","c"]
+<strong>Output:</strong> Return 6, and the first 6 characters of the input array should be: ["a","2","b","2","c","3"]
+<strong>Explanation:</strong> The groups are "aa", "bb", and "ccc". This compresses to "a2b2c3".
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> chars = ["a"]
+<strong>Output:</strong> Return 1, and the first character of the input array should be: ["a"]
+<strong>Explanation:</strong> The only group is "a", which remains uncompressed since it's a single character.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> chars = ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+<strong>Output:</strong> Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].
+<strong>Explanation:</strong> The groups are "a" and "bbbbbbbbbbbb". This compresses to "ab12".</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= chars.length &lt;= 2000
+        </code>
+       </li>
+       <li>
+        <code>
+         chars[i]
+        </code>
+        is a lowercase English letter, uppercase English letter, digit, or symbol.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ol>
+       <li>
+        <strong>
+         Initialization:
+        </strong>
+        <ul>
+         <li>
+          <code class="language-plaintext highlighter-rouge">
+           i
+          </code>
+          is the read pointer, starting at the beginning of the array.
+         </li>
+         <li>
+          <code class="language-plaintext highlighter-rouge">
+           k
+          </code>
+          is the write pointer, indicating where the next compressed character should be written.
+         </li>
+         <li>
+          <code class="language-plaintext highlighter-rouge">
+           n
+          </code>
+          is the total number of characters in the input array.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <strong>
+         Iteration Over Characters:
+        </strong>
+        <ul>
+         <li>
+          The outer
+          <code class="language-plaintext highlighter-rouge">
+           while
+          </code>
+          loop iterates over the characters in the array with
+          <code class="language-plaintext highlighter-rouge">
+           i
+          </code>
+          serving as the starting index for each sequence of identical characters.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <strong>
+         Counting Identical Characters:
+        </strong>
+        <ul>
+         <li>
+          For each character at position
+          <code class="language-plaintext highlighter-rouge">
+           i
+          </code>
+          , the inner
+          <code class="language-plaintext highlighter-rouge">
+           while
+          </code>
+          loop counts how many times the character repeats by incrementing
+          <code class="language-plaintext highlighter-rouge">
+           j
+          </code>
+          until it finds a different character or reaches the end of the array.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <strong>
+         Writing the Character:
+        </strong>
+        <ul>
+         <li>
+          The character at the current sequence start (
+          <code class="language-plaintext highlighter-rouge">
+           chars[i]
+          </code>
+          ) is written to the
+          <code class="language-plaintext highlighter-rouge">
+           k
+          </code>
+          -th position in the array.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <strong>
+         Writing the Count (if applicable):
+        </strong>
+        <ul>
+         <li>
+          If the count of the current character (
+          <code class="language-plaintext highlighter-rouge">
+           j - i
+          </code>
+          ) is greater than 1, the code converts this count to a string (
+          <code class="language-plaintext highlighter-rouge">
+           cnt
+          </code>
+          ) and iterates over each character in this string, writing them sequentially to the array starting from the current
+          <code class="language-plaintext highlighter-rouge">
+           k
+          </code>
+          position.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <strong>
+         Updating Pointers:
+        </strong>
+        <ul>
+         <li>
+          After processing a sequence of identical characters,
+          <code class="language-plaintext highlighter-rouge">
+           i
+          </code>
+          is updated to
+          <code class="language-plaintext highlighter-rouge">
+           j
+          </code>
+          (the index following the last identical character), and the process repeats.
+         </li>
+         <li>
+          <code class="language-plaintext highlighter-rouge">
+           k
+          </code>
+          is incremented as characters (and counts, when applicable) are written to the array.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <strong>
+         Returning the Length:
+        </strong>
+        <ul>
+         <li>
+          After all characters have been processed,
+          <code class="language-plaintext highlighter-rouge">
+           k
+          </code>
+          represents the new length of the compressed character array, which is returned as the solution.
+         </li>
+        </ul>
+       </li>
+      </ol>
+      <h3 id="example">
+       Example
+      </h3>
+      <p>
+       Given an input array
+       <code class="language-plaintext highlighter-rouge">
+        ["a","a","b","b","c","c","c"]
+       </code>
+       , the function works as follows:
+      </p>
+      <ul>
+       <li>
+        Start with
+        <code class="language-plaintext highlighter-rouge">
+         i = 0
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         k = 0
+        </code>
+        .
+       </li>
+       <li>
+        Count
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        âs: Two
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        âs found, write
+        <code class="language-plaintext highlighter-rouge">
+         'a'
+        </code>
+        to
+        <code class="language-plaintext highlighter-rouge">
+         chars[0]
+        </code>
+        , and
+        <code class="language-plaintext highlighter-rouge">
+         '2'
+        </code>
+        to
+        <code class="language-plaintext highlighter-rouge">
+         chars[1]
+        </code>
+        . Now,
+        <code class="language-plaintext highlighter-rouge">
+         k = 2
+        </code>
+        .
+       </li>
+       <li>
+        Move to the
+        <code class="language-plaintext highlighter-rouge">
+         b
+        </code>
+        âs: Two
+        <code class="language-plaintext highlighter-rouge">
+         b
+        </code>
+        âs found, write
+        <code class="language-plaintext highlighter-rouge">
+         'b'
+        </code>
+        to
+        <code class="language-plaintext highlighter-rouge">
+         chars[2]
+        </code>
+        , and
+        <code class="language-plaintext highlighter-rouge">
+         '2'
+        </code>
+        to
+        <code class="language-plaintext highlighter-rouge">
+         chars[3]
+        </code>
+        . Now,
+        <code class="language-plaintext highlighter-rouge">
+         k = 4
+        </code>
+        .
+       </li>
+       <li>
+        Finally, count
+        <code class="language-plaintext highlighter-rouge">
+         c
+        </code>
+        âs: Three
+        <code class="language-plaintext highlighter-rouge">
+         c
+        </code>
+        âs found, write
+        <code class="language-plaintext highlighter-rouge">
+         'c'
+        </code>
+        to
+        <code class="language-plaintext highlighter-rouge">
+         chars[4]
+        </code>
+        ,
+        <code class="language-plaintext highlighter-rouge">
+         '3'
+        </code>
+        to
+        <code class="language-plaintext highlighter-rouge">
+         chars[5]
+        </code>
+        . Now,
+        <code class="language-plaintext highlighter-rouge">
+         k = 6
+        </code>
+        .
+       </li>
+       <li>
+        The array now looks like
+        <code class="language-plaintext highlighter-rouge">
+         ["a","2","b","2","c","3"]
+        </code>
+        , and the function returns
+        <code class="language-plaintext highlighter-rouge">
+         6
+        </code>
+        .
+       </li>
+      </ul>
+      <h3 id="complexity-analysis">
+       Complexity Analysis
+      </h3>
+      <ul>
+       <li>
+        <strong>
+         Time Complexity:
+        </strong>
+        O(n), where n is the length of the input array. Each element is processed once.
+       </li>
+       <li>
+        <strong>
+         Space Complexity:
+        </strong>
+        O(1), as the compression is done in-place, and only a constant amount of extra space is used.
+       </li>
+      </ul>
+      <h3 id="follow-up">
+       Follow up
+      </h3>
+      <p>
+       If a follow up question asking for the compressed result, simply return
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>    return chars[:k];
+</code></pre>
+       </div>
+      </div>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#12581d0e-6404-4736-b3a9-00bb43aff569'}">
+       <li class="uk-active">
+        <a href="solution-443.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-443.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-443.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-443.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-443.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="12581d0e-6404-4736-b3a9-00bb43aff569">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compress</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">chars</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">chars</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">chars</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">j</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">chars</span><span class="o">[</span><span class="n">k</span><span class="o">++]</span> <span class="o">=</span> <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">cnt</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="o">);</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">cnt</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="n">chars</span><span class="o">[</span><span class="n">k</span><span class="o">++]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">k</span><span class="o">;</span>        
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">compress</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span> <span class="n">chars</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">chars</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">chars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="o">++</span><span class="n">j</span><span class="p">;</span>
+            <span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">to_string</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">k</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chars</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">chars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">cnt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cnt</span><span class="p">:</span>
+                    <span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+                    <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
+        <span class="k">return</span> <span class="n">k</span>
+
+        <span class="s">'''
+        if a follow up question asking for the compressed result, simply return
+
+            return chars[:k];
+        '''</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">compress</span><span class="p">(</span><span class="n">chars</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+		<span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">chars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">j</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">k</span><span class="o">++</span>
+		<span class="k">if</span> <span class="n">j</span><span class="o">-</span><span class="n">i</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="p">{</span>
+			<span class="n">cnt</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">cnt</span> <span class="p">{</span>
+				<span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kt">byte</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+				<span class="n">k</span><span class="o">++</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">k</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">compress</span><span class="p">(</span><span class="n">chars</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">char</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="p">(</span><span class="k">mut</span> <span class="n">i</span><span class="p">,</span> <span class="k">mut</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">chars</span><span class="nf">.len</span><span class="p">());</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">chars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="n">cnt</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span><span class="nf">.to_string</span><span class="p">();</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="k">in</span> <span class="n">cnt</span><span class="nf">.chars</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="n">chars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                    <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">k</span> <span class="k">as</span> <span class="nb">i32</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-443.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

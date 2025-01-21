@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-904.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-904.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>904 - Fruit Into Baskets</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 904. Fruit Into Baskets Description You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces. You want...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-904.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-904.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-904.html" rel="stylesheet"/>
+   <link href="solution-904.html" rel="stylesheet"/>
+   <link href="solution-904.html" rel="stylesheet"/>
+   <link href="solution-904.html" rel="stylesheet"/>
+   <link href="solution-904.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="904 - Fruit Into Baskets" property="og:title"/>
+   <meta content="Leetcode 904. Fruit Into Baskets Description You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces. You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow: You only have two baskets, and each basket can only hold a single type of fruit. There is no limit on the amount of fruit each basket can hold. Starting from any tree of your choice, you must pick exactly one fruit from every tree (including the start tree) while moving to the right. The picked fruits must fit in one of your baskets. Once you reach a tree with fruit that cannot fit in your baskets, you must stop. Given the integer array fruits, return the maximum number of fruits you can pick. &amp;nbsp; Example 1: Input: fruits = [1,2,1] Output: 3 Explanation: We can pick from all 3 trees. Example 2: Input: fruits = [0,1,2,2] Output: 3 Explanation: We can pick from trees [1,2,2]. If we had started at the first tree, we would only pick from trees [0,1]. Example 3: Input: fruits = [1,2,3,2,2] Output: 4 Explanation: We can pick from trees [2,3,2,2]. If we had started at the first tree, we would only pick from trees [1,2]. &amp;nbsp; Constraints: 1 &amp;lt;= fruits.length &amp;lt;= 105 0 &amp;lt;= fruits[i] &amp;lt; fruits.length Solutions Solution 1: Hash Table + Sliding Window We use a hash table $cnt$ to maintain the types and corresponding quantities of fruits in the current window, and use two pointers $j$ and $i$ to maintain the left and right boundaries of the window. We traverse the fruits array, add the current fruit $x$ to the window, i.e., $cnt[x]++$, then judge whether the types of fruits in the current window exceed $2$. If it exceeds $2$, we need to move the left boundary $j$ of the window to the right until the types of fruits in the window do not exceed $2$. Then we update the answer, i.e., $ans = \max(ans, i - j + 1)$. After the traversal ends, we can get the final answer. 1 2 3 2 2 1 4 ^ ^ j i 1 2 3 2 2 1 4 ^ ^ j i 1 2 3 2 2 1 4 ^ ^ j i The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the fruits array. Solution 2: Sliding Window Optimization In Solution 1, we find that the window size sometimes increases and sometimes decreases, which requires us to update the answer each time. But what this problem actually asks for is the maximum number of fruits, that is, the âlargestâ window. We donât need to shrink the window, we just need to let the window monotonically increase. So the code omits the operation of updating..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-05-22T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-05-22-904-Fruit-Into-Baskets/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-904.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="904 - Fruit Into Baskets" property="twitter:title"/>
+   <meta content="Leetcode 904. Fruit Into Baskets Description You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces. You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow: You only have two baskets, and each basket can only hold a single type of fruit. There is no limit on the amount of fruit each basket can hold. Starting from any tree of your choice, you must pick exactly one fruit from every tree (including the start tree) while moving to the right. The picked fruits must fit in one of your baskets. Once you reach a tree with fruit that cannot fit in your baskets, you must stop. Given the integer array fruits, return the maximum number of fruits you can pick. &amp;nbsp; Example 1: Input: fruits = [1,2,1] Output: 3 Explanation: We can pick from all 3 trees. Example 2: Input: fruits = [0,1,2,2] Output: 3 Explanation: We can pick from trees [1,2,2]. If we had started at the first tree, we would only pick from trees [0,1]. Example 3: Input: fruits = [1,2,3,2,2] Output: 4 Explanation: We can pick from trees [2,3,2,2]. If we had started at the first tree, we would only pick from trees [1,2]. &amp;nbsp; Constraints: 1 &amp;lt;= fruits.length &amp;lt;= 105 0 &amp;lt;= fruits[i] &amp;lt; fruits.length Solutions Solution 1: Hash Table + Sliding Window We use a hash table $cnt$ to maintain the types and corresponding quantities of fruits in the current window, and use two pointers $j$ and $i$ to maintain the left and right boundaries of the window. We traverse the fruits array, add the current fruit $x$ to the window, i.e., $cnt[x]++$, then judge whether the types of fruits in the current window exceed $2$. If it exceeds $2$, we need to move the left boundary $j$ of the window to the right until the types of fruits in the window do not exceed $2$. Then we update the answer, i.e., $ans = \max(ans, i - j + 1)$. After the traversal ends, we can get the final answer. 1 2 3 2 2 1 4 ^ ^ j i 1 2 3 2 2 1 4 ^ ^ j i 1 2 3 2 2 1 4 ^ ^ j i The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the fruits array. Solution 2: Sliding Window Optimization In Solution 1, we find that the window size sometimes increases and sometimes decreases, which requires us to update the answer each time. But what this problem actually asks for is the maximum number of fruits, that is, the âlargestâ window. We donât need to shrink the window, we just need to let the window monotonically increase. So the code omits the operation of updating..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    904 - Fruit Into Baskets | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="904 - Fruit Into Baskets" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-904.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-05-22-904-Fruit-Into-Baskets/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-05-22T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"904 - Fruit Into Baskets","dateModified":"2018-05-22T00:00:00-07:00","datePublished":"2018-05-22T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-05-22-904-Fruit-Into-Baskets/"},"url":"https://leetcode.ca/2018-05-22-904-Fruit-Into-Baskets/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="904-fruit-into-baskets">
+       <a href="solution-904.html">
+        904. Fruit Into Baskets
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array
+       <code>
+        fruits
+       </code>
+       where
+       <code>
+        fruits[i]
+       </code>
+       is the
+       <strong>
+        type
+       </strong>
+       of fruit the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       tree produces.
+      </p>
+      <p>
+       You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow:
+      </p>
+      <ul>
+       <li>
+        You only have
+        <strong>
+         two
+        </strong>
+        baskets, and each basket can only hold a
+        <strong>
+         single type
+        </strong>
+        of fruit. There is no limit on the amount of fruit each basket can hold.
+       </li>
+       <li>
+        Starting from any tree of your choice, you must pick
+        <strong>
+         exactly one fruit
+        </strong>
+        from
+        <strong>
+         every
+        </strong>
+        tree (including the start tree) while moving to the right. The picked fruits must fit in one of your baskets.
+       </li>
+       <li>
+        Once you reach a tree with fruit that cannot fit in your baskets, you must stop.
+       </li>
+      </ul>
+      <p>
+       Given the integer array
+       <code>
+        fruits
+       </code>
+       , return
+       <em>
+        the
+        <strong>
+         maximum
+        </strong>
+        number of fruits you can pick
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> fruits = [<u>1,2,1</u>]
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> We can pick from all 3 trees.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> fruits = [0,<u>1,2,2</u>]
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> We can pick from trees [1,2,2].
+If we had started at the first tree, we would only pick from trees [0,1].
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> fruits = [1,<u>2,3,2,2</u>]
+<strong>Output:</strong> 4
+<strong>Explanation:</strong> We can pick from trees [2,3,2,2].
+If we had started at the first tree, we would only pick from trees [1,2].
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= fruits.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= fruits[i] &lt; fruits.length
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Hash Table + Sliding Window
+       </strong>
+      </p>
+      <p>
+       We use a hash table $cnt$ to maintain the types and corresponding quantities of fruits in the current window, and use two pointers $j$ and $i$ to maintain the left and right boundaries of the window.
+      </p>
+      <p>
+       We traverse the
+       <code class="language-plaintext highlighter-rouge">
+        fruits
+       </code>
+       array, add the current fruit $x$ to the window, i.e., $cnt[x]++$, then judge whether the types of fruits in the current window exceed $2$. If it exceeds $2$, we need to move the left boundary $j$ of the window to the right until the types of fruits in the window do not exceed $2$. Then we update the answer, i.e., $ans = \max(ans, i - j + 1)$.
+      </p>
+      <p>
+       After the traversal ends, we can get the final answer.
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>1 2 3 2 2 1 4
+^   ^
+j   i
+
+
+1 2 3 2 2 1 4
+  ^ ^
+  j i
+
+
+1 2 3 2 2 1 4
+  ^     ^
+  j     i
+</code></pre>
+       </div>
+      </div>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the
+       <code class="language-plaintext highlighter-rouge">
+        fruits
+       </code>
+       array.
+      </p>
+      <p>
+       <strong>
+        Solution 2: Sliding Window Optimization
+       </strong>
+      </p>
+      <p>
+       In Solution 1, we find that the window size sometimes increases and sometimes decreases, which requires us to update the answer each time.
+      </p>
+      <p>
+       But what this problem actually asks for is the maximum number of fruits, that is, the âlargestâ window. We donât need to shrink the window, we just need to let the window monotonically increase. So the code omits the operation of updating the answer each time, and only needs to return the size of the window as the answer after the traversal ends.
+      </p>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the
+       <code class="language-plaintext highlighter-rouge">
+        fruits
+       </code>
+       array.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#1aafcce8-62be-4296-b0b4-f3638ff65fc0'}">
+       <li class="uk-active">
+        <a href="solution-904.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-904.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-904.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-904.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-904.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-904.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="1aafcce8-62be-4296-b0b4-f3638ff65fc0">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">totalFruit</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">fruits</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fruits</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">fruits</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">fruits</span><span class="o">[</span><span class="n">j</span><span class="o">++];</span>
+                <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">y</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">y</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">cnt</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">y</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">-</span> <span class="n">j</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">totalFruit</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">fruits</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fruits</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">x</span> <span class="o">:</span> <span class="n">fruits</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">fruits</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">cnt</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">cnt</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">-</span> <span class="n">j</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">totalFruit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fruits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fruits</span><span class="p">:</span>
+            <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">fruits</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">cnt</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">cnt</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span> <span class="o">-</span> <span class="n">j</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">totalFruit</span><span class="p">(</span><span class="n">fruits</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="n">j</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">fruits</span> <span class="p">{</span>
+		<span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">++</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">2</span> <span class="p">{</span>
+			<span class="n">y</span> <span class="o">:=</span> <span class="n">fruits</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+			<span class="n">cnt</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">--</span>
+			<span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="nb">delete</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="n">j</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span> <span class="o">-</span> <span class="n">j</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">totalFruit</span><span class="p">(</span><span class="nx">fruits</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">fruits</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">number</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">fruit</span> <span class="k">of</span> <span class="nx">fruits</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">map</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">fruit</span><span class="p">,</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">fruit</span><span class="p">)</span> <span class="o">??</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="nx">size</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">fruits</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">];</span>
+            <span class="nx">map</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">map</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">k</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">-</span> <span class="nx">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">collections</span><span class="p">::</span><span class="n">HashMap</span><span class="p">;</span>
+<span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">total_fruit</span><span class="p">(</span><span class="n">fruits</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fruits</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">map</span> <span class="o">=</span> <span class="nn">HashMap</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="o">&amp;</span><span class="n">fruit</span> <span class="k">in</span> <span class="n">fruits</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">map</span><span class="nf">.entry</span><span class="p">(</span><span class="n">fruit</span><span class="p">)</span><span class="nf">.or_insert</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="n">map</span><span class="nf">.len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="n">k</span> <span class="o">=</span> <span class="n">fruits</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">map</span><span class="nf">.insert</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">map</span><span class="p">[</span><span class="o">&amp;</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="k">if</span> <span class="n">map</span><span class="p">[</span><span class="o">&amp;</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+                    <span class="n">map</span><span class="nf">.remove</span><span class="p">(</span><span class="o">&amp;</span><span class="n">k</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="k">as</span> <span class="nb">i32</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-904.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

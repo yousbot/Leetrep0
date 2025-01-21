@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1956.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1956.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1956 - Minimum Time For K Virus Variants to Spread</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1956. Minimum Time For K Virus Variants to Spread Description There are n unique virus variants in an infinite 2D grid. You are given a 2D array points, where points[i] = [xi, yi] represents a virus originating at (xi, yi) on day 0. Note that...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1956.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1956.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1956.html" rel="stylesheet"/>
+   <link href="solution-1956.html" rel="stylesheet"/>
+   <link href="solution-1956.html" rel="stylesheet"/>
+   <link href="solution-1956.html" rel="stylesheet"/>
+   <link href="solution-1956.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1956 - Minimum Time For K Virus Variants to Spread" property="og:title"/>
+   <meta content="Leetcode 1956. Minimum Time For K Virus Variants to Spread Description There are n unique virus variants in an infinite 2D grid. You are given a 2D array points, where points[i] = [xi, yi] represents a virus originating at (xi, yi) on day 0. Note that it is possible for multiple virus variants to originate at the same point. Every day, each cell infected with a virus variant will spread the virus to all neighboring points in the four cardinal directions (i.e. up, down, left, and right). If a cell has multiple variants, all the variants will spread without interfering with each other. Given an integer k, return the minimum integer number of days for any point to contain at least k of the unique virus variants. &amp;nbsp; Example 1: Input: points = [[1,1],[6,1]], k = 2 Output: 3 Explanation: On day 3, points (3,1) and (4,1) will contain both virus variants. Note that these are not the only points that will contain both virus variants. Example 2: Input: points = [[3,3],[1,2],[9,2]], k = 2 Output: 2 Explanation: On day 2, points (1,3), (2,3), (2,2), and (3,2) will contain the first two viruses. Note that these are not the only points that will contain both virus variants. Example 3: Input: points = [[3,3],[1,2],[9,2]], k = 3 Output: 4 Explanation: On day 4, the point (5,2) will contain all 3 viruses. Note that this is not the only point that will contain all 3 virus variants. &amp;nbsp; Constraints: n == points.length 2 &amp;lt;= n &amp;lt;= 50 points[i].length == 2 1 &amp;lt;= xi, yi &amp;lt;= 100 2 &amp;lt;= k &amp;lt;= n Solution Use binary search. For a specific number of days, calculate whether there exists a point that contains at least k virus variants. Java class Solution { public int minDayskVariants(int[][] points, int k) { int low = 0, high = 1000000000; while (low &amp;lt; high) { int mid = (high - low) / 2 + low; if (containAtLeastK(points, k, mid)) high = mid; else low = mid + 1; } return low; } public boolean containAtLeastK(int[][] points, int k, int days) { Map&amp;lt;Long, Map&amp;lt;Long, Integer&amp;gt;&amp;gt; lines = new HashMap&amp;lt;Long, Map&amp;lt;Long, Integer&amp;gt;&amp;gt;(); for (int[] point : points) { int x = point[0], y = point[1]; long xLeft = x, yLeft = y - days; long xBottom = x - days, yBottom = y; long xRight = x + days, yRight = y; long xTop = x, yTop = y + days; long key11 = xLeft + yLeft, key12 = yLeft - xLeft; Map&amp;lt;Long, Integer&amp;gt; map1 = lines.getOrDefault(key11, new HashMap&amp;lt;Long, Integer&amp;gt;()); map1.put(key12, map1.getOrDefault(key12, 0) + 1); lines.put(key11, map1); long key21 = xBottom + yBottom, key22 = yBottom - xBottom + 1; Map&amp;lt;Long, Integer&amp;gt; map2 = lines.getOrDefault(key21, new HashMap&amp;lt;Long, Integer&amp;gt;()); map2.put(key22, map2.getOrDefault(key22, 0) - 1); lines.put(key21, map2); long key31 = xRight + yRight + 1, key32 = yRight - xRight; Map&amp;lt;Long, Integer&amp;gt; map3 = lines.getOrDefault(key31, new HashMap&amp;lt;Long, Integer&amp;gt;()); map3.put(key32, map3.getOrDefault(key32, 0) - 1); lines.put(key31, map3); long key41 = xTop +..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-04-08T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-04-08-1956-Minimum-Time-For-K-Virus-Variants-to-Spread/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1956.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1956 - Minimum Time For K Virus Variants to Spread" property="twitter:title"/>
+   <meta content="Leetcode 1956. Minimum Time For K Virus Variants to Spread Description There are n unique virus variants in an infinite 2D grid. You are given a 2D array points, where points[i] = [xi, yi] represents a virus originating at (xi, yi) on day 0. Note that it is possible for multiple virus variants to originate at the same point. Every day, each cell infected with a virus variant will spread the virus to all neighboring points in the four cardinal directions (i.e. up, down, left, and right). If a cell has multiple variants, all the variants will spread without interfering with each other. Given an integer k, return the minimum integer number of days for any point to contain at least k of the unique virus variants. &amp;nbsp; Example 1: Input: points = [[1,1],[6,1]], k = 2 Output: 3 Explanation: On day 3, points (3,1) and (4,1) will contain both virus variants. Note that these are not the only points that will contain both virus variants. Example 2: Input: points = [[3,3],[1,2],[9,2]], k = 2 Output: 2 Explanation: On day 2, points (1,3), (2,3), (2,2), and (3,2) will contain the first two viruses. Note that these are not the only points that will contain both virus variants. Example 3: Input: points = [[3,3],[1,2],[9,2]], k = 3 Output: 4 Explanation: On day 4, the point (5,2) will contain all 3 viruses. Note that this is not the only point that will contain all 3 virus variants. &amp;nbsp; Constraints: n == points.length 2 &amp;lt;= n &amp;lt;= 50 points[i].length == 2 1 &amp;lt;= xi, yi &amp;lt;= 100 2 &amp;lt;= k &amp;lt;= n Solution Use binary search. For a specific number of days, calculate whether there exists a point that contains at least k virus variants. Java class Solution { public int minDayskVariants(int[][] points, int k) { int low = 0, high = 1000000000; while (low &amp;lt; high) { int mid = (high - low) / 2 + low; if (containAtLeastK(points, k, mid)) high = mid; else low = mid + 1; } return low; } public boolean containAtLeastK(int[][] points, int k, int days) { Map&amp;lt;Long, Map&amp;lt;Long, Integer&amp;gt;&amp;gt; lines = new HashMap&amp;lt;Long, Map&amp;lt;Long, Integer&amp;gt;&amp;gt;(); for (int[] point : points) { int x = point[0], y = point[1]; long xLeft = x, yLeft = y - days; long xBottom = x - days, yBottom = y; long xRight = x + days, yRight = y; long xTop = x, yTop = y + days; long key11 = xLeft + yLeft, key12 = yLeft - xLeft; Map&amp;lt;Long, Integer&amp;gt; map1 = lines.getOrDefault(key11, new HashMap&amp;lt;Long, Integer&amp;gt;()); map1.put(key12, map1.getOrDefault(key12, 0) + 1); lines.put(key11, map1); long key21 = xBottom + yBottom, key22 = yBottom - xBottom + 1; Map&amp;lt;Long, Integer&amp;gt; map2 = lines.getOrDefault(key21, new HashMap&amp;lt;Long, Integer&amp;gt;()); map2.put(key22, map2.getOrDefault(key22, 0) - 1); lines.put(key21, map2); long key31 = xRight + yRight + 1, key32 = yRight - xRight; Map&amp;lt;Long, Integer&amp;gt; map3 = lines.getOrDefault(key31, new HashMap&amp;lt;Long, Integer&amp;gt;()); map3.put(key32, map3.getOrDefault(key32, 0) - 1); lines.put(key31, map3); long key41 = xTop +..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1956 - Minimum Time For K Virus Variants to Spread | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1956 - Minimum Time For K Virus Variants to Spread" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1956.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-04-08-1956-Minimum-Time-For-K-Virus-Variants-to-Spread/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-04-08T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1956 - Minimum Time For K Virus Variants to Spread","dateModified":"2021-04-08T00:00:00-07:00","datePublished":"2021-04-08T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-04-08-1956-Minimum-Time-For-K-Virus-Variants-to-Spread/"},"url":"https://leetcode.ca/2021-04-08-1956-Minimum-Time-For-K-Virus-Variants-to-Spread/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1956-minimum-time-for-k-virus-variants-to-spread">
+       <a href="solution-1956.html">
+        1956. Minimum Time For K Virus Variants to Spread
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       There are
+       <code>
+        n
+       </code>
+       <strong>
+        unique
+       </strong>
+       virus variants in an infinite 2D grid. You are given a 2D array
+       <code>
+        points
+       </code>
+       , where
+       <code>
+        points[i] = [x
+        <sub>
+         i
+        </sub>
+        , y
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       represents a virus originating at
+       <code>
+        (x
+        <sub>
+         i
+        </sub>
+        , y
+        <sub>
+         i
+        </sub>
+        )
+       </code>
+       on day
+       <code>
+        0
+       </code>
+       . Note that it is possible for
+       <strong>
+        multiple
+       </strong>
+       virus variants to originate at the
+       <strong>
+        same
+       </strong>
+       point.
+      </p>
+      <p>
+       Every day, each cell infected with a virus variant will spread the virus to
+       <strong>
+        all
+       </strong>
+       neighboring points in the
+       <strong>
+        four
+       </strong>
+       cardinal directions (i.e. up, down, left, and right). If a cell has multiple variants, all the variants will spread without interfering with each other.
+      </p>
+      <p>
+       Given an integer
+       <code>
+        k
+       </code>
+       , return
+       <em>
+        the
+        <strong>
+         minimum integer
+        </strong>
+        number of days for
+        <strong>
+         any
+        </strong>
+        point to contain
+        <strong>
+         at least
+        </strong>
+       </em>
+       <code>
+        k
+       </code>
+       <em>
+        of the unique virus variants
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1956.Minimum%20Time%20For%20K%20Virus%20Variants%20to%20Spread/images/case-1.png" style="width: 421px; height: 256px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> points = [[1,1],[6,1]], k = 2
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> On day 3, points (3,1) and (4,1) will contain both virus variants. Note that these are not the only points that will contain both virus variants.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1956.Minimum%20Time%20For%20K%20Virus%20Variants%20to%20Spread/images/case-2.png" style="width: 416px; height: 257px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> points = [[3,3],[1,2],[9,2]], k = 2
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> On day 2, points (1,3), (2,3), (2,2), and (3,2) will contain the first two viruses. Note that these are not the only points that will contain both virus variants.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1956.Minimum%20Time%20For%20K%20Virus%20Variants%20to%20Spread/images/case-2.png" style="width: 416px; height: 257px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> points = [[3,3],[1,2],[9,2]], k = 3
+<strong>Output:</strong> 4
+<strong>Explanation:</strong> On day 4, the point (5,2) will contain all 3 viruses. Note that this is not the only point that will contain all 3 virus variants.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         n == points.length
+        </code>
+       </li>
+       <li>
+        <code>
+         2 &lt;= n &lt;= 50
+        </code>
+       </li>
+       <li>
+        <code>
+         points[i].length == 2
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= x
+         <sub>
+          i
+         </sub>
+         , y
+         <sub>
+          i
+         </sub>
+         &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         2 &lt;= k &lt;= n
+        </code>
+       </li>
+      </ul>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       Use binary search. For a specific number of days, calculate whether there exists a point that contains at least
+       <code class="language-plaintext highlighter-rouge">
+        k
+       </code>
+       virus variants.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#15bdf1d8-6ac2-4180-a664-6330715b5f0a'}">
+       <li class="uk-active">
+        <a href="solution-1956.html">
+         Java
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="15bdf1d8-6ac2-4180-a664-6330715b5f0a">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minDayskVariants</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">points</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">high</span> <span class="o">=</span> <span class="mi">1000000000</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">low</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">containAtLeastK</span><span class="o">(</span><span class="n">points</span><span class="o">,</span> <span class="n">k</span><span class="o">,</span> <span class="n">mid</span><span class="o">))</span>
+                <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">low</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">containAtLeastK</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">points</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">days</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">lines</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">point</span> <span class="o">:</span> <span class="n">points</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">point</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">point</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="kt">long</span> <span class="n">xLeft</span> <span class="o">=</span> <span class="n">x</span><span class="o">,</span> <span class="n">yLeft</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">days</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">xBottom</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">days</span><span class="o">,</span> <span class="n">yBottom</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">xRight</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">days</span><span class="o">,</span> <span class="n">yRight</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">xTop</span> <span class="o">=</span> <span class="n">x</span><span class="o">,</span> <span class="n">yTop</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">days</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">key11</span> <span class="o">=</span> <span class="n">xLeft</span> <span class="o">+</span> <span class="n">yLeft</span><span class="o">,</span> <span class="n">key12</span> <span class="o">=</span> <span class="n">yLeft</span> <span class="o">-</span> <span class="n">xLeft</span><span class="o">;</span>
+            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map1</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key11</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;());</span>
+            <span class="n">map1</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key12</span><span class="o">,</span> <span class="n">map1</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key12</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">lines</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key11</span><span class="o">,</span> <span class="n">map1</span><span class="o">);</span>
+            <span class="kt">long</span> <span class="n">key21</span> <span class="o">=</span> <span class="n">xBottom</span> <span class="o">+</span> <span class="n">yBottom</span><span class="o">,</span> <span class="n">key22</span> <span class="o">=</span> <span class="n">yBottom</span> <span class="o">-</span> <span class="n">xBottom</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map2</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key21</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;());</span>
+            <span class="n">map2</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key22</span><span class="o">,</span> <span class="n">map2</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key22</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">lines</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key21</span><span class="o">,</span> <span class="n">map2</span><span class="o">);</span>
+            <span class="kt">long</span> <span class="n">key31</span> <span class="o">=</span> <span class="n">xRight</span> <span class="o">+</span> <span class="n">yRight</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">key32</span> <span class="o">=</span> <span class="n">yRight</span> <span class="o">-</span> <span class="n">xRight</span><span class="o">;</span>
+            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map3</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key31</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;());</span>
+            <span class="n">map3</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key32</span><span class="o">,</span> <span class="n">map3</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key32</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">lines</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key31</span><span class="o">,</span> <span class="n">map3</span><span class="o">);</span>
+            <span class="kt">long</span> <span class="n">key41</span> <span class="o">=</span> <span class="n">xTop</span> <span class="o">+</span> <span class="n">yTop</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">key42</span> <span class="o">=</span> <span class="n">yTop</span> <span class="o">-</span> <span class="n">xTop</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map4</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key41</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;());</span>
+            <span class="n">map4</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key42</span><span class="o">,</span> <span class="n">map4</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key42</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">lines</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key41</span><span class="o">,</span> <span class="n">map4</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">ranges</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;();</span>
+        <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">set1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;(</span><span class="n">lines</span><span class="o">.</span><span class="na">keySet</span><span class="o">());</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">key1</span> <span class="o">:</span> <span class="n">set1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key1</span><span class="o">);</span>
+            <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">set2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;(</span><span class="n">map</span><span class="o">.</span><span class="na">keySet</span><span class="o">());</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">key2</span> <span class="o">:</span> <span class="n">set2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key2</span><span class="o">);</span>
+                <span class="n">ranges</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key2</span><span class="o">,</span> <span class="n">ranges</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key2</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="n">count</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">rangeSet</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;(</span><span class="n">ranges</span><span class="o">.</span><span class="na">keySet</span><span class="o">());</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">num</span> <span class="o">:</span> <span class="n">rangeSet</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">ranges</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">count</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">total</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="o">)</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1956.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

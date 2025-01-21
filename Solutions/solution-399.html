@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-399.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-399.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>399 - Evaluate Division</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 399. Evaluate Division Description You are given an array of variable pairs equations and an array of real numbers values, where equations[i] = [Ai, Bi] and values[i] represent the equation Ai / Bi = values[i]. Each Ai or Bi is a string that represents a...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-399.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-399.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-399.html" rel="stylesheet"/>
+   <link href="solution-399.html" rel="stylesheet"/>
+   <link href="solution-399.html" rel="stylesheet"/>
+   <link href="solution-399.html" rel="stylesheet"/>
+   <link href="solution-399.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="399 - Evaluate Division" property="og:title"/>
+   <meta content="Leetcode 399. Evaluate Division Description You are given an array of variable pairs equations and an array of real numbers values, where equations[i] = [Ai, Bi] and values[i] represent the equation Ai / Bi = values[i]. Each Ai or Bi is a string that represents a single variable. You are also given some queries, where queries[j] = [Cj, Dj] represents the jth query where you must find the answer for Cj / Dj = ?. Return the answers to all queries. If a single answer cannot be determined, return -1.0. Note: The input is always valid. You may assume that evaluating the queries will not result in division by zero and that there is no contradiction. Note:&amp;nbsp;The variables that do not occur in the list of equations are undefined, so the answer cannot be determined for them. &amp;nbsp; Example 1: Input: equations = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;]], values = [2.0,3.0], queries = [[&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;e&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;a&amp;quot;],[&amp;quot;x&amp;quot;,&amp;quot;x&amp;quot;]] Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000] Explanation: Given: a / b = 2.0, b / c = 3.0 queries are: a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ? return: [6.0, 0.5, -1.0, 1.0, -1.0 ] note: x is undefined =&amp;gt; -1.0 Example 2: Input: equations = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;bc&amp;quot;,&amp;quot;cd&amp;quot;]], values = [1.5,2.5,5.0], queries = [[&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;bc&amp;quot;,&amp;quot;cd&amp;quot;],[&amp;quot;cd&amp;quot;,&amp;quot;bc&amp;quot;]] Output: [3.75000,0.40000,5.00000,0.20000] Example 3: Input: equations = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;]], values = [0.5], queries = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;x&amp;quot;,&amp;quot;y&amp;quot;]] Output: [0.50000,2.00000,-1.00000,-1.00000] &amp;nbsp; Constraints: 1 &amp;lt;= equations.length &amp;lt;= 20 equations[i].length == 2 1 &amp;lt;= Ai.length, Bi.length &amp;lt;= 5 values.length == equations.length 0.0 &amp;lt; values[i] &amp;lt;= 20.0 1 &amp;lt;= queries.length &amp;lt;= 20 queries[i].length == 2 1 &amp;lt;= Cj.length, Dj.length &amp;lt;= 5 Ai, Bi, Cj, Dj consist of lower case English letters and digits. Solutions Union find. Java C++ Python Go RenderScript TypeScript class Solution { private Map&amp;lt;String, String&amp;gt; p; private Map&amp;lt;String, Double&amp;gt; w; public double[] calcEquation( List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; equations, double[] values, List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; queries) { int n = equations.size(); p = new HashMap&amp;lt;&amp;gt;(); w = new HashMap&amp;lt;&amp;gt;(); for (List&amp;lt;String&amp;gt; e : equations) { p.put(e.get(0), e.get(0)); p.put(e.get(1), e.get(1)); w.put(e.get(0), 1.0); w.put(e.get(1), 1.0); } for (int i = 0; i &amp;lt; n; ++i) { List&amp;lt;String&amp;gt; e = equations.get(i); String a = e.get(0), b = e.get(1); String pa = find(a), pb = find(b); if (Objects.equals(pa, pb)) { continue; } p.put(pa, pb); w.put(pa, w.get(b) * values[i] / w.get(a)); } int m = queries.size(); double[] ans = new double[m]; for (int i = 0; i &amp;lt; m; ++i) { String c = queries.get(i).get(0), d = queries.get(i).get(1); ans[i] = !p.containsKey(c) || !p.containsKey(d) || !Objects.equals(find(c), find(d)) ? -1.0 : w.get(c) / w.get(d); } return ans; } private String find(String x) { if (!Objects.equals(p.get(x), x)) { String origin = p.get(x); p.put(x, find(p.get(x))); w.put(x, w.get(x) * w.get(origin)); } return p.get(x); } } class Solution { public: unordered_map&amp;lt;string, string&amp;gt; p; unordered_map&amp;lt;string, double&amp;gt; w; vector&amp;lt;double&amp;gt; calcEquation(vector&amp;lt;vector&amp;lt;string&amp;gt;&amp;gt;&amp;amp; equations, vector&amp;lt;double&amp;gt;&amp;amp; values, vector&amp;lt;vector&amp;lt;string&amp;gt;&amp;gt;&amp;amp; queries) { int n = equations.size(); for (auto e : equations) { p[e[0]] = e[0]; p[e[1]] = e[1]; w[e[0]] = 1.0; w[e[1]] = 1.0; } for (int i = 0;..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-01-02T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-01-02-399-Evaluate-Division/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-399.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="399 - Evaluate Division" property="twitter:title"/>
+   <meta content="Leetcode 399. Evaluate Division Description You are given an array of variable pairs equations and an array of real numbers values, where equations[i] = [Ai, Bi] and values[i] represent the equation Ai / Bi = values[i]. Each Ai or Bi is a string that represents a single variable. You are also given some queries, where queries[j] = [Cj, Dj] represents the jth query where you must find the answer for Cj / Dj = ?. Return the answers to all queries. If a single answer cannot be determined, return -1.0. Note: The input is always valid. You may assume that evaluating the queries will not result in division by zero and that there is no contradiction. Note:&amp;nbsp;The variables that do not occur in the list of equations are undefined, so the answer cannot be determined for them. &amp;nbsp; Example 1: Input: equations = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;]], values = [2.0,3.0], queries = [[&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;e&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;a&amp;quot;],[&amp;quot;x&amp;quot;,&amp;quot;x&amp;quot;]] Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000] Explanation: Given: a / b = 2.0, b / c = 3.0 queries are: a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ? return: [6.0, 0.5, -1.0, 1.0, -1.0 ] note: x is undefined =&amp;gt; -1.0 Example 2: Input: equations = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;bc&amp;quot;,&amp;quot;cd&amp;quot;]], values = [1.5,2.5,5.0], queries = [[&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;bc&amp;quot;,&amp;quot;cd&amp;quot;],[&amp;quot;cd&amp;quot;,&amp;quot;bc&amp;quot;]] Output: [3.75000,0.40000,5.00000,0.20000] Example 3: Input: equations = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;]], values = [0.5], queries = [[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;],[&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;],[&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;],[&amp;quot;x&amp;quot;,&amp;quot;y&amp;quot;]] Output: [0.50000,2.00000,-1.00000,-1.00000] &amp;nbsp; Constraints: 1 &amp;lt;= equations.length &amp;lt;= 20 equations[i].length == 2 1 &amp;lt;= Ai.length, Bi.length &amp;lt;= 5 values.length == equations.length 0.0 &amp;lt; values[i] &amp;lt;= 20.0 1 &amp;lt;= queries.length &amp;lt;= 20 queries[i].length == 2 1 &amp;lt;= Cj.length, Dj.length &amp;lt;= 5 Ai, Bi, Cj, Dj consist of lower case English letters and digits. Solutions Union find. Java C++ Python Go RenderScript TypeScript class Solution { private Map&amp;lt;String, String&amp;gt; p; private Map&amp;lt;String, Double&amp;gt; w; public double[] calcEquation( List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; equations, double[] values, List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; queries) { int n = equations.size(); p = new HashMap&amp;lt;&amp;gt;(); w = new HashMap&amp;lt;&amp;gt;(); for (List&amp;lt;String&amp;gt; e : equations) { p.put(e.get(0), e.get(0)); p.put(e.get(1), e.get(1)); w.put(e.get(0), 1.0); w.put(e.get(1), 1.0); } for (int i = 0; i &amp;lt; n; ++i) { List&amp;lt;String&amp;gt; e = equations.get(i); String a = e.get(0), b = e.get(1); String pa = find(a), pb = find(b); if (Objects.equals(pa, pb)) { continue; } p.put(pa, pb); w.put(pa, w.get(b) * values[i] / w.get(a)); } int m = queries.size(); double[] ans = new double[m]; for (int i = 0; i &amp;lt; m; ++i) { String c = queries.get(i).get(0), d = queries.get(i).get(1); ans[i] = !p.containsKey(c) || !p.containsKey(d) || !Objects.equals(find(c), find(d)) ? -1.0 : w.get(c) / w.get(d); } return ans; } private String find(String x) { if (!Objects.equals(p.get(x), x)) { String origin = p.get(x); p.put(x, find(p.get(x))); w.put(x, w.get(x) * w.get(origin)); } return p.get(x); } } class Solution { public: unordered_map&amp;lt;string, string&amp;gt; p; unordered_map&amp;lt;string, double&amp;gt; w; vector&amp;lt;double&amp;gt; calcEquation(vector&amp;lt;vector&amp;lt;string&amp;gt;&amp;gt;&amp;amp; equations, vector&amp;lt;double&amp;gt;&amp;amp; values, vector&amp;lt;vector&amp;lt;string&amp;gt;&amp;gt;&amp;amp; queries) { int n = equations.size(); for (auto e : equations) { p[e[0]] = e[0]; p[e[1]] = e[1]; w[e[0]] = 1.0; w[e[1]] = 1.0; } for (int i = 0;..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    399 - Evaluate Division | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="399 - Evaluate Division" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-399.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-01-02-399-Evaluate-Division/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-01-02T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"399 - Evaluate Division","dateModified":"2017-01-02T00:00:00-08:00","datePublished":"2017-01-02T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-01-02-399-Evaluate-Division/"},"url":"https://leetcode.ca/2017-01-02-399-Evaluate-Division/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="399-evaluate-division">
+       <a href="solution-399.html">
+        399. Evaluate Division
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an array of variable pairs
+       <code>
+        equations
+       </code>
+       and an array of real numbers
+       <code>
+        values
+       </code>
+       , where
+       <code>
+        equations[i] = [A
+        <sub>
+         i
+        </sub>
+        , B
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       and
+       <code>
+        values[i]
+       </code>
+       represent the equation
+       <code>
+        A
+        <sub>
+         i
+        </sub>
+        / B
+        <sub>
+         i
+        </sub>
+        = values[i]
+       </code>
+       . Each
+       <code>
+        A
+        <sub>
+         i
+        </sub>
+       </code>
+       or
+       <code>
+        B
+        <sub>
+         i
+        </sub>
+       </code>
+       is a string that represents a single variable.
+      </p>
+      <p>
+       You are also given some
+       <code>
+        queries
+       </code>
+       , where
+       <code>
+        queries[j] = [C
+        <sub>
+         j
+        </sub>
+        , D
+        <sub>
+         j
+        </sub>
+        ]
+       </code>
+       represents the
+       <code>
+        j
+        <sup>
+         th
+        </sup>
+       </code>
+       query where you must find the answer for
+       <code>
+        C
+        <sub>
+         j
+        </sub>
+        / D
+        <sub>
+         j
+        </sub>
+        = ?
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the answers to all queries
+       </em>
+       . If a single answer cannot be determined, return
+       <code>
+        -1.0
+       </code>
+       .
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       The input is always valid. You may assume that evaluating the queries will not result in division by zero and that there is no contradiction.
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       The variables that do not occur in the list of equations are undefined, so the answer cannot be determined for them.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
+<strong>Output:</strong> [6.00000,0.50000,-1.00000,1.00000,-1.00000]
+<strong>Explanation:</strong> 
+Given: <em>a / b = 2.0</em>, <em>b / c = 3.0</em>
+queries are: <em>a / c = ?</em>, <em>b / a = ?</em>, <em>a / e = ?</em>, <em>a / a = ?</em>, <em>x / x = ? </em>
+return: [6.0, 0.5, -1.0, 1.0, -1.0 ]
+note: x is undefined =&gt; -1.0</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0], queries = [["a","c"],["c","b"],["bc","cd"],["cd","bc"]]
+<strong>Output:</strong> [3.75000,0.40000,5.00000,0.20000]
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> equations = [["a","b"]], values = [0.5], queries = [["a","b"],["b","a"],["a","c"],["x","y"]]
+<strong>Output:</strong> [0.50000,2.00000,-1.00000,-1.00000]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= equations.length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         equations[i].length == 2
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= A
+         <sub>
+          i
+         </sub>
+         .length, B
+         <sub>
+          i
+         </sub>
+         .length &lt;= 5
+        </code>
+       </li>
+       <li>
+        <code>
+         values.length == equations.length
+        </code>
+       </li>
+       <li>
+        <code>
+         0.0 &lt; values[i] &lt;= 20.0
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= queries.length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         queries[i].length == 2
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= C
+         <sub>
+          j
+         </sub>
+         .length, D
+         <sub>
+          j
+         </sub>
+         .length &lt;= 5
+        </code>
+       </li>
+       <li>
+        <code>
+         A
+         <sub>
+          i
+         </sub>
+         , B
+         <sub>
+          i
+         </sub>
+         , C
+         <sub>
+          j
+         </sub>
+         , D
+         <sub>
+          j
+         </sub>
+        </code>
+        consist of lower case English letters and digits.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       Union find.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8ac98467-20fb-4555-94e5-f2c9877b23c9'}">
+       <li class="uk-active">
+        <a href="solution-399.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-399.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-399.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-399.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-399.html">
+         RenderScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-399.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8ac98467-20fb-4555-94e5-f2c9877b23c9">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">p</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Double</span><span class="o">&gt;</span> <span class="n">w</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">double</span><span class="o">[]</span> <span class="nf">calcEquation</span><span class="o">(</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">equations</span><span class="o">,</span> <span class="kt">double</span><span class="o">[]</span> <span class="n">values</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">queries</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">equations</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">equations</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+            <span class="n">w</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="mf">1.0</span><span class="o">);</span>
+            <span class="n">w</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="mf">1.0</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">equations</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nc">Objects</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">pa</span><span class="o">,</span> <span class="n">pb</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">pa</span><span class="o">,</span> <span class="n">pb</span><span class="o">);</span>
+            <span class="n">w</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">pa</span><span class="o">,</span> <span class="n">w</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">b</span><span class="o">)</span> <span class="o">*</span> <span class="n">values</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">/</span> <span class="n">w</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">a</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">queries</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="kt">double</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="o">[</span><span class="n">m</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">c</span> <span class="o">=</span> <span class="n">queries</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="n">d</span> <span class="o">=</span> <span class="n">queries</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">!</span><span class="n">p</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">c</span><span class="o">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">p</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">d</span><span class="o">)</span> <span class="o">||</span> <span class="o">!</span><span class="nc">Objects</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">find</span><span class="o">(</span><span class="n">c</span><span class="o">),</span> <span class="n">find</span><span class="o">(</span><span class="n">d</span><span class="o">))</span>
+                <span class="o">?</span> <span class="o">-</span><span class="mf">1.0</span>
+                <span class="o">:</span> <span class="n">w</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">c</span><span class="o">)</span> <span class="o">/</span> <span class="n">w</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">d</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="nf">find</span><span class="o">(</span><span class="nc">String</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nc">Objects</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">x</span><span class="o">),</span> <span class="n">x</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">find</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">x</span><span class="o">)));</span>
+            <span class="n">w</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">w</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="o">*</span> <span class="n">w</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">origin</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">;</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">w</span><span class="p">;</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">calcEquation</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">equations</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">values</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">queries</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">equations</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">e</span> <span class="o">:</span> <span class="n">equations</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">equations</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">string</span> <span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">string</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span><span class="p">;</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">*</span> <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">w</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">queries</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">string</span> <span class="n">c</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="n">p</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">||</span> <span class="n">p</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="n">p</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">||</span> <span class="n">find</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">!=</span> <span class="n">find</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">?</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">:</span> <span class="n">w</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">/</span> <span class="n">w</span><span class="p">[</span><span class="n">d</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">string</span> <span class="n">find</span><span class="p">(</span><span class="n">string</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">string</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">*=</span> <span class="n">w</span><span class="p">[</span><span class="n">origin</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calcEquation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">equations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">:</span>
+                <span class="n">origin</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+                <span class="n">w</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">*=</span> <span class="n">w</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+        <span class="n">w</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">equations</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">equations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">pa</span><span class="p">,</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">w</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span> <span class="ow">or</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span> <span class="ow">or</span> <span class="n">find</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">!=</span> <span class="n">find</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">else</span> <span class="n">w</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">/</span> <span class="n">w</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">queries</span>
+        <span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">calcEquation</span><span class="p">(</span><span class="n">equations</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">,</span> <span class="n">values</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">queries</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">float64</span> <span class="p">{</span>
+	<span class="n">p</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span>
+	<span class="n">w</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">equations</span> <span class="p">{</span>
+		<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">p</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
+		<span class="n">w</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">w</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">1.0</span>
+	<span class="p">}</span>
+
+	<span class="k">var</span> <span class="n">find</span> <span class="k">func</span><span class="p">(</span><span class="n">x</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+	<span class="n">find</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">x</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span> <span class="p">{</span>
+			<span class="n">origin</span> <span class="o">:=</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+			<span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+			<span class="n">w</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">*=</span> <span class="n">w</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">values</span> <span class="p">{</span>
+		<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">equations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">],</span> <span class="n">equations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">pa</span><span class="p">,</span> <span class="n">pb</span> <span class="o">:=</span> <span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="n">p</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span>
+		<span class="n">w</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">w</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">var</span> <span class="n">ans</span> <span class="p">[]</span><span class="kt">float64</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">queries</span> <span class="p">{</span>
+		<span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="s">""</span> <span class="o">||</span> <span class="n">p</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">==</span> <span class="s">""</span> <span class="o">||</span> <span class="n">find</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">!=</span> <span class="n">find</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="o">-</span><span class="m">1.0</span><span class="p">)</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">/</span><span class="n">w</span><span class="p">[</span><span class="n">d</span><span class="p">])</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">collections</span><span class="p">::</span><span class="n">HashMap</span><span class="p">;</span>
+
+<span class="nd">#[derive(Debug)]</span>
+<span class="k">pub</span> <span class="k">struct</span> <span class="n">DSUNode</span> <span class="p">{</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">pub</span> <span class="k">struct</span> <span class="n">DisjointSetUnion</span> <span class="p">{</span>
+    <span class="n">nodes</span><span class="p">:</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="n">DSUNode</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">DisjointSetUnion</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">equations</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">DisjointSetUnion</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">nodes</span> <span class="o">=</span> <span class="nn">HashMap</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+        <span class="k">for</span> <span class="n">equation</span> <span class="k">in</span> <span class="n">equations</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">iter</span> <span class="k">in</span> <span class="n">equation</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+                <span class="n">nodes</span><span class="nf">.insert</span><span class="p">(</span><span class="n">iter</span><span class="nf">.clone</span><span class="p">(),</span> <span class="n">DSUNode</span> <span class="p">{</span>
+                    <span class="n">parent</span><span class="p">:</span> <span class="n">iter</span><span class="nf">.clone</span><span class="p">(),</span>
+                    <span class="n">weight</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">DisjointSetUnion</span> <span class="p">{</span> <span class="n">nodes</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">find</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">String</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">origin</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="py">.parent</span><span class="nf">.clone</span><span class="p">();</span>
+        <span class="k">if</span> <span class="n">origin</span> <span class="o">==</span> <span class="o">*</span><span class="n">v</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">origin</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">let</span> <span class="n">root</span> <span class="o">=</span> <span class="k">self</span><span class="nf">.find</span><span class="p">(</span><span class="o">&amp;</span><span class="n">origin</span><span class="p">);</span>
+        <span class="k">self</span><span class="py">.nodes</span><span class="nf">.get_mut</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">()</span><span class="py">.parent</span> <span class="o">=</span> <span class="n">root</span><span class="nf">.clone</span><span class="p">();</span>
+        <span class="k">self</span><span class="py">.nodes</span><span class="nf">.get_mut</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">()</span><span class="py">.weight</span> <span class="o">*=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="o">&amp;</span><span class="n">origin</span><span class="p">]</span><span class="py">.weight</span><span class="p">;</span>
+        <span class="n">root</span>
+    <span class="p">}</span>
+
+    <span class="k">pub</span> <span class="k">fn</span> <span class="k">union</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">String</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">String</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">pa</span> <span class="o">=</span> <span class="k">self</span><span class="nf">.find</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+        <span class="k">let</span> <span class="n">pb</span> <span class="o">=</span> <span class="k">self</span><span class="nf">.find</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+        <span class="k">if</span> <span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">let</span> <span class="p">(</span><span class="n">wa</span><span class="p">,</span> <span class="n">wb</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="py">.weight</span><span class="p">,</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="py">.weight</span><span class="p">);</span>
+        <span class="k">self</span><span class="py">.nodes</span><span class="nf">.get_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pa</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">()</span><span class="py">.parent</span> <span class="o">=</span> <span class="n">pb</span><span class="p">;</span>
+        <span class="k">self</span><span class="py">.nodes</span><span class="nf">.get_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pa</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">()</span><span class="py">.weight</span> <span class="o">=</span> <span class="p">(</span><span class="n">wb</span> <span class="o">*</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="n">wa</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">exist</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.nodes</span><span class="nf">.contains_key</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">calc_value</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">String</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="o">!</span><span class="k">self</span><span class="nf">.exist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">||</span> <span class="o">!</span><span class="k">self</span><span class="nf">.exist</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">||</span> <span class="k">self</span><span class="nf">.find</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="k">self</span><span class="nf">.find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">-</span><span class="mf">1.0</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="n">wa</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="py">.weight</span><span class="p">;</span>
+            <span class="k">let</span> <span class="n">wb</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="py">.weight</span><span class="p">;</span>
+            <span class="n">wa</span> <span class="o">/</span> <span class="n">wb</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">calc_equation</span><span class="p">(</span>
+        <span class="n">equations</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">values</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">f64</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="n">queries</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;&gt;</span>
+    <span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">f64</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">dsu</span> <span class="o">=</span> <span class="nn">DisjointSetUnion</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">equations</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">)</span> <span class="k">in</span> <span class="n">values</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.enumerate</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">equations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">equations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="n">dsu</span><span class="nf">.union</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">ans</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[];</span>
+        <span class="k">for</span> <span class="n">querie</span> <span class="k">in</span> <span class="n">queries</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">querie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">querie</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="n">ans</span><span class="nf">.push</span><span class="p">(</span><span class="n">dsu</span><span class="nf">.calc_value</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="n">ans</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">calcEquation</span><span class="p">(</span><span class="nx">equations</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][],</span> <span class="nx">values</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">queries</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][]):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">g</span><span class="p">:</span> <span class="nb">Record</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="p">[</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="p">][]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="kd">const</span> <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">length</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">equations</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">]</span> <span class="o">=</span> <span class="nx">equations</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">??=</span> <span class="p">[]).</span><span class="nx">push</span><span class="p">([</span><span class="nx">b</span><span class="p">,</span> <span class="nx">values</span><span class="p">[</span><span class="nx">i</span><span class="p">]]);</span>
+        <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">b</span><span class="p">]</span> <span class="o">??=</span> <span class="p">[]).</span><span class="nx">push</span><span class="p">([</span><span class="nx">a</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="nx">values</span><span class="p">[</span><span class="nx">i</span><span class="p">]]);</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">]</span> <span class="o">=</span> <span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="kd">const</span> <span class="nx">vis</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="kd">const</span> <span class="nx">q</span><span class="p">:</span> <span class="p">[</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="p">][]</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">]];</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">g</span><span class="p">[</span><span class="nx">c</span><span class="p">]</span> <span class="o">||</span> <span class="o">!</span><span class="nx">g</span><span class="p">[</span><span class="nx">d</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">c</span> <span class="o">===</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">current</span><span class="p">,</span> <span class="nx">v</span><span class="p">]</span> <span class="k">of</span> <span class="nx">q</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">vis</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">current</span><span class="p">))</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="nx">vis</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">current</span><span class="p">);</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">intermediate</span><span class="p">,</span> <span class="nx">multiplier</span><span class="p">]</span> <span class="k">of</span> <span class="nx">g</span><span class="p">[</span><span class="nx">current</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">vis</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">intermediate</span><span class="p">))</span> <span class="k">continue</span><span class="p">;</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="nx">intermediate</span> <span class="o">===</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">v</span> <span class="o">*</span> <span class="nx">multiplier</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="nx">q</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">intermediate</span><span class="p">,</span> <span class="nx">v</span> <span class="o">*</span> <span class="nx">multiplier</span><span class="p">]);</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-399.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

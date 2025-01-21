@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-314.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-314.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>314 - Binary Tree Vertical Order Traversal</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 314. Binary Tree Vertical Order Traversal Description Given the root of a binary tree, return the vertical order traversal of its nodes&amp;#39; values. (i.e., from top to bottom, column by column). If two nodes are in the same row and column, the order should be...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-314.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-314.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-314.html" rel="stylesheet"/>
+   <link href="solution-314.html" rel="stylesheet"/>
+   <link href="solution-314.html" rel="stylesheet"/>
+   <link href="solution-314.html" rel="stylesheet"/>
+   <link href="solution-314.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="314 - Binary Tree Vertical Order Traversal" property="og:title"/>
+   <meta content="Leetcode 314. Binary Tree Vertical Order Traversal Description Given the root of a binary tree, return the vertical order traversal of its nodes&amp;#39; values. (i.e., from top to bottom, column by column). If two nodes are in the same row and column, the order should be from left to right. &amp;nbsp; Example 1: Input: root = [3,9,20,null,null,15,7] Output: [[9],[3,15],[20],[7]] Example 2: Input: root = [3,9,8,4,0,1,7] Output: [[4],[9],[3,0,1],[8],[7]] Example 3: Input: root = [3,9,8,4,0,1,7,null,null,null,2,5] Output: [[4],[9,5],[3,0,1],[8,2],[7]] &amp;nbsp; Constraints: The number of nodes in the tree is in the range [0, 100]. -100 &amp;lt;= Node.val &amp;lt;= 100 Solutions Solution 1: DFS DFS traverses the binary tree, recording the value, depth, and horizontal offset of each node. Then sort all nodes by horizontal offset from small to large, then by depth from small to large, and finally group by horizontal offset. The time complexity is $O(n\log n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the binary tree. Solution 2: BFS A better approach to this problem should be BFS, traversing from top to bottom level by level. The time complexity is $O(n\log n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the binary tree. Java C++ Python Go /** * Definition for a binary tree node. * public class TreeNode { * int val; * TreeNode left; * TreeNode right; * TreeNode() {} * TreeNode(int val) { this.val = val; } * TreeNode(int val, TreeNode left, TreeNode right) { * this.val = val; * this.left = left; * this.right = right; * } * } */ class Solution { public List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; verticalOrder(TreeNode root) { List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); if (root == null) { return ans; } Deque&amp;lt;Pair&amp;lt;TreeNode, Integer&amp;gt;&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); q.offer(new Pair&amp;lt;&amp;gt;(root, 0)); TreeMap&amp;lt;Integer, List&amp;lt;Integer&amp;gt;&amp;gt; d = new TreeMap&amp;lt;&amp;gt;(); while (!q.isEmpty()) { for (int n = q.size(); n &amp;gt; 0; --n) { var p = q.pollFirst(); root = p.getKey(); int offset = p.getValue(); d.computeIfAbsent(offset, k -&amp;gt; new ArrayList()).add(root.val); if (root.left != null) { q.offer(new Pair&amp;lt;&amp;gt;(root.left, offset - 1)); } if (root.right != null) { q.offer(new Pair&amp;lt;&amp;gt;(root.right, offset + 1)); } } } return new ArrayList&amp;lt;&amp;gt;(d.values()); } } /** * Definition for a binary tree node. * struct TreeNode { * int val; * TreeNode *left; * TreeNode *right; * TreeNode() : val(0), left(nullptr), right(nullptr) {} * TreeNode(int x) : val(x), left(nullptr), right(nullptr) {} * TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {} * }; */ class Solution { public: vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; verticalOrder(TreeNode* root) { vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; ans; if (!root) return ans; map&amp;lt;int, vector&amp;lt;int&amp;gt;&amp;gt; d; queue&amp;lt;pair&amp;lt;TreeNode*, int&amp;gt;&amp;gt; q{ { {root, 0} } }; while (!q.empty()) { for (int n = q.size(); n; --n) { auto p = q.front(); q.pop(); root = p.first; int offset = p.second; d[offset].push_back(root-&amp;gt;val); if (root-&amp;gt;left) q.push({root-&amp;gt;left, offset - 1}); if (root-&amp;gt;right) q.push({root-&amp;gt;right, offset + 1}); } } for (auto&amp;amp; [_, v] : d) { ans.push_back(v); } return ans; } }; # Definition for a binary tree node. # class..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-10-09T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-10-09-314-Binary-Tree-Vertical-Order-Traversal/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-314.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="314 - Binary Tree Vertical Order Traversal" property="twitter:title"/>
+   <meta content="Leetcode 314. Binary Tree Vertical Order Traversal Description Given the root of a binary tree, return the vertical order traversal of its nodes&amp;#39; values. (i.e., from top to bottom, column by column). If two nodes are in the same row and column, the order should be from left to right. &amp;nbsp; Example 1: Input: root = [3,9,20,null,null,15,7] Output: [[9],[3,15],[20],[7]] Example 2: Input: root = [3,9,8,4,0,1,7] Output: [[4],[9],[3,0,1],[8],[7]] Example 3: Input: root = [3,9,8,4,0,1,7,null,null,null,2,5] Output: [[4],[9,5],[3,0,1],[8,2],[7]] &amp;nbsp; Constraints: The number of nodes in the tree is in the range [0, 100]. -100 &amp;lt;= Node.val &amp;lt;= 100 Solutions Solution 1: DFS DFS traverses the binary tree, recording the value, depth, and horizontal offset of each node. Then sort all nodes by horizontal offset from small to large, then by depth from small to large, and finally group by horizontal offset. The time complexity is $O(n\log n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the binary tree. Solution 2: BFS A better approach to this problem should be BFS, traversing from top to bottom level by level. The time complexity is $O(n\log n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the binary tree. Java C++ Python Go /** * Definition for a binary tree node. * public class TreeNode { * int val; * TreeNode left; * TreeNode right; * TreeNode() {} * TreeNode(int val) { this.val = val; } * TreeNode(int val, TreeNode left, TreeNode right) { * this.val = val; * this.left = left; * this.right = right; * } * } */ class Solution { public List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; verticalOrder(TreeNode root) { List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); if (root == null) { return ans; } Deque&amp;lt;Pair&amp;lt;TreeNode, Integer&amp;gt;&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); q.offer(new Pair&amp;lt;&amp;gt;(root, 0)); TreeMap&amp;lt;Integer, List&amp;lt;Integer&amp;gt;&amp;gt; d = new TreeMap&amp;lt;&amp;gt;(); while (!q.isEmpty()) { for (int n = q.size(); n &amp;gt; 0; --n) { var p = q.pollFirst(); root = p.getKey(); int offset = p.getValue(); d.computeIfAbsent(offset, k -&amp;gt; new ArrayList()).add(root.val); if (root.left != null) { q.offer(new Pair&amp;lt;&amp;gt;(root.left, offset - 1)); } if (root.right != null) { q.offer(new Pair&amp;lt;&amp;gt;(root.right, offset + 1)); } } } return new ArrayList&amp;lt;&amp;gt;(d.values()); } } /** * Definition for a binary tree node. * struct TreeNode { * int val; * TreeNode *left; * TreeNode *right; * TreeNode() : val(0), left(nullptr), right(nullptr) {} * TreeNode(int x) : val(x), left(nullptr), right(nullptr) {} * TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {} * }; */ class Solution { public: vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; verticalOrder(TreeNode* root) { vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; ans; if (!root) return ans; map&amp;lt;int, vector&amp;lt;int&amp;gt;&amp;gt; d; queue&amp;lt;pair&amp;lt;TreeNode*, int&amp;gt;&amp;gt; q{ { {root, 0} } }; while (!q.empty()) { for (int n = q.size(); n; --n) { auto p = q.front(); q.pop(); root = p.first; int offset = p.second; d[offset].push_back(root-&amp;gt;val); if (root-&amp;gt;left) q.push({root-&amp;gt;left, offset - 1}); if (root-&amp;gt;right) q.push({root-&amp;gt;right, offset + 1}); } } for (auto&amp;amp; [_, v] : d) { ans.push_back(v); } return ans; } }; # Definition for a binary tree node. # class..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    314 - Binary Tree Vertical Order Traversal | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="314 - Binary Tree Vertical Order Traversal" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-314.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-10-09-314-Binary-Tree-Vertical-Order-Traversal/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-10-09T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"314 - Binary Tree Vertical Order Traversal","dateModified":"2016-10-09T00:00:00-07:00","datePublished":"2016-10-09T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-10-09-314-Binary-Tree-Vertical-Order-Traversal/"},"url":"https://leetcode.ca/2016-10-09-314-Binary-Tree-Vertical-Order-Traversal/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="314-binary-tree-vertical-order-traversal">
+       <a href="solution-314.html">
+        314. Binary Tree Vertical Order Traversal
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given the
+       <code>
+        root
+       </code>
+       of a binary tree, return
+       <em>
+        <strong>
+         the vertical order traversal
+        </strong>
+        of its nodes' values
+       </em>
+       . (i.e., from top to bottom, column by column).
+      </p>
+      <p>
+       If two nodes are in the same row and column, the order should be from
+       <strong>
+        left to right
+       </strong>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0300-0399/0314.Binary%20Tree%20Vertical%20Order%20Traversal/images/vtree1.jpg" style="width: 282px; height: 301px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> root = [3,9,20,null,null,15,7]
+<strong>Output:</strong> [[9],[3,15],[20],[7]]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0300-0399/0314.Binary%20Tree%20Vertical%20Order%20Traversal/images/vtree2-1.jpg" style="width: 462px; height: 222px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> root = [3,9,8,4,0,1,7]
+<strong>Output:</strong> [[4],[9],[3,0,1],[8],[7]]
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0300-0399/0314.Binary%20Tree%20Vertical%20Order%20Traversal/images/vtree2.jpg" style="width: 462px; height: 302px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> root = [3,9,8,4,0,1,7,null,null,null,2,5]
+<strong>Output:</strong> [[4],[9,5],[3,0,1],[8,2],[7]]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        The number of nodes in the tree is in the range
+        <code>
+         [0, 100]
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         -100 &lt;= Node.val &lt;= 100
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: DFS
+       </strong>
+      </p>
+      <p>
+       DFS traverses the binary tree, recording the value, depth, and horizontal offset of each node. Then sort all nodes by horizontal offset from small to large, then by depth from small to large, and finally group by horizontal offset.
+      </p>
+      <p>
+       The time complexity is $O(n\log n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the binary tree.
+      </p>
+      <p>
+       <strong>
+        Solution 2: BFS
+       </strong>
+      </p>
+      <p>
+       A better approach to this problem should be BFS, traversing from top to bottom level by level.
+      </p>
+      <p>
+       The time complexity is $O(n\log n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the binary tree.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#da6b0ef7-f344-48e5-a692-1f8ad31d6329'}">
+       <li class="uk-active">
+        <a href="solution-314.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-314.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-314.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-314.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="da6b0ef7-f344-48e5-a692-1f8ad31d6329">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">verticalOrder</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">TreeNode</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">root</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span>
+        <span class="nc">TreeMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="o">--</span><span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">var</span> <span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">();</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                <span class="n">d</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">offset</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">()).</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">offset</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">d</span><span class="o">.</span><span class="na">values</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">verticalOrder</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">)</span> <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">d</span><span class="p">;</span>
+        <span class="n">queue</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">{</span> <span class="p">{</span> <span class="p">{</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span> <span class="p">}</span> <span class="p">};</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">n</span><span class="p">;</span> <span class="o">--</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">offset</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">offset</span> <span class="o">-</span> <span class="mi">1</span><span class="p">});</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">:</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+</span>
+<span class="s">'''
+&gt;&gt;&gt; d = {1:'a', -1:'b', 10:'c', -100:'d'}
+&gt;&gt;&gt;
+&gt;&gt;&gt; d.items()
+{1: 'a', 10: 'c', -100: 'd', -1: 'b'}
+
+&gt;&gt;&gt; ds = sorted(d.items())
+&gt;&gt;&gt; ds
+[(-100, 'd'), (-1, 'b'), (1, 'a'), (10, 'c')]
+
+&gt;&gt;&gt; sorted(d.items(), key=lambda l: l[1])
+[(1, 'a'), (-1, 'b'), (10, 'c'), (-100, 'd')]
+&gt;&gt;&gt; dict(sorted(d.items(), key=lambda l: l[1]))
+{1: 'a', 10: 'c', -100: 'd', -1: 'b'}
+
+&gt;&gt;&gt; [v for i,v in sorted(d.items(), key=lambda l: l[0])]
+['d', 'b', 'a', 'c']
+'''</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">verticalOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)):</span>
+                <span class="n">root</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">offset</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">val</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">:</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="n">offset</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">:</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">items</span><span class="p">())]</span>
+
+<span class="c1">###############
+</span>
+<span class="kn">from</span> <span class="nn">sortedcontainers</span> <span class="kn">import</span> <span class="n">SortedDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="c1"># similar to above, but use existing data structure
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">verticalOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="c1"># Use SortedDict to automatically sort by column index
+</span>        <span class="n">sorted_dict</span> <span class="o">=</span> <span class="n">SortedDict</span><span class="p">()</span>
+
+        <span class="c1"># Queue for breadth-first search; stores pairs of (node, column_index)
+</span>        <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="n">root</span><span class="p">)])</span>
+
+        <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sorted_dict</span><span class="p">:</span>
+                <span class="n">sorted_dict</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sorted_dict</span><span class="p">[</span><span class="n">column</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">)</span>
+
+            <span class="c1"># Add left and right children to the queue
+</span>            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">:</span>
+                <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="n">column</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">:</span>
+                <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">column</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Return the values from sorted_dict as a list of lists
+</span>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="c1">###########
+</span>
+<span class="c1"># another SortedDict, but different handling on None node, before enqueue vs after enqueue
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">verticalOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="c1"># Initialize a SortedDict to maintain columns in sorted order.
+</span>        <span class="n">column_table</span> <span class="o">=</span> <span class="n">SortedDict</span><span class="p">()</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>  <span class="c1"># (node, column_index)
+</span>
+        <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">column_table</span><span class="p">:</span>
+                    <span class="n">column_table</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">column_table</span><span class="p">[</span><span class="n">column</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">)</span>
+
+                <span class="c1"># Add left and right children to the queue.
+</span>                <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="n">column</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">column</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Extract the values from the sorted dictionary and return them.
+</span>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">column_table</span><span class="p">.</span><span class="n">values</span><span class="p">())</span>
+
+
+
+<span class="c1">#################
+</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">verticalOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+    <span class="s">"""
+    :type root: TreeNode
+    :rtype: List[List[int]]
+    """</span>
+
+    <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span> <span class="c1"># i -&gt; depth, j -&gt; vertical-shift
+</span>      <span class="k">if</span> <span class="n">p</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">append</span><span class="p">((</span><span class="n">p</span><span class="p">.</span><span class="n">val</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">leftMost</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">leftMost</span><span class="p">)</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">leftMost</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"inf"</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">leftMost</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+        <span class="k">break</span>
+      <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+      <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */</span>
+<span class="k">func</span> <span class="n">verticalOrder</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="p">[][]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">ans</span>
+	<span class="p">}</span>
+	<span class="n">d</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">][]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="n">q</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">pair</span><span class="p">{</span><span class="n">pair</span><span class="p">{</span><span class="n">root</span><span class="p">,</span> <span class="m">0</span><span class="p">}</span> <span class="p">}</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">);</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">;</span> <span class="n">n</span><span class="o">--</span> <span class="p">{</span>
+			<span class="n">p</span> <span class="o">:=</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+			<span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+			<span class="n">root</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">node</span>
+			<span class="n">offset</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">offset</span>
+			<span class="n">d</span><span class="p">[</span><span class="n">offset</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">offset</span><span class="p">],</span> <span class="n">root</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">Left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">pair</span><span class="p">{</span><span class="n">root</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span> <span class="n">offset</span> <span class="o">-</span> <span class="m">1</span><span class="p">})</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">Right</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">pair</span><span class="p">{</span><span class="n">root</span><span class="o">.</span><span class="n">Right</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="m">1</span><span class="p">})</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">idx</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">d</span> <span class="p">{</span>
+		<span class="n">idx</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">idx</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">pair</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">node</span>   <span class="o">*</span><span class="n">TreeNode</span>
+	<span class="n">offset</span> <span class="kt">int</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-314.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

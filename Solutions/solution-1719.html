@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1719.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1719.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1719 - Number Of Ways To Reconstruct A Tree</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1719. Number Of Ways To Reconstruct A Tree Description You are given an array pairs, where pairs[i] = [xi, yi], and: There are no duplicates. xi &amp;lt; yi Let ways be the number of rooted trees that satisfy the following conditions: The tree consists of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1719.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1719.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1719.html" rel="stylesheet"/>
+   <link href="solution-1719.html" rel="stylesheet"/>
+   <link href="solution-1719.html" rel="stylesheet"/>
+   <link href="solution-1719.html" rel="stylesheet"/>
+   <link href="solution-1719.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1719 - Number Of Ways To Reconstruct A Tree" property="og:title"/>
+   <meta content="Leetcode 1719. Number Of Ways To Reconstruct A Tree Description You are given an array pairs, where pairs[i] = [xi, yi], and: There are no duplicates. xi &amp;lt; yi Let ways be the number of rooted trees that satisfy the following conditions: The tree consists of nodes whose values appeared in pairs. A pair [xi, yi] exists in pairs if and only if xi is an ancestor of yi or yi is an ancestor of xi. Note: the tree does not have to be a binary tree. Two ways are considered to be different if there is at least one node that has different parents in both ways. Return: 0 if ways == 0 1 if ways == 1 2 if ways &amp;gt; 1 A rooted tree is a tree that has a single root node, and all edges are oriented to be outgoing from the root. An ancestor of a node is any node on the path from the root to that node (excluding the node itself). The root has no ancestors. &amp;nbsp; Example 1: Input: pairs = [[1,2],[2,3]] Output: 1 Explanation: There is exactly one valid rooted tree, which is shown in the above figure. Example 2: Input: pairs = [[1,2],[2,3],[1,3]] Output: 2 Explanation: There are multiple valid rooted trees. Three of them are shown in the above figures. Example 3: Input: pairs = [[1,2],[2,3],[2,4],[1,5]] Output: 0 Explanation: There are no valid rooted trees. &amp;nbsp; Constraints: 1 &amp;lt;= pairs.length &amp;lt;= 105 1 &amp;lt;= xi &amp;lt; yi &amp;lt;= 500 The elements in pairs are unique. Solutions Java C++ Python Go class Solution { public int checkWays(int[][] pairs) { boolean[][] g = new boolean[510][510]; List&amp;lt;Integer&amp;gt;[] v = new List[510]; Arrays.setAll(v, k -&amp;gt; new ArrayList&amp;lt;&amp;gt;()); for (int[] p : pairs) { int x = p[0], y = p[1]; g[x][y] = true; g[y][x] = true; v[x].add(y); v[y].add(x); } List&amp;lt;Integer&amp;gt; nodes = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; 510; ++i) { if (!v[i].isEmpty()) { nodes.add(i); g[i][i] = true; } } nodes.sort(Comparator.comparingInt(a -&amp;gt; v[a].size())); boolean equal = false; int root = 0; for (int i = 0; i &amp;lt; nodes.size(); ++i) { int x = nodes.get(i); int j = i + 1; for (; j &amp;lt; nodes.size() &amp;amp;&amp;amp; !g[x][nodes.get(j)]; ++j) ; if (j &amp;lt; nodes.size()) { int y = nodes.get(j); if (v[x].size() == v[y].size()) { equal = true; } for (int z : v[x]) { if (!g[y][z]) { return 0; } } } else { ++root; } } if (root &amp;gt; 1) { return 0; } return equal ? 2 : 1; } } class Solution { public: int checkWays(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; pairs) { vector&amp;lt;vector&amp;lt;bool&amp;gt;&amp;gt; g(510, vector&amp;lt;bool&amp;gt;(510)); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; v(510); for (auto&amp;amp; p : pairs) { int x = p[0], y = p[1]; g[x][y] = g[y][x] = 1; v[x].push_back(y); v[y].push_back(x); } vector&amp;lt;int&amp;gt; nodes; for (int i = 1; i &amp;lt;= 500; ++i) { if (v[i].size()) { nodes.push_back(i); g[i][i] = 1; } } sort(nodes.begin(), nodes.end(), [&amp;amp;](int x, int y) -&amp;gt; bool { return v[x].size() &amp;lt; v[y].size(); }); bool equal = 0;..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2020-08-14T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2020-08-14-1719-Number-Of-Ways-To-Reconstruct-A-Tree/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1719.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1719 - Number Of Ways To Reconstruct A Tree" property="twitter:title"/>
+   <meta content="Leetcode 1719. Number Of Ways To Reconstruct A Tree Description You are given an array pairs, where pairs[i] = [xi, yi], and: There are no duplicates. xi &amp;lt; yi Let ways be the number of rooted trees that satisfy the following conditions: The tree consists of nodes whose values appeared in pairs. A pair [xi, yi] exists in pairs if and only if xi is an ancestor of yi or yi is an ancestor of xi. Note: the tree does not have to be a binary tree. Two ways are considered to be different if there is at least one node that has different parents in both ways. Return: 0 if ways == 0 1 if ways == 1 2 if ways &amp;gt; 1 A rooted tree is a tree that has a single root node, and all edges are oriented to be outgoing from the root. An ancestor of a node is any node on the path from the root to that node (excluding the node itself). The root has no ancestors. &amp;nbsp; Example 1: Input: pairs = [[1,2],[2,3]] Output: 1 Explanation: There is exactly one valid rooted tree, which is shown in the above figure. Example 2: Input: pairs = [[1,2],[2,3],[1,3]] Output: 2 Explanation: There are multiple valid rooted trees. Three of them are shown in the above figures. Example 3: Input: pairs = [[1,2],[2,3],[2,4],[1,5]] Output: 0 Explanation: There are no valid rooted trees. &amp;nbsp; Constraints: 1 &amp;lt;= pairs.length &amp;lt;= 105 1 &amp;lt;= xi &amp;lt; yi &amp;lt;= 500 The elements in pairs are unique. Solutions Java C++ Python Go class Solution { public int checkWays(int[][] pairs) { boolean[][] g = new boolean[510][510]; List&amp;lt;Integer&amp;gt;[] v = new List[510]; Arrays.setAll(v, k -&amp;gt; new ArrayList&amp;lt;&amp;gt;()); for (int[] p : pairs) { int x = p[0], y = p[1]; g[x][y] = true; g[y][x] = true; v[x].add(y); v[y].add(x); } List&amp;lt;Integer&amp;gt; nodes = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; 510; ++i) { if (!v[i].isEmpty()) { nodes.add(i); g[i][i] = true; } } nodes.sort(Comparator.comparingInt(a -&amp;gt; v[a].size())); boolean equal = false; int root = 0; for (int i = 0; i &amp;lt; nodes.size(); ++i) { int x = nodes.get(i); int j = i + 1; for (; j &amp;lt; nodes.size() &amp;amp;&amp;amp; !g[x][nodes.get(j)]; ++j) ; if (j &amp;lt; nodes.size()) { int y = nodes.get(j); if (v[x].size() == v[y].size()) { equal = true; } for (int z : v[x]) { if (!g[y][z]) { return 0; } } } else { ++root; } } if (root &amp;gt; 1) { return 0; } return equal ? 2 : 1; } } class Solution { public: int checkWays(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; pairs) { vector&amp;lt;vector&amp;lt;bool&amp;gt;&amp;gt; g(510, vector&amp;lt;bool&amp;gt;(510)); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; v(510); for (auto&amp;amp; p : pairs) { int x = p[0], y = p[1]; g[x][y] = g[y][x] = 1; v[x].push_back(y); v[y].push_back(x); } vector&amp;lt;int&amp;gt; nodes; for (int i = 1; i &amp;lt;= 500; ++i) { if (v[i].size()) { nodes.push_back(i); g[i][i] = 1; } } sort(nodes.begin(), nodes.end(), [&amp;amp;](int x, int y) -&amp;gt; bool { return v[x].size() &amp;lt; v[y].size(); }); bool equal = 0;..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1719 - Number Of Ways To Reconstruct A Tree | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1719 - Number Of Ways To Reconstruct A Tree" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1719.html" rel="canonical">
+          <meta content="https://leetcode.ca/2020-08-14-1719-Number-Of-Ways-To-Reconstruct-A-Tree/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2020-08-14T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1719 - Number Of Ways To Reconstruct A Tree","dateModified":"2020-08-14T00:00:00-07:00","datePublished":"2020-08-14T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2020-08-14-1719-Number-Of-Ways-To-Reconstruct-A-Tree/"},"url":"https://leetcode.ca/2020-08-14-1719-Number-Of-Ways-To-Reconstruct-A-Tree/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1719-number-of-ways-to-reconstruct-a-tree">
+       <a href="solution-1719.html">
+        1719. Number Of Ways To Reconstruct A Tree
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an array
+       <code>
+        pairs
+       </code>
+       , where
+       <code>
+        pairs[i] = [x
+        <sub>
+         i
+        </sub>
+        , y
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       , and:
+      </p>
+      <ul>
+       <li>
+        There are no duplicates.
+       </li>
+       <li>
+        <code>
+         x
+         <sub>
+          i
+         </sub>
+         &lt; y
+         <sub>
+          i
+         </sub>
+        </code>
+       </li>
+      </ul>
+      <p>
+       Let
+       <code>
+        ways
+       </code>
+       be the number of rooted trees that satisfy the following conditions:
+      </p>
+      <ul>
+       <li>
+        The tree consists of nodes whose values appeared in
+        <code>
+         pairs
+        </code>
+        .
+       </li>
+       <li>
+        A pair
+        <code>
+         [x
+         <sub>
+          i
+         </sub>
+         , y
+         <sub>
+          i
+         </sub>
+         ]
+        </code>
+        exists in
+        <code>
+         pairs
+        </code>
+        <strong>
+         if and only if
+        </strong>
+        <code>
+         x
+         <sub>
+          i
+         </sub>
+        </code>
+        is an ancestor of
+        <code>
+         y
+         <sub>
+          i
+         </sub>
+        </code>
+        or
+        <code>
+         y
+         <sub>
+          i
+         </sub>
+        </code>
+        is an ancestor of
+        <code>
+         x
+         <sub>
+          i
+         </sub>
+        </code>
+        .
+       </li>
+       <li>
+        <strong>
+         Note:
+        </strong>
+        the tree does not have to be a binary tree.
+       </li>
+      </ul>
+      <p>
+       Two ways are considered to be different if there is at least one node that has different parents in both ways.
+      </p>
+      <p>
+       Return:
+      </p>
+      <ul>
+       <li>
+        <code>
+         0
+        </code>
+        if
+        <code>
+         ways == 0
+        </code>
+       </li>
+       <li>
+        <code>
+         1
+        </code>
+        if
+        <code>
+         ways == 1
+        </code>
+       </li>
+       <li>
+        <code>
+         2
+        </code>
+        if
+        <code>
+         ways &gt; 1
+        </code>
+       </li>
+      </ul>
+      <p>
+       A
+       <strong>
+        rooted tree
+       </strong>
+       is a tree that has a single root node, and all edges are oriented to be outgoing from the root.
+      </p>
+      <p>
+       An
+       <strong>
+        ancestor
+       </strong>
+       of a node is any node on the path from the root to that node (excluding the node itself). The root has no ancestors.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1700-1799/1719.Number%20Of%20Ways%20To%20Reconstruct%20A%20Tree/images/trees2.png" style="width: 208px; height: 221px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> pairs = [[1,2],[2,3]]
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> There is exactly one valid rooted tree, which is shown in the above figure.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1700-1799/1719.Number%20Of%20Ways%20To%20Reconstruct%20A%20Tree/images/tree.png" style="width: 234px; height: 241px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> pairs = [[1,2],[2,3],[1,3]]
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> There are multiple valid rooted trees. Three of them are shown in the above figures.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> pairs = [[1,2],[2,3],[2,4],[1,5]]
+<strong>Output:</strong> 0
+<strong>Explanation:</strong> There are no valid rooted trees.</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= pairs.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= x
+         <sub>
+          i
+         </sub>
+         &lt; y
+         <sub>
+          i
+         </sub>
+         &lt;= 500
+        </code>
+       </li>
+       <li>
+        The elements in
+        <code>
+         pairs
+        </code>
+        are unique.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8bc37c15-6694-4b43-a553-dec7c7c577d5'}">
+       <li class="uk-active">
+        <a href="solution-1719.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1719.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1719.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1719.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8bc37c15-6694-4b43-a553-dec7c7c577d5">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">checkWays</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">pairs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">510</span><span class="o">][</span><span class="mi">510</span><span class="o">];</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">v</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="mi">510</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">setAll</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">p</span> <span class="o">:</span> <span class="n">pairs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">y</span><span class="o">][</span><span class="n">x</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">v</span><span class="o">[</span><span class="n">x</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="n">y</span><span class="o">);</span>
+            <span class="n">v</span><span class="o">[</span><span class="n">y</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">510</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">v</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="nc">Comparator</span><span class="o">.</span><span class="na">comparingInt</span><span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">v</span><span class="o">[</span><span class="n">a</span><span class="o">].</span><span class="na">size</span><span class="o">()));</span>
+        <span class="kt">boolean</span> <span class="n">equal</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">root</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nodes</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nodes</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">g</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">nodes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">)];</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span>
+                <span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">nodes</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">v</span><span class="o">[</span><span class="n">x</span><span class="o">].</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">v</span><span class="o">[</span><span class="n">y</span><span class="o">].</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="n">equal</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">z</span> <span class="o">:</span> <span class="n">v</span><span class="o">[</span><span class="n">x</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">g</span><span class="o">[</span><span class="n">y</span><span class="o">][</span><span class="n">z</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">root</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">equal</span> <span class="o">?</span> <span class="mi">2</span> <span class="o">:</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">checkWays</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">pairs</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span> <span class="n">g</span><span class="p">(</span><span class="mi">510</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">510</span><span class="p">));</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">510</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">p</span> <span class="o">:</span> <span class="n">pairs</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+            <span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">nodes</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">500</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">nodes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">nodes</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nodes</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="p">});</span>
+        <span class="kt">bool</span> <span class="n">equal</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">root</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nodes</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nodes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">]];</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">nodes</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">size</span><span class="p">())</span> <span class="n">equal</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">z</span> <span class="o">:</span> <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">g</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">])</span>
+                        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span>
+                <span class="o">++</span><span class="n">root</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">equal</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">checkWays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pairs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="mi">510</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">510</span><span class="p">)]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">510</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">nodes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">nodes</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span>
+        <span class="n">equal</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">]]:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
+                    <span class="n">equal</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">g</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">]:</span>
+                        <span class="k">return</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">root</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">equal</span> <span class="k">else</span> <span class="mi">1</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">checkWays</span><span class="p">(</span><span class="n">pairs</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">bool</span><span class="p">,</span> <span class="m">510</span><span class="p">)</span>
+	<span class="n">v</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="m">510</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="m">510</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">pairs</span> <span class="p">{</span>
+		<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+		<span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">var</span> <span class="n">nodes</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="m">500</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">nodes</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+			<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span>
+	<span class="p">})</span>
+	<span class="n">equal</span> <span class="o">:=</span> <span class="no">false</span>
+	<span class="n">root</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nodes</span> <span class="p">{</span>
+		<span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="k">for</span> <span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">]];</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">y</span> <span class="o">:=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">])</span> <span class="p">{</span>
+				<span class="n">equal</span> <span class="o">=</span> <span class="no">true</span>
+			<span class="p">}</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="o">!</span><span class="n">g</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">]</span> <span class="p">{</span>
+					<span class="k">return</span> <span class="m">0</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">root</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">root</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="m">0</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">equal</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="m">2</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="m">1</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1719.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

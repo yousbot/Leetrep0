@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1761.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1761.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1761 - Minimum Degree of a Connected Trio in a Graph</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/1761.html 1761. Minimum Degree of a Connected Trio in a Graph Level Hard Description You are given an undirected graph. You are given an integer n which is the number of nodes in the graph and an array edges, where each edges[i]...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1761.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1761.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1761.html" rel="stylesheet"/>
+   <link href="solution-1761.html" rel="stylesheet"/>
+   <link href="solution-1761.html" rel="stylesheet"/>
+   <link href="solution-1761.html" rel="stylesheet"/>
+   <link href="solution-1761.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1761 - Minimum Degree of a Connected Trio in a Graph" property="og:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/1761.html 1761. Minimum Degree of a Connected Trio in a Graph Level Hard Description You are given an undirected graph. You are given an integer n which is the number of nodes in the graph and an array edges, where each edges[i] = [u_i, v_i] indicates that there is an undirected edge between u_i and v_i. A connected trio is a set of three nodes where there is an edge between every pair of them. The degree of a connected trio is the number of edges where one endpoint is in the trio, and the other is not. Return the minimum degree of a connected trio in the graph, or -1 if the graph has no connected trios. Example 1: Input: n = 6, edges = [[1,2],[1,3],[3,2],[4,1],[5,2],[3,6]] Output: 3 Explanation: There is exactly one trio, which is [1,2,3]. The edges that form its degree are bolded in the figure above. Example 2: Input: n = 7, edges = [[1,3],[4,1],[4,3],[2,5],[5,6],[6,7],[7,5],[2,6]] Output: 0 Explanation: There are exactly three trios: 1) [1,4,3] with degree 0. 2) [2,5,6] with degree 2. 3) [5,6,7] with degree 2. Constraints: 2 &amp;lt;= n &amp;lt;= 400 edges[i].length == 2 1 &amp;lt;= edges.length &amp;lt;= n * (n-1) / 2 1 &amp;lt;= u_i, v_i &amp;lt;= n u_i != v_i There are no repeated edges. Solution Use a hash map to store each nodeâs connected nodes. Then loop over all tuples of nodes and determine whether the three nodes form a connected trio. If the three nodes form a connected trio, calculate the sum of the numbers of edges that connect to the three nodes and subtract 6 from the sum (to exclude the edges inside the trio). During the process, maintain the minimum degree. Finally, return the minimum degree. Java Python C++ Go TypeScript class Solution { public int minTrioDegree(int n, int[][] edges) { Map&amp;lt;Integer, Set&amp;lt;Integer&amp;gt;&amp;gt; map = new HashMap&amp;lt;Integer, Set&amp;lt;Integer&amp;gt;&amp;gt;(); for (int[] edge : edges) { int node0 = edge[0], node1 = edge[1]; Set&amp;lt;Integer&amp;gt; set0 = map.getOrDefault(node0, new HashSet&amp;lt;Integer&amp;gt;()); Set&amp;lt;Integer&amp;gt; set1 = map.getOrDefault(node1, new HashSet&amp;lt;Integer&amp;gt;()); set0.add(node1); set1.add(node0); map.put(node0, set0); map.put(node1, set1); } int minDegree = Integer.MAX_VALUE; for (int i = 1; i &amp;lt;= n; i++) { Set&amp;lt;Integer&amp;gt; set = map.getOrDefault(i, new HashSet&amp;lt;Integer&amp;gt;()); if (set.size() &amp;lt; 2) continue; List&amp;lt;Integer&amp;gt; list = new ArrayList&amp;lt;Integer&amp;gt;(set); int size = list.size(); for (int j = 0; j &amp;lt; size; j++) { int node1 = list.get(j); Set&amp;lt;Integer&amp;gt; set1 = map.get(node1); for (int k = j + 1; k &amp;lt; size; k++) { int node2 = list.get(k); if (set1.contains(node2)) { Set&amp;lt;Integer&amp;gt; set2 = map.get(node2); int count = set.size() + set1.size() + set2.size() - 6; minDegree = Math.min(minDegree, count); } } } } return minDegree == Integer.MAX_VALUE ? -1 : minDegree; } } ############ class Solution { public int minTrioDegree(int n, int[][] edges) { boolean[][] g = new boolean[n][n]; int[] deg = new int[n]; for (var e : edges) { int u = e[0] - 1, v = e[1] - 1; g[u][v] = true; g[v][u] = true; ++deg[u]; ++deg[v];..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-04-13T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-04-13-1761-Minimum-Degree-of-a-Connected-Trio-in-a-Graph/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1761.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1761 - Minimum Degree of a Connected Trio in a Graph" property="twitter:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/1761.html 1761. Minimum Degree of a Connected Trio in a Graph Level Hard Description You are given an undirected graph. You are given an integer n which is the number of nodes in the graph and an array edges, where each edges[i] = [u_i, v_i] indicates that there is an undirected edge between u_i and v_i. A connected trio is a set of three nodes where there is an edge between every pair of them. The degree of a connected trio is the number of edges where one endpoint is in the trio, and the other is not. Return the minimum degree of a connected trio in the graph, or -1 if the graph has no connected trios. Example 1: Input: n = 6, edges = [[1,2],[1,3],[3,2],[4,1],[5,2],[3,6]] Output: 3 Explanation: There is exactly one trio, which is [1,2,3]. The edges that form its degree are bolded in the figure above. Example 2: Input: n = 7, edges = [[1,3],[4,1],[4,3],[2,5],[5,6],[6,7],[7,5],[2,6]] Output: 0 Explanation: There are exactly three trios: 1) [1,4,3] with degree 0. 2) [2,5,6] with degree 2. 3) [5,6,7] with degree 2. Constraints: 2 &amp;lt;= n &amp;lt;= 400 edges[i].length == 2 1 &amp;lt;= edges.length &amp;lt;= n * (n-1) / 2 1 &amp;lt;= u_i, v_i &amp;lt;= n u_i != v_i There are no repeated edges. Solution Use a hash map to store each nodeâs connected nodes. Then loop over all tuples of nodes and determine whether the three nodes form a connected trio. If the three nodes form a connected trio, calculate the sum of the numbers of edges that connect to the three nodes and subtract 6 from the sum (to exclude the edges inside the trio). During the process, maintain the minimum degree. Finally, return the minimum degree. Java Python C++ Go TypeScript class Solution { public int minTrioDegree(int n, int[][] edges) { Map&amp;lt;Integer, Set&amp;lt;Integer&amp;gt;&amp;gt; map = new HashMap&amp;lt;Integer, Set&amp;lt;Integer&amp;gt;&amp;gt;(); for (int[] edge : edges) { int node0 = edge[0], node1 = edge[1]; Set&amp;lt;Integer&amp;gt; set0 = map.getOrDefault(node0, new HashSet&amp;lt;Integer&amp;gt;()); Set&amp;lt;Integer&amp;gt; set1 = map.getOrDefault(node1, new HashSet&amp;lt;Integer&amp;gt;()); set0.add(node1); set1.add(node0); map.put(node0, set0); map.put(node1, set1); } int minDegree = Integer.MAX_VALUE; for (int i = 1; i &amp;lt;= n; i++) { Set&amp;lt;Integer&amp;gt; set = map.getOrDefault(i, new HashSet&amp;lt;Integer&amp;gt;()); if (set.size() &amp;lt; 2) continue; List&amp;lt;Integer&amp;gt; list = new ArrayList&amp;lt;Integer&amp;gt;(set); int size = list.size(); for (int j = 0; j &amp;lt; size; j++) { int node1 = list.get(j); Set&amp;lt;Integer&amp;gt; set1 = map.get(node1); for (int k = j + 1; k &amp;lt; size; k++) { int node2 = list.get(k); if (set1.contains(node2)) { Set&amp;lt;Integer&amp;gt; set2 = map.get(node2); int count = set.size() + set1.size() + set2.size() - 6; minDegree = Math.min(minDegree, count); } } } } return minDegree == Integer.MAX_VALUE ? -1 : minDegree; } } ############ class Solution { public int minTrioDegree(int n, int[][] edges) { boolean[][] g = new boolean[n][n]; int[] deg = new int[n]; for (var e : edges) { int u = e[0] - 1, v = e[1] - 1; g[u][v] = true; g[v][u] = true; ++deg[u]; ++deg[v];..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1761 - Minimum Degree of a Connected Trio in a Graph | Leetcode
+   </title>
+   <meta content="Jekyll v3.9.4" name="generator">
+    <meta content="1761 - Minimum Degree of a Connected Trio in a Graph" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1761.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-04-13-1761-Minimum-Degree-of-a-Connected-Trio-in-a-Graph/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-04-13T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"headline":"1761 - Minimum Degree of a Connected Trio in a Graph","dateModified":"2021-04-13T22:21:01-07:00","datePublished":"2021-04-13T22:21:01-07:00","description":"Leetcode","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-04-13-1761-Minimum-Degree-of-a-Connected-Trio-in-a-Graph/"},"url":"https://leetcode.ca/2021-04-13-1761-Minimum-Degree-of-a-Connected-Trio-in-a-Graph/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCDRuzBvLGzyVvgPyohrahrA" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-1761.html">
+        https://leetcode.ca/all/1761.html
+       </a>
+      </p>
+      <h1 id="1761-minimum-degree-of-a-connected-trio-in-a-graph">
+       1761. Minimum Degree of a Connected Trio in a Graph
+      </h1>
+      <h2 id="level">
+       Level
+      </h2>
+      <p>
+       Hard
+      </p>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an undirected graph. You are given an integer
+       <code class="language-plaintext highlighter-rouge">
+        n
+       </code>
+       which is the number of nodes in the graph and an array
+       <code class="language-plaintext highlighter-rouge">
+        edges
+       </code>
+       , where each
+       <code class="language-plaintext highlighter-rouge">
+        edges[i] = [u_i, v_i]
+       </code>
+       indicates that there is an undirected edge between
+       <code class="language-plaintext highlighter-rouge">
+        u_i
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        v_i
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        connected trio
+       </strong>
+       is a set of
+       <strong>
+        three
+       </strong>
+       nodes where there is an edge between
+       <strong>
+        every
+       </strong>
+       pair of them.
+      </p>
+      <p>
+       The
+       <strong>
+        degree of a connected trio
+       </strong>
+       is the number of edges where one endpoint is in the trio, and the other is not.
+      </p>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         minimum
+        </strong>
+        degree of a connected trio in the graph, or
+        <code class="language-plaintext highlighter-rouge">
+         -1
+        </code>
+        if the graph has no connected trios
+       </em>
+       .
+      </p>
+      <p>
+       <strong>
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="Image text" src="https://assets.leetcode.com/uploads/2021/01/26/trios1.png"/>
+      </p>
+      <p>
+       <strong>
+        Input:
+       </strong>
+       n = 6, edges = [[1,2],[1,3],[3,2],[4,1],[5,2],[3,6]]
+      </p>
+      <p>
+       <strong>
+        Output:
+       </strong>
+       3
+      </p>
+      <p>
+       <strong>
+        Explanation:
+       </strong>
+       There is exactly one trio, which is [1,2,3]. The edges that form its degree are bolded in the figure above.
+      </p>
+      <p>
+       <strong>
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="Image text" src="https://assets.leetcode.com/uploads/2021/01/26/trios2.png"/>
+      </p>
+      <p>
+       <strong>
+        Input:
+       </strong>
+       n = 7, edges = [[1,3],[4,1],[4,3],[2,5],[5,6],[6,7],[7,5],[2,6]]
+      </p>
+      <p>
+       <strong>
+        Output:
+       </strong>
+       0
+      </p>
+      <p>
+       <strong>
+        Explanation:
+       </strong>
+       There are exactly three trios:
+      </p>
+      <p>
+       1) [1,4,3] with degree 0.
+      </p>
+      <p>
+       2) [2,5,6] with degree 2.
+      </p>
+      <p>
+       3) [5,6,7] with degree 2.
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         2 &lt;= n &lt;= 400
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         edges[i].length == 2
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         1 &lt;= edges.length &lt;= n * (n-1) / 2
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         1 &lt;= u_i, v_i &lt;= n
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         u_i != v_i
+        </code>
+       </li>
+       <li>
+        There are no repeated edges.
+       </li>
+      </ul>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       Use a hash map to store each nodeâs connected nodes. Then loop over all tuples of nodes and determine whether the three nodes form a connected trio. If the three nodes form a connected trio, calculate the sum of the numbers of edges that connect to the three nodes and subtract 6 from the sum (to exclude the edges inside the trio). During the process, maintain the minimum degree. Finally, return the minimum degree.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#69be02a3-9351-4739-8f11-99d92b4d6602'}">
+       <li class="uk-active">
+        <a href="solution-1761.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1761.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1761.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1761.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1761.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="69be02a3-9351-4739-8f11-99d92b4d6602">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minTrioDegree</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">edge</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">node0</span> <span class="o">=</span> <span class="n">edge</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">node1</span> <span class="o">=</span> <span class="n">edge</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">set0</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">node0</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;());</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">set1</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">node1</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;());</span>
+            <span class="n">set0</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">node1</span><span class="o">);</span>
+            <span class="n">set1</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">node0</span><span class="o">);</span>
+            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">node0</span><span class="o">,</span> <span class="n">set0</span><span class="o">);</span>
+            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">node1</span><span class="o">,</span> <span class="n">set1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">minDegree</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;());</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">)</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;(</span><span class="n">set</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">node1</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+                <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">set1</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node1</span><span class="o">);</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">k</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">node2</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">k</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">set1</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">node2</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">set2</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node2</span><span class="o">);</span>
+                        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">+</span> <span class="n">set1</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">+</span> <span class="n">set2</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">6</span><span class="o">;</span>
+                        <span class="n">minDegree</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">minDegree</span><span class="o">,</span> <span class="n">count</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">minDegree</span> <span class="o">==</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">minDegree</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="err">############</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minTrioDegree</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">deg</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">u</span><span class="o">][</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">v</span><span class="o">][</span><span class="n">u</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">++</span><span class="n">deg</span><span class="o">[</span><span class="n">u</span><span class="o">];</span>
+            <span class="o">++</span><span class="n">deg</span><span class="o">[</span><span class="n">v</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">g</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">])</span> <span class="o">{</span>
+                            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">deg</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">deg</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">deg</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">-</span> <span class="mi">6</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minTrioDegree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">deg</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">v</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">deg</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">deg</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">inf</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="ow">and</span> <span class="n">g</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]:</span>
+                            <span class="n">ans</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">deg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">deg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">deg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">inf</span> <span class="k">else</span> <span class="n">ans</span>
+
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">minTrioDegree</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">g</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">g</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">deg</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">deg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">deg</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">deg</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">++</span><span class="p">,</span> <span class="n">deg</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">deg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">deg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">deg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="mi">6</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">INT_MAX</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minTrioDegree</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">edges</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="n">deg</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+		<span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">-</span><span class="m">1</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span><span class="p">,</span> <span class="no">true</span>
+		<span class="n">deg</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">++</span>
+		<span class="n">deg</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">30</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+				<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="n">j</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+					<span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">g</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="p">{</span>
+						<span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">deg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">deg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">deg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="m">6</span><span class="p">)</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="m">30</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">min</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">a</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minTrioDegree</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">edges</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">n</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">false</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">deg</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="p">[</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">]</span> <span class="k">of</span> <span class="nx">edges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">u</span><span class="o">--</span><span class="p">;</span>
+        <span class="nx">v</span><span class="o">--</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">u</span><span class="p">][</span><span class="nx">v</span><span class="p">]</span> <span class="o">=</span> <span class="nx">g</span><span class="p">[</span><span class="nx">v</span><span class="p">][</span><span class="nx">u</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="o">++</span><span class="nx">deg</span><span class="p">[</span><span class="nx">u</span><span class="p">];</span>
+        <span class="o">++</span><span class="nx">deg</span><span class="p">[</span><span class="nx">v</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="kc">Infinity</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">k</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">g</span><span class="p">[</span><span class="nx">j</span><span class="p">][</span><span class="nx">k</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">ans</span><span class="p">,</span> <span class="nx">deg</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+</span> <span class="nx">deg</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="nx">deg</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">-</span> <span class="mi">6</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span> <span class="o">===</span> <span class="kc">Infinity</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1761.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

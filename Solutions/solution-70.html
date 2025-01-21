@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-70.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-70.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>70 - Climbing Stairs</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 70. Climbing Stairs Description You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? &amp;nbsp; Example 1: Input: n = 2...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-70.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-70.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-70.html" rel="stylesheet"/>
+   <link href="solution-70.html" rel="stylesheet"/>
+   <link href="solution-70.html" rel="stylesheet"/>
+   <link href="solution-70.html" rel="stylesheet"/>
+   <link href="solution-70.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="70 - Climbing Stairs" property="og:title"/>
+   <meta content="Leetcode 70. Climbing Stairs Description You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? &amp;nbsp; Example 1: Input: n = 2 Output: 2 Explanation: There are two ways to climb to the top. 1. 1 step + 1 step 2. 2 steps Example 2: Input: n = 3 Output: 3 Explanation: There are three ways to climb to the top. 1. 1 step + 1 step + 1 step 2. 1 step + 2 steps 3. 2 steps + 1 step &amp;nbsp; Constraints: 1 &amp;lt;= n &amp;lt;= 45 Solutions Solution 1: Recursion We define $f[i]$ to represent the number of ways to climb to the $i$-th step, then $f[i]$ can be transferred from $f[i - 1]$ and $f[i - 2]$, that is: \[f[i] = f[i - 1] + f[i - 2]\] The initial conditions are $f[0] = 1$ and $f[1] = 1$, that is, the number of ways to climb to the 0th step is 1, and the number of ways to climb to the 1st step is also 1. The answer is $f[n]$. Since $f[i]$ is only related to $f[i - 1]$ and $f[i - 2]$, we can use two variables $a$ and $b$ to maintain the current number of ways, reducing the space complexity to $O(1)$. The time complexity is $O(n)$, and the space complexity is $O(1)$. Solution 2: Matrix Quick Power to Accelerate Recursion We set $Fib(n)$ to represent a $1 \times 2$ matrix $\begin{bmatrix} F_n &amp;amp; F_{n - 1} \end{bmatrix}$, where $F_n$ and $F_{n - 1}$ are the $n$-th and $(n - 1)$-th Fibonacci numbers respectively. We hope to derive $Fib(n)$ based on $Fib(n-1) = \begin{bmatrix} F_{n - 1} &amp;amp; F_{n - 2} \end{bmatrix}$. That is to say, we need a matrix $base$, so that $Fib(n - 1) \times base = Fib(n)$, that is: \[\begin{bmatrix} F_{n - 1} &amp;amp; F_{n - 2} \end{bmatrix} \times base = \begin{bmatrix} F_n &amp;amp; F_{n - 1} \end{bmatrix}\] Since $F_n = F_{n - 1} + F_{n - 2}$, the first column of the matrix $base$ is: \[\begin{bmatrix} 1 \\ 1 \end{bmatrix}\] The second column is: \[\begin{bmatrix} 1 \\ 0 \end{bmatrix}\] Therefore: \[\begin{bmatrix} F_{n - 1} &amp;amp; F_{n - 2} \end{bmatrix} \times \begin{bmatrix}1 &amp;amp; 1 \\ 1 &amp;amp; 0\end{bmatrix} = \begin{bmatrix} F_n &amp;amp; F_{n - 1} \end{bmatrix}\] We define the initial matrix $res = \begin{bmatrix} 1 &amp;amp; 1 \end{bmatrix}$, then $F_n$ is equal to the first element of the first row of the result matrix of $res$ multiplied by $base^{n - 1}$. We can solve it using matrix quick power. The time complexity is $O(\log n)$, and the space complexity is $O(1)$. Java C++ Python Go TypeScript Javascript Php RenderScript class Solution { public int climbStairs(int n) { int a = 0, b = 1; for (int i = 0; i &amp;lt; n; ++i) { int c = a + b; a =..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-02-08T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-02-08-70-Climbing-Stairs/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-70.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="70 - Climbing Stairs" property="twitter:title"/>
+   <meta content="Leetcode 70. Climbing Stairs Description You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? &amp;nbsp; Example 1: Input: n = 2 Output: 2 Explanation: There are two ways to climb to the top. 1. 1 step + 1 step 2. 2 steps Example 2: Input: n = 3 Output: 3 Explanation: There are three ways to climb to the top. 1. 1 step + 1 step + 1 step 2. 1 step + 2 steps 3. 2 steps + 1 step &amp;nbsp; Constraints: 1 &amp;lt;= n &amp;lt;= 45 Solutions Solution 1: Recursion We define $f[i]$ to represent the number of ways to climb to the $i$-th step, then $f[i]$ can be transferred from $f[i - 1]$ and $f[i - 2]$, that is: \[f[i] = f[i - 1] + f[i - 2]\] The initial conditions are $f[0] = 1$ and $f[1] = 1$, that is, the number of ways to climb to the 0th step is 1, and the number of ways to climb to the 1st step is also 1. The answer is $f[n]$. Since $f[i]$ is only related to $f[i - 1]$ and $f[i - 2]$, we can use two variables $a$ and $b$ to maintain the current number of ways, reducing the space complexity to $O(1)$. The time complexity is $O(n)$, and the space complexity is $O(1)$. Solution 2: Matrix Quick Power to Accelerate Recursion We set $Fib(n)$ to represent a $1 \times 2$ matrix $\begin{bmatrix} F_n &amp;amp; F_{n - 1} \end{bmatrix}$, where $F_n$ and $F_{n - 1}$ are the $n$-th and $(n - 1)$-th Fibonacci numbers respectively. We hope to derive $Fib(n)$ based on $Fib(n-1) = \begin{bmatrix} F_{n - 1} &amp;amp; F_{n - 2} \end{bmatrix}$. That is to say, we need a matrix $base$, so that $Fib(n - 1) \times base = Fib(n)$, that is: \[\begin{bmatrix} F_{n - 1} &amp;amp; F_{n - 2} \end{bmatrix} \times base = \begin{bmatrix} F_n &amp;amp; F_{n - 1} \end{bmatrix}\] Since $F_n = F_{n - 1} + F_{n - 2}$, the first column of the matrix $base$ is: \[\begin{bmatrix} 1 \\ 1 \end{bmatrix}\] The second column is: \[\begin{bmatrix} 1 \\ 0 \end{bmatrix}\] Therefore: \[\begin{bmatrix} F_{n - 1} &amp;amp; F_{n - 2} \end{bmatrix} \times \begin{bmatrix}1 &amp;amp; 1 \\ 1 &amp;amp; 0\end{bmatrix} = \begin{bmatrix} F_n &amp;amp; F_{n - 1} \end{bmatrix}\] We define the initial matrix $res = \begin{bmatrix} 1 &amp;amp; 1 \end{bmatrix}$, then $F_n$ is equal to the first element of the first row of the result matrix of $res$ multiplied by $base^{n - 1}$. We can solve it using matrix quick power. The time complexity is $O(\log n)$, and the space complexity is $O(1)$. Java C++ Python Go TypeScript Javascript Php RenderScript class Solution { public int climbStairs(int n) { int a = 0, b = 1; for (int i = 0; i &amp;lt; n; ++i) { int c = a + b; a =..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    70 - Climbing Stairs | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="70 - Climbing Stairs" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-70.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-02-08-70-Climbing-Stairs/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-02-08T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"70 - Climbing Stairs","dateModified":"2016-02-08T00:00:00-08:00","datePublished":"2016-02-08T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-02-08-70-Climbing-Stairs/"},"url":"https://leetcode.ca/2016-02-08-70-Climbing-Stairs/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="70-climbing-stairs">
+       <a href="solution-70.html">
+        70. Climbing Stairs
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are climbing a staircase. It takes
+       <code>
+        n
+       </code>
+       steps to reach the top.
+      </p>
+      <p>
+       Each time you can either climb
+       <code>
+        1
+       </code>
+       or
+       <code>
+        2
+       </code>
+       steps. In how many distinct ways can you climb to the top?
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 2
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 3
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= n &lt;= 45
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Recursion
+       </strong>
+      </p>
+      <p>
+       We define $f[i]$ to represent the number of ways to climb to the $i$-th step, then $f[i]$ can be transferred from $f[i - 1]$ and $f[i - 2]$, that is:
+      </p>
+      \[f[i] = f[i - 1] + f[i - 2]\]
+      <p>
+       The initial conditions are $f[0] = 1$ and $f[1] = 1$, that is, the number of ways to climb to the 0th step is 1, and the number of ways to climb to the 1st step is also 1.
+      </p>
+      <p>
+       The answer is $f[n]$.
+      </p>
+      <p>
+       Since $f[i]$ is only related to $f[i - 1]$ and $f[i - 2]$, we can use two variables $a$ and $b$ to maintain the current number of ways, reducing the space complexity to $O(1)$.
+      </p>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(1)$.
+      </p>
+      <p>
+       <strong>
+        Solution 2: Matrix Quick Power to Accelerate Recursion
+       </strong>
+      </p>
+      <p>
+       We set $Fib(n)$ to represent a $1 \times 2$ matrix $\begin{bmatrix} F_n &amp; F_{n - 1} \end{bmatrix}$, where $F_n$ and $F_{n - 1}$ are the $n$-th and $(n - 1)$-th Fibonacci numbers respectively.
+      </p>
+      <p>
+       We hope to derive $Fib(n)$ based on $Fib(n-1) = \begin{bmatrix} F_{n - 1} &amp; F_{n - 2} \end{bmatrix}$. That is to say, we need a matrix $base$, so that $Fib(n - 1) \times base = Fib(n)$, that is:
+      </p>
+      \[\begin{bmatrix}
+F_{n - 1} &amp; F_{n - 2}
+\end{bmatrix} \times base = \begin{bmatrix} F_n &amp; F_{n - 1} \end{bmatrix}\]
+      <p>
+       Since $F_n = F_{n - 1} + F_{n - 2}$, the first column of the matrix $base$ is:
+      </p>
+      \[\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}\]
+      <p>
+       The second column is:
+      </p>
+      \[\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}\]
+      <p>
+       Therefore:
+      </p>
+      \[\begin{bmatrix} F_{n - 1} &amp; F_{n - 2} \end{bmatrix} \times \begin{bmatrix}1 &amp; 1 \\ 1 &amp; 0\end{bmatrix} = \begin{bmatrix} F_n &amp; F_{n - 1} \end{bmatrix}\]
+      <p>
+       We define the initial matrix $res = \begin{bmatrix} 1 &amp; 1 \end{bmatrix}$, then $F_n$ is equal to the first element of the first row of the result matrix of $res$ multiplied by $base^{n - 1}$. We can solve it using matrix quick power.
+      </p>
+      <p>
+       The time complexity is $O(\log n)$, and the space complexity is $O(1)$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#94b95369-0f43-427e-955c-a4bddaaa28b3'}">
+       <li class="uk-active">
+        <a href="solution-70.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-70.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-70.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-70.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-70.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-70.html">
+         Javascript
+        </a>
+       </li>
+       <li>
+        <a href="solution-70.html">
+         Php
+        </a>
+       </li>
+       <li>
+        <a href="solution-70.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="94b95369-0f43-427e-955c-a4bddaaa28b3">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">climbStairs</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">climbStairs</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">climbStairs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="k">return</span> <span class="n">b</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">climbStairs</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">climbStairs</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">p</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">q</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">[</span><span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">q</span><span class="p">,</span> <span class="nx">p</span> <span class="o">+</span> <span class="nx">q</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">q</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * @param {number} n
+ * @return {number}
+ */</span>
+<span class="kd">var</span> <span class="nx">climbStairs</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+        <span class="nx">a</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+        <span class="nx">b</span> <span class="o">=</span> <span class="nx">c</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-php highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="cd">/**
+     * @param Integer $n
+     * @return Integer
+     */</span>
+    <span class="k">function</span> <span class="n">climbStairs</span><span class="p">(</span><span class="nv">$n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$n</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nv">$n</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$dp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;=</span> <span class="nv">$n</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$dp</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$dp</span><span class="p">[</span><span class="nv">$i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nv">$dp</span><span class="p">[</span><span class="nv">$i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nv">$dp</span><span class="p">[</span><span class="nv">$n</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">climb_stairs</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="p">(</span><span class="k">mut</span> <span class="n">p</span><span class="p">,</span> <span class="k">mut</span> <span class="n">q</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="n">n</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="n">t</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span><span class="p">;</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">q</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-70.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

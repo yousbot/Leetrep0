@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1263.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1263.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1263 - Minimum Moves to Move a Box to Their Target Location</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1263. Minimum Moves to Move a Box to Their Target Location Description A storekeeper is a game in which the player pushes boxes around in a warehouse trying to get them to target locations. The game is represented by an m x n grid of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1263.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1263.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1263.html" rel="stylesheet"/>
+   <link href="solution-1263.html" rel="stylesheet"/>
+   <link href="solution-1263.html" rel="stylesheet"/>
+   <link href="solution-1263.html" rel="stylesheet"/>
+   <link href="solution-1263.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1263 - Minimum Moves to Move a Box to Their Target Location" property="og:title"/>
+   <meta content="Leetcode 1263. Minimum Moves to Move a Box to Their Target Location Description A storekeeper is a game in which the player pushes boxes around in a warehouse trying to get them to target locations. The game is represented by an m x n grid of characters grid where each element is a wall, floor, or box. Your task is to move the box &amp;#39;B&amp;#39; to the target position &amp;#39;T&amp;#39; under the following rules: The character &amp;#39;S&amp;#39; represents the player. The player can move up, down, left, right in grid if it is a floor (empty cell). The character &amp;#39;.&amp;#39; represents the floor which means a free cell to walk. The character&amp;nbsp;&amp;#39;#&amp;#39;&amp;nbsp;represents the wall which means an obstacle (impossible to walk there). There is only one box &amp;#39;B&amp;#39; and one target cell &amp;#39;T&amp;#39; in the grid. The box can be moved to an adjacent free cell by standing next to the box and then moving in the direction of the box. This is a push. The player cannot walk through the box. Return the minimum number of pushes to move the box to the target. If there is no way to reach the target, return -1. &amp;nbsp; Example 1: Input: grid = [[&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;T&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;S&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;]] Output: 3 Explanation: We return only the number of times the box is pushed. Example 2: Input: grid = [[&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;T&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;S&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;]] Output: -1 Example 3: Input: grid = [[&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;T&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;S&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;]] Output: 5 Explanation: push the box down, left, left, up and up. &amp;nbsp; Constraints: m == grid.length n == grid[i].length 1 &amp;lt;= m, n &amp;lt;= 20 grid contains only characters &amp;#39;.&amp;#39;, &amp;#39;#&amp;#39;, &amp;#39;S&amp;#39;, &amp;#39;T&amp;#39;, or &amp;#39;B&amp;#39;. There is only one character &amp;#39;S&amp;#39;, &amp;#39;B&amp;#39;, and &amp;#39;T&amp;#39; in the grid. Solutions Solution 1: Double-ended Queue + BFS We consider the playerâs position and the boxâs position as a state, i.e., $(s_i, s_j, b_i, b_j)$, where $(s_i, s_j)$ is the playerâs position, and $(b_i, b_j)$ is the boxâs position. In the code implementation, we define a function $f(i, j)$, which maps the two-dimensional coordinates $(i, j)$ to a one-dimensional state number, i.e., $f(i, j) = i \times n + j$, where $n$ is the number of columns in the grid. So the player and the boxâs state is $(f(s_i, s_j), f(b_i, b_j))$. First, we traverse the grid to find the initial positions of the player and the box, denoted as $(s_i, s_j)$ and $(b_i, b_j)$. Then, we define a double-ended queue $q$, where each element is a triplet $(f(s_i, s_j), f(b_i, b_j), d)$, indicating that the player is at $(s_i, s_j)$, the box is at $(b_i, b_j)$, and $d$ pushes have been made. Initially, we add $(f(s_i, s_j), f(b_i, b_j), 0)$ to the queue $q$. Additionally, we use a two-dimensional array $vis$ to record whether each state has been visited. Initially, $vis[f(s_i, s_j), f(b_i, b_j)]$ is marked as visited. Next, we start the breadth-first search. In each step of the search, we take..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-05-16T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-05-16-1263-Minimum-Moves-to-Move-a-Box-to-Their-Target-Location/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1263.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1263 - Minimum Moves to Move a Box to Their Target Location" property="twitter:title"/>
+   <meta content="Leetcode 1263. Minimum Moves to Move a Box to Their Target Location Description A storekeeper is a game in which the player pushes boxes around in a warehouse trying to get them to target locations. The game is represented by an m x n grid of characters grid where each element is a wall, floor, or box. Your task is to move the box &amp;#39;B&amp;#39; to the target position &amp;#39;T&amp;#39; under the following rules: The character &amp;#39;S&amp;#39; represents the player. The player can move up, down, left, right in grid if it is a floor (empty cell). The character &amp;#39;.&amp;#39; represents the floor which means a free cell to walk. The character&amp;nbsp;&amp;#39;#&amp;#39;&amp;nbsp;represents the wall which means an obstacle (impossible to walk there). There is only one box &amp;#39;B&amp;#39; and one target cell &amp;#39;T&amp;#39; in the grid. The box can be moved to an adjacent free cell by standing next to the box and then moving in the direction of the box. This is a push. The player cannot walk through the box. Return the minimum number of pushes to move the box to the target. If there is no way to reach the target, return -1. &amp;nbsp; Example 1: Input: grid = [[&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;T&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;S&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;]] Output: 3 Explanation: We return only the number of times the box is pushed. Example 2: Input: grid = [[&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;T&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;S&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;]] Output: -1 Example 3: Input: grid = [[&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;T&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;.&amp;quot;,&amp;quot;S&amp;quot;,&amp;quot;#&amp;quot;], [&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;,&amp;quot;#&amp;quot;]] Output: 5 Explanation: push the box down, left, left, up and up. &amp;nbsp; Constraints: m == grid.length n == grid[i].length 1 &amp;lt;= m, n &amp;lt;= 20 grid contains only characters &amp;#39;.&amp;#39;, &amp;#39;#&amp;#39;, &amp;#39;S&amp;#39;, &amp;#39;T&amp;#39;, or &amp;#39;B&amp;#39;. There is only one character &amp;#39;S&amp;#39;, &amp;#39;B&amp;#39;, and &amp;#39;T&amp;#39; in the grid. Solutions Solution 1: Double-ended Queue + BFS We consider the playerâs position and the boxâs position as a state, i.e., $(s_i, s_j, b_i, b_j)$, where $(s_i, s_j)$ is the playerâs position, and $(b_i, b_j)$ is the boxâs position. In the code implementation, we define a function $f(i, j)$, which maps the two-dimensional coordinates $(i, j)$ to a one-dimensional state number, i.e., $f(i, j) = i \times n + j$, where $n$ is the number of columns in the grid. So the player and the boxâs state is $(f(s_i, s_j), f(b_i, b_j))$. First, we traverse the grid to find the initial positions of the player and the box, denoted as $(s_i, s_j)$ and $(b_i, b_j)$. Then, we define a double-ended queue $q$, where each element is a triplet $(f(s_i, s_j), f(b_i, b_j), d)$, indicating that the player is at $(s_i, s_j)$, the box is at $(b_i, b_j)$, and $d$ pushes have been made. Initially, we add $(f(s_i, s_j), f(b_i, b_j), 0)$ to the queue $q$. Additionally, we use a two-dimensional array $vis$ to record whether each state has been visited. Initially, $vis[f(s_i, s_j), f(b_i, b_j)]$ is marked as visited. Next, we start the breadth-first search. In each step of the search, we take..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1263 - Minimum Moves to Move a Box to Their Target Location | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1263 - Minimum Moves to Move a Box to Their Target Location" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1263.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-05-16-1263-Minimum-Moves-to-Move-a-Box-to-Their-Target-Location/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-05-16T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1263 - Minimum Moves to Move a Box to Their Target Location","dateModified":"2019-05-16T00:00:00-07:00","datePublished":"2019-05-16T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-05-16-1263-Minimum-Moves-to-Move-a-Box-to-Their-Target-Location/"},"url":"https://leetcode.ca/2019-05-16-1263-Minimum-Moves-to-Move-a-Box-to-Their-Target-Location/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1263-minimum-moves-to-move-a-box-to-their-target-location">
+       <a href="solution-1263.html">
+        1263. Minimum Moves to Move a Box to Their Target Location
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       A storekeeper is a game in which the player pushes boxes around in a warehouse trying to get them to target locations.
+      </p>
+      <p>
+       The game is represented by an
+       <code>
+        m x n
+       </code>
+       grid of characters
+       <code>
+        grid
+       </code>
+       where each element is a wall, floor, or box.
+      </p>
+      <p>
+       Your task is to move the box
+       <code>
+        'B'
+       </code>
+       to the target position
+       <code>
+        'T'
+       </code>
+       under the following rules:
+      </p>
+      <ul>
+       <li>
+        The character
+        <code>
+         'S'
+        </code>
+        represents the player. The player can move up, down, left, right in
+        <code>
+         grid
+        </code>
+        if it is a floor (empty cell).
+       </li>
+       <li>
+        The character
+        <code>
+         '.'
+        </code>
+        represents the floor which means a free cell to walk.
+       </li>
+       <li>
+        The character
+        <font face="monospace">
+        </font>
+        <code>
+         '#'
+        </code>
+        <font face="monospace">
+        </font>
+        represents the wall which means an obstacle (impossible to walk there).
+       </li>
+       <li>
+        There is only one box
+        <code>
+         'B'
+        </code>
+        and one target cell
+        <code>
+         'T'
+        </code>
+        in the
+        <code>
+         grid
+        </code>
+        .
+       </li>
+       <li>
+        The box can be moved to an adjacent free cell by standing next to the box and then moving in the direction of the box. This is a
+        <strong>
+         push
+        </strong>
+        .
+       </li>
+       <li>
+        The player cannot walk through the box.
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the minimum number of
+        <strong>
+         pushes
+        </strong>
+        to move the box to the target
+       </em>
+       . If there is no way to reach the target, return
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1263.Minimum%20Moves%20to%20Move%20a%20Box%20to%20Their%20Target%20Location/images/sample_1_1620.png" style="width: 500px; height: 335px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> grid = [["#","#","#","#","#","#"],
+               ["#","T","#","#","#","#"],
+               ["#",".",".","B",".","#"],
+               ["#",".","#","#",".","#"],
+               ["#",".",".",".","S","#"],
+               ["#","#","#","#","#","#"]]
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> We return only the number of times the box is pushed.</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> grid = [["#","#","#","#","#","#"],
+               ["#","T","#","#","#","#"],
+               ["#",".",".","B",".","#"],
+               ["#","#","#","#",".","#"],
+               ["#",".",".",".","S","#"],
+               ["#","#","#","#","#","#"]]
+<strong>Output:</strong> -1
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> grid = [["#","#","#","#","#","#"],
+               ["#","T",".",".","#","#"],
+               ["#",".","#","B",".","#"],
+               ["#",".",".",".",".","#"],
+               ["#",".",".",".","S","#"],
+               ["#","#","#","#","#","#"]]
+<strong>Output:</strong> 5
+<strong>Explanation:</strong> push the box down, left, left, up and up.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == grid.length
+        </code>
+       </li>
+       <li>
+        <code>
+         n == grid[i].length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= m, n &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         grid
+        </code>
+        contains only characters
+        <code>
+         '.'
+        </code>
+        ,
+        <code>
+         '#'
+        </code>
+        ,
+        <code>
+         'S'
+        </code>
+        ,
+        <code>
+         'T'
+        </code>
+        , or
+        <code>
+         'B'
+        </code>
+        .
+       </li>
+       <li>
+        There is only one character
+        <code>
+         'S'
+        </code>
+        ,
+        <code>
+         'B'
+        </code>
+        , and
+        <code>
+         'T'
+        </code>
+        in the
+        <code>
+         grid
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Double-ended Queue + BFS
+       </strong>
+      </p>
+      <p>
+       We consider the playerâs position and the boxâs position as a state, i.e., $(s_i, s_j, b_i, b_j)$, where $(s_i, s_j)$ is the playerâs position, and $(b_i, b_j)$ is the boxâs position. In the code implementation, we define a function $f(i, j)$, which maps the two-dimensional coordinates $(i, j)$ to a one-dimensional state number, i.e., $f(i, j) = i \times n + j$, where $n$ is the number of columns in the grid. So the player and the boxâs state is $(f(s_i, s_j), f(b_i, b_j))$.
+      </p>
+      <p>
+       First, we traverse the grid to find the initial positions of the player and the box, denoted as $(s_i, s_j)$ and $(b_i, b_j)$.
+      </p>
+      <p>
+       Then, we define a double-ended queue $q$, where each element is a triplet $(f(s_i, s_j), f(b_i, b_j), d)$, indicating that the player is at $(s_i, s_j)$, the box is at $(b_i, b_j)$, and $d$ pushes have been made. Initially, we add $(f(s_i, s_j), f(b_i, b_j), 0)$ to the queue $q$.
+      </p>
+      <p>
+       Additionally, we use a two-dimensional array $vis$ to record whether each state has been visited. Initially, $vis[f(s_i, s_j), f(b_i, b_j)]$ is marked as visited.
+      </p>
+      <p>
+       Next, we start the breadth-first search.
+      </p>
+      <p>
+       In each step of the search, we take out the queue head element $(f(s_i, s_j), f(b_i, b_j), d)$, and check whether $grid[b_i][b_j] = âTâ$ is satisfied. If it is, it means the box has been pushed to the target position, and now $d$ can be returned as the answer.
+      </p>
+      <p>
+       Otherwise, we enumerate the playerâs next move direction. The playerâs new position is denoted as $(s_x, s_y)$. If $(s_x, s_y)$ is a valid position, we judge whether $(s_x, s_y)$ is the same as the boxâs position $(b_i, b_j)$:
+      </p>
+      <ul>
+       <li>
+        If they are the same, it means the player has reached the boxâs position and pushed the box forward by one step. The boxâs new position is $(b_x, b_y)$. If $(b_x, b_y)$ is a valid position, and the state $(f(s_x, s_y), f(b_x, b_y))$ has not been visited, then we add $(f(s_x, s_y), f(b_x, b_y), d + 1)$ to the end of the queue $q$, and mark $vis[f(s_x, s_y), f(b_x, b_y)]$ as visited.
+       </li>
+       <li>
+        If they are different, it means the player has not pushed the box. Then we only need to judge whether the state $(f(s_x, s_y), f(b_i, b_j))$ has been visited. If it has not been visited, then we add $(f(s_x, s_y), f(b_i, b_j), d)$ to the head of the queue $q$, and mark $vis[f(s_x, s_y), f(b_i, b_j)]$ as visited.
+       </li>
+      </ul>
+      <p>
+       We continue the breadth-first search until the queue is empty.
+      </p>
+      <blockquote>
+       <p>
+        Note, if the box is pushed, the push count $d$ needs to be incremented by $1$, and the new state is added to the end of the queue $q$. If the box is not pushed, the push count $d$ remains unchanged, and the new state is added to the head of the queue $q$.
+       </p>
+      </blockquote>
+      <p>
+       Finally, if no valid push scheme is found, then return $-1$.
+      </p>
+      <p>
+       The time complexity is $O(m^2 \times n^2)$, and the space complexity is $O(m^2 \times n^2)$. Where $m$ and $n$ are the number of rows and columns in the grid, respectively.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#0b1d098d-1acf-4ce7-9242-6359c9af2fe2'}">
+       <li class="uk-active">
+        <a href="solution-1263.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1263.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1263.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1263.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1263.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="0b1d098d-1acf-4ce7-9242-6359c9af2fe2">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">m</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">char</span><span class="o">[][]</span> <span class="n">grid</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minPushBox</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">grid</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">si</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">bi</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">bj</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">grid</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'S'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">si</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+                    <span class="n">sj</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">grid</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'B'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">bi</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+                    <span class="n">bj</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dirs</span> <span class="o">=</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">vis</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="o">][</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="o">];</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">f</span><span class="o">(</span><span class="n">si</span><span class="o">,</span> <span class="n">sj</span><span class="o">),</span> <span class="n">f</span><span class="o">(</span><span class="n">bi</span><span class="o">,</span> <span class="n">bj</span><span class="o">),</span> <span class="mi">0</span><span class="o">});</span>
+        <span class="n">vis</span><span class="o">[</span><span class="n">f</span><span class="o">(</span><span class="n">si</span><span class="o">,</span> <span class="n">sj</span><span class="o">)][</span><span class="n">f</span><span class="o">(</span><span class="n">bi</span><span class="o">,</span> <span class="n">bj</span><span class="o">)]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">var</span> <span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+            <span class="n">bi</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">/</span> <span class="n">n</span><span class="o">;</span>
+            <span class="n">bj</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">%</span> <span class="n">n</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">grid</span><span class="o">[</span><span class="n">bi</span><span class="o">][</span><span class="n">bj</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'T'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">d</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">si</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">/</span> <span class="n">n</span><span class="o">;</span>
+            <span class="n">sj</span> <span class="o">=</span> <span class="n">p</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">%</span> <span class="n">n</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">sx</span> <span class="o">=</span> <span class="n">si</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">k</span><span class="o">],</span> <span class="n">sy</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">check</span><span class="o">(</span><span class="n">sx</span><span class="o">,</span> <span class="n">sy</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">sx</span> <span class="o">==</span> <span class="n">bi</span> <span class="o">&amp;&amp;</span> <span class="n">sy</span> <span class="o">==</span> <span class="n">bj</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">bx</span> <span class="o">=</span> <span class="n">bi</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">k</span><span class="o">],</span> <span class="n">by</span> <span class="o">=</span> <span class="n">bj</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">check</span><span class="o">(</span><span class="n">bx</span><span class="o">,</span> <span class="n">by</span><span class="o">)</span> <span class="o">||</span> <span class="n">vis</span><span class="o">[</span><span class="n">f</span><span class="o">(</span><span class="n">sx</span><span class="o">,</span> <span class="n">sy</span><span class="o">)][</span><span class="n">f</span><span class="o">(</span><span class="n">bx</span><span class="o">,</span> <span class="n">by</span><span class="o">)])</span> <span class="o">{</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="n">vis</span><span class="o">[</span><span class="n">f</span><span class="o">(</span><span class="n">sx</span><span class="o">,</span> <span class="n">sy</span><span class="o">)][</span><span class="n">f</span><span class="o">(</span><span class="n">bx</span><span class="o">,</span> <span class="n">by</span><span class="o">)]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">f</span><span class="o">(</span><span class="n">sx</span><span class="o">,</span> <span class="n">sy</span><span class="o">),</span> <span class="n">f</span><span class="o">(</span><span class="n">bx</span><span class="o">,</span> <span class="n">by</span><span class="o">),</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="o">});</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="n">vis</span><span class="o">[</span><span class="n">f</span><span class="o">(</span><span class="n">sx</span><span class="o">,</span> <span class="n">sy</span><span class="o">)][</span><span class="n">f</span><span class="o">(</span><span class="n">bi</span><span class="o">,</span> <span class="n">bj</span><span class="o">)])</span> <span class="o">{</span>
+                    <span class="n">vis</span><span class="o">[</span><span class="n">f</span><span class="o">(</span><span class="n">sx</span><span class="o">,</span> <span class="n">sy</span><span class="o">)][</span><span class="n">f</span><span class="o">(</span><span class="n">bi</span><span class="o">,</span> <span class="n">bj</span><span class="o">)]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">offerFirst</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">f</span><span class="o">(</span><span class="n">sx</span><span class="o">,</span> <span class="n">sy</span><span class="o">),</span> <span class="n">f</span><span class="o">(</span><span class="n">bi</span><span class="o">,</span> <span class="n">bj</span><span class="o">),</span> <span class="n">d</span><span class="o">});</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">f</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">check</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">grid</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">!=</span> <span class="sc">'#'</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">minPushBox</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&amp;</span> <span class="n">grid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">,</span> <span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'S'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">si</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'B'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">bi</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">bj</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+        <span class="p">};</span>
+        <span class="k">auto</span> <span class="n">check</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'#'</span><span class="p">;</span>
+        <span class="p">};</span>
+        <span class="kt">int</span> <span class="n">dirs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+        <span class="n">deque</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="kt">bool</span> <span class="n">vis</span><span class="p">[</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="p">][</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">vis</span><span class="p">));</span>
+        <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+            <span class="n">si</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="n">s</span> <span class="o">%</span> <span class="n">n</span><span class="p">;</span>
+            <span class="n">bi</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="n">bj</span> <span class="o">=</span> <span class="n">b</span> <span class="o">%</span> <span class="n">n</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">bi</span><span class="p">][</span><span class="n">bj</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'T'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">d</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">sx</span> <span class="o">=</span> <span class="n">si</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">sy</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">check</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">sx</span> <span class="o">==</span> <span class="n">bi</span> <span class="o">&amp;&amp;</span> <span class="n">sy</span> <span class="o">==</span> <span class="n">bj</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">int</span> <span class="n">bx</span> <span class="o">=</span> <span class="n">bi</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">by</span> <span class="o">=</span> <span class="n">bj</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">check</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)</span> <span class="o">||</span> <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)])</span> <span class="p">{</span>
+                        <span class="k">continue</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">),</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)])</span> <span class="p">{</span>
+                    <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">emplace_front</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">),</span> <span class="n">d</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minPushBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="n">j</span>
+
+        <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"#"</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">"S"</span><span class="p">:</span>
+                    <span class="n">si</span><span class="p">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+                <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s">"B"</span><span class="p">:</span>
+                    <span class="n">bi</span><span class="p">,</span> <span class="n">bj</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">dirs</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([(</span><span class="n">f</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">),</span> <span class="mi">0</span><span class="p">)])</span>
+        <span class="n">vis</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="p">)]</span>
+        <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+            <span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+            <span class="n">bi</span><span class="p">,</span> <span class="n">bj</span> <span class="o">=</span> <span class="n">b</span> <span class="o">//</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span> <span class="o">%</span> <span class="n">n</span>
+            <span class="k">if</span> <span class="n">grid</span><span class="p">[</span><span class="n">bi</span><span class="p">][</span><span class="n">bj</span><span class="p">]</span> <span class="o">==</span> <span class="s">"T"</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">d</span>
+            <span class="n">si</span><span class="p">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="n">s</span> <span class="o">//</span> <span class="n">n</span><span class="p">,</span> <span class="n">s</span> <span class="o">%</span> <span class="n">n</span>
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">(</span><span class="n">dirs</span><span class="p">):</span>
+                <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">=</span> <span class="n">si</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">sj</span> <span class="o">+</span> <span class="n">b</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">sx</span> <span class="o">==</span> <span class="n">bi</span> <span class="ow">and</span> <span class="n">sy</span> <span class="o">==</span> <span class="n">bj</span><span class="p">:</span>
+                    <span class="n">bx</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">bi</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">bj</span> <span class="o">+</span> <span class="n">b</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)</span> <span class="ow">or</span> <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)]:</span>
+                        <span class="k">continue</span>
+                    <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">),</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]:</span>
+                    <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">appendleft</span><span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">),</span> <span class="n">d</span><span class="p">))</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minPushBox</span><span class="p">(</span><span class="n">grid</span> <span class="p">[][]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="k">var</span> <span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">,</span> <span class="n">bi</span><span class="p">,</span> <span class="n">bj</span> <span class="kt">int</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">grid</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">row</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'S'</span> <span class="p">{</span>
+				<span class="n">si</span><span class="p">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'B'</span> <span class="p">{</span>
+				<span class="n">bi</span><span class="p">,</span> <span class="n">bj</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">i</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span>
+	<span class="p">}</span>
+	<span class="n">check</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'#'</span>
+	<span class="p">}</span>
+	<span class="n">q</span> <span class="o">:=</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">{[]</span><span class="kt">int</span><span class="p">{</span><span class="n">f</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">),</span> <span class="m">0</span><span class="p">}</span> <span class="p">}</span>
+	<span class="n">vis</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">m</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">vis</span> <span class="p">{</span>
+		<span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">m</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="n">dirs</span> <span class="o">:=</span> <span class="p">[</span><span class="m">5</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">p</span> <span class="o">:=</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+		<span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">,</span> <span class="n">bi</span><span class="p">,</span> <span class="n">bj</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">%</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">%</span><span class="n">n</span>
+		<span class="n">d</span> <span class="o">:=</span> <span class="n">p</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">grid</span><span class="p">[</span><span class="n">bi</span><span class="p">][</span><span class="n">bj</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'T'</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">d</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">:=</span> <span class="n">si</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">sj</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+			<span class="k">if</span> <span class="o">!</span><span class="n">check</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="n">sx</span> <span class="o">==</span> <span class="n">bi</span> <span class="o">&amp;&amp;</span> <span class="n">sy</span> <span class="o">==</span> <span class="n">bj</span> <span class="p">{</span>
+				<span class="n">bx</span><span class="p">,</span> <span class="n">by</span> <span class="o">:=</span> <span class="n">bi</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">bj</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+				<span class="k">if</span> <span class="o">!</span><span class="n">check</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)</span> <span class="o">||</span> <span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)]</span> <span class="p">{</span>
+					<span class="k">continue</span>
+				<span class="p">}</span>
+				<span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)]</span> <span class="o">=</span> <span class="no">true</span>
+				<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">),</span> <span class="n">d</span> <span class="o">+</span> <span class="m">1</span><span class="p">})</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]</span> <span class="p">{</span>
+				<span class="n">vis</span><span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)][</span><span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="no">true</span>
+				<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">([][]</span><span class="kt">int</span><span class="p">{[]</span><span class="kt">int</span><span class="p">{</span><span class="n">f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">bj</span><span class="p">),</span> <span class="n">d</span><span class="p">}</span> <span class="p">},</span> <span class="n">q</span><span class="o">...</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minPushBox</span><span class="p">(</span><span class="nx">grid</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">[</span><span class="nx">m</span><span class="p">,</span> <span class="nx">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">grid</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">];</span>
+    <span class="kd">let</span> <span class="p">[</span><span class="nx">si</span><span class="p">,</span> <span class="nx">sj</span><span class="p">,</span> <span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">S</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">[</span><span class="nx">si</span><span class="p">,</span> <span class="nx">sj</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">];</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">B</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">[</span><span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">j</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="o">=&gt;</span> <span class="nx">i</span> <span class="o">*</span> <span class="nx">n</span> <span class="o">+</span> <span class="nx">j</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">check</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">j</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="o">=&gt;</span>
+        <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">#</span><span class="dl">'</span><span class="p">;</span>
+
+    <span class="kd">const</span> <span class="nx">q</span><span class="p">:</span> <span class="nx">Deque</span><span class="o">&lt;</span><span class="p">[</span><span class="kr">number</span><span class="p">,</span> <span class="kr">number</span><span class="p">,</span> <span class="kr">number</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deque</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">vis</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">[][]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">m</span> <span class="o">*</span> <span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">m</span> <span class="o">*</span> <span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">false</span><span class="p">));</span>
+    <span class="nx">q</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">f</span><span class="p">(</span><span class="nx">si</span><span class="p">,</span> <span class="nx">sj</span><span class="p">),</span> <span class="nx">f</span><span class="p">(</span><span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">),</span> <span class="mi">0</span><span class="p">]);</span>
+    <span class="nx">vis</span><span class="p">[</span><span class="nx">f</span><span class="p">(</span><span class="nx">si</span><span class="p">,</span> <span class="nx">sj</span><span class="p">)][</span><span class="nx">f</span><span class="p">(</span><span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">dirs</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">s</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">d</span><span class="p">]</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span><span class="o">!</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">si</span><span class="p">,</span> <span class="nx">sj</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">s</span> <span class="o">/</span> <span class="nx">n</span><span class="p">),</span> <span class="nx">s</span> <span class="o">%</span> <span class="nx">n</span><span class="p">];</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">b</span> <span class="o">/</span> <span class="nx">n</span><span class="p">),</span> <span class="nx">b</span> <span class="o">%</span> <span class="nx">n</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">bi</span><span class="p">][</span><span class="nx">bj</span><span class="p">]</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">T</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">d</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="p">[</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">si</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">k</span><span class="p">],</span> <span class="nx">sj</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">check</span><span class="p">(</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">sx</span> <span class="o">===</span> <span class="nx">bi</span> <span class="o">&amp;&amp;</span> <span class="nx">sy</span> <span class="o">===</span> <span class="nx">bj</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">const</span> <span class="p">[</span><span class="nx">bx</span><span class="p">,</span> <span class="nx">by</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bi</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">k</span><span class="p">],</span> <span class="nx">bj</span> <span class="o">+</span> <span class="nx">dirs</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">check</span><span class="p">(</span><span class="nx">bx</span><span class="p">,</span> <span class="nx">by</span><span class="p">)</span> <span class="o">||</span> <span class="nx">vis</span><span class="p">[</span><span class="nx">f</span><span class="p">(</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">)][</span><span class="nx">f</span><span class="p">(</span><span class="nx">bx</span><span class="p">,</span> <span class="nx">by</span><span class="p">)])</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">vis</span><span class="p">[</span><span class="nx">f</span><span class="p">(</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">)][</span><span class="nx">f</span><span class="p">(</span><span class="nx">bx</span><span class="p">,</span> <span class="nx">by</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">f</span><span class="p">(</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">),</span> <span class="nx">f</span><span class="p">(</span><span class="nx">bx</span><span class="p">,</span> <span class="nx">by</span><span class="p">),</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">vis</span><span class="p">[</span><span class="nx">f</span><span class="p">(</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">)][</span><span class="nx">f</span><span class="p">(</span><span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">)])</span> <span class="p">{</span>
+                <span class="nx">vis</span><span class="p">[</span><span class="nx">f</span><span class="p">(</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">)][</span><span class="nx">f</span><span class="p">(</span><span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nx">unshift</span><span class="p">([</span><span class="nx">f</span><span class="p">(</span><span class="nx">sx</span><span class="p">,</span> <span class="nx">sy</span><span class="p">),</span> <span class="nx">f</span><span class="p">(</span><span class="nx">bi</span><span class="p">,</span> <span class="nx">bj</span><span class="p">),</span> <span class="nx">d</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* ä»¥ä¸æ¯åååéæ¨¡æ¿ç±» */</span>
+<span class="kd">class</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="na">prev</span><span class="p">:</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nl">next</span><span class="p">:</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nl">begin</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">end</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">empty</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">;</span>
+    <span class="nl">data</span><span class="p">:</span> <span class="nx">T</span><span class="p">[];</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="na">N</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">N</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">isFull</span><span class="p">():</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">isEmpty</span><span class="p">():</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">push</span><span class="p">(</span><span class="na">val</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFull</span><span class="p">())</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">front</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">()</span> <span class="p">?</span> <span class="kc">undefined</span> <span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">begin</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="nx">back</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">()</span> <span class="p">?</span> <span class="kc">undefined</span> <span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="nx">pop</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">())</span> <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">+=</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">begin</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">unshift</span><span class="p">(</span><span class="na">val</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFull</span><span class="p">())</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">+=</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">begin</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">shift</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">())</span> <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">begin</span><span class="p">];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">begin</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="o">*</span><span class="nx">values</span><span class="p">():</span> <span class="nx">Generator</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="k">void</span><span class="p">,</span> <span class="kc">undefined</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">())</span> <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">begin</span><span class="p">;</span>
+        <span class="k">do</span> <span class="p">{</span>
+            <span class="k">yield</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nx">i</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">Deque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="na">head</span><span class="p">:</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="nl">tail</span><span class="p">:</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="nl">_size</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="na">collection</span><span class="p">:</span> <span class="nx">T</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[])</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tail</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">item</span> <span class="k">of</span> <span class="nx">collection</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">size</span><span class="p">():</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_size</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">push</span><span class="p">(</span><span class="na">val</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">last</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">.</span><span class="nx">prev</span><span class="o">!</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">last</span><span class="p">.</span><span class="nx">isFull</span><span class="p">())</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">inserted</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="nx">inserted</span><span class="p">;</span>
+            <span class="nx">inserted</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">;</span>
+
+            <span class="nx">last</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">inserted</span><span class="p">;</span>
+            <span class="nx">inserted</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="nx">last</span><span class="p">;</span>
+
+            <span class="nx">last</span> <span class="o">=</span> <span class="nx">inserted</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">last</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_size</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">back</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_size</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">.</span><span class="nx">prev</span><span class="o">!</span><span class="p">.</span><span class="nx">back</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="nx">pop</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">)</span> <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">last</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">.</span><span class="nx">prev</span><span class="o">!</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">last</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">last</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="nx">last</span><span class="p">.</span><span class="nx">prev</span><span class="p">;</span>
+            <span class="nx">last</span><span class="p">.</span><span class="nx">prev</span><span class="o">!</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_size</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">unshift</span><span class="p">(</span><span class="na">val</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">first</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span><span class="o">!</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">first</span><span class="p">.</span><span class="nx">isFull</span><span class="p">())</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">inserted</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CircularDeque</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">inserted</span><span class="p">;</span>
+            <span class="nx">inserted</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+
+            <span class="nx">inserted</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">first</span><span class="p">;</span>
+            <span class="nx">first</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="nx">inserted</span><span class="p">;</span>
+
+            <span class="nx">first</span> <span class="o">=</span> <span class="nx">inserted</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">first</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_size</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">shift</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">)</span> <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">first</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span><span class="o">!</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">first</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">first</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">first</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
+            <span class="nx">first</span><span class="p">.</span><span class="nx">next</span><span class="o">!</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_size</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">front</span><span class="p">():</span> <span class="nx">T</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_size</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span><span class="o">!</span><span class="p">.</span><span class="nx">front</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="o">*</span><span class="nx">values</span><span class="p">():</span> <span class="nx">Generator</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="k">void</span><span class="p">,</span> <span class="kc">undefined</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span><span class="o">!</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">node</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">tail</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">value</span> <span class="k">of</span> <span class="nx">node</span><span class="p">.</span><span class="nx">values</span><span class="p">())</span> <span class="k">yield</span> <span class="nx">value</span><span class="p">;</span>
+            <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">next</span><span class="o">!</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1263.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2416.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2416.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2416 - Sum of Prefix Scores of Strings</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2416. Sum of Prefix Scores of Strings Description You are given an array words of size n consisting of non-empty strings. We define the score of a string word as the number of strings words[i] such that word is a prefix of words[i]. For example,...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2416.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2416.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2416.html" rel="stylesheet"/>
+   <link href="solution-2416.html" rel="stylesheet"/>
+   <link href="solution-2416.html" rel="stylesheet"/>
+   <link href="solution-2416.html" rel="stylesheet"/>
+   <link href="solution-2416.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2416 - Sum of Prefix Scores of Strings" property="og:title"/>
+   <meta content="Leetcode 2416. Sum of Prefix Scores of Strings Description You are given an array words of size n consisting of non-empty strings. We define the score of a string word as the number of strings words[i] such that word is a prefix of words[i]. For example, if words = [&amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;abc&amp;quot;, &amp;quot;cab&amp;quot;], then the score of &amp;quot;ab&amp;quot; is 2, since &amp;quot;ab&amp;quot; is a prefix of both &amp;quot;ab&amp;quot; and &amp;quot;abc&amp;quot;. Return an array answer of size n where answer[i] is the sum of scores of every non-empty prefix of words[i]. Note that a string is considered as a prefix of itself. &amp;nbsp; Example 1: Input: words = [&amp;quot;abc&amp;quot;,&amp;quot;ab&amp;quot;,&amp;quot;bc&amp;quot;,&amp;quot;b&amp;quot;] Output: [5,4,3,2] Explanation: The answer for each string is the following: - &amp;quot;abc&amp;quot; has 3 prefixes: &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, and &amp;quot;abc&amp;quot;. - There are 2 strings with the prefix &amp;quot;a&amp;quot;, 2 strings with the prefix &amp;quot;ab&amp;quot;, and 1 string with the prefix &amp;quot;abc&amp;quot;. The total is answer[0] = 2 + 2 + 1 = 5. - &amp;quot;ab&amp;quot; has 2 prefixes: &amp;quot;a&amp;quot; and &amp;quot;ab&amp;quot;. - There are 2 strings with the prefix &amp;quot;a&amp;quot;, and 2 strings with the prefix &amp;quot;ab&amp;quot;. The total is answer[1] = 2 + 2 = 4. - &amp;quot;bc&amp;quot; has 2 prefixes: &amp;quot;b&amp;quot; and &amp;quot;bc&amp;quot;. - There are 2 strings with the prefix &amp;quot;b&amp;quot;, and 1 string with the prefix &amp;quot;bc&amp;quot;. The total is answer[2] = 2 + 1 = 3. - &amp;quot;b&amp;quot; has 1 prefix: &amp;quot;b&amp;quot;. - There are 2 strings with the prefix &amp;quot;b&amp;quot;. The total is answer[3] = 2. Example 2: Input: words = [&amp;quot;abcd&amp;quot;] Output: [4] Explanation: &amp;quot;abcd&amp;quot; has 4 prefixes: &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;abc&amp;quot;, and &amp;quot;abcd&amp;quot;. Each prefix has a score of one, so the total is answer[0] = 1 + 1 + 1 + 1 = 4. &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 1000 1 &amp;lt;= words[i].length &amp;lt;= 1000 words[i] consists of lowercase English letters. Solutions Solution 1: Trie Use a trie to maintain the prefixes of all strings and the occurrence count of each prefix. Then, traverse each string, accumulating the occurrence count of each prefix. The time complexity is $O(n \times m)$. Here, $n$ and $m$ are the length of the string array words and the maximum length of the strings in it, respectively. Java C++ Python Go TypeScript Javascript class Trie { private Trie[] children = new Trie[26]; private int cnt; public void insert(String w) { Trie node = this; for (char c : w.toCharArray()) { c -= 'a'; if (node.children[c] == null) { node.children[c] = new Trie(); } node = node.children[c]; ++node.cnt; } } public int search(String w) { Trie node = this; int ans = 0; for (char c : w.toCharArray()) { c -= 'a'; if (node.children[c] == null) { return ans; } node = node.children[c]; ans += node.cnt; } return ans; } } class Solution { public int[] sumPrefixScores(String[] words) { Trie trie = new Trie(); for (String w : words) { trie.insert(w); } int[] ans = new int[words.length]; for (int i = 0; i &amp;lt;..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2022-07-12T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2022-07-12-2416-Sum-of-Prefix-Scores-of-Strings/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2416.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2416 - Sum of Prefix Scores of Strings" property="twitter:title"/>
+   <meta content="Leetcode 2416. Sum of Prefix Scores of Strings Description You are given an array words of size n consisting of non-empty strings. We define the score of a string word as the number of strings words[i] such that word is a prefix of words[i]. For example, if words = [&amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;abc&amp;quot;, &amp;quot;cab&amp;quot;], then the score of &amp;quot;ab&amp;quot; is 2, since &amp;quot;ab&amp;quot; is a prefix of both &amp;quot;ab&amp;quot; and &amp;quot;abc&amp;quot;. Return an array answer of size n where answer[i] is the sum of scores of every non-empty prefix of words[i]. Note that a string is considered as a prefix of itself. &amp;nbsp; Example 1: Input: words = [&amp;quot;abc&amp;quot;,&amp;quot;ab&amp;quot;,&amp;quot;bc&amp;quot;,&amp;quot;b&amp;quot;] Output: [5,4,3,2] Explanation: The answer for each string is the following: - &amp;quot;abc&amp;quot; has 3 prefixes: &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, and &amp;quot;abc&amp;quot;. - There are 2 strings with the prefix &amp;quot;a&amp;quot;, 2 strings with the prefix &amp;quot;ab&amp;quot;, and 1 string with the prefix &amp;quot;abc&amp;quot;. The total is answer[0] = 2 + 2 + 1 = 5. - &amp;quot;ab&amp;quot; has 2 prefixes: &amp;quot;a&amp;quot; and &amp;quot;ab&amp;quot;. - There are 2 strings with the prefix &amp;quot;a&amp;quot;, and 2 strings with the prefix &amp;quot;ab&amp;quot;. The total is answer[1] = 2 + 2 = 4. - &amp;quot;bc&amp;quot; has 2 prefixes: &amp;quot;b&amp;quot; and &amp;quot;bc&amp;quot;. - There are 2 strings with the prefix &amp;quot;b&amp;quot;, and 1 string with the prefix &amp;quot;bc&amp;quot;. The total is answer[2] = 2 + 1 = 3. - &amp;quot;b&amp;quot; has 1 prefix: &amp;quot;b&amp;quot;. - There are 2 strings with the prefix &amp;quot;b&amp;quot;. The total is answer[3] = 2. Example 2: Input: words = [&amp;quot;abcd&amp;quot;] Output: [4] Explanation: &amp;quot;abcd&amp;quot; has 4 prefixes: &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;abc&amp;quot;, and &amp;quot;abcd&amp;quot;. Each prefix has a score of one, so the total is answer[0] = 1 + 1 + 1 + 1 = 4. &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 1000 1 &amp;lt;= words[i].length &amp;lt;= 1000 words[i] consists of lowercase English letters. Solutions Solution 1: Trie Use a trie to maintain the prefixes of all strings and the occurrence count of each prefix. Then, traverse each string, accumulating the occurrence count of each prefix. The time complexity is $O(n \times m)$. Here, $n$ and $m$ are the length of the string array words and the maximum length of the strings in it, respectively. Java C++ Python Go TypeScript Javascript class Trie { private Trie[] children = new Trie[26]; private int cnt; public void insert(String w) { Trie node = this; for (char c : w.toCharArray()) { c -= 'a'; if (node.children[c] == null) { node.children[c] = new Trie(); } node = node.children[c]; ++node.cnt; } } public int search(String w) { Trie node = this; int ans = 0; for (char c : w.toCharArray()) { c -= 'a'; if (node.children[c] == null) { return ans; } node = node.children[c]; ans += node.cnt; } return ans; } } class Solution { public int[] sumPrefixScores(String[] words) { Trie trie = new Trie(); for (String w : words) { trie.insert(w); } int[] ans = new int[words.length]; for (int i = 0; i &amp;lt;..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2416 - Sum of Prefix Scores of Strings | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2416 - Sum of Prefix Scores of Strings" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2416.html" rel="canonical">
+          <meta content="https://leetcode.ca/2022-07-12-2416-Sum-of-Prefix-Scores-of-Strings/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2022-07-12T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2416 - Sum of Prefix Scores of Strings","dateModified":"2022-07-12T00:00:00-07:00","datePublished":"2022-07-12T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2022-07-12-2416-Sum-of-Prefix-Scores-of-Strings/"},"url":"https://leetcode.ca/2022-07-12-2416-Sum-of-Prefix-Scores-of-Strings/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2416-sum-of-prefix-scores-of-strings">
+       <a href="solution-2416.html">
+        2416. Sum of Prefix Scores of Strings
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an array
+       <code>
+        words
+       </code>
+       of size
+       <code>
+        n
+       </code>
+       consisting of
+       <strong>
+        non-empty
+       </strong>
+       strings.
+      </p>
+      <p>
+       We define the
+       <strong>
+        score
+       </strong>
+       of a string
+       <code>
+        word
+       </code>
+       as the
+       <strong>
+        number
+       </strong>
+       of strings
+       <code>
+        words[i]
+       </code>
+       such that
+       <code>
+        word
+       </code>
+       is a
+       <strong>
+        prefix
+       </strong>
+       of
+       <code>
+        words[i]
+       </code>
+       .
+      </p>
+      <ul>
+       <li>
+        For example, if
+        <code>
+         words = ["a", "ab", "abc", "cab"]
+        </code>
+        , then the score of
+        <code>
+         "ab"
+        </code>
+        is
+        <code>
+         2
+        </code>
+        , since
+        <code>
+         "ab"
+        </code>
+        is a prefix of both
+        <code>
+         "ab"
+        </code>
+        and
+        <code>
+         "abc"
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        an array
+       </em>
+       <code>
+        answer
+       </code>
+       <em>
+        of size
+       </em>
+       <code>
+        n
+       </code>
+       <em>
+        where
+       </em>
+       <code>
+        answer[i]
+       </code>
+       <em>
+        is the
+        <strong>
+         sum
+        </strong>
+        of scores of every
+        <strong>
+         non-empty
+        </strong>
+        prefix of
+       </em>
+       <code>
+        words[i]
+       </code>
+       .
+      </p>
+      <p>
+       <strong>
+        Note
+       </strong>
+       that a string is considered as a prefix of itself.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["abc","ab","bc","b"]
+<strong>Output:</strong> [5,4,3,2]
+<strong>Explanation:</strong> The answer for each string is the following:
+- "abc" has 3 prefixes: "a", "ab", and "abc".
+- There are 2 strings with the prefix "a", 2 strings with the prefix "ab", and 1 string with the prefix "abc".
+The total is answer[0] = 2 + 2 + 1 = 5.
+- "ab" has 2 prefixes: "a" and "ab".
+- There are 2 strings with the prefix "a", and 2 strings with the prefix "ab".
+The total is answer[1] = 2 + 2 = 4.
+- "bc" has 2 prefixes: "b" and "bc".
+- There are 2 strings with the prefix "b", and 1 string with the prefix "bc".
+The total is answer[2] = 2 + 1 = 3.
+- "b" has 1 prefix: "b".
+- There are 2 strings with the prefix "b".
+The total is answer[3] = 2.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["abcd"]
+<strong>Output:</strong> [4]
+<strong>Explanation:</strong>
+"abcd" has 4 prefixes: "a", "ab", "abc", and "abcd".
+Each prefix has a score of one, so the total is answer[0] = 1 + 1 + 1 + 1 = 4.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= words.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= words[i].length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         words[i]
+        </code>
+        consists of lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Trie
+       </strong>
+      </p>
+      <p>
+       Use a trie to maintain the prefixes of all strings and the occurrence count of each prefix.
+      </p>
+      <p>
+       Then, traverse each string, accumulating the occurrence count of each prefix.
+      </p>
+      <p>
+       The time complexity is $O(n \times m)$. Here, $n$ and $m$ are the length of the string array
+       <code class="language-plaintext highlighter-rouge">
+        words
+       </code>
+       and the maximum length of the strings in it, respectively.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#4a4f045f-afa4-48c9-92d9-3b1ef14d25ae'}">
+       <li class="uk-active">
+        <a href="solution-2416.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2416.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2416.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2416.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2416.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-2416.html">
+         Javascript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="4a4f045f-afa4-48c9-92d9-3b1ef14d25ae">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Trie</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Trie</span><span class="o">[]</span> <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">cnt</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">insert</span><span class="o">(</span><span class="nc">String</span> <span class="n">w</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">w</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">];</span>
+            <span class="o">++</span><span class="n">node</span><span class="o">.</span><span class="na">cnt</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">search</span><span class="o">(</span><span class="nc">String</span> <span class="n">w</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">w</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">];</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">cnt</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">sumPrefixScores</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">w</span> <span class="o">:</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">trie</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">w</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">words</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">words</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">trie</span><span class="o">.</span><span class="na">search</span><span class="o">(</span><span class="n">words</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">Trie</span><span class="o">*&gt;</span> <span class="n">children</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">Trie</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">children</span><span class="p">(</span><span class="mi">26</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">cnt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">insert</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Trie</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Trie</span><span class="p">();</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+            <span class="o">++</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">cnt</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">search</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Trie</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">cnt</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sumPrefixScores</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Trie</span><span class="o">*</span> <span class="n">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Trie</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">w</span> <span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">trie</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">w</span> <span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">trie</span><span class="o">-&gt;</span><span class="n">search</span><span class="p">(</span><span class="n">w</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Trie</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">26</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Trie</span><span class="p">()</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ans</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">cnt</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sumPrefixScores</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">trie</span> <span class="o">=</span> <span class="n">Trie</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">trie</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">trie</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">Trie</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">children</span> <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="o">*</span><span class="n">Trie</span>
+	<span class="n">cnt</span>      <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newTrie</span><span class="p">()</span> <span class="o">*</span><span class="n">Trie</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">Trie</span><span class="p">{}</span>
+<span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Trie</span><span class="p">)</span> <span class="n">insert</span><span class="p">(</span><span class="n">w</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">node</span> <span class="o">:=</span> <span class="n">this</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">w</span> <span class="p">{</span>
+		<span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">newTrie</span><span class="p">()</span>
+		<span class="p">}</span>
+		<span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">cnt</span><span class="o">++</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Trie</span><span class="p">)</span> <span class="n">search</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">node</span> <span class="o">:=</span> <span class="n">this</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word</span> <span class="p">{</span>
+		<span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">ans</span>
+		<span class="p">}</span>
+		<span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+		<span class="n">ans</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="n">cnt</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">sumPrefixScores</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">trie</span> <span class="o">:=</span> <span class="n">newTrie</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+		<span class="n">trie</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+		<span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">trie</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">sumPrefixScores</span><span class="p">(</span><span class="nx">words</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">();</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">word</span> <span class="k">of</span> <span class="nx">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">word</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">word</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+            <span class="nx">map</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="o">??</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">words</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">word</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">word</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">word</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+            <span class="nx">count</span> <span class="o">+=</span> <span class="nx">map</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">count</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">Trie</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">insert</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">c</span> <span class="k">of</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">c</span><span class="p">])</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">c</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trie</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">c</span><span class="p">];</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">cnt</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">search</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">c</span> <span class="k">of</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">c</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">c</span><span class="p">];</span>
+            <span class="nx">ans</span> <span class="o">+=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">cnt</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * @param {string[]} words
+ * @return {number[]}
+ */</span>
+<span class="kd">var</span> <span class="nx">sumPrefixScores</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">words</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trie</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">w</span> <span class="k">of</span> <span class="nx">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">trie</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">words</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">w</span> <span class="o">=&gt;</span> <span class="nx">trie</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">w</span><span class="p">));</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2416.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

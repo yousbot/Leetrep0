@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1586.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1586.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1586 - Binary Search Tree Iterator II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1586. Binary Search Tree Iterator II Description Implement the BSTIterator class that represents an iterator over the in-order traversal of a binary search tree (BST): BSTIterator(TreeNode root) Initializes an object of the BSTIterator class. The root of the BST is given as part of the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1586.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1586.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1586.html" rel="stylesheet"/>
+   <link href="solution-1586.html" rel="stylesheet"/>
+   <link href="solution-1586.html" rel="stylesheet"/>
+   <link href="solution-1586.html" rel="stylesheet"/>
+   <link href="solution-1586.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1586 - Binary Search Tree Iterator II" property="og:title"/>
+   <meta content="Leetcode 1586. Binary Search Tree Iterator II Description Implement the BSTIterator class that represents an iterator over the in-order traversal of a binary search tree (BST): BSTIterator(TreeNode root) Initializes an object of the BSTIterator class. The root of the BST is given as part of the constructor. The pointer should be initialized to a non-existent number smaller than any element in the BST. boolean hasNext() Returns true if there exists a number in the traversal to the right of the pointer, otherwise returns false. int next() Moves the pointer to the right, then returns the number at the pointer. boolean hasPrev() Returns true if there exists a number in the traversal to the left of the pointer, otherwise returns false. int prev() Moves the pointer to the left, then returns the number at the pointer. Notice that by initializing the pointer to a non-existent smallest number, the first call to next() will return the smallest element in the BST. You may assume that next() and prev() calls will always be valid. That is, there will be at least a next/previous number in the in-order traversal when next()/prev() is called. &amp;nbsp; Example 1: Input [&amp;quot;BSTIterator&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;prev&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;hasNext&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;hasNext&amp;quot;, &amp;quot;hasPrev&amp;quot;, &amp;quot;prev&amp;quot;, &amp;quot;prev&amp;quot;] [[[7, 3, 15, null, null, 9, 20]], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null]] Output [null, 3, 7, 3, 7, true, 9, 15, 20, false, true, 15, 9] Explanation // The underlined element is where the pointer currently is. BSTIterator bSTIterator = new BSTIterator([7, 3, 15, null, null, 9, 20]); // state is [3, 7, 9, 15, 20] bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 3 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 7 bSTIterator.prev(); // state becomes [3, 7, 9, 15, 20], return 3 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 7 bSTIterator.hasNext(); // return true bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 9 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 15 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 20 bSTIterator.hasNext(); // return false bSTIterator.hasPrev(); // return true bSTIterator.prev(); // state becomes [3, 7, 9, 15, 20], return 15 bSTIterator.prev(); // state becomes [3, 7, 9, 15, 20], return 9 &amp;nbsp; Constraints: The number of nodes in the tree is in the range [1, 105]. 0 &amp;lt;= Node.val &amp;lt;= 106 At most 105 calls will be made to hasNext, next, hasPrev, and prev. &amp;nbsp; Follow up: Could you solve the problem without precalculating the values of the tree? Solutions Solution 1: In-order Traversal + Array We can use in-order traversal to store the values of all nodes in the binary search tree into an array $nums$, and then use the array to implement the iterator. We define a pointer $i$, initially $i = -1$, which points to an element in the array $nums$. Each time we call $next()$, we add $1$ to the value of $i$..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2020-04-03T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2020-04-03-1586-Binary-Search-Tree-Iterator-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1586.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1586 - Binary Search Tree Iterator II" property="twitter:title"/>
+   <meta content="Leetcode 1586. Binary Search Tree Iterator II Description Implement the BSTIterator class that represents an iterator over the in-order traversal of a binary search tree (BST): BSTIterator(TreeNode root) Initializes an object of the BSTIterator class. The root of the BST is given as part of the constructor. The pointer should be initialized to a non-existent number smaller than any element in the BST. boolean hasNext() Returns true if there exists a number in the traversal to the right of the pointer, otherwise returns false. int next() Moves the pointer to the right, then returns the number at the pointer. boolean hasPrev() Returns true if there exists a number in the traversal to the left of the pointer, otherwise returns false. int prev() Moves the pointer to the left, then returns the number at the pointer. Notice that by initializing the pointer to a non-existent smallest number, the first call to next() will return the smallest element in the BST. You may assume that next() and prev() calls will always be valid. That is, there will be at least a next/previous number in the in-order traversal when next()/prev() is called. &amp;nbsp; Example 1: Input [&amp;quot;BSTIterator&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;prev&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;hasNext&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;next&amp;quot;, &amp;quot;hasNext&amp;quot;, &amp;quot;hasPrev&amp;quot;, &amp;quot;prev&amp;quot;, &amp;quot;prev&amp;quot;] [[[7, 3, 15, null, null, 9, 20]], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null]] Output [null, 3, 7, 3, 7, true, 9, 15, 20, false, true, 15, 9] Explanation // The underlined element is where the pointer currently is. BSTIterator bSTIterator = new BSTIterator([7, 3, 15, null, null, 9, 20]); // state is [3, 7, 9, 15, 20] bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 3 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 7 bSTIterator.prev(); // state becomes [3, 7, 9, 15, 20], return 3 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 7 bSTIterator.hasNext(); // return true bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 9 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 15 bSTIterator.next(); // state becomes [3, 7, 9, 15, 20], return 20 bSTIterator.hasNext(); // return false bSTIterator.hasPrev(); // return true bSTIterator.prev(); // state becomes [3, 7, 9, 15, 20], return 15 bSTIterator.prev(); // state becomes [3, 7, 9, 15, 20], return 9 &amp;nbsp; Constraints: The number of nodes in the tree is in the range [1, 105]. 0 &amp;lt;= Node.val &amp;lt;= 106 At most 105 calls will be made to hasNext, next, hasPrev, and prev. &amp;nbsp; Follow up: Could you solve the problem without precalculating the values of the tree? Solutions Solution 1: In-order Traversal + Array We can use in-order traversal to store the values of all nodes in the binary search tree into an array $nums$, and then use the array to implement the iterator. We define a pointer $i$, initially $i = -1$, which points to an element in the array $nums$. Each time we call $next()$, we add $1$ to the value of $i$..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1586 - Binary Search Tree Iterator II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1586 - Binary Search Tree Iterator II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1586.html" rel="canonical">
+          <meta content="https://leetcode.ca/2020-04-03-1586-Binary-Search-Tree-Iterator-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2020-04-03T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1586 - Binary Search Tree Iterator II","dateModified":"2020-04-03T00:00:00-07:00","datePublished":"2020-04-03T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2020-04-03-1586-Binary-Search-Tree-Iterator-II/"},"url":"https://leetcode.ca/2020-04-03-1586-Binary-Search-Tree-Iterator-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1586-binary-search-tree-iterator-ii">
+       <a href="solution-1586.html">
+        1586. Binary Search Tree Iterator II
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Implement the
+       <code>
+        BSTIterator
+       </code>
+       class that represents an iterator over the
+       <strong>
+        <a href="solution-1586.html">
+         in-order traversal
+        </a>
+       </strong>
+       of a binary search tree (BST):
+      </p>
+      <ul>
+       <li>
+        <code>
+         BSTIterator(TreeNode root)
+        </code>
+        Initializes an object of the
+        <code>
+         BSTIterator
+        </code>
+        class. The
+        <code>
+         root
+        </code>
+        of the BST is given as part of the constructor. The pointer should be initialized to a non-existent number smaller than any element in the BST.
+       </li>
+       <li>
+        <code>
+         boolean hasNext()
+        </code>
+        Returns
+        <code>
+         true
+        </code>
+        if there exists a number in the traversal to the right of the pointer, otherwise returns
+        <code>
+         false
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         int next()
+        </code>
+        Moves the pointer to the right, then returns the number at the pointer.
+       </li>
+       <li>
+        <code>
+         boolean hasPrev()
+        </code>
+        Returns
+        <code>
+         true
+        </code>
+        if there exists a number in the traversal to the left of the pointer, otherwise returns
+        <code>
+         false
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         int prev()
+        </code>
+        Moves the pointer to the left, then returns the number at the pointer.
+       </li>
+      </ul>
+      <p>
+       Notice that by initializing the pointer to a non-existent smallest number, the first call to
+       <code>
+        next()
+       </code>
+       will return the smallest element in the BST.
+      </p>
+      <p>
+       You may assume that
+       <code>
+        next()
+       </code>
+       and
+       <code>
+        prev()
+       </code>
+       calls will always be valid. That is, there will be at least a next/previous number in the in-order traversal when
+       <code>
+        next()
+       </code>
+       /
+       <code>
+        prev()
+       </code>
+       is called.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <strong>
+        <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1500-1599/1586.Binary%20Search%20Tree%20Iterator%20II/images/untitled-diagram-1.png" style="width: 201px; height: 201px;"/>
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["BSTIterator", "next", "next", "prev", "next", "hasNext", "next", "next", "next", "hasNext", "hasPrev", "prev", "prev"]
+[[[7, 3, 15, null, null, 9, 20]], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null], [null]]
+<strong>Output</strong>
+[null, 3, 7, 3, 7, true, 9, 15, 20, false, true, 15, 9]
+
+<strong>Explanation</strong>
+// The underlined element is where the pointer currently is.
+BSTIterator bSTIterator = new BSTIterator([7, 3, 15, null, null, 9, 20]); // state is <u> </u> [3, 7, 9, 15, 20]
+bSTIterator.next(); // state becomes [<u>3</u>, 7, 9, 15, 20], return 3
+bSTIterator.next(); // state becomes [3, <u>7</u>, 9, 15, 20], return 7
+bSTIterator.prev(); // state becomes [<u>3</u>, 7, 9, 15, 20], return 3
+bSTIterator.next(); // state becomes [3, <u>7</u>, 9, 15, 20], return 7
+bSTIterator.hasNext(); // return true
+bSTIterator.next(); // state becomes [3, 7, <u>9</u>, 15, 20], return 9
+bSTIterator.next(); // state becomes [3, 7, 9, <u>15</u>, 20], return 15
+bSTIterator.next(); // state becomes [3, 7, 9, 15, <u>20</u>], return 20
+bSTIterator.hasNext(); // return false
+bSTIterator.hasPrev(); // return true
+bSTIterator.prev(); // state becomes [3, 7, 9, <u>15</u>, 20], return 15
+bSTIterator.prev(); // state becomes [3, 7, <u>9</u>, 15, 20], return 9
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        The number of nodes in the tree is in the range
+        <code>
+         [1, 10
+         <sup>
+          5
+         </sup>
+         ]
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         0 &lt;= Node.val &lt;= 10
+         <sup>
+          6
+         </sup>
+        </code>
+       </li>
+       <li>
+        At most
+        <code>
+         10
+         <sup>
+          5
+         </sup>
+        </code>
+        calls will be made to
+        <code>
+         hasNext
+        </code>
+        ,
+        <code>
+         next
+        </code>
+        ,
+        <code>
+         hasPrev
+        </code>
+        , and
+        <code>
+         prev
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Follow up:
+       </strong>
+       Could you solve the problem without precalculating the values of the tree?
+      </p>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: In-order Traversal + Array
+       </strong>
+      </p>
+      <p>
+       We can use in-order traversal to store the values of all nodes in the binary search tree into an array $nums$, and then use the array to implement the iterator. We define a pointer $i$, initially $i = -1$, which points to an element in the array $nums$. Each time we call $next()$, we add $1$ to the value of $i$ and return $nums[i]$; each time we call $prev()$, we subtract $1$ from the value of $i$ and return $nums[i]$.
+      </p>
+      <p>
+       In terms of time complexity, initializing the iterator requires $O(n)$ time, where $n$ is the number of nodes in the binary search tree. Each call to $next()$ and $prev()$ requires $O(1)$ time. In terms of space complexity, we need $O(n)$ space to store the values of all nodes in the binary search tree.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8aaaed6c-50d3-4f71-80dd-a43182826af5'}">
+       <li class="uk-active">
+        <a href="solution-1586.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1586.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1586.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1586.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1586.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8aaaed6c-50d3-4f71-80dd-a43182826af5">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */</span>
+<span class="kd">class</span> <span class="nc">BSTIterator</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">BSTIterator</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">hasNext</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">next</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">nums</span><span class="o">.</span><span class="na">get</span><span class="o">(++</span><span class="n">i</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">hasPrev</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">prev</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">nums</span><span class="o">.</span><span class="na">get</span><span class="o">(--</span><span class="n">i</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * boolean param_1 = obj.hasNext();
+ * int param_2 = obj.next();
+ * boolean param_3 = obj.hasPrev();
+ * int param_4 = obj.prev();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */</span>
+<span class="k">class</span> <span class="nc">BSTIterator</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">BSTIterator</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">hasNext</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">next</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="o">++</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">hasPrev</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">prev</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="o">--</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">nums</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">dfs</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="n">nums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator* obj = new BSTIterator(root);
+ * bool param_1 = obj-&gt;hasNext();
+ * int param_2 = obj-&gt;next();
+ * bool param_3 = obj-&gt;hasPrev();
+ * int param_4 = obj-&gt;prev();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">BSTIterator</span><span class="p">:</span> <span class="c1"># lazy load, not create full doubly-linked list
+</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">]):</span>
+
+        <span class="bp">self</span><span class="p">.</span><span class="n">next_stack</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># è®°å½ææè¿æ²¡æè¢« visited çnode
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">prev_stack</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># è®°å½ææè¢« visited çnode
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#å½ånodeçä½ç½®
+</span>        <span class="c1"># ä»æ ¹èç¹å¼å§æææå·¦è¾¹èç¹æ¾è¿stack
+</span>        <span class="c1"># ä»å¤§å°å°æ¾å°nextstackï¼ nextstackçæåä¸ä¸ªæ¯å½åæå°èç¹
+</span>        <span class="k">while</span> <span class="n">root</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">next_stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="n">left</span>
+
+    <span class="k">def</span> <span class="nf">hasNext</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># è¿æèç¹æ²¡æè¢«visited OR ææèç¹é½è¢«visited ä½æ¯å½åèç¹ä¸æ¯æåä¸ä¸ªèç¹
+</span>        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">next_stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="p">.</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">prev_stack</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+
+        <span class="c1"># å½åèç¹æ¯å·²ç»å¨stacké ä¸ä¸æ¯æåä¸ä¸ª
+</span>        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">prev_stack</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">prev_stack</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">ind</span><span class="p">].</span><span class="n">val</span>
+
+        <span class="c1"># å½åèç¹æ¯stackéçæåä¸ä¸ªï¼ ç»§ç»­çnextstackéæ¯å¦æä¸ä¸ä¸ªèç¹
+</span>        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">next_stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="c1"># ænextstackéçèç¹popåºæ¥å å°stacké
+</span>        <span class="c1"># æindex resetæåstackéçæåä¸ä¸ªèç¹ -- å½åèç¹
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">prev_stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">ind</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">prev_stack</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="c1"># å¦æå½ånodeæå³å­æ ï¼æå³å­æ çå·¦èç¹å å°nextéï¼ä»å¤§å°å°çé¡ºåºä»èä½¿ nextstackéçææ°ä¸ä¸ªnodeæ¯å½åæå°ç
+</span>        <span class="n">current</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span>
+        <span class="k">while</span> <span class="n">current</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">next_stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="p">.</span><span class="n">left</span>
+
+        <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">hasPrev</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># å¦æindex &gt;= 1 åè¯´æstackéæåä¸ä¸ªèç¹ stack[0]
+</span>        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">ind</span> <span class="o">!=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">prev</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># æå½åindexå¾åç§»1 ç¶åreturn
+</span>        <span class="c1"># later that index will be overwritten
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">ind</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">prev_stack</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">ind</span><span class="p">].</span><span class="n">val</span>
+
+<span class="c1">#############
+</span>
+<span class="k">class</span> <span class="nc">BSTIterator</span><span class="p">:</span> <span class="c1"># extra space, to save the list
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dummyHead</span> <span class="o">=</span> <span class="n">TreeNode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">curr</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">dummyHead</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">root</span>
+
+        <span class="c1"># in-order traversal, iteratively
+</span>        <span class="k">while</span> <span class="n">node</span> <span class="ow">or</span> <span class="n">stack</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">:</span>
+                <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="c1"># re-contruct a double-linked-list, re-use TreeNode class as actual LinkNode
+</span>                <span class="n">visitNode</span> <span class="o">=</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">)</span>
+                <span class="n">prev</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">visitNode</span>
+                <span class="n">visitNode</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">prev</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="n">visitNode</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span>
+
+        <span class="bp">self</span><span class="p">.</span><span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">dummyHead</span>
+
+    <span class="k">def</span> <span class="nf">hasNext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">curr</span><span class="p">.</span><span class="n">right</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">curr</span><span class="p">.</span><span class="n">right</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">curr</span><span class="p">.</span><span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">hasPrev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">curr</span><span class="p">.</span><span class="n">left</span> <span class="o">!=</span> <span class="bp">self</span><span class="p">.</span><span class="n">dummyHead</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">.</span><span class="n">curr</span> <span class="o">!=</span> <span class="bp">self</span><span class="p">.</span><span class="n">dummyHead</span>
+
+    <span class="k">def</span> <span class="nf">prev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">curr</span><span class="p">.</span><span class="n">left</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">curr</span><span class="p">.</span><span class="n">val</span>
+
+<span class="c1">###############
+</span>
+<span class="c1"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+</span><span class="k">class</span> <span class="nc">BSTIterator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">nums</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">nums</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
+
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">hasNext</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">nums</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">hasPrev</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">prev</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">nums</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">i</span><span class="p">]</span>
+
+
+<span class="c1"># Your BSTIterator object will be instantiated and called as such:
+# obj = BSTIterator(root)
+# param_1 = obj.hasNext()
+# param_2 = obj.next()
+# param_3 = obj.hasPrev()
+# param_4 = obj.prev()
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */</span>
+<span class="k">type</span> <span class="n">BSTIterator</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="n">BSTIterator</span> <span class="p">{</span>
+	<span class="n">nums</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Left</span><span class="p">)</span>
+		<span class="n">nums</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span>
+		<span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">BSTIterator</span><span class="p">{</span><span class="n">nums</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">BSTIterator</span><span class="p">)</span> <span class="n">HasNext</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">this</span><span class="o">.</span><span class="n">n</span><span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">BSTIterator</span><span class="p">)</span> <span class="n">Next</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">i</span><span class="o">++</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">this</span><span class="o">.</span><span class="n">i</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">BSTIterator</span><span class="p">)</span> <span class="n">HasPrev</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;</span> <span class="m">0</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">BSTIterator</span><span class="p">)</span> <span class="n">Prev</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">i</span><span class="o">--</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">this</span><span class="o">.</span><span class="n">i</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * obj := Constructor(root);
+ * param_1 := obj.HasNext();
+ * param_2 := obj.Next();
+ * param_3 := obj.HasPrev();
+ * param_4 := obj.Prev();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */</span>
+
+<span class="kd">class</span> <span class="nx">BSTIterator</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">nums</span><span class="p">:</span> <span class="kr">number</span><span class="p">[];</span>
+    <span class="k">private</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nx">i</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">root</span><span class="p">:</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">nums</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="kd">const</span> <span class="nx">dfs</span> <span class="o">=</span> <span class="p">(</span><span class="nx">root</span><span class="p">:</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">dfs</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">nums</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">val</span><span class="p">);</span>
+            <span class="nx">dfs</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">right</span><span class="p">);</span>
+        <span class="p">};</span>
+        <span class="nx">dfs</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">n</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">hasNext</span><span class="p">():</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">next</span><span class="p">():</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">nums</span><span class="p">[</span><span class="o">++</span><span class="k">this</span><span class="p">.</span><span class="nx">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="nx">hasPrev</span><span class="p">():</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">prev</span><span class="p">():</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">nums</span><span class="p">[</span><span class="o">--</span><span class="k">this</span><span class="p">.</span><span class="nx">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * var obj = new BSTIterator(root)
+ * var param_1 = obj.hasNext()
+ * var param_2 = obj.next()
+ * var param_3 = obj.hasPrev()
+ * var param_4 = obj.prev()
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1586.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

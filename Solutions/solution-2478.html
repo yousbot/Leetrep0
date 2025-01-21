@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2478.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2478.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2478 - Number of Beautiful Partitions</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2478. Number of Beautiful Partitions Description You are given a string s that consists of the digits &amp;#39;1&amp;#39; to &amp;#39;9&amp;#39; and two integers k and minLength. A partition of s is called beautiful if: s is partitioned into k non-intersecting substrings. Each substring has a...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2478.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2478.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2478.html" rel="stylesheet"/>
+   <link href="solution-2478.html" rel="stylesheet"/>
+   <link href="solution-2478.html" rel="stylesheet"/>
+   <link href="solution-2478.html" rel="stylesheet"/>
+   <link href="solution-2478.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2478 - Number of Beautiful Partitions" property="og:title"/>
+   <meta content="Leetcode 2478. Number of Beautiful Partitions Description You are given a string s that consists of the digits &amp;#39;1&amp;#39; to &amp;#39;9&amp;#39; and two integers k and minLength. A partition of s is called beautiful if: s is partitioned into k non-intersecting substrings. Each substring has a length of at least minLength. Each substring starts with a prime digit and ends with a non-prime digit. Prime digits are &amp;#39;2&amp;#39;, &amp;#39;3&amp;#39;, &amp;#39;5&amp;#39;, and &amp;#39;7&amp;#39;, and the rest of the digits are non-prime. Return the number of beautiful partitions of s. Since the answer may be very large, return it modulo 109 + 7. A substring is a contiguous sequence of characters within a string. &amp;nbsp; Example 1: Input: s = &amp;quot;23542185131&amp;quot;, k = 3, minLength = 2 Output: 3 Explanation: There exists three ways to create a beautiful partition: &amp;quot;2354 | 218 | 5131&amp;quot; &amp;quot;2354 | 21851 | 31&amp;quot; &amp;quot;2354218 | 51 | 31&amp;quot; Example 2: Input: s = &amp;quot;23542185131&amp;quot;, k = 3, minLength = 3 Output: 1 Explanation: There exists one way to create a beautiful partition: &amp;quot;2354 | 218 | 5131&amp;quot;. Example 3: Input: s = &amp;quot;3312958&amp;quot;, k = 3, minLength = 1 Output: 1 Explanation: There exists one way to create a beautiful partition: &amp;quot;331 | 29 | 58&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= k, minLength &amp;lt;= s.length &amp;lt;= 1000 s consists of the digits &amp;#39;1&amp;#39; to &amp;#39;9&amp;#39;. Solutions Java C++ Python Go TypeScript class Solution { private static final int MOD = (int) 1e9 + 7; public int beautifulPartitions(String s, int k, int minLength) { int n = s.length(); if (!prime(s.charAt(0)) || prime(s.charAt(n - 1))) { return 0; } int[][] f = new int[n + 1][k + 1]; int[][] g = new int[n + 1][k + 1]; f[0][0] = 1; g[0][0] = 1; for (int i = 1; i &amp;lt;= n; ++i) { if (i &amp;gt;= minLength &amp;amp;&amp;amp; !prime(s.charAt(i - 1)) &amp;amp;&amp;amp; (i == n || prime(s.charAt(i)))) { for (int j = 1; j &amp;lt;= k; ++j) { f[i][j] = g[i - minLength][j - 1]; } } for (int j = 0; j &amp;lt;= k; ++j) { g[i][j] = (g[i - 1][j] + f[i][j]) % MOD; } } return f[n][k]; } private boolean prime(char c) { return c == '2' || c == '3' || c == '5' || c == '7'; } } class Solution { public: const int mod = 1e9 + 7; int beautifulPartitions(string s, int k, int minLength) { int n = s.size(); auto prime = [](char c) { return c == '2' || c == '3' || c == '5' || c == '7'; }; if (!prime(s[0]) || prime(s[n - 1])) return 0; vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; f(n + 1, vector&amp;lt;int&amp;gt;(k + 1)); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; g(n + 1, vector&amp;lt;int&amp;gt;(k + 1)); f[0][0] = g[0][0] = 1; for (int i = 1; i &amp;lt;= n; ++i) { if (i &amp;gt;= minLength &amp;amp;&amp;amp; !prime(s[i - 1]) &amp;amp;&amp;amp; (i == n || prime(s[i]))) { for (int j = 1; j &amp;lt;= k; ++j) { f[i][j] = g[i..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2022-09-12T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2022-09-12-2478-Number-of-Beautiful-Partitions/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2478.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2478 - Number of Beautiful Partitions" property="twitter:title"/>
+   <meta content="Leetcode 2478. Number of Beautiful Partitions Description You are given a string s that consists of the digits &amp;#39;1&amp;#39; to &amp;#39;9&amp;#39; and two integers k and minLength. A partition of s is called beautiful if: s is partitioned into k non-intersecting substrings. Each substring has a length of at least minLength. Each substring starts with a prime digit and ends with a non-prime digit. Prime digits are &amp;#39;2&amp;#39;, &amp;#39;3&amp;#39;, &amp;#39;5&amp;#39;, and &amp;#39;7&amp;#39;, and the rest of the digits are non-prime. Return the number of beautiful partitions of s. Since the answer may be very large, return it modulo 109 + 7. A substring is a contiguous sequence of characters within a string. &amp;nbsp; Example 1: Input: s = &amp;quot;23542185131&amp;quot;, k = 3, minLength = 2 Output: 3 Explanation: There exists three ways to create a beautiful partition: &amp;quot;2354 | 218 | 5131&amp;quot; &amp;quot;2354 | 21851 | 31&amp;quot; &amp;quot;2354218 | 51 | 31&amp;quot; Example 2: Input: s = &amp;quot;23542185131&amp;quot;, k = 3, minLength = 3 Output: 1 Explanation: There exists one way to create a beautiful partition: &amp;quot;2354 | 218 | 5131&amp;quot;. Example 3: Input: s = &amp;quot;3312958&amp;quot;, k = 3, minLength = 1 Output: 1 Explanation: There exists one way to create a beautiful partition: &amp;quot;331 | 29 | 58&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= k, minLength &amp;lt;= s.length &amp;lt;= 1000 s consists of the digits &amp;#39;1&amp;#39; to &amp;#39;9&amp;#39;. Solutions Java C++ Python Go TypeScript class Solution { private static final int MOD = (int) 1e9 + 7; public int beautifulPartitions(String s, int k, int minLength) { int n = s.length(); if (!prime(s.charAt(0)) || prime(s.charAt(n - 1))) { return 0; } int[][] f = new int[n + 1][k + 1]; int[][] g = new int[n + 1][k + 1]; f[0][0] = 1; g[0][0] = 1; for (int i = 1; i &amp;lt;= n; ++i) { if (i &amp;gt;= minLength &amp;amp;&amp;amp; !prime(s.charAt(i - 1)) &amp;amp;&amp;amp; (i == n || prime(s.charAt(i)))) { for (int j = 1; j &amp;lt;= k; ++j) { f[i][j] = g[i - minLength][j - 1]; } } for (int j = 0; j &amp;lt;= k; ++j) { g[i][j] = (g[i - 1][j] + f[i][j]) % MOD; } } return f[n][k]; } private boolean prime(char c) { return c == '2' || c == '3' || c == '5' || c == '7'; } } class Solution { public: const int mod = 1e9 + 7; int beautifulPartitions(string s, int k, int minLength) { int n = s.size(); auto prime = [](char c) { return c == '2' || c == '3' || c == '5' || c == '7'; }; if (!prime(s[0]) || prime(s[n - 1])) return 0; vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; f(n + 1, vector&amp;lt;int&amp;gt;(k + 1)); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; g(n + 1, vector&amp;lt;int&amp;gt;(k + 1)); f[0][0] = g[0][0] = 1; for (int i = 1; i &amp;lt;= n; ++i) { if (i &amp;gt;= minLength &amp;amp;&amp;amp; !prime(s[i - 1]) &amp;amp;&amp;amp; (i == n || prime(s[i]))) { for (int j = 1; j &amp;lt;= k; ++j) { f[i][j] = g[i..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2478 - Number of Beautiful Partitions | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2478 - Number of Beautiful Partitions" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2478.html" rel="canonical">
+          <meta content="https://leetcode.ca/2022-09-12-2478-Number-of-Beautiful-Partitions/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2022-09-12T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2478 - Number of Beautiful Partitions","dateModified":"2022-09-12T00:00:00-07:00","datePublished":"2022-09-12T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2022-09-12-2478-Number-of-Beautiful-Partitions/"},"url":"https://leetcode.ca/2022-09-12-2478-Number-of-Beautiful-Partitions/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2478-number-of-beautiful-partitions">
+       <a href="solution-2478.html">
+        2478. Number of Beautiful Partitions
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a string
+       <code>
+        s
+       </code>
+       that consists of the digits
+       <code>
+        '1'
+       </code>
+       to
+       <code>
+        '9'
+       </code>
+       and two integers
+       <code>
+        k
+       </code>
+       and
+       <code>
+        minLength
+       </code>
+       .
+      </p>
+      <p>
+       A partition of
+       <code>
+        s
+       </code>
+       is called
+       <strong>
+        beautiful
+       </strong>
+       if:
+      </p>
+      <ul>
+       <li>
+        <code>
+         s
+        </code>
+        is partitioned into
+        <code>
+         k
+        </code>
+        non-intersecting substrings.
+       </li>
+       <li>
+        Each substring has a length of
+        <strong>
+         at least
+        </strong>
+        <code>
+         minLength
+        </code>
+        .
+       </li>
+       <li>
+        Each substring starts with a
+        <strong>
+         prime
+        </strong>
+        digit and ends with a
+        <strong>
+         non-prime
+        </strong>
+        digit. Prime digits are
+        <code>
+         '2'
+        </code>
+        ,
+        <code>
+         '3'
+        </code>
+        ,
+        <code>
+         '5'
+        </code>
+        , and
+        <code>
+         '7'
+        </code>
+        , and the rest of the digits are non-prime.
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the number of
+        <strong>
+         beautiful
+        </strong>
+        partitions of
+       </em>
+       <code>
+        s
+       </code>
+       . Since the answer may be very large, return it
+       <strong>
+        modulo
+       </strong>
+       <code>
+        10
+        <sup>
+         9
+        </sup>
+        + 7
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        substring
+       </strong>
+       is a contiguous sequence of characters within a string.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "23542185131", k = 3, minLength = 2
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> There exists three ways to create a beautiful partition:
+"2354 | 218 | 5131"
+"2354 | 21851 | 31"
+"2354218 | 51 | 31"
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "23542185131", k = 3, minLength = 3
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> There exists one way to create a beautiful partition: "2354 | 218 | 5131".
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "3312958", k = 3, minLength = 1
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> There exists one way to create a beautiful partition: "331 | 29 | 58".
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= k, minLength &lt;= s.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists of the digits
+        <code>
+         '1'
+        </code>
+        to
+        <code>
+         '9'
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#88617772-9f62-4656-b75f-2194c502269d'}">
+       <li class="uk-active">
+        <a href="solution-2478.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2478.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2478.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2478.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2478.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="88617772-9f62-4656-b75f-2194c502269d">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MOD</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">beautifulPartitions</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">minLength</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">prime</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span> <span class="o">||</span> <span class="n">prime</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">f</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="n">g</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">minLength</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">prime</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="n">prime</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">))))</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">g</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">minLength</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">])</span> <span class="o">%</span> <span class="no">MOD</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">k</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">prime</span><span class="o">(</span><span class="kt">char</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'2'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'3'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'5'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'7'</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mf">1e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">beautifulPartitions</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">minLength</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">auto</span> <span class="n">prime</span> <span class="o">=</span> <span class="p">[](</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'2'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'3'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'5'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'7'</span><span class="p">;</span>
+        <span class="p">};</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">||</span> <span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">minLength</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">minLength</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">beautifulPartitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">minLength</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">primes</span> <span class="o">=</span> <span class="s">'2357'</span>
+        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">primes</span> <span class="ow">or</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">primes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">minLength</span> <span class="ow">and</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">primes</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">primes</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">minLength</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">beautifulPartitions</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">,</span> <span class="n">minLength</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">prime</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">c</span> <span class="kt">byte</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'2'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'3'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'5'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'7'</span>
+	<span class="p">}</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="k">if</span> <span class="o">!</span><span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="m">0</span><span class="p">])</span> <span class="o">||</span> <span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">])</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="m">0</span>
+	<span class="p">}</span>
+	<span class="k">const</span> <span class="n">mod</span> <span class="kt">int</span> <span class="o">=</span> <span class="m">1e9</span> <span class="o">+</span> <span class="m">7</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span> <span class="p">{</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">f</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="m">0</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">minLength</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="n">prime</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+				<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">minLength</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">beautifulPartitions</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">minLength</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">prime</span> <span class="o">=</span> <span class="p">(</span><span class="nx">c</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="nx">boolean</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">2</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">3</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">5</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">7</span><span class="dl">'</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="kd">const</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">prime</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">||</span> <span class="nx">prime</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">g</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">mod</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">1</span><span class="nx">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+
+    <span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">g</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;=</span> <span class="nx">minLength</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">prime</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">n</span> <span class="o">||</span> <span class="nx">prime</span><span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="p">])))</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">k</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="nx">minLength</span><span class="p">][</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">k</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">f</span><span class="p">[</span><span class="nx">n</span><span class="p">][</span><span class="nx">k</span><span class="p">];</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2478.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

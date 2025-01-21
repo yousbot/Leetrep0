@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3307.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3307.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3307 - Find the K-th Character in String Game II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3307. Find the K-th Character in String Game II Description Alice and Bob are playing a game. Initially, Alice has a string word = &amp;quot;a&amp;quot;. You are given a positive integer k. You are also given an integer array operations, where operations[i] represents the type...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3307.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3307.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3307.html" rel="stylesheet"/>
+   <link href="solution-3307.html" rel="stylesheet"/>
+   <link href="solution-3307.html" rel="stylesheet"/>
+   <link href="solution-3307.html" rel="stylesheet"/>
+   <link href="solution-3307.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3307 - Find the K-th Character in String Game II" property="og:title"/>
+   <meta content="Leetcode 3307. Find the K-th Character in String Game II Description Alice and Bob are playing a game. Initially, Alice has a string word = &amp;quot;a&amp;quot;. You are given a positive integer k. You are also given an integer array operations, where operations[i] represents the type of the ith operation. Now Bob will ask Alice to perform all operations in sequence: If operations[i] == 0, append a copy of word to itself. If operations[i] == 1, generate a new string by changing each character in word to its next character in the English alphabet, and append it to the original word. For example, performing the operation on &amp;quot;c&amp;quot; generates &amp;quot;cd&amp;quot; and performing the operation on &amp;quot;zb&amp;quot; generates &amp;quot;zbac&amp;quot;. Return the value of the kth character in word after performing all the operations. Note that the character &amp;#39;z&amp;#39; can be changed to &amp;#39;a&amp;#39; in the second type of operation. &amp;nbsp; Example 1: Input: k = 5, operations = [0,0,0] Output: &amp;quot;a&amp;quot; Explanation: Initially, word == &amp;quot;a&amp;quot;. Alice performs the three operations as follows: Appends &amp;quot;a&amp;quot; to &amp;quot;a&amp;quot;, word becomes &amp;quot;aa&amp;quot;. Appends &amp;quot;aa&amp;quot; to &amp;quot;aa&amp;quot;, word becomes &amp;quot;aaaa&amp;quot;. Appends &amp;quot;aaaa&amp;quot; to &amp;quot;aaaa&amp;quot;, word becomes &amp;quot;aaaaaaaa&amp;quot;. Example 2: Input: k = 10, operations = [0,1,0,1] Output: &amp;quot;b&amp;quot; Explanation: Initially, word == &amp;quot;a&amp;quot;. Alice performs the four operations as follows: Appends &amp;quot;a&amp;quot; to &amp;quot;a&amp;quot;, word becomes &amp;quot;aa&amp;quot;. Appends &amp;quot;bb&amp;quot; to &amp;quot;aa&amp;quot;, word becomes &amp;quot;aabb&amp;quot;. Appends &amp;quot;aabb&amp;quot; to &amp;quot;aabb&amp;quot;, word becomes &amp;quot;aabbaabb&amp;quot;. Appends &amp;quot;bbccbbcc&amp;quot; to &amp;quot;aabbaabb&amp;quot;, word becomes &amp;quot;aabbaabbbbccbbcc&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= k &amp;lt;= 1014 1 &amp;lt;= operations.length &amp;lt;= 100 operations[i] is either 0 or 1. The input is generated such that word has at least k characters after all operations. Solutions Solution 1: Recurrence Since the length of the string doubles after each operation, if we perform $i$ operations, the length of the string will be $2^i$. We can simulate this process to find the first string length $n$ that is greater than or equal to $k$. Next, we backtrack and discuss the following cases: If $k \gt n / 2$, it means $k$ is in the second half. If $\textit{operations}[i - 1] = 1$, it means the character at position $k$ is obtained by adding $1$ to the character in the first half. We add $1$ to it. Then we update $k$ to $k - n / 2$. If $k \le n / 2$, it means $k$ is in the first half and is not affected by $\textit{operations}[i - 1]$. Next, we update $n$ to $n / 2$ and continue backtracking until $n = 1$. Finally, we take the resulting number modulo $26$ and add the ASCII code of 'a' to get the answer. The time complexity is $O(\log k)$, and the space complexity is $O(1)$. Java C++ Python Go TypeScript class Solution { public char kthCharacter(long k, int[] operations) { long n = 1; int i = 0; while (n &amp;lt; k) { n *= 2; ++i; } int d = 0; while (n &amp;gt; 1) {..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-10-24T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-10-24-3307-Find-the-K-th-Character-in-String-Game-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3307.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3307 - Find the K-th Character in String Game II" property="twitter:title"/>
+   <meta content="Leetcode 3307. Find the K-th Character in String Game II Description Alice and Bob are playing a game. Initially, Alice has a string word = &amp;quot;a&amp;quot;. You are given a positive integer k. You are also given an integer array operations, where operations[i] represents the type of the ith operation. Now Bob will ask Alice to perform all operations in sequence: If operations[i] == 0, append a copy of word to itself. If operations[i] == 1, generate a new string by changing each character in word to its next character in the English alphabet, and append it to the original word. For example, performing the operation on &amp;quot;c&amp;quot; generates &amp;quot;cd&amp;quot; and performing the operation on &amp;quot;zb&amp;quot; generates &amp;quot;zbac&amp;quot;. Return the value of the kth character in word after performing all the operations. Note that the character &amp;#39;z&amp;#39; can be changed to &amp;#39;a&amp;#39; in the second type of operation. &amp;nbsp; Example 1: Input: k = 5, operations = [0,0,0] Output: &amp;quot;a&amp;quot; Explanation: Initially, word == &amp;quot;a&amp;quot;. Alice performs the three operations as follows: Appends &amp;quot;a&amp;quot; to &amp;quot;a&amp;quot;, word becomes &amp;quot;aa&amp;quot;. Appends &amp;quot;aa&amp;quot; to &amp;quot;aa&amp;quot;, word becomes &amp;quot;aaaa&amp;quot;. Appends &amp;quot;aaaa&amp;quot; to &amp;quot;aaaa&amp;quot;, word becomes &amp;quot;aaaaaaaa&amp;quot;. Example 2: Input: k = 10, operations = [0,1,0,1] Output: &amp;quot;b&amp;quot; Explanation: Initially, word == &amp;quot;a&amp;quot;. Alice performs the four operations as follows: Appends &amp;quot;a&amp;quot; to &amp;quot;a&amp;quot;, word becomes &amp;quot;aa&amp;quot;. Appends &amp;quot;bb&amp;quot; to &amp;quot;aa&amp;quot;, word becomes &amp;quot;aabb&amp;quot;. Appends &amp;quot;aabb&amp;quot; to &amp;quot;aabb&amp;quot;, word becomes &amp;quot;aabbaabb&amp;quot;. Appends &amp;quot;bbccbbcc&amp;quot; to &amp;quot;aabbaabb&amp;quot;, word becomes &amp;quot;aabbaabbbbccbbcc&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= k &amp;lt;= 1014 1 &amp;lt;= operations.length &amp;lt;= 100 operations[i] is either 0 or 1. The input is generated such that word has at least k characters after all operations. Solutions Solution 1: Recurrence Since the length of the string doubles after each operation, if we perform $i$ operations, the length of the string will be $2^i$. We can simulate this process to find the first string length $n$ that is greater than or equal to $k$. Next, we backtrack and discuss the following cases: If $k \gt n / 2$, it means $k$ is in the second half. If $\textit{operations}[i - 1] = 1$, it means the character at position $k$ is obtained by adding $1$ to the character in the first half. We add $1$ to it. Then we update $k$ to $k - n / 2$. If $k \le n / 2$, it means $k$ is in the first half and is not affected by $\textit{operations}[i - 1]$. Next, we update $n$ to $n / 2$ and continue backtracking until $n = 1$. Finally, we take the resulting number modulo $26$ and add the ASCII code of 'a' to get the answer. The time complexity is $O(\log k)$, and the space complexity is $O(1)$. Java C++ Python Go TypeScript class Solution { public char kthCharacter(long k, int[] operations) { long n = 1; int i = 0; while (n &amp;lt; k) { n *= 2; ++i; } int d = 0; while (n &amp;gt; 1) {..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3307 - Find the K-th Character in String Game II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3307 - Find the K-th Character in String Game II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3307.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-10-24-3307-Find-the-K-th-Character-in-String-Game-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-10-24T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3307 - Find the K-th Character in String Game II","dateModified":"2024-10-24T00:00:00-07:00","datePublished":"2024-10-24T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-10-24-3307-Find-the-K-th-Character-in-String-Game-II/"},"url":"https://leetcode.ca/2024-10-24-3307-Find-the-K-th-Character-in-String-Game-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3307-find-the-k-th-character-in-string-game-ii">
+       <a href="solution-3307.html">
+        3307. Find the K-th Character in String Game II
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       Alice and Bob are playing a game. Initially, Alice has a string
+       <code>
+        word = "a"
+       </code>
+       .
+      </p>
+      <p>
+       You are given a
+       <strong>
+        positive
+       </strong>
+       integer
+       <code>
+        k
+       </code>
+       . You are also given an integer array
+       <code>
+        operations
+       </code>
+       , where
+       <code>
+        operations[i]
+       </code>
+       represents the
+       <strong>
+        type
+       </strong>
+       of the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       operation.
+      </p>
+      <p>
+       Now Bob will ask Alice to perform
+       <strong>
+        all
+       </strong>
+       operations in sequence:
+      </p>
+      <ul>
+       <li>
+        If
+        <code>
+         operations[i] == 0
+        </code>
+        ,
+        <strong>
+         append
+        </strong>
+        a copy of
+        <code>
+         word
+        </code>
+        to itself.
+       </li>
+       <li>
+        If
+        <code>
+         operations[i] == 1
+        </code>
+        , generate a new string by
+        <strong>
+         changing
+        </strong>
+        each character in
+        <code>
+         word
+        </code>
+        to its
+        <strong>
+         next
+        </strong>
+        character in the English alphabet, and
+        <strong>
+         append
+        </strong>
+        it to the
+        <em>
+         original
+        </em>
+        <code>
+         word
+        </code>
+        . For example, performing the operation on
+        <code>
+         "c"
+        </code>
+        generates
+        <code>
+         "cd"
+        </code>
+        and performing the operation on
+        <code>
+         "zb"
+        </code>
+        generates
+        <code>
+         "zbac"
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Return the value of the
+       <code>
+        k
+        <sup>
+         th
+        </sup>
+       </code>
+       character in
+       <code>
+        word
+       </code>
+       after performing all the operations.
+      </p>
+      <p>
+       <strong>
+        Note
+       </strong>
+       that the character
+       <code>
+        'z'
+       </code>
+       can be changed to
+       <code>
+        'a'
+       </code>
+       in the second type of operation.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         k = 5, operations = [0,0,0]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         "a"
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        Initially,
+        <code>
+         word == "a"
+        </code>
+        . Alice performs the three operations as follows:
+       </p>
+       <ul>
+        <li>
+         Appends
+         <code>
+          "a"
+         </code>
+         to
+         <code>
+          "a"
+         </code>
+         ,
+         <code>
+          word
+         </code>
+         becomes
+         <code>
+          "aa"
+         </code>
+         .
+        </li>
+        <li>
+         Appends
+         <code>
+          "aa"
+         </code>
+         to
+         <code>
+          "aa"
+         </code>
+         ,
+         <code>
+          word
+         </code>
+         becomes
+         <code>
+          "aaaa"
+         </code>
+         .
+        </li>
+        <li>
+         Appends
+         <code>
+          "aaaa"
+         </code>
+         to
+         <code>
+          "aaaa"
+         </code>
+         ,
+         <code>
+          word
+         </code>
+         becomes
+         <code>
+          "aaaaaaaa"
+         </code>
+         .
+        </li>
+       </ul>
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         k = 10, operations = [0,1,0,1]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         "b"
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <p>
+        Initially,
+        <code>
+         word == "a"
+        </code>
+        . Alice performs the four operations as follows:
+       </p>
+       <ul>
+        <li>
+         Appends
+         <code>
+          "a"
+         </code>
+         to
+         <code>
+          "a"
+         </code>
+         ,
+         <code>
+          word
+         </code>
+         becomes
+         <code>
+          "aa"
+         </code>
+         .
+        </li>
+        <li>
+         Appends
+         <code>
+          "bb"
+         </code>
+         to
+         <code>
+          "aa"
+         </code>
+         ,
+         <code>
+          word
+         </code>
+         becomes
+         <code>
+          "aabb"
+         </code>
+         .
+        </li>
+        <li>
+         Appends
+         <code>
+          "aabb"
+         </code>
+         to
+         <code>
+          "aabb"
+         </code>
+         ,
+         <code>
+          word
+         </code>
+         becomes
+         <code>
+          "aabbaabb"
+         </code>
+         .
+        </li>
+        <li>
+         Appends
+         <code>
+          "bbccbbcc"
+         </code>
+         to
+         <code>
+          "aabbaabb"
+         </code>
+         ,
+         <code>
+          word
+         </code>
+         becomes
+         <code>
+          "aabbaabbbbccbbcc"
+         </code>
+         .
+        </li>
+       </ul>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= k &lt;= 10
+         <sup>
+          14
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= operations.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         operations[i]
+        </code>
+        is either 0 or 1.
+       </li>
+       <li>
+        The input is generated such that
+        <code>
+         word
+        </code>
+        has
+        <strong>
+         at least
+        </strong>
+        <code>
+         k
+        </code>
+        characters after all operations.
+       </li>
+      </ul>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1-recurrence">
+       Solution 1: Recurrence
+      </h3>
+      <p>
+       Since the length of the string doubles after each operation, if we perform $i$ operations, the length of the string will be $2^i$.
+      </p>
+      <p>
+       We can simulate this process to find the first string length $n$ that is greater than or equal to $k$.
+      </p>
+      <p>
+       Next, we backtrack and discuss the following cases:
+      </p>
+      <ul>
+       <li>
+        If $k \gt n / 2$, it means $k$ is in the second half. If $\textit{operations}[i - 1] = 1$, it means the character at position $k$ is obtained by adding $1$ to the character in the first half. We add $1$ to it. Then we update $k$ to $k - n / 2$.
+       </li>
+       <li>
+        If $k \le n / 2$, it means $k$ is in the first half and is not affected by $\textit{operations}[i - 1]$.
+       </li>
+       <li>
+        Next, we update $n$ to $n / 2$ and continue backtracking until $n = 1$.
+       </li>
+      </ul>
+      <p>
+       Finally, we take the resulting number modulo $26$ and add the ASCII code of
+       <code class="language-plaintext highlighter-rouge">
+        'a'
+       </code>
+       to get the answer.
+      </p>
+      <p>
+       The time complexity is $O(\log k)$, and the space complexity is $O(1)$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#09b6e552-06c0-45a4-8fdb-d6587cf71939'}">
+       <li class="uk-active">
+        <a href="solution-3307.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3307.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3307.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3307.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3307.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="09b6e552-06c0-45a4-8fdb-d6587cf71939">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">char</span> <span class="nf">kthCharacter</span><span class="o">(</span><span class="kt">long</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">operations</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">n</span> <span class="o">*=</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="o">++</span><span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">k</span> <span class="o">-=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+                <span class="n">d</span> <span class="o">+=</span> <span class="n">operations</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="n">n</span> <span class="o">/=</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="o">--</span><span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span> <span class="o">(</span><span class="sc">'a'</span> <span class="o">+</span> <span class="o">(</span><span class="n">d</span> <span class="o">%</span> <span class="mi">26</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">char</span> <span class="n">kthCharacter</span><span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="n">k</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">operations</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">n</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">k</span> <span class="o">-=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+                <span class="n">d</span> <span class="o">+=</span> <span class="n">operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="n">n</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="o">--</span><span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="sc">'a'</span> <span class="o">+</span> <span class="p">(</span><span class="n">d</span> <span class="o">%</span> <span class="mi">26</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">kthCharacter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">operations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">-=</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span>
+                <span class="n">d</span> <span class="o">+=</span> <span class="n">operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">n</span> <span class="o">//=</span> <span class="mi">2</span>
+            <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="n">d</span> <span class="o">%</span> <span class="mi">26</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s">"a"</span><span class="p">))</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">kthCharacter</span><span class="p">(</span><span class="n">k</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">operations</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">byte</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="kt">int64</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">i</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">k</span> <span class="p">{</span>
+		<span class="n">n</span> <span class="o">*=</span> <span class="m">2</span>
+		<span class="n">i</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="n">d</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span><span class="o">/</span><span class="m">2</span> <span class="p">{</span>
+			<span class="n">k</span> <span class="o">-=</span> <span class="n">n</span> <span class="o">/</span> <span class="m">2</span>
+			<span class="n">d</span> <span class="o">+=</span> <span class="n">operations</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">n</span> <span class="o">/=</span> <span class="m">2</span>
+		<span class="n">i</span><span class="o">--</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kt">byte</span><span class="p">(</span><span class="sc">'a'</span> <span class="o">+</span> <span class="p">(</span><span class="n">d</span> <span class="o">%</span> <span class="m">26</span><span class="p">))</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">kthCharacter</span><span class="p">(</span><span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">operations</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]):</span> <span class="kr">string</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&lt;</span> <span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">n</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="nx">i</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">let</span> <span class="nx">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">k</span> <span class="o">&gt;</span> <span class="nx">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">k</span> <span class="o">-=</span> <span class="nx">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="nx">d</span> <span class="o">+=</span> <span class="nx">operations</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="nx">n</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="nx">i</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nx">d</span> <span class="o">%</span> <span class="mi">26</span><span class="p">));</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3307.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

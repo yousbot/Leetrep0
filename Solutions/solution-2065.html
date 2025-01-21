@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2065.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2065.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2065 - Maximum Path Quality of a Graph</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2065. Maximum Path Quality of a Graph Description There is an undirected graph with n nodes numbered from 0 to n - 1 (inclusive). You are given a 0-indexed integer array values where values[i] is the value of the ith node. You are also given...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2065.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2065.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2065.html" rel="stylesheet"/>
+   <link href="solution-2065.html" rel="stylesheet"/>
+   <link href="solution-2065.html" rel="stylesheet"/>
+   <link href="solution-2065.html" rel="stylesheet"/>
+   <link href="solution-2065.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2065 - Maximum Path Quality of a Graph" property="og:title"/>
+   <meta content="Leetcode 2065. Maximum Path Quality of a Graph Description There is an undirected graph with n nodes numbered from 0 to n - 1 (inclusive). You are given a 0-indexed integer array values where values[i] is the value of the ith node. You are also given a 0-indexed 2D integer array edges, where each edges[j] = [uj, vj, timej] indicates that there is an undirected edge between the nodes uj and vj, and it takes timej seconds to travel between the two nodes. Finally, you are given an integer maxTime. A valid path in the graph is any path that starts at node 0, ends at node 0, and takes at most maxTime seconds to complete. You may visit the same node multiple times. The quality of a valid path is the sum of the values of the unique nodes visited in the path (each node&amp;#39;s value is added at most once to the sum). Return the maximum quality of a valid path. Note: There are at most four edges connected to each node. &amp;nbsp; Example 1: Input: values = [0,32,10,43], edges = [[0,1,10],[1,2,15],[0,3,10]], maxTime = 49 Output: 75 Explanation: One possible path is 0 -&amp;gt; 1 -&amp;gt; 0 -&amp;gt; 3 -&amp;gt; 0. The total time taken is 10 + 10 + 10 + 10 = 40 &amp;lt;= 49. The nodes visited are 0, 1, and 3, giving a maximal path quality of 0 + 32 + 43 = 75. Example 2: Input: values = [5,10,15,20], edges = [[0,1,10],[1,2,10],[0,3,10]], maxTime = 30 Output: 25 Explanation: One possible path is 0 -&amp;gt; 3 -&amp;gt; 0. The total time taken is 10 + 10 = 20 &amp;lt;= 30. The nodes visited are 0 and 3, giving a maximal path quality of 5 + 20 = 25. Example 3: Input: values = [1,2,3,4], edges = [[0,1,10],[1,2,11],[2,3,12],[1,3,13]], maxTime = 50 Output: 7 Explanation: One possible path is 0 -&amp;gt; 1 -&amp;gt; 3 -&amp;gt; 1 -&amp;gt; 0. The total time taken is 10 + 13 + 13 + 10 = 46 &amp;lt;= 50. The nodes visited are 0, 1, and 3, giving a maximal path quality of 1 + 2 + 4 = 7. &amp;nbsp; Constraints: n == values.length 1 &amp;lt;= n &amp;lt;= 1000 0 &amp;lt;= values[i] &amp;lt;= 108 0 &amp;lt;= edges.length &amp;lt;= 2000 edges[j].length == 3 0 &amp;lt;= uj &amp;lt; vj &amp;lt;= n - 1 10 &amp;lt;= timej, maxTime &amp;lt;= 100 All the pairs [uj, vj] are unique. There are at most four edges connected to each node. The graph may not be connected. Solutions TypeScript Java C++ Python Go function maximalPathQuality(values: number[], edges: number[][], maxTime: number): number { const n = values.length; let g: Array&amp;lt;Array&amp;lt;Array&amp;lt;number&amp;gt;&amp;gt;&amp;gt; = Array.from({ length: n }, v =&amp;gt; new Array()); for (let edge of edges) { let [u, v, t] = edge; g[u].push([v, t]); g[v].push([u, t]); } let visited = new Array(n).fill(false); let ans = 0; function dfs(u: number, time: number, value: number): void { // ç´¢å¼0ä¸ºç»ç¹ if (!u) { ans = Math.max(value, ans); }..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-07-26T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-07-26-2065-Maximum-Path-Quality-of-a-Graph/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2065.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2065 - Maximum Path Quality of a Graph" property="twitter:title"/>
+   <meta content="Leetcode 2065. Maximum Path Quality of a Graph Description There is an undirected graph with n nodes numbered from 0 to n - 1 (inclusive). You are given a 0-indexed integer array values where values[i] is the value of the ith node. You are also given a 0-indexed 2D integer array edges, where each edges[j] = [uj, vj, timej] indicates that there is an undirected edge between the nodes uj and vj, and it takes timej seconds to travel between the two nodes. Finally, you are given an integer maxTime. A valid path in the graph is any path that starts at node 0, ends at node 0, and takes at most maxTime seconds to complete. You may visit the same node multiple times. The quality of a valid path is the sum of the values of the unique nodes visited in the path (each node&amp;#39;s value is added at most once to the sum). Return the maximum quality of a valid path. Note: There are at most four edges connected to each node. &amp;nbsp; Example 1: Input: values = [0,32,10,43], edges = [[0,1,10],[1,2,15],[0,3,10]], maxTime = 49 Output: 75 Explanation: One possible path is 0 -&amp;gt; 1 -&amp;gt; 0 -&amp;gt; 3 -&amp;gt; 0. The total time taken is 10 + 10 + 10 + 10 = 40 &amp;lt;= 49. The nodes visited are 0, 1, and 3, giving a maximal path quality of 0 + 32 + 43 = 75. Example 2: Input: values = [5,10,15,20], edges = [[0,1,10],[1,2,10],[0,3,10]], maxTime = 30 Output: 25 Explanation: One possible path is 0 -&amp;gt; 3 -&amp;gt; 0. The total time taken is 10 + 10 = 20 &amp;lt;= 30. The nodes visited are 0 and 3, giving a maximal path quality of 5 + 20 = 25. Example 3: Input: values = [1,2,3,4], edges = [[0,1,10],[1,2,11],[2,3,12],[1,3,13]], maxTime = 50 Output: 7 Explanation: One possible path is 0 -&amp;gt; 1 -&amp;gt; 3 -&amp;gt; 1 -&amp;gt; 0. The total time taken is 10 + 13 + 13 + 10 = 46 &amp;lt;= 50. The nodes visited are 0, 1, and 3, giving a maximal path quality of 1 + 2 + 4 = 7. &amp;nbsp; Constraints: n == values.length 1 &amp;lt;= n &amp;lt;= 1000 0 &amp;lt;= values[i] &amp;lt;= 108 0 &amp;lt;= edges.length &amp;lt;= 2000 edges[j].length == 3 0 &amp;lt;= uj &amp;lt; vj &amp;lt;= n - 1 10 &amp;lt;= timej, maxTime &amp;lt;= 100 All the pairs [uj, vj] are unique. There are at most four edges connected to each node. The graph may not be connected. Solutions TypeScript Java C++ Python Go function maximalPathQuality(values: number[], edges: number[][], maxTime: number): number { const n = values.length; let g: Array&amp;lt;Array&amp;lt;Array&amp;lt;number&amp;gt;&amp;gt;&amp;gt; = Array.from({ length: n }, v =&amp;gt; new Array()); for (let edge of edges) { let [u, v, t] = edge; g[u].push([v, t]); g[v].push([u, t]); } let visited = new Array(n).fill(false); let ans = 0; function dfs(u: number, time: number, value: number): void { // ç´¢å¼0ä¸ºç»ç¹ if (!u) { ans = Math.max(value, ans); }..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2065 - Maximum Path Quality of a Graph | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2065 - Maximum Path Quality of a Graph" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2065.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-07-26-2065-Maximum-Path-Quality-of-a-Graph/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-07-26T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2065 - Maximum Path Quality of a Graph","dateModified":"2021-07-26T00:00:00-07:00","datePublished":"2021-07-26T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-07-26-2065-Maximum-Path-Quality-of-a-Graph/"},"url":"https://leetcode.ca/2021-07-26-2065-Maximum-Path-Quality-of-a-Graph/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2065-maximum-path-quality-of-a-graph">
+       <a href="solution-2065.html">
+        2065. Maximum Path Quality of a Graph
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       There is an
+       <strong>
+        undirected
+       </strong>
+       graph with
+       <code>
+        n
+       </code>
+       nodes numbered from
+       <code>
+        0
+       </code>
+       to
+       <code>
+        n - 1
+       </code>
+       (
+       <strong>
+        inclusive
+       </strong>
+       ). You are given a
+       <strong>
+        0-indexed
+       </strong>
+       integer array
+       <code>
+        values
+       </code>
+       where
+       <code>
+        values[i]
+       </code>
+       is the
+       <strong>
+        value
+       </strong>
+       of the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       node. You are also given a
+       <strong>
+        0-indexed
+       </strong>
+       2D integer array
+       <code>
+        edges
+       </code>
+       , where each
+       <code>
+        edges[j] = [u
+        <sub>
+         j
+        </sub>
+        , v
+        <sub>
+         j
+        </sub>
+        , time
+        <sub>
+         j
+        </sub>
+        ]
+       </code>
+       indicates that there is an undirected edge between the nodes
+       <code>
+        u
+        <sub>
+         j
+        </sub>
+       </code>
+       and
+       <code>
+        v
+        <sub>
+         j
+        </sub>
+       </code>
+       ,
+       <sub>
+       </sub>
+       and it takes
+       <code>
+        time
+        <sub>
+         j
+        </sub>
+       </code>
+       seconds to travel between the two nodes. Finally, you are given an integer
+       <code>
+        maxTime
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        valid
+       </strong>
+       <strong>
+        path
+       </strong>
+       in the graph is any path that starts at node
+       <code>
+        0
+       </code>
+       , ends at node
+       <code>
+        0
+       </code>
+       , and takes
+       <strong>
+        at most
+       </strong>
+       <code>
+        maxTime
+       </code>
+       seconds to complete. You may visit the same node multiple times. The
+       <strong>
+        quality
+       </strong>
+       of a valid path is the
+       <strong>
+        sum
+       </strong>
+       of the values of the
+       <strong>
+        unique nodes
+       </strong>
+       visited in the path (each node's value is added
+       <strong>
+        at most once
+       </strong>
+       to the sum).
+      </p>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         maximum
+        </strong>
+        quality of a valid path
+       </em>
+       .
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       There are
+       <strong>
+        at most four
+       </strong>
+       edges connected to each node.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2000-2099/2065.Maximum%20Path%20Quality%20of%20a%20Graph/images/ex1drawio.png" style="width: 269px; height: 170px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> values = [0,32,10,43], edges = [[0,1,10],[1,2,15],[0,3,10]], maxTime = 49
+<strong>Output:</strong> 75
+<strong>Explanation:</strong>
+One possible path is 0 -&gt; 1 -&gt; 0 -&gt; 3 -&gt; 0. The total time taken is 10 + 10 + 10 + 10 = 40 &lt;= 49.
+The nodes visited are 0, 1, and 3, giving a maximal path quality of 0 + 32 + 43 = 75.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2000-2099/2065.Maximum%20Path%20Quality%20of%20a%20Graph/images/ex2drawio.png" style="width: 269px; height: 170px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> values = [5,10,15,20], edges = [[0,1,10],[1,2,10],[0,3,10]], maxTime = 30
+<strong>Output:</strong> 25
+<strong>Explanation:</strong>
+One possible path is 0 -&gt; 3 -&gt; 0. The total time taken is 10 + 10 = 20 &lt;= 30.
+The nodes visited are 0 and 3, giving a maximal path quality of 5 + 20 = 25.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2000-2099/2065.Maximum%20Path%20Quality%20of%20a%20Graph/images/ex31drawio.png" style="width: 236px; height: 170px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> values = [1,2,3,4], edges = [[0,1,10],[1,2,11],[2,3,12],[1,3,13]], maxTime = 50
+<strong>Output:</strong> 7
+<strong>Explanation:</strong>
+One possible path is 0 -&gt; 1 -&gt; 3 -&gt; 1 -&gt; 0. The total time taken is 10 + 13 + 13 + 10 = 46 &lt;= 50.
+The nodes visited are 0, 1, and 3, giving a maximal path quality of 1 + 2 + 4 = 7.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         n == values.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= n &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= values[i] &lt;= 10
+         <sup>
+          8
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= edges.length &lt;= 2000
+        </code>
+       </li>
+       <li>
+        <code>
+         edges[j].length == 3
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= u
+         <sub>
+          j
+         </sub>
+         &lt; v
+         <sub>
+          j
+         </sub>
+         &lt;= n - 1
+        </code>
+       </li>
+       <li>
+        <code>
+         10 &lt;= time
+         <sub>
+          j
+         </sub>
+         , maxTime &lt;= 100
+        </code>
+       </li>
+       <li>
+        All the pairs
+        <code>
+         [u
+         <sub>
+          j
+         </sub>
+         , v
+         <sub>
+          j
+         </sub>
+         ]
+        </code>
+        are
+        <strong>
+         unique
+        </strong>
+        .
+       </li>
+       <li>
+        There are
+        <strong>
+         at most four
+        </strong>
+        edges connected to each node.
+       </li>
+       <li>
+        The graph may not be connected.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#0a0a95a8-38bd-4b10-b1cd-1b3843a255a8'}">
+       <li class="uk-active">
+        <a href="solution-2065.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-2065.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2065.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2065.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2065.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="0a0a95a8-38bd-4b10-b1cd-1b3843a255a8">
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">maximalPathQuality</span><span class="p">(</span><span class="nx">values</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">edges</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][],</span> <span class="nx">maxTime</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">values</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">g</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nb">Array</span><span class="o">&lt;</span><span class="nb">Array</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;&gt;&gt;</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">n</span> <span class="p">},</span> <span class="nx">v</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">());</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">edge</span> <span class="k">of</span> <span class="nx">edges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="p">[</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">t</span><span class="p">]</span> <span class="o">=</span> <span class="nx">edge</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">push</span><span class="p">([</span><span class="nx">v</span><span class="p">,</span> <span class="nx">t</span><span class="p">]);</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">v</span><span class="p">].</span><span class="nx">push</span><span class="p">([</span><span class="nx">u</span><span class="p">,</span> <span class="nx">t</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="kd">let</span> <span class="nx">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">u</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">time</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="c1">// ç´¢å¼0ä¸ºç»ç¹</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">u</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">ans</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="p">[</span><span class="nx">v</span><span class="p">,</span> <span class="nx">dist</span><span class="p">]</span> <span class="k">of</span> <span class="nx">g</span><span class="p">[</span><span class="nx">u</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">dist</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">visited</span><span class="p">[</span><span class="nx">v</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="nx">visited</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                    <span class="nx">dfs</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="nx">time</span> <span class="o">-</span> <span class="nx">dist</span><span class="p">,</span> <span class="nx">value</span> <span class="o">+</span> <span class="nx">values</span><span class="p">[</span><span class="nx">v</span><span class="p">]);</span>
+                    <span class="nx">visited</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// åæº¯</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">dfs</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="nx">time</span> <span class="o">-</span> <span class="nx">dist</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ç´¢å¼0ä¸ºèµ·ç¹</span>
+    <span class="nx">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="nx">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">maxTime</span><span class="p">,</span> <span class="nx">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;[]</span> <span class="n">g</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span><span class="o">[]</span> <span class="n">vis</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">values</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">maxTime</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">ans</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maximalPathQuality</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">values</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">,</span> <span class="kt">int</span> <span class="n">maxTime</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">setAll</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">t</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">v</span><span class="o">,</span> <span class="n">t</span><span class="o">});</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">v</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">u</span><span class="o">,</span> <span class="n">t</span><span class="o">});</span>
+        <span class="o">}</span>
+        <span class="n">vis</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">vis</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">values</span> <span class="o">=</span> <span class="n">values</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">maxTime</span> <span class="o">=</span> <span class="n">maxTime</span><span class="o">;</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">values</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cost</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">g</span><span class="o">[</span><span class="n">u</span><span class="o">])</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">t</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cost</span> <span class="o">+</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">maxTime</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">vis</span><span class="o">[</span><span class="n">v</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">dfs</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">t</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">vis</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="n">dfs</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">t</span><span class="o">,</span> <span class="n">value</span> <span class="o">+</span> <span class="n">values</span><span class="o">[</span><span class="n">v</span><span class="o">]);</span>
+                    <span class="n">vis</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">maximalPathQuality</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">values</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edges</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxTime</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">values</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">g</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">t</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="n">vis</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">vis</span><span class="p">));</span>
+        <span class="n">vis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="p">,</span> <span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cost</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">void</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span> <span class="o">:</span> <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cost</span> <span class="o">+</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">maxTime</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="n">dfs</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">t</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                        <span class="n">dfs</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">t</span><span class="p">,</span> <span class="n">value</span> <span class="o">+</span> <span class="n">values</span><span class="p">[</span><span class="n">v</span><span class="p">]);</span>
+                        <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">maximalPathQuality</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">maxTime</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">nonlocal</span> <span class="n">ans</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">maxTime</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                        <span class="n">dfs</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">t</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="n">dfs</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">t</span><span class="p">,</span> <span class="n">value</span> <span class="o">+</span> <span class="n">values</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
+                        <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">append</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">append</span><span class="p">((</span><span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+        <span class="n">vis</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="n">vis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">maximalPathQuality</span><span class="p">(</span><span class="n">values</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">edges</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">maxTime</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+		<span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">t</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">],</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">})</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">})</span>
+	<span class="p">}</span>
+	<span class="n">vis</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="n">vis</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">value</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">value</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">v</span><span class="p">,</span> <span class="n">t</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">cost</span><span class="o">+</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="n">maxTime</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="p">{</span>
+					<span class="n">dfs</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">cost</span><span class="o">+</span><span class="n">t</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+					<span class="n">dfs</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">cost</span><span class="o">+</span><span class="n">t</span><span class="p">,</span> <span class="n">value</span><span class="o">+</span><span class="n">values</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
+					<span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">dfs</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2065.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

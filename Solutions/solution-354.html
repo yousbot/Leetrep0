@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-354.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-354.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>354 - Russian Doll Envelopes</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 354. Russian Doll Envelopes Description You are given a 2D array of integers envelopes where envelopes[i] = [wi, hi] represents the width and the height of an envelope. One envelope can fit into another if and only if both the width and height of one...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-354.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-354.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-354.html" rel="stylesheet"/>
+   <link href="solution-354.html" rel="stylesheet"/>
+   <link href="solution-354.html" rel="stylesheet"/>
+   <link href="solution-354.html" rel="stylesheet"/>
+   <link href="solution-354.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="354 - Russian Doll Envelopes" property="og:title"/>
+   <meta content="Leetcode 354. Russian Doll Envelopes Description You are given a 2D array of integers envelopes where envelopes[i] = [wi, hi] represents the width and the height of an envelope. One envelope can fit into another if and only if both the width and height of one envelope are greater than the other envelope&amp;#39;s width and height. Return the maximum number of envelopes you can Russian doll (i.e., put one inside the other). Note: You cannot rotate an envelope. &amp;nbsp; Example 1: Input: envelopes = [[5,4],[6,4],[6,7],[2,3]] Output: 3 Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] =&amp;gt; [5,4] =&amp;gt; [6,7]). Example 2: Input: envelopes = [[1,1],[1,1],[1,1]] Output: 1 &amp;nbsp; Constraints: 1 &amp;lt;= envelopes.length &amp;lt;= 105 envelopes[i].length == 2 1 &amp;lt;= wi, hi &amp;lt;= 105 Solutions Consider a situation [100,100],[200,200], [1,300],[2,400],[3,500]. If you only update x in p(x,y) every time, then the next three will be thrown away, and the maximum value is 2, while correct reulst should be 3. First, we must sort all the envelopes from smallest to largest. First row according to the width from small to large, If the width is the same, then the height is smaller and then the front, Then we start to traverse, for each envelope, we traverse all the envelopes before it, If the length and width of the current envelope are larger than those of the previous envelope, then we update the dp array by dp[i] = max(dp[i], dp[j] + 1). Then every time we traverse an envelope, we update the result Follow up - If the envelope can be rotated. What is the longest sequence? With rotation allowed, an envelope that is initially wider than taller can be rotated 90 degrees to make it taller than wide, potentially allowing it to fit into another envelope it couldnât before, or vice versa. To approach this modified problem, you would need to consider both orientations of each envelope when determining if one can fit into another. Hereâs a strategy on how you might tackle the problem with rotation allowed: 1. Generate All Orientations: For each envelope, consider both possible orientations: (width, height) and (height, width), but only if rotating it gives a different dimension. This effectively doubles the number of envelopes you have to consider, except for squares which remain unchanged upon rotation. To enqueue &amp;lt;3,4&amp;gt;, then &amp;lt;4,3&amp;gt; also enqueue, and then find the longest sequence. 2. Sort and Remove Duplicates: Sort all generated envelopes first by width and then by height. However, because an envelope in one orientation might be identical to another envelope or even the same envelope in a different orientation, youâll need to remove duplicates to ensure each unique envelope is considered only once. 3. Dynamic Programming (DP) or Patience Sorting: After sorting and deduplicating, you can apply a similar approach to the one used in the original problem. However, the decision to include an envelope in your sequence now must consider the possibility that its alternate orientation could lead..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-11-18T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-11-18-354-Russian-Doll-Envelopes/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-354.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="354 - Russian Doll Envelopes" property="twitter:title"/>
+   <meta content="Leetcode 354. Russian Doll Envelopes Description You are given a 2D array of integers envelopes where envelopes[i] = [wi, hi] represents the width and the height of an envelope. One envelope can fit into another if and only if both the width and height of one envelope are greater than the other envelope&amp;#39;s width and height. Return the maximum number of envelopes you can Russian doll (i.e., put one inside the other). Note: You cannot rotate an envelope. &amp;nbsp; Example 1: Input: envelopes = [[5,4],[6,4],[6,7],[2,3]] Output: 3 Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] =&amp;gt; [5,4] =&amp;gt; [6,7]). Example 2: Input: envelopes = [[1,1],[1,1],[1,1]] Output: 1 &amp;nbsp; Constraints: 1 &amp;lt;= envelopes.length &amp;lt;= 105 envelopes[i].length == 2 1 &amp;lt;= wi, hi &amp;lt;= 105 Solutions Consider a situation [100,100],[200,200], [1,300],[2,400],[3,500]. If you only update x in p(x,y) every time, then the next three will be thrown away, and the maximum value is 2, while correct reulst should be 3. First, we must sort all the envelopes from smallest to largest. First row according to the width from small to large, If the width is the same, then the height is smaller and then the front, Then we start to traverse, for each envelope, we traverse all the envelopes before it, If the length and width of the current envelope are larger than those of the previous envelope, then we update the dp array by dp[i] = max(dp[i], dp[j] + 1). Then every time we traverse an envelope, we update the result Follow up - If the envelope can be rotated. What is the longest sequence? With rotation allowed, an envelope that is initially wider than taller can be rotated 90 degrees to make it taller than wide, potentially allowing it to fit into another envelope it couldnât before, or vice versa. To approach this modified problem, you would need to consider both orientations of each envelope when determining if one can fit into another. Hereâs a strategy on how you might tackle the problem with rotation allowed: 1. Generate All Orientations: For each envelope, consider both possible orientations: (width, height) and (height, width), but only if rotating it gives a different dimension. This effectively doubles the number of envelopes you have to consider, except for squares which remain unchanged upon rotation. To enqueue &amp;lt;3,4&amp;gt;, then &amp;lt;4,3&amp;gt; also enqueue, and then find the longest sequence. 2. Sort and Remove Duplicates: Sort all generated envelopes first by width and then by height. However, because an envelope in one orientation might be identical to another envelope or even the same envelope in a different orientation, youâll need to remove duplicates to ensure each unique envelope is considered only once. 3. Dynamic Programming (DP) or Patience Sorting: After sorting and deduplicating, you can apply a similar approach to the one used in the original problem. However, the decision to include an envelope in your sequence now must consider the possibility that its alternate orientation could lead..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    354 - Russian Doll Envelopes | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="354 - Russian Doll Envelopes" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-354.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-11-18-354-Russian-Doll-Envelopes/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-11-18T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"354 - Russian Doll Envelopes","dateModified":"2016-11-18T00:00:00-08:00","datePublished":"2016-11-18T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-11-18-354-Russian-Doll-Envelopes/"},"url":"https://leetcode.ca/2016-11-18-354-Russian-Doll-Envelopes/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="354-russian-doll-envelopes">
+       <a href="solution-354.html">
+        354. Russian Doll Envelopes
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a 2D array of integers
+       <code>
+        envelopes
+       </code>
+       where
+       <code>
+        envelopes[i] = [w
+        <sub>
+         i
+        </sub>
+        , h
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       represents the width and the height of an envelope.
+      </p>
+      <p>
+       One envelope can fit into another if and only if both the width and height of one envelope are greater than the other envelope's width and height.
+      </p>
+      <p>
+       Return
+       <em>
+        the maximum number of envelopes you can Russian doll (i.e., put one inside the other)
+       </em>
+       .
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       You cannot rotate an envelope.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> envelopes = [[5,4],[6,4],[6,7],[2,3]]
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> The maximum number of envelopes you can Russian doll is <code>3</code> ([2,3] =&gt; [5,4] =&gt; [6,7]).
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> envelopes = [[1,1],[1,1],[1,1]]
+<strong>Output:</strong> 1
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= envelopes.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         envelopes[i].length == 2
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= w
+         <sub>
+          i
+         </sub>
+         , h
+         <sub>
+          i
+         </sub>
+         &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       Consider a situation
+       <code class="language-plaintext highlighter-rouge">
+        [100,100],[200,200], [1,300],[2,400],[3,500]
+       </code>
+       .
+If you only update x in p(x,y) every time, then the next three will be thrown away, and the maximum value is 2, while correct reulst should be 3.
+      </p>
+      <p>
+       First, we must sort all the envelopes from smallest to largest.
+      </p>
+      <ul>
+       <li>
+        First row according to the width from small to large,
+       </li>
+       <li>
+        If the width is the same, then the height is smaller and then the front,
+       </li>
+      </ul>
+      <p>
+       Then we start to traverse, for each envelope, we traverse all the envelopes before it,
+      </p>
+      <ul>
+       <li>
+        If the length and width of the current envelope are larger than those of the previous envelope, then we update the dp array by
+        <code class="language-plaintext highlighter-rouge">
+         dp[i] = max(dp[i], dp[j] + 1)
+        </code>
+        .
+       </li>
+       <li>
+        Then every time we traverse an envelope, we update the result
+       </li>
+      </ul>
+      <h2 id="follow-up---if-the-envelope-can-be-rotated-what-is-the-longest-sequence">
+       Follow up - If the envelope can be rotated. What is the longest sequence?
+      </h2>
+      <p>
+       With rotation allowed, an envelope that is initially wider than taller can be rotated 90 degrees to make it taller than wide,
+       <code class="language-plaintext highlighter-rouge">
+        potentially allowing
+       </code>
+       it to fit into another envelope it couldnât before, or vice versa.
+      </p>
+      <p>
+       To approach this modified problem, you would need to consider both orientations of each envelope when determining if one can fit into another. Hereâs a strategy on how you might tackle the problem with rotation allowed:
+      </p>
+      <h3 id="1-generate-all-orientations">
+       1. Generate All Orientations:
+      </h3>
+      <p>
+       For each envelope, consider both possible orientations: (width, height) and (height, width), but only if rotating it gives a different dimension. This effectively doubles the number of envelopes you have to consider, except for
+       <code class="language-plaintext highlighter-rouge">
+        squares
+       </code>
+       which remain unchanged upon rotation.
+      </p>
+      <p>
+       To enqueue
+       <code class="language-plaintext highlighter-rouge">
+        &lt;3,4&gt;
+       </code>
+       , then
+       <code class="language-plaintext highlighter-rouge">
+        &lt;4,3&gt;
+       </code>
+       also enqueue, and then find the longest sequence.
+      </p>
+      <h3 id="2-sort-and-remove-duplicates">
+       2. Sort and Remove Duplicates:
+      </h3>
+      <p>
+       Sort all generated envelopes first by width and then by height. However, because an envelope in one orientation might be identical to another envelope or even the same envelope in a different orientation, youâll need to
+       <code class="language-plaintext highlighter-rouge">
+        remove duplicates
+       </code>
+       to ensure each
+       <code class="language-plaintext highlighter-rouge">
+        unique
+       </code>
+       envelope is considered only once.
+      </p>
+      <h3 id="3-dynamic-programming-dp-or-patience-sorting">
+       3. Dynamic Programming (DP) or Patience Sorting:
+      </h3>
+      <p>
+       After sorting and deduplicating, you can apply a similar approach to the one used in the original problem. However, the decision to include an envelope in your sequence now must consider the possibility that its alternate orientation could lead to a different sequence of envelopes.
+      </p>
+      <ul>
+       <li>
+        <p>
+         <strong>
+          Dynamic Programming
+         </strong>
+         : Iterate through the sorted list, and for each envelope, check all previously considered envelopes to see if it fits. Keep track of the longest sequence formed with each envelope as the last one in the sequence. This approach has a time complexity of O(N^2) for N envelopes (considering both orientations).
+        </p>
+       </li>
+       <li>
+        <p>
+         <strong>
+          Patience Sorting (Binary Search)
+         </strong>
+         : A more efficient approach involves modifying the
+         <code class="language-plaintext highlighter-rouge">
+          longest increasing subsequence algorithm (LIS)
+         </code>
+         using binary search (patience sorting technique). For each envelope, find the place where it fits in the âstackâ of increasing envelopes, considering both dimensions. This approach has a time complexity of O(N log N).
+        </p>
+       </li>
+      </ul>
+      <h3 id="challenges-with-rotation">
+       Challenges with Rotation:
+      </h3>
+      <ul>
+       <li>
+        <strong>
+         Overlap
+        </strong>
+        : Allowing rotation introduces more complexity in comparing envelopes since an envelope could potentially fit into another in more than one way.
+       </li>
+       <li>
+        <strong>
+         Optimization
+        </strong>
+        : The rotation adds more possibilities to consider, making the optimization more challenging. Youâll need to carefully handle cases where rotating an envelope might allow it to fit into others that it couldnât before, or alternatively, prevent it from fitting into an envelope it could before rotation.
+       </li>
+      </ul>
+      <h3 id="below-python-code-explanation">
+       Below Python Code Explanation:
+      </h3>
+      <ol>
+       <li>
+        <p>
+         <strong>
+          All Orientations
+         </strong>
+         : For each envelope, both orientations
+         <code class="language-plaintext highlighter-rouge">
+          (w, h)
+         </code>
+         and
+         <code class="language-plaintext highlighter-rouge">
+          (h, w)
+         </code>
+         are considered, unless they are the same (which happens when
+         <code class="language-plaintext highlighter-rouge">
+          w == h
+         </code>
+         , i.e., the envelope is square).
+        </p>
+       </li>
+       <li>
+        <p>
+         <strong>
+          Sorting
+         </strong>
+         : The envelopes are sorted by width in ascending order and by height in descending order within the same width. Sorting by height in descending order ensures that when we apply the LIS algorithm on heights, we correctly handle envelopes with the same width but different heights.
+        </p>
+       </li>
+       <li>
+        <p>
+         <strong>
+          LIS on Heights
+         </strong>
+         : After sorting, the problem reduces to finding the Longest Increasing Subsequence of the heights. This part is solved using a variation of the classic LIS algorithm, where we maintain an array
+         <code class="language-plaintext highlighter-rouge">
+          tails
+         </code>
+         to keep track of the smallest possible tail for all increasing subsequences of length
+         <code class="language-plaintext highlighter-rouge">
+          i + 1
+         </code>
+         in
+         <code class="language-plaintext highlighter-rouge">
+          tails[i]
+         </code>
+         .
+        </p>
+       </li>
+       <li>
+        <p>
+         <strong>
+          Binary Search
+         </strong>
+         : For each height, we use binary search to find the position in the
+         <code class="language-plaintext highlighter-rouge">
+          tails
+         </code>
+         array where it can be placed or replaced. This step ensures the algorithm runs in
+         <code class="language-plaintext highlighter-rouge">
+          O(N log N)
+         </code>
+         time complexity, where
+         <code class="language-plaintext highlighter-rouge">
+          N
+         </code>
+         is the total number of orientations considered.
+        </p>
+       </li>
+      </ol>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#f8aaf1b1-c812-45e1-b7b0-97cf9026f030'}">
+       <li class="uk-active">
+        <a href="solution-354.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-354.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-354.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-354.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="f8aaf1b1-c812-45e1-b7b0-97cf9026f030">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxEnvelopes</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">envelopes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">envelopes</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="k">return</span> <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">?</span> <span class="n">b</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">:</span> <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span> <span class="o">});</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">envelopes</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">d</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">envelopes</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">envelopes</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">1</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">d</span><span class="o">[</span><span class="n">size</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">d</span><span class="o">[++</span><span class="n">size</span><span class="o">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">size</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">d</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">d</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">x</span> <span class="o">?</span> <span class="n">left</span> <span class="o">:</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">d</span><span class="o">[</span><span class="n">p</span><span class="o">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">size</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">maxEnvelopes</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">envelopes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">envelopes</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">envelopes</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">e1</span><span class="p">,</span> <span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">e2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">e2</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">});</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">envelopes</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">{</span><span class="n">envelopes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">[</span><span class="n">d</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">d</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">d</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">d</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="n">d</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">d</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="s">'''
+&gt;&gt;&gt; envelopes = [[100,100],[200,200], [1,300],[2,400],[2,401], [2,402], [3,500]]
+&gt;&gt;&gt; envelopes.sort(key=lambda key: (key[0], -key[1]))
+&gt;&gt;&gt; envelopes
+[[1, 300], [2, 402], [2, 401], [2, 400], [3, 500], [100, 100], [200, 200]]
+&gt;&gt;&gt;
+&gt;&gt;&gt;
+&gt;&gt;&gt; tails = []
+&gt;&gt;&gt; bisect.bisect_right(tails, envelopes[0][1])
+0
+&gt;&gt;&gt; tails.append(envelopes[0][1])
+&gt;&gt;&gt;
+&gt;&gt;&gt; bisect.bisect_right(tails, envelopes[1][1])
+1
+&gt;&gt;&gt; tails.append(envelopes[1][1])
+&gt;&gt;&gt; tails
+[300, 402]
+&gt;&gt;&gt;
+&gt;&gt;&gt; bisect.bisect_right(tails, envelopes[2][1]) # [2, 401]
+1
+'''</span>
+
+<span class="c1"># why -key[1], not key[1]?
+# eg input [[4,5],[4,6],[6,7],[2,3],[1,1]]
+</span><span class="s">'''
+&gt;&gt;&gt; a = [[4,5],[4,6],[6,7],[2,3],[1,1]]
+&gt;&gt;&gt; a.sort(key=lambda key: (key[0], -key[1]))
+&gt;&gt;&gt; a
+[[1, 1], [2, 3], [4, 6], [4, 5], [6, 7]]
+&gt;&gt;&gt; [each[1] for each in a]
+[1, 3, 6, 5, 7] 
+
+==&gt; reversed 6,5 to ensure either 6 or 5 picked for longest trail, not both 6 and 5
+
+##########
+
+
+&gt;&gt;&gt; a = [[4,5],[4,6],[6,7],[2,3],[1,1]]
+&gt;&gt;&gt; a.sort(key=lambda key: (key[0]))
+&gt;&gt;&gt; a
+[[1, 1], [2, 3], [4, 5], [4, 6], [6, 7]]
+&gt;&gt;&gt; [each[1] for each in a]
+[1, 3, 5, 6, 7]
+
+==&gt; default sort to 5,6, then both 5 and 6 picked for longest trail
+
+'''</span>
+<span class="c1"># w increasing-ordered, if w ties then h decreasing ordered. 
+# then it's the question of Longest Increasing Subsequence for all h 
+# (As in LC-300 Longest Increasing Subsequence)
+</span>
+<span class="kn">import</span> <span class="nn">bisect</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">maxEnvelopes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envelopes</span><span class="p">):</span>
+    <span class="s">"""
+    :type envelopes: List[List[int]]
+    :rtype: int
+    """</span>
+    <span class="n">envelopes</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">tails</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">envelopes</span><span class="p">)):</span>
+      <span class="n">idx</span> <span class="o">=</span> <span class="n">bisect</span><span class="p">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="n">tails</span><span class="p">,</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tails</span><span class="p">):</span>
+        <span class="n">tails</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">tails</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">tails</span><span class="p">)</span>
+
+
+<span class="c1"># follow up - allow rotation
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">maxEnvelopes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envelopes</span><span class="p">):</span>
+        <span class="c1"># Generate all possible orientations with rotation allowed
+</span>        <span class="n">all_orientations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">envelopes</span><span class="p">:</span>
+            <span class="n">all_orientations</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+            <span class="c1"># Add the rotated envelope if it results in a different orientation
+</span>            <span class="k">if</span> <span class="n">w</span> <span class="o">!=</span> <span class="n">h</span><span class="p">:</span>
+                <span class="n">all_orientations</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+        
+        <span class="c1"># Sort by width and then height
+</span>        <span class="n">all_orientations</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        
+        <span class="c1"># Apply LIS on the heights of the sorted envelopes
+</span>        <span class="k">def</span> <span class="nf">lis_heights</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+            <span class="n">tails</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">height</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">:</span>
+                <span class="c1"># Binary search
+</span>                <span class="n">idx</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">tails</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tails</span><span class="p">):</span>
+                    <span class="n">tails</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tails</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">height</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">tails</span><span class="p">)</span>
+        
+        <span class="c1"># similar to bisect.bisect_left()
+</span>        <span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">tails</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tails</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="p">:</span>
+                <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+                <span class="k">if</span> <span class="n">tails</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">:</span>
+                    <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
+            <span class="k">return</span> <span class="n">lo</span>
+        
+        <span class="c1"># Extract heights and apply LIS
+</span>        <span class="n">heights</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">all_orientations</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">lis_heights</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span>
+
+<span class="c1"># Example usage
+</span><span class="n">envelopes</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">maxEnvelopes</span><span class="p">(</span><span class="n">envelopes</span><span class="p">))</span>
+
+
+<span class="c1">#################
+</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">maxEnvelopes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envelopes</span><span class="p">):</span>
+    <span class="s">"""
+    :type envelopes: List[List[int]]
+    :rtype: int
+    """</span>
+    <span class="n">envelopes</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">tails</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">envelopes</span><span class="p">)):</span>
+      <span class="s">'''
+      @note: below line different from above
+             if use `bisect_right()`, then need to add extra if check for duplication
+      '''</span>
+      <span class="n">idx</span> <span class="o">=</span> <span class="n">bisect</span><span class="p">.</span><span class="n">bisect_right</span><span class="p">(</span><span class="n">tails</span><span class="p">,</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">tails</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">continue</span> <span class="c1"># avoid de-dup
+</span>      <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tails</span><span class="p">):</span>
+        <span class="n">tails</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">tails</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">tails</span><span class="p">)</span>
+
+
+<span class="c1"># O(N^2), overlimit if large input
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">maxEnvelopes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envelopes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">envelopes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">envelopes</span><span class="p">)</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="n">max_len</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">envelopes</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_len</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">max_len</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">maxEnvelopes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envelopes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">envelopes</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="n">envelopes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">envelopes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">d</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">bisect_left</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">maxEnvelopes</span><span class="p">(</span><span class="n">envelopes</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">envelopes</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">0</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">envelopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+	<span class="p">})</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">envelopes</span><span class="p">)</span>
+	<span class="n">d</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">d</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">envelopes</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+	<span class="n">size</span> <span class="o">:=</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">envelopes</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span> <span class="p">{</span>
+		<span class="n">x</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">size</span><span class="o">++</span>
+			<span class="n">d</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">:=</span> <span class="m">1</span><span class="p">,</span> <span class="n">size</span>
+			<span class="k">for</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="p">{</span>
+				<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="m">1</span>
+				<span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">x</span> <span class="p">{</span>
+					<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="m">1</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="p">{</span>
+				<span class="n">left</span> <span class="o">=</span> <span class="m">1</span>
+			<span class="p">}</span>
+			<span class="n">d</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">size</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-354.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>
