@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-230.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-230.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>230 - Kth Smallest Element in a BST</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Question Formatted question description: https://leetcode.ca/all/230.html 230. Kth Smallest Element in a BST Level Medium Description Given a binary search tree, write a function kthSmallest to find the kth smallest element in it. Note: You may assume k is always valid, 1 â¤ k â¤ BSTâs...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-230.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-230.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-230.html" rel="stylesheet"/>
+   <link href="solution-230.html" rel="stylesheet"/>
+   <link href="solution-230.html" rel="stylesheet"/>
+   <link href="solution-230.html" rel="stylesheet"/>
+   <link href="solution-230.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="230 - Kth Smallest Element in a BST" property="og:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/230.html 230. Kth Smallest Element in a BST Level Medium Description Given a binary search tree, write a function kthSmallest to find the kth smallest element in it. Note: You may assume k is always valid, 1 â¤ k â¤ BSTâs total elements. Example 1: Input: root = [3,1,4,null,2], k = 1 3 / \ 1 4 \ 2 Output: 1 Example 2: Input: root = [5,3,6,2,4,null,null,1], k = 3 5 / \ 3 6 / \ 2 4 / 1 Output: 3 Follow up: What if the BST is modified (insert/delete operations) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine? Solution The inorder traversal of a Binary Search Tree (BST) naturally produces a sequence of values in ascending order. To find the k-th smallest element in a BST, one can perform an inorder traversal and select the k-th element encountered. A counter is employed to keep track of the traversal order. As each node is visited during the traversal, the counter is incremented. Upon the counter reaching k, the value of the current node is identified as the k-th smallest. Solution Follow up - Improved Solution for Efficiency Directly traversing all nodes of the left subtree to determine the number of nodes each time is not the most efficient approach. To optimize, the structure of the original BST nodes can be enhanced to include a count of all nodes under a given node, including itself, its left subtree, and its right subtree. This modification allows for the swift determination of the total node count within any left subtree, facilitating quicker identification of the target value. Implementing the Enhanced Node Structure New Node Structure: Introduce an augmented node structure that maintains a count of the total nodes rooted at that node. Tree Transformation: Transform the original tree into one that adheres to the new structure, either by constructing a new tree or employing a recursive strategy to update the original tree in place. Ensure the nodeâs count includes the sum of the counts of its left and right children. Finding the k-th Smallest Element with the Enhanced Tree Tree Preparation: Begin by transforming the BST into the enhanced structure. Recursive Search: In the search for the k-th smallest element, a recursive function is used. However, direct access to a left child nodeâs count is not guaranteed since the left child might not exist. With Left Child: If the left child exists, proceed similarly to the initial solution, using the node count to guide the search. Without Left Child: If k is 1, return the current nodeâs value immediately. Otherwise, continue the search recursively on the right child, decrementing k by 1. This follow-up solution significantly reduces the number of traversals needed by leveraging the node count information, making it more efficient, especially for large trees. Code Java C++ Python Go TypeScript RenderScript import java.util.Comparator; import java.util.PriorityQueue; public class Kth_Smallest_Element_in_a_BST { /** *..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-07-17T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-07-17-230-Kth-Smallest-Element-in-a-BST/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-230.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="230 - Kth Smallest Element in a BST" property="twitter:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/230.html 230. Kth Smallest Element in a BST Level Medium Description Given a binary search tree, write a function kthSmallest to find the kth smallest element in it. Note: You may assume k is always valid, 1 â¤ k â¤ BSTâs total elements. Example 1: Input: root = [3,1,4,null,2], k = 1 3 / \ 1 4 \ 2 Output: 1 Example 2: Input: root = [5,3,6,2,4,null,null,1], k = 3 5 / \ 3 6 / \ 2 4 / 1 Output: 3 Follow up: What if the BST is modified (insert/delete operations) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine? Solution The inorder traversal of a Binary Search Tree (BST) naturally produces a sequence of values in ascending order. To find the k-th smallest element in a BST, one can perform an inorder traversal and select the k-th element encountered. A counter is employed to keep track of the traversal order. As each node is visited during the traversal, the counter is incremented. Upon the counter reaching k, the value of the current node is identified as the k-th smallest. Solution Follow up - Improved Solution for Efficiency Directly traversing all nodes of the left subtree to determine the number of nodes each time is not the most efficient approach. To optimize, the structure of the original BST nodes can be enhanced to include a count of all nodes under a given node, including itself, its left subtree, and its right subtree. This modification allows for the swift determination of the total node count within any left subtree, facilitating quicker identification of the target value. Implementing the Enhanced Node Structure New Node Structure: Introduce an augmented node structure that maintains a count of the total nodes rooted at that node. Tree Transformation: Transform the original tree into one that adheres to the new structure, either by constructing a new tree or employing a recursive strategy to update the original tree in place. Ensure the nodeâs count includes the sum of the counts of its left and right children. Finding the k-th Smallest Element with the Enhanced Tree Tree Preparation: Begin by transforming the BST into the enhanced structure. Recursive Search: In the search for the k-th smallest element, a recursive function is used. However, direct access to a left child nodeâs count is not guaranteed since the left child might not exist. With Left Child: If the left child exists, proceed similarly to the initial solution, using the node count to guide the search. Without Left Child: If k is 1, return the current nodeâs value immediately. Otherwise, continue the search recursively on the right child, decrementing k by 1. This follow-up solution significantly reduces the number of traversals needed by leveraging the node count information, making it more efficient, especially for large trees. Code Java C++ Python Go TypeScript RenderScript import java.util.Comparator; import java.util.PriorityQueue; public class Kth_Smallest_Element_in_a_BST { /** *..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    230 - Kth Smallest Element in a BST | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="230 - Kth Smallest Element in a BST" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-230.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-07-17-230-Kth-Smallest-Element-in-a-BST/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-07-17T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"230 - Kth Smallest Element in a BST","dateModified":"2016-07-17T22:21:01-07:00","datePublished":"2016-07-17T22:21:01-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-07-17-230-Kth-Smallest-Element-in-a-BST/"},"url":"https://leetcode.ca/2016-07-17-230-Kth-Smallest-Element-in-a-BST/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="question">
+       Question
+      </h1>
+      <p>
+       Formatted question description:
+       <a href="solution-230.html">
+        https://leetcode.ca/all/230.html
+       </a>
+      </p>
+      <h1 id="230-kth-smallest-element-in-a-bst">
+       230. Kth Smallest Element in a BST
+      </h1>
+      <h2 id="level">
+       Level
+      </h2>
+      <p>
+       Medium
+      </p>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a binary search tree, write a function
+       <code class="language-plaintext highlighter-rouge">
+        kthSmallest
+       </code>
+       to find the
+       <strong>
+        k
+       </strong>
+       th smallest element in it.
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+      </p>
+      <p>
+       You may assume k is always valid, 1 â¤ k â¤ BSTâs total elements.
+      </p>
+      <p>
+       <strong>
+        Example 1:
+       </strong>
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>Input: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+Output: 1
+</code></pre>
+       </div>
+      </div>
+      <p>
+       <strong>
+        Example 2:
+       </strong>
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>Input: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+Output: 3
+</code></pre>
+       </div>
+      </div>
+      <p>
+       <strong>
+        Follow up:
+       </strong>
+      </p>
+      <p>
+       What if the BST is modified (insert/delete operations) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine?
+      </p>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       The
+       <code class="language-plaintext highlighter-rouge">
+        inorder
+       </code>
+       traversal of a Binary Search Tree (BST) naturally produces a sequence of values in ascending order. To find the
+       <code class="language-plaintext highlighter-rouge">
+        k-th
+       </code>
+       smallest element in a BST, one can perform an inorder traversal and select the
+       <code class="language-plaintext highlighter-rouge">
+        k-th
+       </code>
+       element encountered.
+      </p>
+      <p>
+       A
+       <code class="language-plaintext highlighter-rouge">
+        counter
+       </code>
+       is employed to keep track of the traversal order. As each node is visited during the traversal, the counter is incremented. Upon the counter reaching
+       <code class="language-plaintext highlighter-rouge">
+        k
+       </code>
+       , the value of the current node is identified as the
+       <code class="language-plaintext highlighter-rouge">
+        k-th
+       </code>
+       smallest.
+      </p>
+      <h2 id="solution-follow-up---improved-solution-for-efficiency">
+       Solution Follow up - Improved Solution for Efficiency
+      </h2>
+      <p>
+       Directly traversing all nodes of the left subtree to determine the number of nodes each time is not the most efficient approach. To optimize, the structure of the original BST nodes can be enhanced to include a count of all nodes under a given node, including itself, its left subtree, and its right subtree.
+      </p>
+      <p>
+       This modification allows for the swift determination of the total node count within any left subtree, facilitating quicker identification of the target value.
+      </p>
+      <h3 id="implementing-the-enhanced-node-structure">
+       Implementing the Enhanced Node Structure
+      </h3>
+      <ul>
+       <li>
+        <strong>
+         New Node Structure
+        </strong>
+        : Introduce an augmented node structure that maintains a count of the total nodes rooted at that node.
+       </li>
+       <li>
+        <strong>
+         Tree Transformation
+        </strong>
+        : Transform the original tree into one that adheres to the new structure, either by constructing a new tree or employing a recursive strategy to update the original tree in place. Ensure the nodeâs count includes the sum of the counts of its left and right children.
+       </li>
+      </ul>
+      <h3 id="finding-the-k-th-smallest-element-with-the-enhanced-tree">
+       Finding the
+       <code class="language-plaintext highlighter-rouge">
+        k-th
+       </code>
+       Smallest Element with the Enhanced Tree
+      </h3>
+      <ul>
+       <li>
+        <strong>
+         Tree Preparation
+        </strong>
+        : Begin by transforming the BST into the enhanced structure.
+       </li>
+       <li>
+        <strong>
+         Recursive Search
+        </strong>
+        : In the search for the
+        <code class="language-plaintext highlighter-rouge">
+         k-th
+        </code>
+        smallest element, a recursive function is used. However, direct access to a left child nodeâs count is not guaranteed since the left child might not exist.
+        <ul>
+         <li>
+          <strong>
+           With Left Child
+          </strong>
+          : If the left child exists, proceed similarly to the initial solution, using the node count to guide the search.
+         </li>
+         <li>
+          <strong>
+           Without Left Child
+          </strong>
+          :
+          <ul>
+           <li>
+            If
+            <code class="language-plaintext highlighter-rouge">
+             k
+            </code>
+            is 1, return the current nodeâs value immediately.
+           </li>
+           <li>
+            Otherwise, continue the search recursively on the right child, decrementing
+            <code class="language-plaintext highlighter-rouge">
+             k
+            </code>
+            by 1.
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+       This follow-up solution significantly reduces the number of traversals needed by leveraging the node count information, making it more efficient, especially for large trees.
+      </p>
+      <h1 id="code">
+       Code
+      </h1>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#98e4e756-95be-4460-8ae2-7d30fd763869'}">
+       <li class="uk-active">
+        <a href="solution-230.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-230.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-230.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-230.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-230.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-230.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="98e4e756-95be-4460-8ae2-7d30fd763869">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.Comparator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.PriorityQueue</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Kth_Smallest_Element_in_a_BST</span> <span class="o">{</span>
+    <span class="cm">/**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     *     int val;
+     *     TreeNode left;
+     *     TreeNode right;
+     *     TreeNode(int x) { val = x; }
+     * }
+     */</span>
+    <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+
+        <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">heap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;(</span><span class="k">new</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">o1</span><span class="o">,</span> <span class="nc">Integer</span> <span class="n">o2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">o2</span> <span class="o">-</span> <span class="n">o1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">kthSmallest</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+
+            <span class="k">return</span> <span class="n">heap</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">// maintain heap</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">heap</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">heap</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+
+                <span class="c1">// followup question, heap.remove() is by object, not index.</span>
+                <span class="c1">// so if delete operation, just remove element from both tree and heap</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="n">heap</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                    <span class="n">heap</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">val</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Solution_followUp</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">kthSmallest</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">MyTreeNode</span> <span class="n">node</span> <span class="o">=</span> <span class="n">build</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">class</span> <span class="nc">MyTreeNode</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">val</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">count</span><span class="o">;</span> <span class="c1">// key point to add up and find k-th element</span>
+        <span class="nc">MyTreeNode</span> <span class="n">left</span><span class="o">;</span>
+        <span class="nc">MyTreeNode</span> <span class="n">right</span><span class="o">;</span>
+        <span class="nc">MyTreeNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">count</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="nc">MyTreeNode</span> <span class="nf">build</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="nc">MyTreeNode</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyTreeNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">build</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">build</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">node</span><span class="o">.</span><span class="na">count</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">count</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">node</span><span class="o">.</span><span class="na">count</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">.</span><span class="na">count</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">int</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">MyTreeNode</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">count</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;=</span> <span class="n">cnt</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">cnt</span><span class="o">);</span> <span class="c1">// -1 is to exclude current root</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c1">// k == cnt + 1</span>
+                <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
+            <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="err">############</span>
+
+<span class="cm">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">kthSmallest</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">TreeNode</span><span class="o">&gt;</span> <span class="n">stk</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">root</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">||</span> <span class="o">!</span><span class="n">stk</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">stk</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(--</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/kth-smallest-element-in-a-bst/</span>
+<span class="c1">// Time: O(N)</span>
+<span class="c1">// Space: O(H)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">kthSmallest</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">function</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">inorder</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">TreeNode</span> <span class="o">*</span><span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">inorder</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">val</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">inorder</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="p">};</span>
+        <span class="k">return</span> <span class="n">inorder</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">kthSmallest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">stk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">stk</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">root</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="n">left</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">k</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">root</span><span class="p">.</span><span class="n">val</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="n">right</span>
+
+<span class="c1">############
+</span>
+<span class="c1"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+</span><span class="k">class</span> <span class="nc">Solution_followUp</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">kthSmallest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">MyTreeNode</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># default 1
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MyTreeNode</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">MyTreeNode</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">val</span><span class="p">)</span> <span class="c1"># default count already is 1
+</span>        <span class="n">node</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">)</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">count</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">count</span>
+        <span class="k">return</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">MyTreeNode</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="n">cnt</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">count</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">cnt</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># k == cnt+1
+</span>                <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># cannot move to beginning of dfs()
+</span>                <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */</span>
+<span class="k">func</span> <span class="n">kthSmallest</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">stk</span> <span class="o">:=</span> <span class="p">[]</span><span class="o">*</span><span class="n">TreeNode</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">root</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">||</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">root</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
+			<span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">Left</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">root</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">k</span><span class="o">--</span>
+			<span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="n">Val</span>
+			<span class="p">}</span>
+			<span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">Right</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="m">0</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */</span>
+
+<span class="kd">function</span> <span class="nx">kthSmallest</span><span class="p">(</span><span class="nx">root</span><span class="p">:</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">dfs</span> <span class="o">=</span> <span class="p">(</span><span class="nx">root</span><span class="p">:</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="p">{</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">left</span><span class="p">,</span> <span class="nx">right</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">left</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">l</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">k</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">k</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">val</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">right</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="k">return</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// Definition for a binary tree node.</span>
+<span class="c1">// #[derive(Debug, PartialEq, Eq)]</span>
+<span class="c1">// pub struct TreeNode {</span>
+<span class="c1">//   pub val: i32,</span>
+<span class="c1">//   pub left: Option&lt;Rc&lt;RefCell&lt;TreeNode&gt;&gt;&gt;,</span>
+<span class="c1">//   pub right: Option&lt;Rc&lt;RefCell&lt;TreeNode&gt;&gt;&gt;,</span>
+<span class="c1">// }</span>
+<span class="c1">//</span>
+<span class="c1">// impl TreeNode {</span>
+<span class="c1">//   #[inline]</span>
+<span class="c1">//   pub fn new(val: i32) -&gt; Self {</span>
+<span class="c1">//     TreeNode {</span>
+<span class="c1">//       val,</span>
+<span class="c1">//       left: None,</span>
+<span class="c1">//       right: None</span>
+<span class="c1">//     }</span>
+<span class="c1">//   }</span>
+<span class="c1">// }</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">rc</span><span class="p">::</span><span class="nb">Rc</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">cell</span><span class="p">::</span><span class="n">RefCell</span><span class="p">;</span>
+<span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;&gt;&gt;</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">=</span> <span class="n">root</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="nf">.borrow_mut</span><span class="p">();</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">node</span><span class="py">.left</span><span class="nf">.take</span><span class="p">(),</span> <span class="n">res</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+            <span class="n">res</span><span class="nf">.push</span><span class="p">(</span><span class="n">node</span><span class="py">.val</span><span class="p">);</span>
+            <span class="k">if</span> <span class="n">res</span><span class="nf">.len</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">k</span> <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">node</span><span class="py">.right</span><span class="nf">.take</span><span class="p">(),</span> <span class="n">res</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">kth_smallest</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;&gt;&gt;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">;</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">res</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nn">Vec</span><span class="p">::</span><span class="nf">with_capacity</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+        <span class="k">Self</span><span class="p">::</span><span class="nf">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">res</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-230.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

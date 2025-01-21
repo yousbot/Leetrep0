@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2213.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2213.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2213 - Longest Substring of One Repeating Character</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2213. Longest Substring of One Repeating Character Description You are given a 0-indexed string s. You are also given a 0-indexed string queryCharacters of length k and a 0-indexed array of integer indices queryIndices of length k, both of which are used to describe k...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2213.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2213.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2213.html" rel="stylesheet"/>
+   <link href="solution-2213.html" rel="stylesheet"/>
+   <link href="solution-2213.html" rel="stylesheet"/>
+   <link href="solution-2213.html" rel="stylesheet"/>
+   <link href="solution-2213.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2213 - Longest Substring of One Repeating Character" property="og:title"/>
+   <meta content="Leetcode 2213. Longest Substring of One Repeating Character Description You are given a 0-indexed string s. You are also given a 0-indexed string queryCharacters of length k and a 0-indexed array of integer indices queryIndices of length k, both of which are used to describe k queries. The ith query updates the character in s at index queryIndices[i] to the character queryCharacters[i]. Return an array lengths of length k where lengths[i] is the length of the longest substring of s consisting of only one repeating character after the ith query is performed. &amp;nbsp; Example 1: Input: s = &amp;quot;babacc&amp;quot;, queryCharacters = &amp;quot;bcb&amp;quot;, queryIndices = [1,3,3] Output: [3,3,4] Explanation: - 1st query updates s = &amp;quot;bbbacc&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;bbb&amp;quot; with length 3. - 2nd query updates s = &amp;quot;bbbccc&amp;quot;. The longest substring consisting of one repeating character can be &amp;quot;bbb&amp;quot; or &amp;quot;ccc&amp;quot; with length 3. - 3rd query updates s = &amp;quot;bbbbcc&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;bbbb&amp;quot; with length 4. Thus, we return [3,3,4]. Example 2: Input: s = &amp;quot;abyzz&amp;quot;, queryCharacters = &amp;quot;aa&amp;quot;, queryIndices = [2,1] Output: [2,3] Explanation: - 1st query updates s = &amp;quot;abazz&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;zz&amp;quot; with length 2. - 2nd query updates s = &amp;quot;aaazz&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;aaa&amp;quot; with length 3. Thus, we return [2,3]. &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 105 s consists of lowercase English letters. k == queryCharacters.length == queryIndices.length 1 &amp;lt;= k &amp;lt;= 105 queryCharacters consists of lowercase English letters. 0 &amp;lt;= queryIndices[i] &amp;lt; s.length Solutions Segment Tree. Java C++ Python Go TypeScript class Node { int l; int r; int size; int lmx; int rmx; int mx; char lc; char rc; } class SegmentTree { private String s; private Node[] tr; public SegmentTree(String s) { int n = s.length(); this.s = s; tr = new Node[n &amp;lt;&amp;lt; 2]; for (int i = 0; i &amp;lt; tr.length; ++i) { tr[i] = new Node(); } build(1, 1, n); } public void build(int u, int l, int r) { tr[u].l = l; tr[u].r = r; if (l == r) { tr[u].lmx = 1; tr[u].rmx = 1; tr[u].mx = 1; tr[u].size = 1; tr[u].lc = s.charAt(l - 1); tr[u].rc = s.charAt(l - 1); return; } int mid = (l + r) &amp;gt;&amp;gt; 1; build(u &amp;lt;&amp;lt; 1, l, mid); build(u &amp;lt;&amp;lt; 1 | 1, mid + 1, r); pushup(u); } void modify(int u, int x, char v) { if (tr[u].l == x &amp;amp;&amp;amp; tr[u].r == x) { tr[u].lc = v; tr[u].rc = v; return; } int mid = (tr[u].l + tr[u].r) &amp;gt;&amp;gt; 1; if (x &amp;lt;= mid) { modify(u &amp;lt;&amp;lt; 1, x, v); } else { modify(u &amp;lt;&amp;lt; 1 | 1, x, v); } pushup(u); } Node query(int u, int l, int r) { if (tr[u].l &amp;gt;= l &amp;amp;&amp;amp; tr[u].r &amp;lt;= r) { return tr[u]; } int mid = (tr[u].l + tr[u].r) &amp;gt;&amp;gt; 1; if (r &amp;lt;=..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-12-21T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-12-21-2213-Longest-Substring-of-One-Repeating-Character/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2213.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2213 - Longest Substring of One Repeating Character" property="twitter:title"/>
+   <meta content="Leetcode 2213. Longest Substring of One Repeating Character Description You are given a 0-indexed string s. You are also given a 0-indexed string queryCharacters of length k and a 0-indexed array of integer indices queryIndices of length k, both of which are used to describe k queries. The ith query updates the character in s at index queryIndices[i] to the character queryCharacters[i]. Return an array lengths of length k where lengths[i] is the length of the longest substring of s consisting of only one repeating character after the ith query is performed. &amp;nbsp; Example 1: Input: s = &amp;quot;babacc&amp;quot;, queryCharacters = &amp;quot;bcb&amp;quot;, queryIndices = [1,3,3] Output: [3,3,4] Explanation: - 1st query updates s = &amp;quot;bbbacc&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;bbb&amp;quot; with length 3. - 2nd query updates s = &amp;quot;bbbccc&amp;quot;. The longest substring consisting of one repeating character can be &amp;quot;bbb&amp;quot; or &amp;quot;ccc&amp;quot; with length 3. - 3rd query updates s = &amp;quot;bbbbcc&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;bbbb&amp;quot; with length 4. Thus, we return [3,3,4]. Example 2: Input: s = &amp;quot;abyzz&amp;quot;, queryCharacters = &amp;quot;aa&amp;quot;, queryIndices = [2,1] Output: [2,3] Explanation: - 1st query updates s = &amp;quot;abazz&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;zz&amp;quot; with length 2. - 2nd query updates s = &amp;quot;aaazz&amp;quot;. The longest substring consisting of one repeating character is &amp;quot;aaa&amp;quot; with length 3. Thus, we return [2,3]. &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 105 s consists of lowercase English letters. k == queryCharacters.length == queryIndices.length 1 &amp;lt;= k &amp;lt;= 105 queryCharacters consists of lowercase English letters. 0 &amp;lt;= queryIndices[i] &amp;lt; s.length Solutions Segment Tree. Java C++ Python Go TypeScript class Node { int l; int r; int size; int lmx; int rmx; int mx; char lc; char rc; } class SegmentTree { private String s; private Node[] tr; public SegmentTree(String s) { int n = s.length(); this.s = s; tr = new Node[n &amp;lt;&amp;lt; 2]; for (int i = 0; i &amp;lt; tr.length; ++i) { tr[i] = new Node(); } build(1, 1, n); } public void build(int u, int l, int r) { tr[u].l = l; tr[u].r = r; if (l == r) { tr[u].lmx = 1; tr[u].rmx = 1; tr[u].mx = 1; tr[u].size = 1; tr[u].lc = s.charAt(l - 1); tr[u].rc = s.charAt(l - 1); return; } int mid = (l + r) &amp;gt;&amp;gt; 1; build(u &amp;lt;&amp;lt; 1, l, mid); build(u &amp;lt;&amp;lt; 1 | 1, mid + 1, r); pushup(u); } void modify(int u, int x, char v) { if (tr[u].l == x &amp;amp;&amp;amp; tr[u].r == x) { tr[u].lc = v; tr[u].rc = v; return; } int mid = (tr[u].l + tr[u].r) &amp;gt;&amp;gt; 1; if (x &amp;lt;= mid) { modify(u &amp;lt;&amp;lt; 1, x, v); } else { modify(u &amp;lt;&amp;lt; 1 | 1, x, v); } pushup(u); } Node query(int u, int l, int r) { if (tr[u].l &amp;gt;= l &amp;amp;&amp;amp; tr[u].r &amp;lt;= r) { return tr[u]; } int mid = (tr[u].l + tr[u].r) &amp;gt;&amp;gt; 1; if (r &amp;lt;=..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2213 - Longest Substring of One Repeating Character | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2213 - Longest Substring of One Repeating Character" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2213.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-12-21-2213-Longest-Substring-of-One-Repeating-Character/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-12-21T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2213 - Longest Substring of One Repeating Character","dateModified":"2021-12-21T00:00:00-08:00","datePublished":"2021-12-21T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-12-21-2213-Longest-Substring-of-One-Repeating-Character/"},"url":"https://leetcode.ca/2021-12-21-2213-Longest-Substring-of-One-Repeating-Character/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2213-longest-substring-of-one-repeating-character">
+       <a href="solution-2213.html">
+        2213. Longest Substring of One Repeating Character
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a
+       <strong>
+        0-indexed
+       </strong>
+       string
+       <code>
+        s
+       </code>
+       . You are also given a
+       <strong>
+        0-indexed
+       </strong>
+       string
+       <code>
+        queryCharacters
+       </code>
+       of length
+       <code>
+        k
+       </code>
+       and a
+       <strong>
+        0-indexed
+       </strong>
+       array of integer
+       <strong>
+        indices
+       </strong>
+       <code>
+        queryIndices
+       </code>
+       of length
+       <code>
+        k
+       </code>
+       , both of which are used to describe
+       <code>
+        k
+       </code>
+       queries.
+      </p>
+      <p>
+       The
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       query updates the character in
+       <code>
+        s
+       </code>
+       at index
+       <code>
+        queryIndices[i]
+       </code>
+       to the character
+       <code>
+        queryCharacters[i]
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        an array
+       </em>
+       <code>
+        lengths
+       </code>
+       <em>
+        of length
+       </em>
+       <code>
+        k
+       </code>
+       <em>
+        where
+       </em>
+       <code>
+        lengths[i]
+       </code>
+       <em>
+        is the
+        <strong>
+         length
+        </strong>
+        of the
+        <strong>
+         longest substring
+        </strong>
+        of
+       </em>
+       <code>
+        s
+       </code>
+       <em>
+        consisting of
+        <strong>
+         only one repeating
+        </strong>
+        character
+        <strong>
+         after
+        </strong>
+        the
+       </em>
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       <em>
+        query
+       </em>
+       <em>
+        is performed.
+       </em>
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "babacc", queryCharacters = "bcb", queryIndices = [1,3,3]
+<strong>Output:</strong> [3,3,4]
+<strong>Explanation:</strong> 
+- 1<sup>st</sup> query updates s = "<u>b<strong>b</strong>b</u>acc". The longest substring consisting of one repeating character is "bbb" with length 3.
+- 2<sup>nd</sup> query updates s = "bbb<u><strong>c</strong>cc</u>". 
+  The longest substring consisting of one repeating character can be "bbb" or "ccc" with length 3.
+- 3<sup>rd</sup> query updates s = "<u>bbb<strong>b</strong></u>cc". The longest substring consisting of one repeating character is "bbbb" with length 4.
+Thus, we return [3,3,4].
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "abyzz", queryCharacters = "aa", queryIndices = [2,1]
+<strong>Output:</strong> [2,3]
+<strong>Explanation:</strong>
+- 1<sup>st</sup> query updates s = "ab<strong>a</strong><u>zz</u>". The longest substring consisting of one repeating character is "zz" with length 2.
+- 2<sup>nd</sup> query updates s = "<u>a<strong>a</strong>a</u>zz". The longest substring consisting of one repeating character is "aaa" with length 3.
+Thus, we return [2,3].
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         k == queryCharacters.length == queryIndices.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= k &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         queryCharacters
+        </code>
+        consists of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         0 &lt;= queryIndices[i] &lt; s.length
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       Segment Tree.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#0e21a69d-3eb4-44ef-be9e-a7e7ac900adc'}">
+       <li class="uk-active">
+        <a href="solution-2213.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2213.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2213.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2213.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2213.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="0e21a69d-3eb4-44ef-be9e-a7e7ac900adc">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">l</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">r</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">lmx</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">rmx</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">mx</span><span class="o">;</span>
+    <span class="kt">char</span> <span class="n">lc</span><span class="o">;</span>
+    <span class="kt">char</span> <span class="n">rc</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">SegmentTree</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">s</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Node</span><span class="o">[]</span> <span class="n">tr</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">SegmentTree</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">[</span><span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">build</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">build</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">l</span> <span class="o">=</span> <span class="n">l</span><span class="o">;</span>
+        <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">lmx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">rmx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">mx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">size</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">lc</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">rc</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="n">build</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">mid</span><span class="o">);</span>
+        <span class="n">build</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="o">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">r</span><span class="o">);</span>
+        <span class="n">pushup</span><span class="o">(</span><span class="n">u</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">modify</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">char</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">l</span> <span class="o">==</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">r</span> <span class="o">==</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">lc</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+            <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">rc</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">l</span> <span class="o">+</span> <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">r</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">modify</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">v</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">modify</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">v</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">pushup</span><span class="o">(</span><span class="n">u</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nc">Node</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">l</span> <span class="o">+</span> <span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">r</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">query</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">query</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">Node</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">();</span>
+        <span class="nc">Node</span> <span class="n">left</span> <span class="o">=</span> <span class="n">query</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">);</span>
+        <span class="nc">Node</span> <span class="n">right</span> <span class="o">=</span> <span class="n">query</span><span class="o">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">);</span>
+        <span class="n">pushup</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">pushup</span><span class="o">(</span><span class="nc">Node</span> <span class="n">root</span><span class="o">,</span> <span class="nc">Node</span> <span class="n">left</span><span class="o">,</span> <span class="nc">Node</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">lc</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="na">lc</span><span class="o">;</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">rc</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="na">rc</span><span class="o">;</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">size</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="na">size</span> <span class="o">+</span> <span class="n">right</span><span class="o">.</span><span class="na">size</span><span class="o">;</span>
+
+        <span class="n">root</span><span class="o">.</span><span class="na">mx</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">left</span><span class="o">.</span><span class="na">mx</span><span class="o">,</span> <span class="n">right</span><span class="o">.</span><span class="na">mx</span><span class="o">);</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">lmx</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="na">lmx</span><span class="o">;</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">rmx</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="na">rmx</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">left</span><span class="o">.</span><span class="na">rc</span> <span class="o">==</span> <span class="n">right</span><span class="o">.</span><span class="na">lc</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">left</span><span class="o">.</span><span class="na">lmx</span> <span class="o">==</span> <span class="n">left</span><span class="o">.</span><span class="na">size</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">root</span><span class="o">.</span><span class="na">lmx</span> <span class="o">+=</span> <span class="n">right</span><span class="o">.</span><span class="na">lmx</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">right</span><span class="o">.</span><span class="na">rmx</span> <span class="o">==</span> <span class="n">right</span><span class="o">.</span><span class="na">size</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">root</span><span class="o">.</span><span class="na">rmx</span> <span class="o">+=</span> <span class="n">left</span><span class="o">.</span><span class="na">rmx</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">root</span><span class="o">.</span><span class="na">mx</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">mx</span><span class="o">,</span> <span class="n">left</span><span class="o">.</span><span class="na">rmx</span> <span class="o">+</span> <span class="n">right</span><span class="o">.</span><span class="na">lmx</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">pushup</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">pushup</span><span class="o">(</span><span class="n">tr</span><span class="o">[</span><span class="n">u</span><span class="o">],</span> <span class="n">tr</span><span class="o">[</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">],</span> <span class="n">tr</span><span class="o">[</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="o">]);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">longestRepeating</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">String</span> <span class="n">queryCharacters</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">queryIndices</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SegmentTree</span> <span class="n">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SegmentTree</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">queryCharacters</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">queryIndices</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">queryCharacters</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">tree</span><span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">c</span><span class="o">);</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()).</span><span class="na">mx</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">lmx</span><span class="p">,</span> <span class="n">rmx</span><span class="p">,</span> <span class="n">mx</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">lc</span><span class="p">,</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">SegmentTree</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span> <span class="n">tr</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">SegmentTree</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">tr</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tr</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">tr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">();</span>
+        <span class="n">build</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">build</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
+        <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lmx</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rmx</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mx</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lc</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rc</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">build</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">mid</span><span class="p">);</span>
+        <span class="n">build</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+        <span class="n">pushup</span><span class="p">(</span><span class="n">u</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">modify</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">char</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">==</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lc</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rc</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">+</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">)</span>
+            <span class="n">modify</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">modify</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+        <span class="n">pushup</span><span class="p">(</span><span class="n">u</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Node</span><span class="o">*</span> <span class="n">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="k">return</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">+</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">)</span> <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span> <span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">();</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">left</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">right</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+        <span class="n">pushup</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">pushup</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">left</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">lc</span> <span class="o">=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">lc</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">rc</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">rc</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">+</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">;</span>
+
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">mx</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">mx</span><span class="p">,</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">mx</span><span class="p">);</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">lmx</span> <span class="o">=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">lmx</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">rmx</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">rmx</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">rc</span> <span class="o">==</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">lc</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">lmx</span> <span class="o">==</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">lmx</span> <span class="o">+=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">lmx</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">rmx</span> <span class="o">==</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">rmx</span> <span class="o">+=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">rmx</span><span class="p">;</span>
+            <span class="n">root</span><span class="o">-&gt;</span><span class="n">mx</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">mx</span><span class="p">,</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">rmx</span> <span class="o">+</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">lmx</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">pushup</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pushup</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">],</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">longestRepeating</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">queryCharacters</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">queryIndices</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">SegmentTree</span><span class="o">*</span> <span class="n">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SegmentTree</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">queryCharacters</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">queryIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">tree</span><span class="o">-&gt;</span><span class="n">modify</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">queryCharacters</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">mx</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">lmx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">rmx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">lc</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">rc</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100010</span>
+<span class="n">tr</span> <span class="o">=</span> <span class="p">[</span><span class="n">Node</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)]</span>
+
+
+<span class="k">class</span> <span class="nc">SegmentTree</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+        <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="p">:</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">lmx</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rmx</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">mx</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">size</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">lc</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rc</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">s</span><span class="p">[</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">mid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">pushup</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">modify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">l</span> <span class="o">==</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">r</span> <span class="o">==</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">lc</span> <span class="o">=</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rc</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">return</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">pushup</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="ow">and</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span> <span class="bp">self</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_pushup</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+    <span class="k">def</span> <span class="nf">_pushup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="n">root</span><span class="p">.</span><span class="n">lc</span><span class="p">,</span> <span class="n">root</span><span class="p">.</span><span class="n">rc</span> <span class="o">=</span> <span class="n">left</span><span class="p">.</span><span class="n">lc</span><span class="p">,</span> <span class="n">right</span><span class="p">.</span><span class="n">rc</span>
+        <span class="n">root</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">left</span><span class="p">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">size</span>
+
+        <span class="n">root</span><span class="p">.</span><span class="n">mx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">left</span><span class="p">.</span><span class="n">mx</span><span class="p">,</span> <span class="n">right</span><span class="p">.</span><span class="n">mx</span><span class="p">)</span>
+        <span class="n">root</span><span class="p">.</span><span class="n">lmx</span><span class="p">,</span> <span class="n">root</span><span class="p">.</span><span class="n">rmx</span> <span class="o">=</span> <span class="n">left</span><span class="p">.</span><span class="n">lmx</span><span class="p">,</span> <span class="n">right</span><span class="p">.</span><span class="n">rmx</span>
+
+        <span class="k">if</span> <span class="n">left</span><span class="p">.</span><span class="n">rc</span> <span class="o">==</span> <span class="n">right</span><span class="p">.</span><span class="n">lc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">left</span><span class="p">.</span><span class="n">lmx</span> <span class="o">==</span> <span class="n">left</span><span class="p">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="n">root</span><span class="p">.</span><span class="n">lmx</span> <span class="o">+=</span> <span class="n">right</span><span class="p">.</span><span class="n">lmx</span>
+            <span class="k">if</span> <span class="n">right</span><span class="p">.</span><span class="n">rmx</span> <span class="o">==</span> <span class="n">right</span><span class="p">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="n">root</span><span class="p">.</span><span class="n">rmx</span> <span class="o">+=</span> <span class="n">left</span><span class="p">.</span><span class="n">rmx</span>
+            <span class="n">root</span><span class="p">.</span><span class="n">mx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">mx</span><span class="p">,</span> <span class="n">left</span><span class="p">.</span><span class="n">rmx</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">lmx</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pushup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_pushup</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">],</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tr</span><span class="p">[</span><span class="n">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">])</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">longestRepeating</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">queryCharacters</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">queryIndices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">SegmentTree</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryIndices</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">queryCharacters</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">queryIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">tree</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)).</span><span class="n">mx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">segmentTree</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">str</span> <span class="p">[]</span><span class="kt">byte</span>
+	<span class="n">mx</span>  <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">lmx</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">rmx</span> <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newSegmentTree</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="n">segmentTree</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">t</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">segmentTree</span><span class="p">{</span>
+		<span class="n">str</span><span class="o">:</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="n">s</span><span class="p">),</span>
+		<span class="n">mx</span><span class="o">:</span>  <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">&lt;&lt;</span><span class="m">2</span><span class="p">),</span>
+		<span class="n">lmx</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">&lt;&lt;</span><span class="m">2</span><span class="p">),</span>
+		<span class="n">rmx</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">&lt;&lt;</span><span class="m">2</span><span class="p">),</span>
+	<span class="p">}</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">t</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">segmentTree</span><span class="p">)</span> <span class="n">build</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">lmx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">rmx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">mx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="n">m</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="m">1</span><span class="p">)</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="m">2</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="m">2</span><span class="o">+</span><span class="m">2</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">pushup</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">segmentTree</span><span class="p">)</span> <span class="n">pushup</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">lch</span><span class="p">,</span> <span class="n">rch</span> <span class="o">:=</span> <span class="n">x</span><span class="o">*</span><span class="m">2</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">x</span><span class="o">*</span><span class="m">2</span><span class="o">+</span><span class="m">2</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">lmx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">lmx</span><span class="p">[</span><span class="n">lch</span><span class="p">]</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">rmx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">rmx</span><span class="p">[</span><span class="n">rch</span><span class="p">]</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">mx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">mx</span><span class="p">[</span><span class="n">lch</span><span class="p">],</span> <span class="n">t</span><span class="o">.</span><span class="n">mx</span><span class="p">[</span><span class="n">rch</span><span class="p">])</span>
+	<span class="c">// can be merged</span>
+	<span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="n">m</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">lmx</span><span class="p">[</span><span class="n">lch</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="m">1</span> <span class="p">{</span>
+			<span class="n">t</span><span class="o">.</span><span class="n">lmx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">t</span><span class="o">.</span><span class="n">lmx</span><span class="p">[</span><span class="n">rch</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">rmx</span><span class="p">[</span><span class="n">rch</span><span class="p">]</span> <span class="o">==</span> <span class="n">r</span><span class="o">-</span><span class="n">m</span> <span class="p">{</span>
+			<span class="n">t</span><span class="o">.</span><span class="n">rmx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">t</span><span class="o">.</span><span class="n">rmx</span><span class="p">[</span><span class="n">lch</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">mx</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">mx</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">t</span><span class="o">.</span><span class="n">rmx</span><span class="p">[</span><span class="n">lch</span><span class="p">]</span><span class="o">+</span><span class="n">t</span><span class="o">.</span><span class="n">lmx</span><span class="p">[</span><span class="n">rch</span><span class="p">])</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">segmentTree</span><span class="p">)</span> <span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">pos</span> <span class="kt">int</span><span class="p">,</span> <span class="n">val</span> <span class="kt">byte</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="n">m</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="m">1</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="m">2</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="m">2</span><span class="o">+</span><span class="m">2</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">t</span><span class="o">.</span><span class="n">pushup</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">longestRepeating</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">queryCharacters</span> <span class="kt">string</span><span class="p">,</span> <span class="n">queryIndices</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryCharacters</span><span class="p">))</span>
+	<span class="n">t</span> <span class="o">:=</span> <span class="n">newSegmentTree</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">queryCharacters</span> <span class="p">{</span>
+		<span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">queryIndices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="kt">byte</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+		<span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">mx</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">Node</span> <span class="p">{</span>
+    <span class="nl">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">lmx</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">rmx</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">mx</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">l</span> <span class="o">=</span> <span class="nx">l</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">lmx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rmx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">mx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">SegmentTree</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">[];</span>
+    <span class="k">private</span> <span class="nx">tr</span><span class="p">:</span> <span class="nx">Node</span><span class="p">[];</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tr</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">build</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="nx">build</span><span class="p">(</span><span class="nx">u</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">===</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="p">(</span><span class="nx">l</span> <span class="o">+</span> <span class="nx">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">build</span><span class="p">(</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">mid</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">build</span><span class="p">((</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">r</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">pushup</span><span class="p">(</span><span class="nx">u</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nx">modify</span><span class="p">(</span><span class="nx">u</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">v</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">l</span> <span class="o">===</span> <span class="nx">x</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">r</span> <span class="o">===</span> <span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">s</span><span class="p">[</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">l</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&lt;=</span> <span class="nx">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">modify</span><span class="p">(</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">v</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">modify</span><span class="p">((</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">v</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">pushup</span><span class="p">(</span><span class="nx">u</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nx">query</span><span class="p">(</span><span class="nx">u</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">r</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">l</span> <span class="o">&gt;=</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">r</span> <span class="o">&lt;=</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">mx</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">l</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">].</span><span class="nx">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">r</span> <span class="o">&lt;=</span> <span class="nx">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ans</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&gt;</span> <span class="nx">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">ans</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">((</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">));</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">ans</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">),</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">((</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="nx">pushup</span><span class="p">(</span><span class="nx">u</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span><span class="p">];</span>
+        <span class="kd">const</span> <span class="nx">left</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="kd">const</span> <span class="nx">right</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">[(</span><span class="nx">u</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">mx</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">left</span><span class="p">.</span><span class="nx">mx</span><span class="p">,</span> <span class="nx">right</span><span class="p">.</span><span class="nx">mx</span><span class="p">);</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">lmx</span> <span class="o">=</span> <span class="nx">left</span><span class="p">.</span><span class="nx">lmx</span><span class="p">;</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">rmx</span> <span class="o">=</span> <span class="nx">right</span><span class="p">.</span><span class="nx">rmx</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">left</span><span class="p">.</span><span class="nx">r</span> <span class="o">-</span> <span class="nx">left</span><span class="p">.</span><span class="nx">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">right</span><span class="p">.</span><span class="nx">r</span> <span class="o">-</span> <span class="nx">right</span><span class="p">.</span><span class="nx">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">s</span><span class="p">[</span><span class="nx">left</span><span class="p">.</span><span class="nx">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">s</span><span class="p">[</span><span class="nx">right</span><span class="p">.</span><span class="nx">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">left</span><span class="p">.</span><span class="nx">lmx</span> <span class="o">===</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">root</span><span class="p">.</span><span class="nx">lmx</span> <span class="o">+=</span> <span class="nx">right</span><span class="p">.</span><span class="nx">lmx</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">right</span><span class="p">.</span><span class="nx">rmx</span> <span class="o">===</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">root</span><span class="p">.</span><span class="nx">rmx</span> <span class="o">+=</span> <span class="nx">left</span><span class="p">.</span><span class="nx">rmx</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">root</span><span class="p">.</span><span class="nx">mx</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">mx</span><span class="p">,</span> <span class="nx">left</span><span class="p">.</span><span class="nx">rmx</span> <span class="o">+</span> <span class="nx">right</span><span class="p">.</span><span class="nx">lmx</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">longestRepeating</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">queryCharacters</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">queryIndices</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SegmentTree</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">queryIndices</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">k</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">k</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">queryIndices</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">v</span> <span class="o">=</span> <span class="nx">queryCharacters</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">tree</span><span class="p">.</span><span class="nx">modify</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">v</span><span class="p">);</span>
+        <span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2213.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

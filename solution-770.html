@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-770.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-770.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>770 - Basic Calculator IV</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/770.html 770. Basic Calculator IV (Hard) Given an expression&amp;nbsp;such as expression = &quot;e + 8 - a + 5&quot; and an evaluation map such as {&quot;e&quot;: 1} (given in terms of evalvars = [&quot;e&quot;] and evalints = [1]), return a list of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-770.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-770.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-770.html" rel="stylesheet"/>
+   <link href="solution-770.html" rel="stylesheet"/>
+   <link href="solution-770.html" rel="stylesheet"/>
+   <link href="solution-770.html" rel="stylesheet"/>
+   <link href="solution-770.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="770 - Basic Calculator IV" property="og:title"/>
+   <meta content='Leetcode Formatted question description: https://leetcode.ca/all/770.html 770. Basic Calculator IV (Hard) Given an expression&amp;nbsp;such as expression = "e + 8 - a + 5" and an evaluation map such as {"e": 1} (given in terms of evalvars = ["e"] and evalints = [1]), return a list of tokens representing the simplified expression, such as ["-1*a","14"] An expression alternates chunks and symbols, with a space separating each chunk and symbol. A chunk is either an expression in parentheses, a variable, or a non-negative integer. A variable is a string of lowercase letters (not including digits.) Note that variables can be multiple letters, and note that variables never have a leading coefficient or unary operator like "2x" or "-x". Expressions are evaluated in the usual order: brackets first, then multiplication, then addition and subtraction. For example, expression = "1 + 2 * 3" has an answer of ["7"]. The format of the output is as follows: For each term of free variables with non-zero coefficient, we write the free variables within a term in sorted order lexicographically. For example, we would never write a term like "b*a*c", only "a*b*c". Terms have degree equal to the number of free variables being multiplied, counting multiplicity. (For example, "a*a*b*c" has degree 4.) We write the largest degree terms of our answer first, breaking ties by lexicographic order ignoring the leading coefficient of the term. The leading coefficient of the term is placed directly to the left with an asterisk separating it from the variables (if they exist.)&amp;nbsp; A leading coefficient of 1 is still printed. An example of a well formatted answer is ["-2*a*a*a", "3*a*a*b", "3*b*b", "4*a", "5*c", "-6"]&amp;nbsp; Terms (including constant terms) with coefficient 0 are not included.&amp;nbsp; For example, an expression of "0" has an output of []. Examples: Input: expression = "e + 8 - a + 5", evalvars = ["e"], evalints = [1] Output: ["-1*a","14"] Input: expression = "e - 8 + temperature - pressure", evalvars = ["e", "temperature"], evalints = [1, 12] Output: ["-1*pressure","5"] Input: expression = "(e + 8) * (e - 8)", evalvars = [], evalints = [] Output: ["1*e*e","-64"] Input: expression = "7 - 7", evalvars = [], evalints = [] Output: [] Input: expression = "a * b * c + b * a * c * 4", evalvars = [], evalints = [] Output: ["5*a*b*c"] Input: expression = "((a - b) * (b - c) + (c - a)) * ((a - b) + (b - c) * (c - a))", evalvars = [], evalints = [] Output: ["-1*a*a*b*b","2*a*a*b*c","-1*a*a*c*c","1*a*b*b*b","-1*a*b*b*c","-1*a*b*c*c","1*a*c*c*c","-1*b*b*b*c","2*b*b*c*c","-1*b*c*c*c","2*a*a*b","-2*a*a*c","-2*a*b*b","2*a*c*c","1*b*b*b","-1*b*b*c","1*b*c*c","-1*c*c*c","-1*a*a","1*a*b","1*a*c","-1*b*c"] Note: expression will have length in range [1, 250]. evalvars, evalints will have equal lengths in range [0, 100]. Companies: Intuit, Pinterest, Roblox Related Topics: Hash Table, String, Stack Similar Questions: Parse Lisp Expression (Hard) Basic Calculator III (Hard) Solution 1. Java C++ class Solution { public List&amp;lt;String&amp;gt; basicCalculatorIV(String expression, String[] evalvars, int[] evalints) { Polynomial polynomial = parse(expression); Map&amp;lt;String, Integer&amp;gt; evaluateMap = new HashMap&amp;lt;String, Integer&amp;gt;(); int length = evalvars.length; for (int i...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-01-08T21:21:01-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-01-08-770-Basic-Calculator-IV/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-770.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="770 - Basic Calculator IV" property="twitter:title"/>
+   <meta content='Leetcode Formatted question description: https://leetcode.ca/all/770.html 770. Basic Calculator IV (Hard) Given an expression&amp;nbsp;such as expression = "e + 8 - a + 5" and an evaluation map such as {"e": 1} (given in terms of evalvars = ["e"] and evalints = [1]), return a list of tokens representing the simplified expression, such as ["-1*a","14"] An expression alternates chunks and symbols, with a space separating each chunk and symbol. A chunk is either an expression in parentheses, a variable, or a non-negative integer. A variable is a string of lowercase letters (not including digits.) Note that variables can be multiple letters, and note that variables never have a leading coefficient or unary operator like "2x" or "-x". Expressions are evaluated in the usual order: brackets first, then multiplication, then addition and subtraction. For example, expression = "1 + 2 * 3" has an answer of ["7"]. The format of the output is as follows: For each term of free variables with non-zero coefficient, we write the free variables within a term in sorted order lexicographically. For example, we would never write a term like "b*a*c", only "a*b*c". Terms have degree equal to the number of free variables being multiplied, counting multiplicity. (For example, "a*a*b*c" has degree 4.) We write the largest degree terms of our answer first, breaking ties by lexicographic order ignoring the leading coefficient of the term. The leading coefficient of the term is placed directly to the left with an asterisk separating it from the variables (if they exist.)&amp;nbsp; A leading coefficient of 1 is still printed. An example of a well formatted answer is ["-2*a*a*a", "3*a*a*b", "3*b*b", "4*a", "5*c", "-6"]&amp;nbsp; Terms (including constant terms) with coefficient 0 are not included.&amp;nbsp; For example, an expression of "0" has an output of []. Examples: Input: expression = "e + 8 - a + 5", evalvars = ["e"], evalints = [1] Output: ["-1*a","14"] Input: expression = "e - 8 + temperature - pressure", evalvars = ["e", "temperature"], evalints = [1, 12] Output: ["-1*pressure","5"] Input: expression = "(e + 8) * (e - 8)", evalvars = [], evalints = [] Output: ["1*e*e","-64"] Input: expression = "7 - 7", evalvars = [], evalints = [] Output: [] Input: expression = "a * b * c + b * a * c * 4", evalvars = [], evalints = [] Output: ["5*a*b*c"] Input: expression = "((a - b) * (b - c) + (c - a)) * ((a - b) + (b - c) * (c - a))", evalvars = [], evalints = [] Output: ["-1*a*a*b*b","2*a*a*b*c","-1*a*a*c*c","1*a*b*b*b","-1*a*b*b*c","-1*a*b*c*c","1*a*c*c*c","-1*b*b*b*c","2*b*b*c*c","-1*b*c*c*c","2*a*a*b","-2*a*a*c","-2*a*b*b","2*a*c*c","1*b*b*b","-1*b*b*c","1*b*c*c","-1*c*c*c","-1*a*a","1*a*b","1*a*c","-1*b*c"] Note: expression will have length in range [1, 250]. evalvars, evalints will have equal lengths in range [0, 100]. Companies: Intuit, Pinterest, Roblox Related Topics: Hash Table, String, Stack Similar Questions: Parse Lisp Expression (Hard) Basic Calculator III (Hard) Solution 1. Java C++ class Solution { public List&amp;lt;String&amp;gt; basicCalculatorIV(String expression, String[] evalvars, int[] evalints) { Polynomial polynomial = parse(expression); Map&amp;lt;String, Integer&amp;gt; evaluateMap = new HashMap&amp;lt;String, Integer&amp;gt;(); int length = evalvars.length; for (int i...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    770 - Basic Calculator IV | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="770 - Basic Calculator IV" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-770.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-01-08-770-Basic-Calculator-IV/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-01-08T21:21:01-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"770 - Basic Calculator IV","dateModified":"2018-01-08T21:21:01-08:00","datePublished":"2018-01-08T21:21:01-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-01-08-770-Basic-Calculator-IV/"},"url":"https://leetcode.ca/2018-01-08-770-Basic-Calculator-IV/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-770.html">
+        https://leetcode.ca/all/770.html
+       </a>
+      </p>
+      <h1 id="770-basic-calculator-iv-hard">
+       <a href="solution-770.html">
+        770. Basic Calculator IV (Hard)
+       </a>
+      </h1>
+      <p>
+       Given an
+       <code>
+        expression
+       </code>
+       such as
+       <code>
+        expression = "e + 8 - a + 5"
+       </code>
+       and an evaluation map such as
+       <code>
+        {"e": 1}
+       </code>
+       (given in terms of
+       <code>
+        evalvars = ["e"]
+       </code>
+       and
+       <code>
+        evalints = [1]
+       </code>
+       ), return a list of tokens representing the simplified expression, such as
+       <code>
+        ["-1*a","14"]
+       </code>
+      </p>
+      <ul>
+       <li>
+        An expression alternates chunks and symbols, with a space separating each chunk and symbol.
+       </li>
+       <li>
+        A chunk is either an expression in parentheses, a variable, or a non-negative integer.
+       </li>
+       <li>
+        A variable is a string of lowercase letters (not including digits.) Note that variables can be multiple letters, and note that variables never have a leading coefficient or unary operator like
+        <code>
+         "2x"
+        </code>
+        or
+        <code>
+         "-x"
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Expressions are evaluated in the usual order: brackets first, then multiplication, then addition and subtraction. For example,
+       <code>
+        expression = "1 + 2 * 3"
+       </code>
+       has an answer of
+       <code>
+        ["7"]
+       </code>
+       .
+      </p>
+      <p>
+       The format of the output is as follows:
+      </p>
+      <ul>
+       <li>
+        For each term of free variables with non-zero coefficient, we write the free variables within a term in sorted order lexicographically. For example, we would never write a term like
+        <code>
+         "b*a*c"
+        </code>
+        , only
+        <code>
+         "a*b*c"
+        </code>
+        .
+       </li>
+       <li>
+        Terms have degree equal to the number of free variables being multiplied, counting multiplicity. (For example,
+        <code>
+         "a*a*b*c"
+        </code>
+        has degree 4.) We write the largest degree terms of our answer first, breaking ties by lexicographic order ignoring the leading coefficient of the term.
+       </li>
+       <li>
+        The leading coefficient of the term is placed directly to the left with an asterisk separating it from the variables (if they exist.)  A leading coefficient of 1 is still printed.
+       </li>
+       <li>
+        An example of a well formatted answer is
+        <code>
+         ["-2*a*a*a", "3*a*a*b", "3*b*b", "4*a", "5*c", "-6"]
+        </code>
+       </li>
+       <li>
+        Terms (including constant terms) with coefficient 0 are not included.  For example, an expression of "0" has an output of [].
+       </li>
+      </ul>
+      <p>
+       <strong>
+        Examples:
+       </strong>
+      </p>
+      <pre><strong>Input:</strong> expression = "e + 8 - a + 5", evalvars = ["e"], evalints = [1]
+<strong>Output:</strong> ["-1*a","14"]
+
+<strong>Input:</strong> expression = "e - 8 + temperature - pressure",
+evalvars = ["e", "temperature"], evalints = [1, 12]
+<strong>Output:</strong> ["-1*pressure","5"]
+
+<strong>Input:</strong> expression = "(e + 8) * (e - 8)", evalvars = [], evalints = []
+<strong>Output:</strong> ["1*e*e","-64"]
+
+<strong>Input:</strong> expression = "7 - 7", evalvars = [], evalints = []
+<strong>Output:</strong> []
+
+<strong>Input:</strong> expression = "a * b * c + b * a * c * 4", evalvars = [], evalints = []
+<strong>Output:</strong> ["5*a*b*c"]
+
+<strong>Input:</strong> expression = "((a - b) * (b - c) + (c - a)) * ((a - b) + (b - c) * (c - a))",
+evalvars = [], evalints = []
+<strong>Output:</strong> ["-1*a*a*b*b","2*a*a*b*c","-1*a*a*c*c","1*a*b*b*b","-1*a*b*b*c","-1*a*b*c*c","1*a*c*c*c","-1*b*b*b*c","2*b*b*c*c","-1*b*c*c*c","2*a*a*b","-2*a*a*c","-2*a*b*b","2*a*c*c","1*b*b*b","-1*b*b*c","1*b*c*c","-1*c*c*c","-1*a*a","1*a*b","1*a*c","-1*b*c"]
+</pre>
+      <p>
+       <strong>
+        Note:
+       </strong>
+      </p>
+      <ol>
+       <li>
+        <code>
+         expression
+        </code>
+        will have length in range
+        <code>
+         [1, 250]
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         evalvars, evalints
+        </code>
+        will have equal lengths in range
+        <code>
+         [0, 100]
+        </code>
+        .
+       </li>
+      </ol>
+      <p>
+       <strong>
+        Companies
+       </strong>
+       :
+       <br/>
+       <a href="solution-770.html">
+        Intuit
+       </a>
+       ,
+       <a href="solution-770.html">
+        Pinterest
+       </a>
+       ,
+       <a href="solution-770.html">
+        Roblox
+       </a>
+      </p>
+      <p>
+       <strong>
+        Related Topics
+       </strong>
+       :
+       <br/>
+       <a href="solution-770.html">
+        Hash Table
+       </a>
+       ,
+       <a href="solution-770.html">
+        String
+       </a>
+       ,
+       <a href="solution-770.html">
+        Stack
+       </a>
+      </p>
+      <p>
+       <strong>
+        Similar Questions
+       </strong>
+       :
+      </p>
+      <ul>
+       <li>
+        <a href="solution-770.html">
+         Parse Lisp Expression (Hard)
+        </a>
+       </li>
+       <li>
+        <a href="solution-770.html">
+         Basic Calculator III (Hard)
+        </a>
+       </li>
+      </ul>
+      <h2 id="solution-1">
+       Solution 1.
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#bda2f3ea-636c-4d89-ae0e-47ad3e423479'}">
+       <li class="uk-active">
+        <a href="solution-770.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-770.html">
+         C++
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="bda2f3ea-636c-4d89-ae0e-47ad3e423479">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">basicCalculatorIV</span><span class="o">(</span><span class="nc">String</span> <span class="n">expression</span><span class="o">,</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">evalvars</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">evalints</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Polynomial</span> <span class="n">polynomial</span> <span class="o">=</span> <span class="n">parse</span><span class="o">(</span><span class="n">expression</span><span class="o">);</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">evaluateMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;();</span>
+        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">evalvars</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+            <span class="n">evaluateMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">evalvars</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">evalints</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="nc">Polynomial</span> <span class="n">evaluation</span> <span class="o">=</span> <span class="n">polynomial</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">evaluateMap</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">evaluation</span><span class="o">.</span><span class="na">toList</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Polynomial</span> <span class="nf">parse</span><span class="o">(</span><span class="nc">String</span> <span class="n">expression</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Polynomial</span><span class="o">&gt;</span> <span class="n">bucket</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Polynomial</span><span class="o">&gt;();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">operators</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;();</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">index</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">balance</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">curIndex</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">curIndex</span> <span class="o">&lt;</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">curIndex</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span>
+                        <span class="n">balance</span><span class="o">++;</span>
+                    <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">curIndex</span><span class="o">)</span> <span class="o">==</span> <span class="sc">')'</span><span class="o">)</span>
+                        <span class="n">balance</span><span class="o">--;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="n">curIndex</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="nc">Polynomial</span> <span class="n">curPolynomial</span> <span class="o">=</span> <span class="n">parse</span><span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">curIndex</span><span class="o">));</span>
+                <span class="n">bucket</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">curPolynomial</span><span class="o">);</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">curIndex</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nc">Character</span><span class="o">.</span><span class="na">isLetterOrDigit</span><span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">index</span><span class="o">)))</span> <span class="o">{</span>
+                <span class="kt">boolean</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">curIndex</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">curIndex</span> <span class="o">&lt;</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">curIndex</span><span class="o">)</span> <span class="o">==</span> <span class="sc">' '</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nc">Polynomial</span> <span class="n">curPolynomial</span> <span class="o">=</span> <span class="n">make</span><span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="n">curIndex</span><span class="o">));</span>
+                        <span class="n">bucket</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">curPolynomial</span><span class="o">);</span>
+                        <span class="n">flag</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="n">curIndex</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">flag</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nc">Polynomial</span> <span class="n">polynomial</span> <span class="o">=</span> <span class="n">make</span><span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">index</span><span class="o">));</span>
+                    <span class="n">bucket</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">polynomial</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">curIndex</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">index</span><span class="o">)</span> <span class="o">!=</span> <span class="sc">' '</span><span class="o">)</span>
+                <span class="n">operators</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">index</span><span class="o">));</span>
+            <span class="n">index</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">operators</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'*'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">Polynomial</span> <span class="n">newPolynomial</span> <span class="o">=</span> <span class="n">combine</span><span class="o">(</span><span class="n">bucket</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">bucket</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">),</span> <span class="n">operators</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+                <span class="n">bucket</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">newPolynomial</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">bucket</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Polynomial</span><span class="o">();</span>
+        <span class="nc">Polynomial</span> <span class="n">polynomial</span> <span class="o">=</span> <span class="n">bucket</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+            <span class="n">polynomial</span> <span class="o">=</span> <span class="n">combine</span><span class="o">(</span><span class="n">polynomial</span><span class="o">,</span> <span class="n">bucket</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">),</span> <span class="n">operators</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">polynomial</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Polynomial</span> <span class="nf">make</span><span class="o">(</span><span class="nc">String</span> <span class="n">expression</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Polynomial</span> <span class="n">polynomial</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Polynomial</span><span class="o">();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nc">Character</span><span class="o">.</span><span class="na">isDigit</span><span class="o">(</span><span class="n">expression</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)))</span>
+            <span class="n">polynomial</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">expression</span><span class="o">));</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">expression</span><span class="o">);</span>
+            <span class="n">polynomial</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">polynomial</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Polynomial</span> <span class="nf">combine</span><span class="o">(</span><span class="nc">Polynomial</span> <span class="n">polynomial1</span><span class="o">,</span> <span class="nc">Polynomial</span> <span class="n">polynomial2</span><span class="o">,</span> <span class="kt">char</span> <span class="n">operator</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">operator</span> <span class="o">==</span> <span class="sc">'+'</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">polynomial1</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">polynomial2</span><span class="o">);</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">operator</span> <span class="o">==</span> <span class="sc">'-'</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">polynomial1</span><span class="o">.</span><span class="na">subtract</span><span class="o">(</span><span class="n">polynomial2</span><span class="o">);</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">operator</span> <span class="o">==</span> <span class="sc">'*'</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">polynomial1</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="n">polynomial2</span><span class="o">);</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Polynomial</span> <span class="o">{</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">countMap</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Polynomial</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">countMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;,</span> <span class="nc">Integer</span><span class="o">&gt;();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">newCount</span> <span class="o">=</span> <span class="n">countMap</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="n">count</span><span class="o">;</span>
+        <span class="n">countMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">newCount</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Polynomial</span> <span class="nf">add</span><span class="o">(</span><span class="nc">Polynomial</span> <span class="n">polynomial2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Polynomial</span> <span class="n">sum</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Polynomial</span><span class="o">();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keySet1</span> <span class="o">=</span> <span class="n">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">:</span> <span class="n">keySet1</span><span class="o">)</span>
+            <span class="n">sum</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list</span><span class="o">));</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keySet2</span> <span class="o">=</span> <span class="n">polynomial2</span><span class="o">.</span><span class="na">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">:</span> <span class="n">keySet2</span><span class="o">)</span>
+            <span class="n">sum</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">polynomial2</span><span class="o">.</span><span class="na">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Polynomial</span> <span class="nf">subtract</span><span class="o">(</span><span class="nc">Polynomial</span> <span class="n">polynomial2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Polynomial</span> <span class="n">difference</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Polynomial</span><span class="o">();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keySet1</span> <span class="o">=</span> <span class="n">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">:</span> <span class="n">keySet1</span><span class="o">)</span>
+            <span class="n">difference</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list</span><span class="o">));</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keySet2</span> <span class="o">=</span> <span class="n">polynomial2</span><span class="o">.</span><span class="na">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">:</span> <span class="n">keySet2</span><span class="o">)</span>
+            <span class="n">difference</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="o">-</span><span class="n">polynomial2</span><span class="o">.</span><span class="na">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">difference</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Polynomial</span> <span class="nf">multiply</span><span class="o">(</span><span class="nc">Polynomial</span> <span class="n">polynomial2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Polynomial</span> <span class="n">product</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Polynomial</span><span class="o">();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keySet1</span> <span class="o">=</span> <span class="n">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keySet2</span> <span class="o">=</span> <span class="n">polynomial2</span><span class="o">.</span><span class="na">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list1</span> <span class="o">:</span> <span class="n">keySet1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list2</span> <span class="o">:</span> <span class="n">keySet2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">newList</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list1</span><span class="o">)</span>
+                    <span class="n">newList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list2</span><span class="o">)</span>
+                    <span class="n">newList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+                <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">newList</span><span class="o">);</span>
+                <span class="n">product</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">newList</span><span class="o">,</span> <span class="n">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list1</span><span class="o">)</span> <span class="o">*</span> <span class="n">polynomial2</span><span class="o">.</span><span class="na">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list2</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">product</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Polynomial</span> <span class="nf">evaluate</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">evaluateMap</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Polynomial</span> <span class="n">polynomial</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Polynomial</span><span class="o">();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keySet</span> <span class="o">=</span> <span class="n">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">:</span> <span class="n">keySet</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">freeList</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">evaluateMap</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">str</span><span class="o">))</span>
+                    <span class="n">count</span> <span class="o">*=</span> <span class="n">evaluateMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+                <span class="k">else</span>
+                    <span class="n">freeList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">polynomial</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">freeList</span><span class="o">,</span> <span class="n">count</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">polynomial</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compareList</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list1</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">size1</span> <span class="o">=</span> <span class="n">list1</span><span class="o">.</span><span class="na">size</span><span class="o">(),</span> <span class="n">size2</span> <span class="o">=</span> <span class="n">list2</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size1</span> <span class="o">!=</span> <span class="n">size2</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">size2</span> <span class="o">-</span> <span class="n">size1</span><span class="o">;</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="n">list1</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">str2</span> <span class="o">=</span> <span class="n">list2</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">str1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">str2</span><span class="o">))</span>
+                    <span class="k">return</span> <span class="n">str1</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">str2</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">toList</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">keyList</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;(</span><span class="n">countMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">());</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">keyList</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list1</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nf">compareList</span><span class="o">(</span><span class="n">list1</span><span class="o">,</span> <span class="n">list2</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">key</span> <span class="o">:</span> <span class="n">keyList</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">countMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">StringBuffer</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">();</span>
+                <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">count</span><span class="o">);</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="sc">'*'</span><span class="o">);</span>
+                    <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/basic-calculator-iv</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">expression</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">tokens</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">expression</span><span class="p">.</span><span class="n">size</span><span class="p">();)</span> <span class="p">{</span>
+            <span class="n">string</span> <span class="n">token</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isalnum</span><span class="p">(</span><span class="n">expression</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">expression</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">isalnum</span><span class="p">(</span><span class="n">expression</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="n">token</span> <span class="o">+=</span> <span class="n">expression</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="n">token</span> <span class="o">+=</span> <span class="n">expression</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+            <span class="n">tokens</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">expression</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">expression</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">tokens</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">inject</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">tokens</span><span class="p">,</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">token</span> <span class="o">:</span> <span class="n">tokens</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="o">!=</span> <span class="n">m</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="n">token</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">token</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">tokens</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">toRPN</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">tokens</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">stack</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ops</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">token</span> <span class="o">:</span> <span class="n">tokens</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">switch</span><span class="p">(</span><span class="n">token</span><span class="p">.</span><span class="n">back</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">case</span> <span class="sc">'+'</span><span class="p">:</span>
+                <span class="k">case</span> <span class="sc">'-'</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">ops</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">!=</span> <span class="s">"("</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+                        <span class="n">ops</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="p">}</span>
+                    <span class="n">ops</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="sc">'*'</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">ops</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="s">"*"</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+                        <span class="n">ops</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="p">}</span>
+                    <span class="n">ops</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="sc">'('</span><span class="p">:</span>
+                    <span class="n">ops</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="sc">')'</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">ops</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">!=</span> <span class="s">"("</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+                        <span class="n">ops</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="n">ops</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="nl">default:</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ops</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+            <span class="n">ops</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">splitSymbols</span><span class="p">(</span><span class="n">string</span> <span class="n">exp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">istringstream</span> <span class="n">s</span><span class="p">(</span><span class="n">exp</span><span class="p">);</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">symbol</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getline</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="sc">'*'</span><span class="p">))</span> <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">symbol</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">tokens</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">stack</span><span class="o">&lt;</span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">token</span> <span class="o">:</span> <span class="n">tokens</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">switch</span><span class="p">(</span><span class="n">token</span><span class="p">.</span><span class="n">back</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">case</span> <span class="sc">'+'</span><span class="p">:</span>
+                <span class="k">case</span> <span class="sc">'-'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="kt">int</span> <span class="n">sign</span> <span class="o">=</span> <span class="n">token</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'+'</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                    <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span> <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span> <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">:</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">m</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">]</span> <span class="o">+=</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">:</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">m</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">case</span> <span class="sc">'*'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span> <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span> <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">:</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">auto</span> <span class="n">symbol1</span> <span class="o">=</span> <span class="n">splitSymbols</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">q</span> <span class="o">:</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="n">istringstream</span> <span class="n">sb</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+                            <span class="k">auto</span> <span class="n">symbol2</span> <span class="o">=</span> <span class="n">splitSymbols</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+                            <span class="n">string</span> <span class="n">symbol</span><span class="p">;</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">symbol1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">symbol1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">"1"</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="n">symbol</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+                            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">symbol2</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">symbol2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">"1"</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="n">symbol</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+                            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">symbol1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">symbol2</span><span class="p">.</span><span class="n">size</span><span class="p">();)</span> <span class="p">{</span>
+                                    <span class="k">if</span> <span class="p">(</span><span class="n">symbol</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="n">symbol</span> <span class="o">+=</span> <span class="s">"*"</span><span class="p">;</span>
+                                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">symbol1</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+                                        <span class="n">symbol</span> <span class="o">+=</span> <span class="n">symbol2</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+                                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="n">symbol2</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+                                        <span class="n">symbol</span> <span class="o">+=</span> <span class="n">symbol1</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+                                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">symbol1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">symbol2</span><span class="p">[</span><span class="n">j</span><span class="p">]){</span>
+                                        <span class="n">symbol</span> <span class="o">+=</span> <span class="n">symbol1</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+                                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                                        <span class="n">symbol</span> <span class="o">+=</span> <span class="n">symbol2</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+                                    <span class="p">}</span>
+                                <span class="p">}</span>
+                            <span class="p">}</span>
+                            <span class="n">m</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">+=</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span> <span class="o">*</span> <span class="n">q</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nl">default:</span> <span class="p">{</span>
+                    <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">isdigit</span><span class="p">(</span><span class="n">token</span><span class="p">.</span><span class="n">back</span><span class="p">()))</span> <span class="p">{</span>
+                        <span class="n">m</span><span class="p">[</span><span class="s">"1"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stoi</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">m</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">:</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">to_string</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">first</span> <span class="o">==</span> <span class="s">"1"</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="s">"*"</span> <span class="o">+</span> <span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="n">stable_sort</span><span class="p">(</span><span class="n">ans</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">ans</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">string</span> <span class="n">a</span><span class="p">,</span> <span class="n">string</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">count</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">a</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="sc">'*'</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">b</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="sc">'*'</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">basicCalculatorIV</span><span class="p">(</span><span class="n">string</span> <span class="n">expression</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">evalvars</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">evalints</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span> <span class="n">m</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">evalvars</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">m</span><span class="p">[</span><span class="n">evalvars</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">to_string</span><span class="p">(</span><span class="n">evalints</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">auto</span> <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">expression</span><span class="p">);</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">inject</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">toRPN</span><span class="p">(</span><span class="n">tokens</span><span class="p">);</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">tokens</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">tokens</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-770.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

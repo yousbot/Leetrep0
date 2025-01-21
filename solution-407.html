@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-407.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-407.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>407 - Trapping Rain Water II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/407.html 407. Trapping Rain Water II Level Hard Description Given an m x n matrix of positive integers representing the height of each unit cell in a 2D elevation map, compute the volume of water it is able to trap after raining....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-407.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-407.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-407.html" rel="stylesheet"/>
+   <link href="solution-407.html" rel="stylesheet"/>
+   <link href="solution-407.html" rel="stylesheet"/>
+   <link href="solution-407.html" rel="stylesheet"/>
+   <link href="solution-407.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="407 - Trapping Rain Water II" property="og:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/407.html 407. Trapping Rain Water II Level Hard Description Given an m x n matrix of positive integers representing the height of each unit cell in a 2D elevation map, compute the volume of water it is able to trap after raining. Note: Both m and n are less than 110. The height of each unit cell is greater than 0 and is less than 20,000. Example: Given the following 3x6 height map: [ [1,4,3,1,3,2], [3,2,1,3,2,4], [2,3,3,2,3,1] ] Return 4. The above image represents the elevation map [[1,4,3,1,3,2],[3,2,1,3,2,4],[2,3,3,2,3,1]] before the rain. After the rain, water is trapped between the blocks. The total volume of water trapped is 4. Solution If height has length 0, then return 0. Use priority queue and breadth first search. For each cell, store its row, column and height. To calculate the amount of water trapped in a terrain, start by adding all the cells on the border of the terrain to a priority queue. Each cellâs height is compared, and the cell with the smallest height is polled first. After a cell is polled from the queue, its adjacent cells are considered. If an adjacent cell has a lower height, then water is trapped in that cell. Calculate the amount of water trapped by taking the difference in height between the two cells, add that amount to the result, and offer the adjacent cell to the priority queue with the height of the current cell. If an adjacent cell has a greater height, then that cell will not have any trapped water. Simply offer the adjacent cell to the priority queue using its own height. Finally, return the total amount of trapped water. Java C++ Python Go class Solution { public int trapRainWater(int[][] heightMap) { if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) return 0; int rows = heightMap.length, columns = heightMap[0].length; boolean[][] visited = new boolean[rows][columns]; PriorityQueue&amp;lt;Cell&amp;gt; priorityQueue = new PriorityQueue&amp;lt;Cell&amp;gt;(); // top/bottom border process for (int i = 0; i &amp;lt; columns; i++) { visited[0][i] = true; visited[rows - 1][i] = true; priorityQueue.offer(new Cell(0, i, heightMap[0][i])); priorityQueue.offer(new Cell(rows - 1, i, heightMap[rows - 1][i])); } // left/right border process for (int i = 1; i &amp;lt; rows - 1; i++) { visited[i][0] = true; visited[i][columns - 1] = true; priorityQueue.offer(new Cell(i, 0, heightMap[i][0])); priorityQueue.offer(new Cell(i, columns - 1, heightMap[i][columns - 1])); } int amount = 0; int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} }; while (!priorityQueue.isEmpty()) { while (!priorityQueue.isEmpty()) { // ç¬¬ä¸æ¬¡pollåºæ¥çï¼æ¯æ´ä¸ª3Då°å¾ç4ä¸ªborderä¸çæä½ç¹ int row = cell.row, column = cell.column, height = cell.height; for (int[] direction : directions) { int newRow = row + direction[0], newColumn = column + direction[1]; if (newRow &amp;gt;= 0 &amp;amp;&amp;amp; newRow &amp;lt; rows &amp;amp;&amp;amp; newColumn &amp;gt;= 0 &amp;amp;&amp;amp; newColumn &amp;lt; columns) { if (!visited[newRow][newColumn]) { visited[newRow][newColumn] = true; int newCellHeight = heightMap[newRow][newColumn]; if (height &amp;gt; newCellHeight) { // always enque with higher height amount += height - newCellHeight; priorityQueue.offer(new Cell(newRow, newColumn, height));..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-01-10T21:21:01-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-01-10-407-Trapping-Rain-Water-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-407.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="407 - Trapping Rain Water II" property="twitter:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/407.html 407. Trapping Rain Water II Level Hard Description Given an m x n matrix of positive integers representing the height of each unit cell in a 2D elevation map, compute the volume of water it is able to trap after raining. Note: Both m and n are less than 110. The height of each unit cell is greater than 0 and is less than 20,000. Example: Given the following 3x6 height map: [ [1,4,3,1,3,2], [3,2,1,3,2,4], [2,3,3,2,3,1] ] Return 4. The above image represents the elevation map [[1,4,3,1,3,2],[3,2,1,3,2,4],[2,3,3,2,3,1]] before the rain. After the rain, water is trapped between the blocks. The total volume of water trapped is 4. Solution If height has length 0, then return 0. Use priority queue and breadth first search. For each cell, store its row, column and height. To calculate the amount of water trapped in a terrain, start by adding all the cells on the border of the terrain to a priority queue. Each cellâs height is compared, and the cell with the smallest height is polled first. After a cell is polled from the queue, its adjacent cells are considered. If an adjacent cell has a lower height, then water is trapped in that cell. Calculate the amount of water trapped by taking the difference in height between the two cells, add that amount to the result, and offer the adjacent cell to the priority queue with the height of the current cell. If an adjacent cell has a greater height, then that cell will not have any trapped water. Simply offer the adjacent cell to the priority queue using its own height. Finally, return the total amount of trapped water. Java C++ Python Go class Solution { public int trapRainWater(int[][] heightMap) { if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) return 0; int rows = heightMap.length, columns = heightMap[0].length; boolean[][] visited = new boolean[rows][columns]; PriorityQueue&amp;lt;Cell&amp;gt; priorityQueue = new PriorityQueue&amp;lt;Cell&amp;gt;(); // top/bottom border process for (int i = 0; i &amp;lt; columns; i++) { visited[0][i] = true; visited[rows - 1][i] = true; priorityQueue.offer(new Cell(0, i, heightMap[0][i])); priorityQueue.offer(new Cell(rows - 1, i, heightMap[rows - 1][i])); } // left/right border process for (int i = 1; i &amp;lt; rows - 1; i++) { visited[i][0] = true; visited[i][columns - 1] = true; priorityQueue.offer(new Cell(i, 0, heightMap[i][0])); priorityQueue.offer(new Cell(i, columns - 1, heightMap[i][columns - 1])); } int amount = 0; int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} }; while (!priorityQueue.isEmpty()) { while (!priorityQueue.isEmpty()) { // ç¬¬ä¸æ¬¡pollåºæ¥çï¼æ¯æ´ä¸ª3Då°å¾ç4ä¸ªborderä¸çæä½ç¹ int row = cell.row, column = cell.column, height = cell.height; for (int[] direction : directions) { int newRow = row + direction[0], newColumn = column + direction[1]; if (newRow &amp;gt;= 0 &amp;amp;&amp;amp; newRow &amp;lt; rows &amp;amp;&amp;amp; newColumn &amp;gt;= 0 &amp;amp;&amp;amp; newColumn &amp;lt; columns) { if (!visited[newRow][newColumn]) { visited[newRow][newColumn] = true; int newCellHeight = heightMap[newRow][newColumn]; if (height &amp;gt; newCellHeight) { // always enque with higher height amount += height - newCellHeight; priorityQueue.offer(new Cell(newRow, newColumn, height));..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    407 - Trapping Rain Water II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="407 - Trapping Rain Water II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-407.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-01-10-407-Trapping-Rain-Water-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-01-10T21:21:01-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"407 - Trapping Rain Water II","dateModified":"2017-01-10T21:21:01-08:00","datePublished":"2017-01-10T21:21:01-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-01-10-407-Trapping-Rain-Water-II/"},"url":"https://leetcode.ca/2017-01-10-407-Trapping-Rain-Water-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-407.html">
+        https://leetcode.ca/all/407.html
+       </a>
+      </p>
+      <h1 id="407-trapping-rain-water-ii">
+       407. Trapping Rain Water II
+      </h1>
+      <h2 id="level">
+       Level
+      </h2>
+      <p>
+       Hard
+      </p>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an
+       <code class="language-plaintext highlighter-rouge">
+        m x n
+       </code>
+       matrix of positive integers representing the height of each unit cell in a 2D elevation map, compute the volume of water it is able to trap after raining.
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+      </p>
+      <p>
+       Both
+       <code class="language-plaintext highlighter-rouge">
+        m
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        n
+       </code>
+       are less than 110. The height of each unit cell is greater than 0 and is less than 20,000.
+      </p>
+      <p>
+       <strong>
+        Example:
+       </strong>
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>Given the following 3x6 height map:
+[
+  [1,4,3,1,3,2],
+  [3,2,1,3,2,4],
+  [2,3,3,2,3,1]
+]
+
+Return 4.
+</code></pre>
+       </div>
+      </div>
+      <p>
+       <img alt="Image text" src="https://assets.leetcode.com/uploads/2018/10/13/rainwater_empty.png"/>
+      </p>
+      <p>
+       The above image represents the elevation map
+       <code class="language-plaintext highlighter-rouge">
+        [[1,4,3,1,3,2],[3,2,1,3,2,4],[2,3,3,2,3,1]]
+       </code>
+       before the rain.
+      </p>
+      <p>
+       <img alt="Image text" src="https://assets.leetcode.com/uploads/2018/10/13/rainwater_fill.png"/>
+      </p>
+      <p>
+       After the rain, water is trapped between the blocks. The total volume of water trapped is 4.
+      </p>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       If
+       <code class="language-plaintext highlighter-rouge">
+        height
+       </code>
+       has length 0, then return 0.
+      </p>
+      <p>
+       Use
+       <code class="language-plaintext highlighter-rouge">
+        priority queue
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        breadth first search
+       </code>
+       . For each cell, store its row, column and height.
+      </p>
+      <p>
+       To calculate the amount of water trapped in a terrain, start by adding all the cells on the border of the terrain to a priority queue. Each cellâs height is compared, and the cell with the smallest height is polled first.
+      </p>
+      <p>
+       After a cell is polled from the queue, its adjacent cells are considered. If an adjacent cell has a lower height, then water is trapped in that cell. Calculate the amount of water trapped by taking the difference in height between the two cells, add that amount to the result, and offer the adjacent cell to the priority queue with the height of the current cell.
+      </p>
+      <p>
+       If an adjacent cell has a greater height, then that cell will not have any trapped water. Simply offer the adjacent cell to the priority queue using its own height.
+      </p>
+      <p>
+       Finally, return the total amount of trapped water.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#d486756a-1314-4e5b-aca9-f75429643379'}">
+       <li class="uk-active">
+        <a href="solution-407.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-407.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-407.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-407.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="d486756a-1314-4e5b-aca9-f75429643379">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">trapRainWater</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">heightMap</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">heightMap</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">heightMap</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">heightMap</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">rows</span> <span class="o">=</span> <span class="n">heightMap</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">heightMap</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">rows</span><span class="o">][</span><span class="n">columns</span><span class="o">];</span>
+        <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Cell</span><span class="o">&gt;</span> <span class="n">priorityQueue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Cell</span><span class="o">&gt;();</span>
+
+        <span class="c1">// top/bottom border process</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">columns</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">visited</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">visited</span><span class="o">[</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">priorityQueue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Cell</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">heightMap</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">i</span><span class="o">]));</span>
+            <span class="n">priorityQueue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Cell</span><span class="o">(</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">heightMap</span><span class="o">[</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">i</span><span class="o">]));</span>
+        <span class="o">}</span>
+
+        <span class="c1">// left/right border process</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">visited</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">visited</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">priorityQueue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Cell</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">heightMap</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">]));</span>
+            <span class="n">priorityQueue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Cell</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">heightMap</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]));</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">amount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">directions</span> <span class="o">=</span> <span class="o">{</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">},</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">},</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">},</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">}</span> <span class="o">};</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">priorityQueue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">priorityQueue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span> <span class="c1">// ç¬¬ä¸æ¬¡pollåºæ¥çï¼æ¯æ´ä¸ª3Då°å¾ç4ä¸ªborderä¸çæä½ç¹</span>
+            <span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="na">row</span><span class="o">,</span> <span class="n">column</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="na">column</span><span class="o">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="na">height</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">direction</span> <span class="o">:</span> <span class="n">directions</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">newRow</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="n">direction</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">newColumn</span> <span class="o">=</span> <span class="n">column</span> <span class="o">+</span> <span class="n">direction</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">newRow</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">newRow</span> <span class="o">&lt;</span> <span class="n">rows</span> <span class="o">&amp;&amp;</span> <span class="n">newColumn</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">newColumn</span> <span class="o">&lt;</span> <span class="n">columns</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">visited</span><span class="o">[</span><span class="n">newRow</span><span class="o">][</span><span class="n">newColumn</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="n">visited</span><span class="o">[</span><span class="n">newRow</span><span class="o">][</span><span class="n">newColumn</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="kt">int</span> <span class="n">newCellHeight</span> <span class="o">=</span> <span class="n">heightMap</span><span class="o">[</span><span class="n">newRow</span><span class="o">][</span><span class="n">newColumn</span><span class="o">];</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">newCellHeight</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// always enque with higher height</span>
+                            <span class="n">amount</span> <span class="o">+=</span> <span class="n">height</span> <span class="o">-</span> <span class="n">newCellHeight</span><span class="o">;</span>
+                            <span class="n">priorityQueue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Cell</span><span class="o">(</span><span class="n">newRow</span><span class="o">,</span> <span class="n">newColumn</span><span class="o">,</span> <span class="n">height</span><span class="o">));</span>
+                        <span class="o">}</span> <span class="k">else</span>
+                            <span class="n">priorityQueue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Cell</span><span class="o">(</span><span class="n">newRow</span><span class="o">,</span> <span class="n">newColumn</span><span class="o">,</span> <span class="n">newCellHeight</span><span class="o">));</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">amount</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Cell</span> <span class="kd">implements</span> <span class="nc">Comparable</span><span class="o">&lt;</span><span class="nc">Cell</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">row</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">column</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">height</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Cell</span><span class="o">(</span><span class="kt">int</span> <span class="n">row</span><span class="o">,</span> <span class="kt">int</span> <span class="n">column</span><span class="o">,</span> <span class="kt">int</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">column</span> <span class="o">=</span> <span class="n">column</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">height</span> <span class="o">=</span> <span class="n">height</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compareTo</span><span class="o">(</span><span class="nc">Cell</span> <span class="n">cell2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">height</span> <span class="o">-</span> <span class="n">cell2</span><span class="o">.</span><span class="na">height</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/trapping-rain-water-ii/</span>
+<span class="c1">// Time: O(MNlog(MN))</span>
+<span class="c1">// Space: O(MN)</span>
+<span class="c1">// Ref: https://discuss.leetcode.com/topic/60914/concise-c-priority_queue-solution</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">typedef</span> <span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">Point</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">trapRainWater</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">M</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">(),</span> <span class="n">dirs</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">},{</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">},{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="p">},</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">maxH</span> <span class="o">=</span> <span class="n">INT_MIN</span><span class="p">;</span>
+        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">Point</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;&gt;&gt;</span> <span class="n">pq</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span> <span class="n">seen</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">N</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">==</span> <span class="n">M</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="p">});</span>
+                    <span class="n">seen</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="n">maxH</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxH</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="p">[</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">]</span> <span class="o">:</span> <span class="n">dirs</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="n">M</span> <span class="o">||</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="n">N</span> <span class="o">||</span> <span class="n">seen</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
+                <span class="n">seen</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">maxH</span><span class="p">)</span> <span class="n">ans</span> <span class="o">+=</span> <span class="n">maxH</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">];</span>
+                <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span> <span class="n">A</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">],</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="s">'''
+&gt;&gt;&gt; from itertools import pairwise
+&gt;&gt;&gt; dirs = (-1, 0, 1, 0, -1)
+&gt;&gt;&gt; pairwise(dirs)
+&lt;itertools.pairwise object at 0x104dbe470&gt;
+&gt;&gt;&gt; list(pairwise(dirs))
+[(-1, 0), (0, 1), (1, 0), (0, -1)]
+'''</span>
+
+<span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">trapRainWater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">heightMap</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heightMap</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">vis</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">)]</span> <span class="c1"># visited
+</span>        <span class="n">pq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># border enqueue
+</span>                    <span class="n">heappush</span><span class="p">(</span><span class="n">pq</span><span class="p">,</span> <span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span> <span class="c1"># default order
+</span>                    <span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dirs</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">pq</span><span class="p">:</span>
+            <span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">pq</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">(</span><span class="n">dirs</span><span class="p">):</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]:</span>
+                    <span class="n">ans</span> <span class="o">+=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="n">heightMap</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span> <span class="c1"># look for neighbour which is lower than pop result hight
+</span>                    <span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">heappush</span><span class="p">(</span><span class="n">pq</span><span class="p">,</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">heightMap</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">trapRainWater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">heightMap</span><span class="p">):</span>
+    <span class="s">"""
+    :type heightMap: List[List[int]]
+    :rtype: int
+    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">heightMap</span><span class="p">:</span>
+      <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heightMap</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+      <span class="n">heapq</span><span class="p">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+      <span class="n">heapq</span><span class="p">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="n">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+      <span class="n">visited</span> <span class="o">|=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">)}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+      <span class="n">heapq</span><span class="p">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+      <span class="n">heapq</span><span class="p">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">w</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+      <span class="n">visited</span> <span class="o">|=</span> <span class="p">{(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)}</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+    <span class="k">while</span> <span class="n">heap</span><span class="p">:</span>
+      <span class="n">height</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">heapq</span><span class="p">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">di</span><span class="p">,</span> <span class="n">dj</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+        <span class="n">ni</span><span class="p">,</span> <span class="n">nj</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">di</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">dj</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">ni</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">nj</span> <span class="o">&lt;</span> <span class="n">w</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nj</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+          <span class="n">ans</span> <span class="o">+=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">heightMap</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="n">nj</span><span class="p">])</span>
+          <span class="n">heapq</span><span class="p">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="n">nj</span><span class="p">],</span> <span class="n">height</span><span class="p">),</span> <span class="n">ni</span><span class="p">,</span> <span class="n">nj</span><span class="p">))</span> <span class="c1"># update new hight, max(heightMap[ni][nj], height)
+</span>          <span class="n">visited</span> <span class="o">|=</span> <span class="p">{(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nj</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">trapRainWater</span><span class="p">(</span><span class="n">heightMap</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heightMap</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">heightMap</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="n">pq</span> <span class="o">:=</span> <span class="n">hp</span><span class="p">{}</span>
+	<span class="n">vis</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">heightMap</span> <span class="p">{</span>
+		<span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">row</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span><span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+				<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pq</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">})</span>
+				<span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">dirs</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">pq</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">p</span> <span class="o">:=</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pq</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">tuple</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">i</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">j</span><span class="o">+</span><span class="n">dirs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">ans</span> <span class="o">+=</span> <span class="n">max</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">v</span><span class="o">-</span><span class="n">heightMap</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
+				<span class="n">vis</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+				<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pq</span><span class="p">,</span> <span class="n">tuple</span><span class="p">{</span><span class="n">max</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">heightMap</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">})</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">a</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">tuple</span> <span class="k">struct</span><span class="p">{</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span> <span class="p">}</span>
+<span class="k">type</span> <span class="n">hp</span> <span class="p">[]</span><span class="n">tuple</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="kt">int</span>            <span class="p">{</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">hp</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span>       <span class="p">{</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">v</span> <span class="k">interface</span><span class="p">{})</span> <span class="p">{</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="p">(</span><span class="n">tuple</span><span class="p">))</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="k">interface</span><span class="p">{}</span>   <span class="p">{</span> <span class="n">a</span> <span class="o">:=</span> <span class="o">*</span><span class="n">h</span><span class="p">;</span> <span class="n">v</span> <span class="o">:=</span> <span class="n">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">];</span> <span class="k">return</span> <span class="n">v</span> <span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-407.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

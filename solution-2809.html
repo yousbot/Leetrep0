@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2809.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2809.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2809 - Minimum Time to Make Array Sum At Most x</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2809. Minimum Time to Make Array Sum At Most x Description You are given two 0-indexed integer arrays nums1 and nums2 of equal length. Every second, for all indices 0 &amp;lt;= i &amp;lt; nums1.length, value of nums1[i] is incremented by nums2[i]. After this is done,...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2809.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2809.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2809.html" rel="stylesheet"/>
+   <link href="solution-2809.html" rel="stylesheet"/>
+   <link href="solution-2809.html" rel="stylesheet"/>
+   <link href="solution-2809.html" rel="stylesheet"/>
+   <link href="solution-2809.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2809 - Minimum Time to Make Array Sum At Most x" property="og:title"/>
+   <meta content="Leetcode 2809. Minimum Time to Make Array Sum At Most x Description You are given two 0-indexed integer arrays nums1 and nums2 of equal length. Every second, for all indices 0 &amp;lt;= i &amp;lt; nums1.length, value of nums1[i] is incremented by nums2[i]. After this is done, you can do the following operation: Choose an index 0 &amp;lt;= i &amp;lt; nums1.length and make nums1[i] = 0. You are also given an integer x. Return the minimum time in which you can make the sum of all elements of nums1 to be less than or equal to x, or -1 if this is not possible. &amp;nbsp; Example 1: Input: nums1 = [1,2,3], nums2 = [1,2,3], x = 4 Output: 3 Explanation: For the 1st second, we apply the operation on i = 0. Therefore nums1 = [0,2+2,3+3] = [0,4,6]. For the 2nd second, we apply the operation on i = 1. Therefore nums1 = [0+1,0,6+3] = [1,0,9]. For the 3rd second, we apply the operation on i = 2. Therefore nums1 = [1+1,0+2,0] = [2,2,0]. Now sum of nums1 = 4. It can be shown that these operations are optimal, so we return 3. Example 2: Input: nums1 = [1,2,3], nums2 = [3,3,3], x = 4 Output: -1 Explanation: It can be shown that the sum of nums1 will always be greater than x, no matter which operations are performed. &amp;nbsp; Constraints: 1 &amp;lt;= nums1.length &amp;lt;= 103 1 &amp;lt;= nums1[i] &amp;lt;= 103 0 &amp;lt;= nums2[i] &amp;lt;= 103 nums1.length == nums2.length 0 &amp;lt;= x &amp;lt;= 106 Solutions Solution 1: Sorting + Dynamic Programming We notice that if we operate on the same number multiple times, only the last operation is meaningful, and the rest of the operations on that number will only increase the other numbers. Therefore, we operate on each number at most once, that is to say, the number of operations is within $[0,..n]$. Letâs assume that we have performed $j$ operations, and the indices of the numbers operated on are $i_1, i_2, \cdots, i_j$. For these $j$ operations, the value that each operation can reduce the sum of array elements is: \[\begin{aligned} &amp;amp; d_1 = nums_1[i_1] + nums_2[i_1] \times 1 \\ &amp;amp; d_2 = nums_1[i_2] + nums_2[i_2] \times 2 \\ &amp;amp; \cdots \\ &amp;amp; d_j = nums_1[i_j] + nums_2[i_j] \times j \end{aligned}\] From a greedy perspective, in order to maximize the reduction of the sum of array elements, we should let the larger elements in $nums_2$ be operated on as late as possible. Therefore, we can sort $nums_1$ and $nums_2$ in ascending order of the element values in $nums_2$. Next, we consider the implementation of dynamic programming. We use $f[i][j]$ to represent the maximum value that can reduce the sum of array elements for the first $i$ elements of the array $nums_1$ with $j$ operations. We can get the following state transition equation: \[f[i][j] = \max \{f[i-1][j], f[i-1][j-1] + nums_1[i] + nums_2[i] \times j\}\] Finally, we enumerate $j$ and find the smallest $j$ that satisfies $s_1..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-08-09T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-08-09-2809-Minimum-Time-to-Make-Array-Sum-At-Most-x/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2809.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2809 - Minimum Time to Make Array Sum At Most x" property="twitter:title"/>
+   <meta content="Leetcode 2809. Minimum Time to Make Array Sum At Most x Description You are given two 0-indexed integer arrays nums1 and nums2 of equal length. Every second, for all indices 0 &amp;lt;= i &amp;lt; nums1.length, value of nums1[i] is incremented by nums2[i]. After this is done, you can do the following operation: Choose an index 0 &amp;lt;= i &amp;lt; nums1.length and make nums1[i] = 0. You are also given an integer x. Return the minimum time in which you can make the sum of all elements of nums1 to be less than or equal to x, or -1 if this is not possible. &amp;nbsp; Example 1: Input: nums1 = [1,2,3], nums2 = [1,2,3], x = 4 Output: 3 Explanation: For the 1st second, we apply the operation on i = 0. Therefore nums1 = [0,2+2,3+3] = [0,4,6]. For the 2nd second, we apply the operation on i = 1. Therefore nums1 = [0+1,0,6+3] = [1,0,9]. For the 3rd second, we apply the operation on i = 2. Therefore nums1 = [1+1,0+2,0] = [2,2,0]. Now sum of nums1 = 4. It can be shown that these operations are optimal, so we return 3. Example 2: Input: nums1 = [1,2,3], nums2 = [3,3,3], x = 4 Output: -1 Explanation: It can be shown that the sum of nums1 will always be greater than x, no matter which operations are performed. &amp;nbsp; Constraints: 1 &amp;lt;= nums1.length &amp;lt;= 103 1 &amp;lt;= nums1[i] &amp;lt;= 103 0 &amp;lt;= nums2[i] &amp;lt;= 103 nums1.length == nums2.length 0 &amp;lt;= x &amp;lt;= 106 Solutions Solution 1: Sorting + Dynamic Programming We notice that if we operate on the same number multiple times, only the last operation is meaningful, and the rest of the operations on that number will only increase the other numbers. Therefore, we operate on each number at most once, that is to say, the number of operations is within $[0,..n]$. Letâs assume that we have performed $j$ operations, and the indices of the numbers operated on are $i_1, i_2, \cdots, i_j$. For these $j$ operations, the value that each operation can reduce the sum of array elements is: \[\begin{aligned} &amp;amp; d_1 = nums_1[i_1] + nums_2[i_1] \times 1 \\ &amp;amp; d_2 = nums_1[i_2] + nums_2[i_2] \times 2 \\ &amp;amp; \cdots \\ &amp;amp; d_j = nums_1[i_j] + nums_2[i_j] \times j \end{aligned}\] From a greedy perspective, in order to maximize the reduction of the sum of array elements, we should let the larger elements in $nums_2$ be operated on as late as possible. Therefore, we can sort $nums_1$ and $nums_2$ in ascending order of the element values in $nums_2$. Next, we consider the implementation of dynamic programming. We use $f[i][j]$ to represent the maximum value that can reduce the sum of array elements for the first $i$ elements of the array $nums_1$ with $j$ operations. We can get the following state transition equation: \[f[i][j] = \max \{f[i-1][j], f[i-1][j-1] + nums_1[i] + nums_2[i] \times j\}\] Finally, we enumerate $j$ and find the smallest $j$ that satisfies $s_1..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2809 - Minimum Time to Make Array Sum At Most x | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2809 - Minimum Time to Make Array Sum At Most x" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2809.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-08-09-2809-Minimum-Time-to-Make-Array-Sum-At-Most-x/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-08-09T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2809 - Minimum Time to Make Array Sum At Most x","dateModified":"2023-08-09T00:00:00-07:00","datePublished":"2023-08-09T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-08-09-2809-Minimum-Time-to-Make-Array-Sum-At-Most-x/"},"url":"https://leetcode.ca/2023-08-09-2809-Minimum-Time-to-Make-Array-Sum-At-Most-x/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2809-minimum-time-to-make-array-sum-at-most-x">
+       <a href="solution-2809.html">
+        2809. Minimum Time to Make Array Sum At Most x
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given two
+       <strong>
+        0-indexed
+       </strong>
+       integer arrays
+       <code>
+        nums1
+       </code>
+       and
+       <code>
+        nums2
+       </code>
+       of equal length. Every second, for all indices
+       <code>
+        0 &lt;= i &lt; nums1.length
+       </code>
+       , value of
+       <code>
+        nums1[i]
+       </code>
+       is incremented by
+       <code>
+        nums2[i]
+       </code>
+       .
+       <strong>
+        After
+       </strong>
+       this is done, you can do the following operation:
+      </p>
+      <ul>
+       <li>
+        Choose an index
+        <code>
+         0 &lt;= i &lt; nums1.length
+        </code>
+        and make
+        <code>
+         nums1[i] = 0
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       You are also given an integer
+       <code>
+        x
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         minimum
+        </strong>
+        time in which you can make the sum of all elements of
+       </em>
+       <code>
+        nums1
+       </code>
+       <em>
+        to be
+        <strong>
+         less than or equal
+        </strong>
+        to
+       </em>
+       <code>
+        x
+       </code>
+       ,
+       <em>
+        or
+       </em>
+       <code>
+        -1
+       </code>
+       <em>
+        if this is not possible.
+       </em>
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums1 = [1,2,3], nums2 = [1,2,3], x = 4
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> 
+For the 1st second, we apply the operation on i = 0. Therefore nums1 = [0,2+2,3+3] = [0,4,6]. 
+For the 2nd second, we apply the operation on i = 1. Therefore nums1 = [0+1,0,6+3] = [1,0,9]. 
+For the 3rd second, we apply the operation on i = 2. Therefore nums1 = [1+1,0+2,0] = [2,2,0]. 
+Now sum of nums1 = 4. It can be shown that these operations are optimal, so we return 3.
+
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums1 = [1,2,3], nums2 = [3,3,3], x = 4
+<strong>Output:</strong> -1
+<strong>Explanation:</strong> It can be shown that the sum of nums1 will always be greater than x, no matter which operations are performed.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         <font face="monospace">
+          1 &lt;= nums1.length &lt;= 10
+          <sup>
+           3
+          </sup>
+         </font>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= nums1[i] &lt;= 10
+         <sup>
+          3
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= nums2[i] &lt;= 10
+         <sup>
+          3
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         nums1.length == nums2.length
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= x &lt;= 10
+         <sup>
+          6
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Sorting + Dynamic Programming
+       </strong>
+      </p>
+      <p>
+       We notice that if we operate on the same number multiple times, only the last operation is meaningful, and the rest of the operations on that number will only increase the other numbers. Therefore, we operate on each number at most once, that is to say, the number of operations is within $[0,..n]$.
+      </p>
+      <p>
+       Letâs assume that we have performed $j$ operations, and the indices of the numbers operated on are $i_1, i_2, \cdots, i_j$. For these $j$ operations, the value that each operation can reduce the sum of array elements is:
+      </p>
+      \[\begin{aligned}
+&amp; d_1 = nums_1[i_1] + nums_2[i_1] \times 1 \\
+&amp; d_2 = nums_1[i_2] + nums_2[i_2] \times 2 \\
+&amp; \cdots \\
+&amp; d_j = nums_1[i_j] + nums_2[i_j] \times j
+\end{aligned}\]
+      <p>
+       From a greedy perspective, in order to maximize the reduction of the sum of array elements, we should let the larger elements in $nums_2$ be operated on as late as possible. Therefore, we can sort $nums_1$ and $nums_2$ in ascending order of the element values in $nums_2$.
+      </p>
+      <p>
+       Next, we consider the implementation of dynamic programming. We use $f[i][j]$ to represent the maximum value that can reduce the sum of array elements for the first $i$ elements of the array $nums_1$ with $j$ operations. We can get the following state transition equation:
+      </p>
+      \[f[i][j] = \max \{f[i-1][j], f[i-1][j-1] + nums_1[i] + nums_2[i] \times j\}\]
+      <p>
+       Finally, we enumerate $j$ and find the smallest $j$ that satisfies $s_1 + s_2 \times j - f[n][j] \le x$.
+      </p>
+      <p>
+       The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$, where $n$ is the length of the array.
+      </p>
+      <p>
+       We notice that the state $f[i][j]$ is only related to $f[i-1][j]$ and $f[i-1][j-1]$, so we can optimize the first dimension and reduce the space complexity to $O(n)$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#03a22973-a4f8-453f-90ff-b547fd6db711'}">
+       <li class="uk-active">
+        <a href="solution-2809.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2809.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2809.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2809.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2809.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="03a22973-a4f8-453f-90ff-b547fd6db711">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minimumTime</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">nums1</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">nums2</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums1</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="mi">0</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">nums1</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">nums2</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)};</span>
+        <span class="o">}</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="nc">Comparator</span><span class="o">.</span><span class="na">comparingInt</span><span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="mi">0</span><span class="o">],</span> <span class="n">b</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="mi">1</span><span class="o">];</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">],</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">j</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">s1</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">s1</span> <span class="o">+=</span> <span class="n">v</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">s2</span> <span class="o">+=</span> <span class="n">v</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s1</span> <span class="o">+</span> <span class="n">s2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">f</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">j</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">minimumTime</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums1</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">nums</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">nums</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">nums2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">auto</span> <span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">j</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">s1</span> <span class="o">=</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">nums1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums1</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">nums2</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums2</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s1</span> <span class="o">+</span> <span class="n">s2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minimumTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">nums2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nums1</span><span class="p">,</span> <span class="n">nums2</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">z</span><span class="p">:</span> <span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">j</span><span class="p">)</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nums2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">s1</span> <span class="o">+</span> <span class="n">s2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">j</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minimumTime</span><span class="p">(</span><span class="n">nums1</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">nums2</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span> <span class="p">{</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">type</span> <span class="n">pair</span> <span class="k">struct</span><span class="p">{</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span> <span class="p">}</span>
+	<span class="n">nums</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="n">pair</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">var</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="kt">int</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+		<span class="n">s1</span> <span class="o">+=</span> <span class="n">nums1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">s2</span> <span class="o">+=</span> <span class="n">nums2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair</span><span class="p">{</span><span class="n">nums1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">b</span> <span class="p">})</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">b</span>
+				<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">*</span><span class="n">j</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">s1</span><span class="o">+</span><span class="n">s2</span><span class="o">*</span><span class="n">j</span><span class="o">-</span><span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">j</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minimumTime</span><span class="p">(</span><span class="nx">nums1</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">nums2</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">nums1</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">nums</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">nums</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">nums1</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">nums2</span><span class="p">[</span><span class="nx">i</span><span class="p">]]);</span>
+    <span class="p">}</span>
+    <span class="nx">nums</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">const</span> <span class="p">[</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">]</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">],</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">*</span> <span class="nx">j</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">s1</span> <span class="o">=</span> <span class="nx">nums1</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">s2</span> <span class="o">=</span> <span class="nx">nums2</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">s1</span> <span class="o">+</span> <span class="nx">s2</span> <span class="o">*</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">f</span><span class="p">[</span><span class="nx">n</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">j</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2809.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

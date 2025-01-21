@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1065.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1065.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1065 - Index Pairs of a String</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1065. Index Pairs of a String Description Given a string text and an array of strings words, return an array of all index pairs [i, j] so that the substring text[i...j] is in words. Return the pairs [i, j] in sorted order (i.e., sort them...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1065.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1065.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1065.html" rel="stylesheet"/>
+   <link href="solution-1065.html" rel="stylesheet"/>
+   <link href="solution-1065.html" rel="stylesheet"/>
+   <link href="solution-1065.html" rel="stylesheet"/>
+   <link href="solution-1065.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1065 - Index Pairs of a String" property="og:title"/>
+   <meta content="Leetcode 1065. Index Pairs of a String Description Given a string text and an array of strings words, return an array of all index pairs [i, j] so that the substring text[i...j] is in words. Return the pairs [i, j] in sorted order (i.e., sort them by their first coordinate, and in case of ties sort them by their second coordinate). &amp;nbsp; Example 1: Input: text = &amp;quot;thestoryofleetcodeandme&amp;quot;, words = [&amp;quot;story&amp;quot;,&amp;quot;fleet&amp;quot;,&amp;quot;leetcode&amp;quot;] Output: [[3,7],[9,13],[10,17]] Example 2: Input: text = &amp;quot;ababa&amp;quot;, words = [&amp;quot;aba&amp;quot;,&amp;quot;ab&amp;quot;] Output: [[0,1],[0,2],[2,3],[2,4]] Explanation: Notice that matches can overlap, see &amp;quot;aba&amp;quot; is found in [0,2] and [2,4]. &amp;nbsp; Constraints: 1 &amp;lt;= text.length &amp;lt;= 100 1 &amp;lt;= words.length &amp;lt;= 20 1 &amp;lt;= words[i].length &amp;lt;= 50 text and words[i] consist of lowercase English letters. All the strings of words are unique. Solutions Java C++ Python Go class Trie { Trie[] children = new Trie[26]; boolean isEnd = false; void insert(String word) { Trie node = this; for (char c : word.toCharArray()) { c -= 'a'; if (node.children[c] == null) { node.children[c] = new Trie(); } node = node.children[c]; } node.isEnd = true; } } class Solution { public int[][] indexPairs(String text, String[] words) { Trie trie = new Trie(); for (String w : words) { trie.insert(w); } int n = text.length(); List&amp;lt;int[]&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; n; ++i) { Trie node = trie; for (int j = i; j &amp;lt; n; ++j) { int idx = text.charAt(j) - 'a'; if (node.children[idx] == null) { break; } node = node.children[idx]; if (node.isEnd) { ans.add(new int[] {i, j}); } } } return ans.toArray(new int[ans.size()][2]); } } class Trie { public: vector&amp;lt;Trie*&amp;gt; children; bool isEnd = false; Trie() { children.resize(26); } void insert(string word) { Trie* node = this; for (char c : word) { c -= 'a'; if (!node-&amp;gt;children[c]) node-&amp;gt;children[c] = new Trie(); node = node-&amp;gt;children[c]; } node-&amp;gt;isEnd = true; } }; class Solution { public: vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; indexPairs(string text, vector&amp;lt;string&amp;gt;&amp;amp; words) { Trie* trie = new Trie(); for (auto w : words) trie-&amp;gt;insert(w); int n = text.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; ans; for (int i = 0; i &amp;lt; n; ++i) { Trie* node = trie; for (int j = i; j &amp;lt; n; ++j) { int idx = text[j] - 'a'; if (!node-&amp;gt;children[idx]) break; node = node-&amp;gt;children[idx]; if (node-&amp;gt;isEnd) ans.push_back({i, j}); } } return ans; } }; class Solution: def indexPairs(self, text: str, words: List[str]) -&amp;gt; List[List[int]]: words = set(words) n = len(text) return [ [i, j] for i in range(n) for j in range(i, n) if text[i : j + 1] in words ] type Trie struct { children [26]*Trie isEnd bool } func newTrie() *Trie { return &amp;amp;Trie{} } func (this *Trie) insert(word string) { node := this for _, c := range word { idx := int(c - 'a') if node.children[idx] == nil { node.children[idx] = newTrie() } node = node.children[idx] } node.isEnd = true } func indexPairs(text string, words []string) [][]int { trie := newTrie() for _, w := range..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-10-30T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-10-30-1065-Index-Pairs-of-a-String/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1065.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1065 - Index Pairs of a String" property="twitter:title"/>
+   <meta content="Leetcode 1065. Index Pairs of a String Description Given a string text and an array of strings words, return an array of all index pairs [i, j] so that the substring text[i...j] is in words. Return the pairs [i, j] in sorted order (i.e., sort them by their first coordinate, and in case of ties sort them by their second coordinate). &amp;nbsp; Example 1: Input: text = &amp;quot;thestoryofleetcodeandme&amp;quot;, words = [&amp;quot;story&amp;quot;,&amp;quot;fleet&amp;quot;,&amp;quot;leetcode&amp;quot;] Output: [[3,7],[9,13],[10,17]] Example 2: Input: text = &amp;quot;ababa&amp;quot;, words = [&amp;quot;aba&amp;quot;,&amp;quot;ab&amp;quot;] Output: [[0,1],[0,2],[2,3],[2,4]] Explanation: Notice that matches can overlap, see &amp;quot;aba&amp;quot; is found in [0,2] and [2,4]. &amp;nbsp; Constraints: 1 &amp;lt;= text.length &amp;lt;= 100 1 &amp;lt;= words.length &amp;lt;= 20 1 &amp;lt;= words[i].length &amp;lt;= 50 text and words[i] consist of lowercase English letters. All the strings of words are unique. Solutions Java C++ Python Go class Trie { Trie[] children = new Trie[26]; boolean isEnd = false; void insert(String word) { Trie node = this; for (char c : word.toCharArray()) { c -= 'a'; if (node.children[c] == null) { node.children[c] = new Trie(); } node = node.children[c]; } node.isEnd = true; } } class Solution { public int[][] indexPairs(String text, String[] words) { Trie trie = new Trie(); for (String w : words) { trie.insert(w); } int n = text.length(); List&amp;lt;int[]&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; n; ++i) { Trie node = trie; for (int j = i; j &amp;lt; n; ++j) { int idx = text.charAt(j) - 'a'; if (node.children[idx] == null) { break; } node = node.children[idx]; if (node.isEnd) { ans.add(new int[] {i, j}); } } } return ans.toArray(new int[ans.size()][2]); } } class Trie { public: vector&amp;lt;Trie*&amp;gt; children; bool isEnd = false; Trie() { children.resize(26); } void insert(string word) { Trie* node = this; for (char c : word) { c -= 'a'; if (!node-&amp;gt;children[c]) node-&amp;gt;children[c] = new Trie(); node = node-&amp;gt;children[c]; } node-&amp;gt;isEnd = true; } }; class Solution { public: vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; indexPairs(string text, vector&amp;lt;string&amp;gt;&amp;amp; words) { Trie* trie = new Trie(); for (auto w : words) trie-&amp;gt;insert(w); int n = text.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; ans; for (int i = 0; i &amp;lt; n; ++i) { Trie* node = trie; for (int j = i; j &amp;lt; n; ++j) { int idx = text[j] - 'a'; if (!node-&amp;gt;children[idx]) break; node = node-&amp;gt;children[idx]; if (node-&amp;gt;isEnd) ans.push_back({i, j}); } } return ans; } }; class Solution: def indexPairs(self, text: str, words: List[str]) -&amp;gt; List[List[int]]: words = set(words) n = len(text) return [ [i, j] for i in range(n) for j in range(i, n) if text[i : j + 1] in words ] type Trie struct { children [26]*Trie isEnd bool } func newTrie() *Trie { return &amp;amp;Trie{} } func (this *Trie) insert(word string) { node := this for _, c := range word { idx := int(c - 'a') if node.children[idx] == nil { node.children[idx] = newTrie() } node = node.children[idx] } node.isEnd = true } func indexPairs(text string, words []string) [][]int { trie := newTrie() for _, w := range..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1065 - Index Pairs of a String | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1065 - Index Pairs of a String" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1065.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-10-30-1065-Index-Pairs-of-a-String/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-10-30T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1065 - Index Pairs of a String","dateModified":"2018-10-30T00:00:00-07:00","datePublished":"2018-10-30T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-10-30-1065-Index-Pairs-of-a-String/"},"url":"https://leetcode.ca/2018-10-30-1065-Index-Pairs-of-a-String/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1065-index-pairs-of-a-string">
+       <a href="solution-1065.html">
+        1065. Index Pairs of a String
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string
+       <code>
+        text
+       </code>
+       and an array of strings
+       <code>
+        words
+       </code>
+       , return
+       <em>
+        an array of all index pairs
+       </em>
+       <code>
+        [i, j]
+       </code>
+       <em>
+        so that the substring
+       </em>
+       <code>
+        text[i...j]
+       </code>
+       <em>
+        is in
+        <code>
+         words
+        </code>
+       </em>
+       .
+      </p>
+      <p>
+       Return the pairs
+       <code>
+        [i, j]
+       </code>
+       in sorted order (i.e., sort them by their first coordinate, and in case of ties sort them by their second coordinate).
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> text = "thestoryofleetcodeandme", words = ["story","fleet","leetcode"]
+<strong>Output:</strong> [[3,7],[9,13],[10,17]]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> text = "ababa", words = ["aba","ab"]
+<strong>Output:</strong> [[0,1],[0,2],[2,3],[2,4]]
+<strong>Explanation:</strong> Notice that matches can overlap, see "aba" is found in [0,2] and [2,4].
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= text.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= words.length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= words[i].length &lt;= 50
+        </code>
+       </li>
+       <li>
+        <code>
+         text
+        </code>
+        and
+        <code>
+         words[i]
+        </code>
+        consist of lowercase English letters.
+       </li>
+       <li>
+        All the strings of
+        <code>
+         words
+        </code>
+        are
+        <strong>
+         unique
+        </strong>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#71983874-a8c3-41b2-9164-63ef43efc3cf'}">
+       <li class="uk-active">
+        <a href="solution-1065.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1065.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1065.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1065.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="71983874-a8c3-41b2-9164-63ef43efc3cf">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Trie</span> <span class="o">{</span>
+    <span class="nc">Trie</span><span class="o">[]</span> <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+    <span class="kt">boolean</span> <span class="n">isEnd</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">insert</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">c</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">isEnd</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[][]</span> <span class="nf">indexPairs</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">w</span> <span class="o">:</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">trie</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">w</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="n">trie</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">isEnd</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">});</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">ans</span><span class="o">.</span><span class="na">size</span><span class="o">()][</span><span class="mi">2</span><span class="o">]);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">Trie</span><span class="o">*&gt;</span> <span class="n">children</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">isEnd</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="n">Trie</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">children</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">26</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">insert</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Trie</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">c</span> <span class="o">-=</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Trie</span><span class="p">();</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">isEnd</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">indexPairs</span><span class="p">(</span><span class="n">string</span> <span class="n">text</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Trie</span><span class="o">*</span> <span class="n">trie</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Trie</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">w</span> <span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="n">trie</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Trie</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">trie</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="k">break</span><span class="p">;</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">isEnd</span><span class="p">)</span> <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">indexPairs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">text</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">words</span>
+        <span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">Trie</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">children</span> <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="o">*</span><span class="n">Trie</span>
+	<span class="n">isEnd</span>    <span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newTrie</span><span class="p">()</span> <span class="o">*</span><span class="n">Trie</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">Trie</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Trie</span><span class="p">)</span> <span class="n">insert</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">node</span> <span class="o">:=</span> <span class="n">this</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word</span> <span class="p">{</span>
+		<span class="n">idx</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">newTrie</span><span class="p">()</span>
+		<span class="p">}</span>
+		<span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="n">node</span><span class="o">.</span><span class="n">isEnd</span> <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">indexPairs</span><span class="p">(</span><span class="n">text</span> <span class="kt">string</span><span class="p">,</span> <span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[][]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">trie</span> <span class="o">:=</span> <span class="n">newTrie</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+		<span class="n">trie</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+	<span class="k">var</span> <span class="n">ans</span> <span class="p">[][]</span><span class="kt">int</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">text</span> <span class="p">{</span>
+		<span class="n">node</span> <span class="o">:=</span> <span class="n">trie</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">idx</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+			<span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">isEnd</span> <span class="p">{</span>
+				<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">})</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1065.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

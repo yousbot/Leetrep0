@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1764.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1764.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1764 - Form Array by Concatenating Subarrays of Another Array</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/1764.html 1764. Form Array by Concatenating Subarrays of Another Array Level Medium Description You are given a 2D integer array groups of length n. You are also given an integer array nums. You are asked if you can choose n disjoint subarrays...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1764.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1764.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1764.html" rel="stylesheet"/>
+   <link href="solution-1764.html" rel="stylesheet"/>
+   <link href="solution-1764.html" rel="stylesheet"/>
+   <link href="solution-1764.html" rel="stylesheet"/>
+   <link href="solution-1764.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1764 - Form Array by Concatenating Subarrays of Another Array" property="og:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/1764.html 1764. Form Array by Concatenating Subarrays of Another Array Level Medium Description You are given a 2D integer array groups of length n. You are also given an integer array nums. You are asked if you can choose n disjoint subarrays from the array nums such that the i-th subarray is equal to groups[i] (0-indexed), and if i &amp;gt; 0, the (i-1)-th subarray appears before the i-th subarray in nums (i.e. the subarrays must be in the same order as groups). Return true if you can do this task, and false otherwise. Note that the subarrays are disjoint if and only if there is no index k such that nums[k] belongs to more than one subarray. A subarray is a contiguous sequence of elements within an array. Example 1: Input: groups = [[1,-1,-1],[3,-2,0]], nums = [1,-1,0,1,-1,-1,3,-2,0] Output: true Explanation: You can choose the 0th subarray as [1,-1,0,1,-1,-1,3,-2,0] and the 1st one as [1,-1,0,1,-1,-1,3,-2,0]. These subarrays are disjoint as they share no common nums[k] element. Example 2: Input: groups = [[10,-2],[1,2,3,4]], nums = [1,2,3,4,10,-2] Output: false Explanation: Note that choosing the subarrays [1,2,3,4,10,-2] and [1,2,3,4,10,-2] is incorrect because they are not in the same order as in groups. [10,-2] must come before [1,2,3,4]. Example 3: Input: groups = [[1,2,3],[3,4]], nums = [7,7,1,2,3,4,7,7] Output: false Explanation: Note that choosing the subarrays [7,7,1,2,3,4,7,7] and [7,7,1,2,3,4,7,7] is invalid because they are not disjoint. They share a common elements nums[4] (0-indexed). Constraints: groups.length == n 1 &amp;lt;= n &amp;lt;= 10^3 1 &amp;lt;= groups[i].length, sum(groups[i].length) &amp;lt;= 10^3 1 &amp;lt;= nums.length &amp;lt;= 10^3 -10^7 &amp;lt;= groups[i][j], nums[k] &amp;lt;= 10^7 Solution Loop over groups. For each group in groups, find the first occurrence of group in nums. After the start index of group in nums is found, update the minimum possible start index in nums and check the remaining groups. The minimum possible start index of the next group in nums must be greater than the last index in nums of group. If all groupsâ occurrences in nums can be found, return true. Otherwise, return false. Java C++ Python Go class Solution { public boolean canChoose(int[][] groups, int[] nums) { int length = nums.length; int groupsCount = groups.length; int curIndex = 0; for (int i = 0; i &amp;lt; groupsCount; i++) { int[] group = groups[i]; int groupStart = findGroupStart(group, nums, curIndex); if (groupStart &amp;lt; 0) return false; curIndex = groupStart + group.length; if (curIndex &amp;gt;= length &amp;amp;&amp;amp; i &amp;lt; groupsCount - 1) return false; } return true; } public int findGroupStart(int[] group, int[] nums, int start) { int length = nums.length; int groupLength = group.length; int maxStart = length - groupLength; for (int i = start; i &amp;lt;= maxStart; i++) { boolean flag = true; for (int j = 0; j &amp;lt; groupLength; j++) { if (nums[i + j] != group[j]) { flag = false; break; } } if (flag) return i; } return -1; } } ############ class Solution { public boolean canChoose(int[][] groups, int[] nums) {..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-04-16T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-04-16-1764-Form-Array-by-Concatenating-Subarrays-of-Another-Array/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1764.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1764 - Form Array by Concatenating Subarrays of Another Array" property="twitter:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/1764.html 1764. Form Array by Concatenating Subarrays of Another Array Level Medium Description You are given a 2D integer array groups of length n. You are also given an integer array nums. You are asked if you can choose n disjoint subarrays from the array nums such that the i-th subarray is equal to groups[i] (0-indexed), and if i &amp;gt; 0, the (i-1)-th subarray appears before the i-th subarray in nums (i.e. the subarrays must be in the same order as groups). Return true if you can do this task, and false otherwise. Note that the subarrays are disjoint if and only if there is no index k such that nums[k] belongs to more than one subarray. A subarray is a contiguous sequence of elements within an array. Example 1: Input: groups = [[1,-1,-1],[3,-2,0]], nums = [1,-1,0,1,-1,-1,3,-2,0] Output: true Explanation: You can choose the 0th subarray as [1,-1,0,1,-1,-1,3,-2,0] and the 1st one as [1,-1,0,1,-1,-1,3,-2,0]. These subarrays are disjoint as they share no common nums[k] element. Example 2: Input: groups = [[10,-2],[1,2,3,4]], nums = [1,2,3,4,10,-2] Output: false Explanation: Note that choosing the subarrays [1,2,3,4,10,-2] and [1,2,3,4,10,-2] is incorrect because they are not in the same order as in groups. [10,-2] must come before [1,2,3,4]. Example 3: Input: groups = [[1,2,3],[3,4]], nums = [7,7,1,2,3,4,7,7] Output: false Explanation: Note that choosing the subarrays [7,7,1,2,3,4,7,7] and [7,7,1,2,3,4,7,7] is invalid because they are not disjoint. They share a common elements nums[4] (0-indexed). Constraints: groups.length == n 1 &amp;lt;= n &amp;lt;= 10^3 1 &amp;lt;= groups[i].length, sum(groups[i].length) &amp;lt;= 10^3 1 &amp;lt;= nums.length &amp;lt;= 10^3 -10^7 &amp;lt;= groups[i][j], nums[k] &amp;lt;= 10^7 Solution Loop over groups. For each group in groups, find the first occurrence of group in nums. After the start index of group in nums is found, update the minimum possible start index in nums and check the remaining groups. The minimum possible start index of the next group in nums must be greater than the last index in nums of group. If all groupsâ occurrences in nums can be found, return true. Otherwise, return false. Java C++ Python Go class Solution { public boolean canChoose(int[][] groups, int[] nums) { int length = nums.length; int groupsCount = groups.length; int curIndex = 0; for (int i = 0; i &amp;lt; groupsCount; i++) { int[] group = groups[i]; int groupStart = findGroupStart(group, nums, curIndex); if (groupStart &amp;lt; 0) return false; curIndex = groupStart + group.length; if (curIndex &amp;gt;= length &amp;amp;&amp;amp; i &amp;lt; groupsCount - 1) return false; } return true; } public int findGroupStart(int[] group, int[] nums, int start) { int length = nums.length; int groupLength = group.length; int maxStart = length - groupLength; for (int i = start; i &amp;lt;= maxStart; i++) { boolean flag = true; for (int j = 0; j &amp;lt; groupLength; j++) { if (nums[i + j] != group[j]) { flag = false; break; } } if (flag) return i; } return -1; } } ############ class Solution { public boolean canChoose(int[][] groups, int[] nums) {..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1764 - Form Array by Concatenating Subarrays of Another Array | Leetcode
+   </title>
+   <meta content="Jekyll v3.9.4" name="generator">
+    <meta content="1764 - Form Array by Concatenating Subarrays of Another Array" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1764.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-04-16-1764-Form-Array-by-Concatenating-Subarrays-of-Another-Array/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-04-16T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"headline":"1764 - Form Array by Concatenating Subarrays of Another Array","dateModified":"2021-04-16T22:21:01-07:00","datePublished":"2021-04-16T22:21:01-07:00","description":"Leetcode","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-04-16-1764-Form-Array-by-Concatenating-Subarrays-of-Another-Array/"},"url":"https://leetcode.ca/2021-04-16-1764-Form-Array-by-Concatenating-Subarrays-of-Another-Array/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCDRuzBvLGzyVvgPyohrahrA" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-1764.html">
+        https://leetcode.ca/all/1764.html
+       </a>
+      </p>
+      <h1 id="1764-form-array-by-concatenating-subarrays-of-another-array">
+       1764. Form Array by Concatenating Subarrays of Another Array
+      </h1>
+      <h2 id="level">
+       Level
+      </h2>
+      <p>
+       Medium
+      </p>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a 2D integer array
+       <code class="language-plaintext highlighter-rouge">
+        groups
+       </code>
+       of length
+       <code class="language-plaintext highlighter-rouge">
+        n
+       </code>
+       . You are also given an integer array
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       .
+      </p>
+      <p>
+       You are asked if you can choose
+       <code class="language-plaintext highlighter-rouge">
+        n
+       </code>
+       <strong>
+        disjoint
+       </strong>
+       subarrays from the array
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       such that the
+       <code class="language-plaintext highlighter-rouge">
+        i-th
+       </code>
+       subarray is equal to
+       <code class="language-plaintext highlighter-rouge">
+        groups[i]
+       </code>
+       <strong>
+        (0-indexed)
+       </strong>
+       , and if
+       <code class="language-plaintext highlighter-rouge">
+        i &gt; 0
+       </code>
+       , the
+       <code class="language-plaintext highlighter-rouge">
+        (i-1)-th
+       </code>
+       subarray appears
+       <strong>
+        before
+       </strong>
+       the
+       <code class="language-plaintext highlighter-rouge">
+        i-th
+       </code>
+       subarray in nums (i.e. the subarrays must be in the same order as
+       <code class="language-plaintext highlighter-rouge">
+        groups
+       </code>
+       ).
+      </p>
+      <p>
+       Return
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       <em>
+        if you can do this task, and
+        <code class="language-plaintext highlighter-rouge">
+         false
+        </code>
+        otherwise
+       </em>
+       .
+      </p>
+      <p>
+       Note that the subarrays are
+       <strong>
+        disjoint
+       </strong>
+       if and only if there is no index
+       <code class="language-plaintext highlighter-rouge">
+        k
+       </code>
+       such that
+       <code class="language-plaintext highlighter-rouge">
+        nums[k]
+       </code>
+       belongs to more than one subarray. A subarray is a contiguous sequence of elements within an array.
+      </p>
+      <p>
+       <strong>
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <strong>
+        Input:
+       </strong>
+       groups = [[1,-1,-1],[3,-2,0]], nums = [1,-1,0,1,-1,-1,3,-2,0]
+      </p>
+      <p>
+       <strong>
+        Output:
+       </strong>
+       true
+      </p>
+      <p>
+       <strong>
+        Explanation:
+       </strong>
+       You can choose the 0th subarray as [1,-1,0,
+       <strong>
+        1,-1,-1
+       </strong>
+       ,3,-2,0] and the 1st one as [1,-1,0,1,-1,-1,
+       <strong>
+        3,-2,0
+       </strong>
+       ].
+      </p>
+      <p>
+       These subarrays are disjoint as they share no common nums[k] element.
+      </p>
+      <p>
+       <strong>
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <strong>
+        Input:
+       </strong>
+       groups = [[10,-2],[1,2,3,4]], nums = [1,2,3,4,10,-2]
+      </p>
+      <p>
+       <strong>
+        Output:
+       </strong>
+       false
+      </p>
+      <p>
+       <strong>
+        Explanation:
+       </strong>
+       Note that choosing the subarrays [1,2,3,4,10,-2] and [1,2,3,4,10,-2] is incorrect because they are not in the same order as in groups.
+      </p>
+      <p>
+       [10,-2] must come before [1,2,3,4].
+      </p>
+      <p>
+       <strong>
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <strong>
+        Input:
+       </strong>
+       groups = [[1,2,3],[3,4]], nums = [7,7,1,2,3,4,7,7]
+      </p>
+      <p>
+       <strong>
+        Output:
+       </strong>
+       false
+      </p>
+      <p>
+       <strong>
+        Explanation:
+       </strong>
+       Note that choosing the subarrays [7,7,
+       <strong>
+        1,2,3
+       </strong>
+       ,4,7,7] and [7,7,1,2,
+       <strong>
+        3,4
+       </strong>
+       ,7,7] is invalid because they are not disjoint.
+They share a common elements nums[4] (0-indexed).
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         groups.length == n
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         1 &lt;= n &lt;= 10^3
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         1 &lt;= groups[i].length, sum(groups[i].length) &lt;= 10^3
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         1 &lt;= nums.length &lt;= 10^3
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         -10^7 &lt;= groups[i][j], nums[k] &lt;= 10^7
+        </code>
+       </li>
+      </ul>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       Loop over
+       <code class="language-plaintext highlighter-rouge">
+        groups
+       </code>
+       . For each
+       <code class="language-plaintext highlighter-rouge">
+        group
+       </code>
+       in
+       <code class="language-plaintext highlighter-rouge">
+        groups
+       </code>
+       , find the first occurrence of
+       <code class="language-plaintext highlighter-rouge">
+        group
+       </code>
+       in
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       . After the start index of
+       <code class="language-plaintext highlighter-rouge">
+        group
+       </code>
+       in
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       is found, update the minimum possible start index in
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       and check the remaining groups. The minimum possible start index of the next group in
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       must be greater than the last index in
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       of
+       <code class="language-plaintext highlighter-rouge">
+        group
+       </code>
+       .
+      </p>
+      <p>
+       If all groupsâ occurrences in
+       <code class="language-plaintext highlighter-rouge">
+        nums
+       </code>
+       can be found, return
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       . Otherwise, return
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       .
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#6d2ac73d-fcb1-4a8a-be47-c197aea070a0'}">
+       <li class="uk-active">
+        <a href="solution-1764.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1764.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1764.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1764.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="6d2ac73d-fcb1-4a8a-be47-c197aea070a0">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canChoose</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">groups</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">groupsCount</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">curIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">groupsCount</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">group</span> <span class="o">=</span> <span class="n">groups</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">groupStart</span> <span class="o">=</span> <span class="n">findGroupStart</span><span class="o">(</span><span class="n">group</span><span class="o">,</span> <span class="n">nums</span><span class="o">,</span> <span class="n">curIndex</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">groupStart</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="n">curIndex</span> <span class="o">=</span> <span class="n">groupStart</span> <span class="o">+</span> <span class="n">group</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">curIndex</span> <span class="o">&gt;=</span> <span class="n">length</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">groupsCount</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">findGroupStart</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">group</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">groupLength</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">maxStart</span> <span class="o">=</span> <span class="n">length</span> <span class="o">-</span> <span class="n">groupLength</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">maxStart</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">boolean</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">groupLength</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="o">]</span> <span class="o">!=</span> <span class="n">group</span><span class="o">[</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">flag</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">flag</span><span class="o">)</span>
+                <span class="k">return</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="err">############</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canChoose</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">groups</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">check</span><span class="o">(</span><span class="n">groups</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">nums</span><span class="o">,</span> <span class="n">j</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="n">groups</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+                <span class="o">++</span><span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">j</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">check</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">b</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">,</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">!=</span> <span class="n">b</span><span class="o">[</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/form-array-by-concatenating-subarrays-of-another-array/</span>
+<span class="c1">// Time: O(MLN) where M is the length of G, L is the max length of arrays in G, and N is the length of A</span>
+<span class="c1">// Space: O(M)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">good</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">G</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">gi</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="o">&amp;</span><span class="n">g</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="n">gi</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">g</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">||</span> <span class="n">g</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">gi</span> <span class="o">==</span> <span class="n">G</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">g</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">good</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span>  <span class="n">gi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">canChoose</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">G</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">G</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">v</span> <span class="o">:</span> <span class="n">G</span><span class="p">)</span> <span class="n">len</span> <span class="o">+=</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">good</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">canChoose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">groups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)]:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span>
+
+<span class="c1">############
+</span>
+<span class="c1"># 1764. Form Array by Concatenating Subarrays of Another Array
+# https://leetcode.com/problems/form-array-by-concatenating-subarrays-of-another-array/
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">canChoose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">for</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">ii</span><span class="p">:</span> <span class="n">ii</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">grp</span><span class="p">)]</span> <span class="o">==</span> <span class="n">grp</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">grp</span><span class="p">)</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">return</span> <span class="bp">True</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">canChoose</span><span class="p">(</span><span class="n">groups</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">check</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+		<span class="n">i</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="m">1</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="no">false</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span>
+	<span class="p">}</span>
+	<span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+	<span class="n">i</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">check</span><span class="p">(</span><span class="n">groups</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">j</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">j</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1764.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

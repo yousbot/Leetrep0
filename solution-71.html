@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-71.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-71.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>71 - Simplify Path</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 71. Simplify Path Description Given a string path, which is an absolute path (starting with a slash &amp;#39;/&amp;#39;) to a file or directory in a Unix-style file system, convert it to the simplified canonical path. In a Unix-style file system, a period &amp;#39;.&amp;#39; refers to...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-71.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-71.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-71.html" rel="stylesheet"/>
+   <link href="solution-71.html" rel="stylesheet"/>
+   <link href="solution-71.html" rel="stylesheet"/>
+   <link href="solution-71.html" rel="stylesheet"/>
+   <link href="solution-71.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="71 - Simplify Path" property="og:title"/>
+   <meta content="Leetcode 71. Simplify Path Description Given a string path, which is an absolute path (starting with a slash &amp;#39;/&amp;#39;) to a file or directory in a Unix-style file system, convert it to the simplified canonical path. In a Unix-style file system, a period &amp;#39;.&amp;#39; refers to the current directory, a double period &amp;#39;..&amp;#39; refers to the directory up a level, and any multiple consecutive slashes (i.e. &amp;#39;//&amp;#39;) are treated as a single slash &amp;#39;/&amp;#39;. For this problem, any other format of periods such as &amp;#39;...&amp;#39; are treated as file/directory names. The canonical path should have the following format: The path starts with a single slash &amp;#39;/&amp;#39;. Any two directories are separated by a single slash &amp;#39;/&amp;#39;. The path does not end with a trailing &amp;#39;/&amp;#39;. The path only contains the directories on the path from the root directory to the target file or directory (i.e., no period &amp;#39;.&amp;#39; or double period &amp;#39;..&amp;#39;) Return the simplified canonical path. &amp;nbsp; Example 1: Input: path = &amp;quot;/home/&amp;quot; Output: &amp;quot;/home&amp;quot; Explanation: Note that there is no trailing slash after the last directory name. Example 2: Input: path = &amp;quot;/../&amp;quot; Output: &amp;quot;/&amp;quot; Explanation: Going one level up from the root directory is a no-op, as the root level is the highest level you can go. Example 3: Input: path = &amp;quot;/home//foo/&amp;quot; Output: &amp;quot;/home/foo&amp;quot; Explanation: In the canonical path, multiple consecutive slashes are replaced by a single one. &amp;nbsp; Constraints: 1 &amp;lt;= path.length &amp;lt;= 3000 path consists of English letters, digits, period &amp;#39;.&amp;#39;, slash &amp;#39;/&amp;#39; or &amp;#39;_&amp;#39;. path is a valid absolute Unix path. Solutions Solution 1: Stack We first split the path into a number of substrings split by '/'. Then, we traverse each substring and perform the following operations based on the content of the substring: If the substring is empty or '.', no operation is performed because '.' represents the current directory. If the substring is '..', the top element of the stack is popped, because '..' represents the parent directory. If the substring is other strings, the substring is pushed into the stack, because the substring represents the subdirectory of the current directory. Finally, we concatenate all the elements in the stack from the bottom to the top of the stack to form a string, which is the simplified canonical path. The time complexity is $O(n)$ and the space complexity is $O(n)$, where $n$ is the length of the path. Java C++ Python Go TypeScript C# RenderScript class Solution { public String simplifyPath(String path) { Deque&amp;lt;String&amp;gt; stk = new ArrayDeque&amp;lt;&amp;gt;(); for (String s : path.split(&quot;/&quot;)) { if (&quot;&quot;.equals(s) || &quot;.&quot;.equals(s)) { continue; } if (&quot;..&quot;.equals(s)) { stk.pollLast(); } else { stk.offerLast(s); } } return &quot;/&quot; + String.join(&quot;/&quot;, stk); } } class Solution { public: string simplifyPath(string path) { deque&amp;lt;string&amp;gt; stk; stringstream ss(path); string t; while (getline(ss, t, '/')) { if (t == &quot;&quot; || t == &quot;.&quot;) { continue; } if (t == &quot;..&quot;) { if (!stk.empty()) { stk.pop_back(); } } else { stk.push_back(t); } } if (stk.empty())..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-02-09T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-02-09-71-Simplify-Path/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-71.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="71 - Simplify Path" property="twitter:title"/>
+   <meta content="Leetcode 71. Simplify Path Description Given a string path, which is an absolute path (starting with a slash &amp;#39;/&amp;#39;) to a file or directory in a Unix-style file system, convert it to the simplified canonical path. In a Unix-style file system, a period &amp;#39;.&amp;#39; refers to the current directory, a double period &amp;#39;..&amp;#39; refers to the directory up a level, and any multiple consecutive slashes (i.e. &amp;#39;//&amp;#39;) are treated as a single slash &amp;#39;/&amp;#39;. For this problem, any other format of periods such as &amp;#39;...&amp;#39; are treated as file/directory names. The canonical path should have the following format: The path starts with a single slash &amp;#39;/&amp;#39;. Any two directories are separated by a single slash &amp;#39;/&amp;#39;. The path does not end with a trailing &amp;#39;/&amp;#39;. The path only contains the directories on the path from the root directory to the target file or directory (i.e., no period &amp;#39;.&amp;#39; or double period &amp;#39;..&amp;#39;) Return the simplified canonical path. &amp;nbsp; Example 1: Input: path = &amp;quot;/home/&amp;quot; Output: &amp;quot;/home&amp;quot; Explanation: Note that there is no trailing slash after the last directory name. Example 2: Input: path = &amp;quot;/../&amp;quot; Output: &amp;quot;/&amp;quot; Explanation: Going one level up from the root directory is a no-op, as the root level is the highest level you can go. Example 3: Input: path = &amp;quot;/home//foo/&amp;quot; Output: &amp;quot;/home/foo&amp;quot; Explanation: In the canonical path, multiple consecutive slashes are replaced by a single one. &amp;nbsp; Constraints: 1 &amp;lt;= path.length &amp;lt;= 3000 path consists of English letters, digits, period &amp;#39;.&amp;#39;, slash &amp;#39;/&amp;#39; or &amp;#39;_&amp;#39;. path is a valid absolute Unix path. Solutions Solution 1: Stack We first split the path into a number of substrings split by '/'. Then, we traverse each substring and perform the following operations based on the content of the substring: If the substring is empty or '.', no operation is performed because '.' represents the current directory. If the substring is '..', the top element of the stack is popped, because '..' represents the parent directory. If the substring is other strings, the substring is pushed into the stack, because the substring represents the subdirectory of the current directory. Finally, we concatenate all the elements in the stack from the bottom to the top of the stack to form a string, which is the simplified canonical path. The time complexity is $O(n)$ and the space complexity is $O(n)$, where $n$ is the length of the path. Java C++ Python Go TypeScript C# RenderScript class Solution { public String simplifyPath(String path) { Deque&amp;lt;String&amp;gt; stk = new ArrayDeque&amp;lt;&amp;gt;(); for (String s : path.split(&quot;/&quot;)) { if (&quot;&quot;.equals(s) || &quot;.&quot;.equals(s)) { continue; } if (&quot;..&quot;.equals(s)) { stk.pollLast(); } else { stk.offerLast(s); } } return &quot;/&quot; + String.join(&quot;/&quot;, stk); } } class Solution { public: string simplifyPath(string path) { deque&amp;lt;string&amp;gt; stk; stringstream ss(path); string t; while (getline(ss, t, '/')) { if (t == &quot;&quot; || t == &quot;.&quot;) { continue; } if (t == &quot;..&quot;) { if (!stk.empty()) { stk.pop_back(); } } else { stk.push_back(t); } } if (stk.empty())..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    71 - Simplify Path | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="71 - Simplify Path" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-71.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-02-09-71-Simplify-Path/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-02-09T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"71 - Simplify Path","dateModified":"2016-02-09T00:00:00-08:00","datePublished":"2016-02-09T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-02-09-71-Simplify-Path/"},"url":"https://leetcode.ca/2016-02-09-71-Simplify-Path/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="71-simplify-path">
+       <a href="solution-71.html">
+        71. Simplify Path
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string
+       <code>
+        path
+       </code>
+       , which is an
+       <strong>
+        absolute path
+       </strong>
+       (starting with a slash
+       <code>
+        '/'
+       </code>
+       ) to a file or directory in a Unix-style file system, convert it to the simplified
+       <strong>
+        canonical path
+       </strong>
+       .
+      </p>
+      <p>
+       In a Unix-style file system, a period
+       <code>
+        '.'
+       </code>
+       refers to the current directory, a double period
+       <code>
+        '..'
+       </code>
+       refers to the directory up a level, and any multiple consecutive slashes (i.e.
+       <code>
+        '//'
+       </code>
+       ) are treated as a single slash
+       <code>
+        '/'
+       </code>
+       . For this problem, any other format of periods such as
+       <code>
+        '...'
+       </code>
+       are treated as file/directory names.
+      </p>
+      <p>
+       The
+       <strong>
+        canonical path
+       </strong>
+       should have the following format:
+      </p>
+      <ul>
+       <li>
+        The path starts with a single slash
+        <code>
+         '/'
+        </code>
+        .
+       </li>
+       <li>
+        Any two directories are separated by a single slash
+        <code>
+         '/'
+        </code>
+        .
+       </li>
+       <li>
+        The path does not end with a trailing
+        <code>
+         '/'
+        </code>
+        .
+       </li>
+       <li>
+        The path only contains the directories on the path from the root directory to the target file or directory (i.e., no period
+        <code>
+         '.'
+        </code>
+        or double period
+        <code>
+         '..'
+        </code>
+        )
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the simplified
+        <strong>
+         canonical path
+        </strong>
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> path = "/home/"
+<strong>Output:</strong> "/home"
+<strong>Explanation:</strong> Note that there is no trailing slash after the last directory name.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> path = "/../"
+<strong>Output:</strong> "/"
+<strong>Explanation:</strong> Going one level up from the root directory is a no-op, as the root level is the highest level you can go.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> path = "/home//foo/"
+<strong>Output:</strong> "/home/foo"
+<strong>Explanation:</strong> In the canonical path, multiple consecutive slashes are replaced by a single one.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= path.length &lt;= 3000
+        </code>
+       </li>
+       <li>
+        <code>
+         path
+        </code>
+        consists of English letters, digits, period
+        <code>
+         '.'
+        </code>
+        , slash
+        <code>
+         '/'
+        </code>
+        or
+        <code>
+         '_'
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         path
+        </code>
+        is a valid absolute Unix path.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Stack
+       </strong>
+      </p>
+      <p>
+       We first split the path into a number of substrings split by
+       <code class="language-plaintext highlighter-rouge">
+        '/'
+       </code>
+       . Then, we traverse each substring and perform the following operations based on the content of the substring:
+      </p>
+      <ul>
+       <li>
+        If the substring is empty or
+        <code class="language-plaintext highlighter-rouge">
+         '.'
+        </code>
+        , no operation is performed because
+        <code class="language-plaintext highlighter-rouge">
+         '.'
+        </code>
+        represents the current directory.
+       </li>
+       <li>
+        If the substring is
+        <code class="language-plaintext highlighter-rouge">
+         '..'
+        </code>
+        , the top element of the stack is popped, because
+        <code class="language-plaintext highlighter-rouge">
+         '..'
+        </code>
+        represents the parent directory.
+       </li>
+       <li>
+        If the substring is other strings, the substring is pushed into the stack, because the substring represents the subdirectory of the current directory.
+       </li>
+      </ul>
+      <p>
+       Finally, we concatenate all the elements in the stack from the bottom to the top of the stack to form a string, which is the simplified canonical path.
+      </p>
+      <p>
+       The time complexity is $O(n)$ and the space complexity is $O(n)$, where $n$ is the length of the path.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#498d8a7f-0ace-491e-ae46-a73648adb284'}">
+       <li class="uk-active">
+        <a href="solution-71.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-71.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-71.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-71.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-71.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-71.html">
+         C#
+        </a>
+       </li>
+       <li>
+        <a href="solution-71.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="498d8a7f-0ace-491e-ae46-a73648adb284">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">simplifyPath</span><span class="o">(</span><span class="nc">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">stk</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">path</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">"/"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="s">""</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="o">||</span> <span class="s">"."</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">s</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="s">".."</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">s</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">pollLast</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">offerLast</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="s">"/"</span> <span class="o">+</span> <span class="nc">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">"/"</span><span class="o">,</span> <span class="n">stk</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">string</span> <span class="n">simplifyPath</span><span class="p">(</span><span class="n">string</span> <span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">deque</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">stk</span><span class="p">;</span>
+        <span class="n">stringstream</span> <span class="n">ss</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="n">string</span> <span class="n">t</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getline</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="sc">'/'</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">""</span> <span class="o">||</span> <span class="n">t</span> <span class="o">==</span> <span class="s">"."</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">".."</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">stk</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s">"/"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">string</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">s</span> <span class="o">:</span> <span class="n">stk</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">s</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">simplifyPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">stk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">path</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">or</span> <span class="n">s</span> <span class="o">==</span> <span class="s">'.'</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s">'..'</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">stk</span><span class="p">:</span>
+                    <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">'/'</span> <span class="o">+</span> <span class="s">'/'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">simplifyPath</span><span class="p">(</span><span class="n">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">stk</span> <span class="p">[]</span><span class="kt">string</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">strings</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"/"</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s">""</span> <span class="o">||</span> <span class="n">s</span> <span class="o">==</span> <span class="s">"."</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s">".."</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">stk</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="m">0</span> <span class="o">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="p">}</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">strings</span><span class="o">.</span><span class="n">Join</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="s">"/"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">simplifyPath</span><span class="p">(</span><span class="nx">path</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">string</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">stk</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">s</span> <span class="k">of</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">s</span> <span class="o">===</span> <span class="dl">''</span> <span class="o">||</span> <span class="nx">s</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">.</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">s</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">..</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">stk</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">stk</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">stk</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="dl">'</span><span class="s1">/</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">stk</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">SimplifyPath</span><span class="p">(</span><span class="kt">string</span> <span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">stk</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">s</span> <span class="k">in</span> <span class="n">path</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">'/'</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="p">==</span> <span class="s">""</span> <span class="p">||</span> <span class="n">s</span> <span class="p">==</span> <span class="s">"."</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="p">==</span> <span class="s">".."</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">stk</span><span class="p">.</span><span class="nf">Pop</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">stk</span><span class="p">.</span><span class="nf">Push</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">var</span> <span class="n">sb</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">sb</span><span class="p">.</span><span class="nf">Insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="s">"/"</span> <span class="p">+</span> <span class="n">stk</span><span class="p">.</span><span class="nf">Pop</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">sb</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span> <span class="p">?</span> <span class="s">"/"</span> <span class="p">:</span> <span class="n">sb</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="nd">#[allow(dead_code)]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">simplify_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">String</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">s</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;&amp;</span><span class="nb">str</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nn">Vec</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+
+        <span class="c1">// Split the path</span>
+        <span class="k">let</span> <span class="n">p_vec</span> <span class="o">=</span> <span class="n">path</span><span class="nf">.split</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span><span class="py">.collect</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;&amp;</span><span class="nb">str</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+
+        <span class="c1">// Traverse the path vector</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="k">in</span> <span class="n">p_vec</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="n">p</span> <span class="p">{</span>
+                <span class="c1">// Do nothing for "" or "."</span>
+                <span class="s">""</span> <span class="p">|</span> <span class="s">"."</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="s">".."</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="o">!</span><span class="n">s</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="p">{</span>
+                        <span class="n">s</span><span class="nf">.pop</span><span class="p">();</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="n">_</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="nf">.push</span><span class="p">(</span><span class="n">p</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="s">"/"</span><span class="nf">.to_string</span><span class="p">()</span> <span class="o">+</span> <span class="o">&amp;</span><span class="n">s</span><span class="nf">.join</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-71.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

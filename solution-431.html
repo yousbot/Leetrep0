@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-431.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-431.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>431 - Encode N-ary Tree to Binary Tree</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Question Formatted question description: https://leetcode.ca/all/431.html Design an algorithm to encode an N-ary tree into a binary tree and decode the binary tree to get the original N-ary tree. An N-ary tree is a rooted tree in which each node has no more than N children....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-431.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-431.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-431.html" rel="stylesheet"/>
+   <link href="solution-431.html" rel="stylesheet"/>
+   <link href="solution-431.html" rel="stylesheet"/>
+   <link href="solution-431.html" rel="stylesheet"/>
+   <link href="solution-431.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="431 - Encode N-ary Tree to Binary Tree" property="og:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/431.html Design an algorithm to encode an N-ary tree into a binary tree and decode the binary tree to get the original N-ary tree. An N-ary tree is a rooted tree in which each node has no more than N children. Similarly, a binary tree is a rooted tree in which each node has no more than 2 children. There is no restriction on how your encode/decode algorithm should work. You just need to ensure that an N-ary tree can be encoded to a binary tree and this binary tree can be decoded to the original N-nary tree structure. For example, you may encode the following 3-ary tree to a binary tree in this way: Note that the above is just an example which might or might not work. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself. Note: N is in the range of [1, 1000] Do not use class member/global/static variables to store states. Your encode and decode algorithms should be stateless. è¿éé¢è®©æä»¬å°ä¸æ£µNåæ ç¼ç ä¸ºäºåæ ï¼å¶å®è¿éè¦å°äºåæ è§£ç åNåæ ãé¢ç®ä¸­è¯´äºå·ä½çç¼è§£ç çæ¹æ³æ æè°ï¼é£ä¹å°±æä¹ç®åæä¹æ¥åãé¦åæ³ä¸ä¸è¿éé¢çé¾ç¹æ¯ä»ä¹ï¼Nåæ çç¹ç¹çæ¯ä¸ªç»ç¹æå¤æNä¸ªå­ç»ç¹ï¼èäºåæ çæ¯ä¸ªç»ç¹æå¤åªè½æä¸¤ä¸ªå­ç»ç¹ï¼é£ä¹å¤ä½çå­ç»ç¹æä¹åï¼å½ç¶åªè½ç»§ç»­å­ç»ç¹ä¸ç»§ç»­ç´¯å ï¼å°±åæ³¡æ³¡é¾æ¸¸æä¸æ ·ï¼ä¸ä¸ªæä¸ä¸ªçãå¦ä½ç´¯ï¼å¾ç¡®å®ä¸å¥å·ä½çè§åï¼è¿æ ·è§£ç çæ¶åï¼ååæ¥ä¸éå°±å¯ä»¥äºãå¯¹äºå½åç»ç¹ root çNä¸ªå­ç»ç¹çå¤çåæ³æ¯ï¼å°ç¬¬ä¸ä¸ªç»ç¹æå°äºåæ çå·¦å­ç»ç¹ä¸ï¼ç¶åå°åé¢çç»ç¹ä¾æ¬¡æå°å³å­ç»ç¹ï¼åå³å­ç»ç¹çå³å­ç»ç¹ä¸ï¼è¿æ ·åçå¥½å¤æ¯ï¼åä¸å±çå­ç»ç¹é½æå¨å³å­ç»ç¹ä¸ï¼èè¿äºå­ç»ç¹èªå·±çå­ç»ç¹é½ä¼æå¨å·¦å­ç»ç¹ä¸ï¼å¬èµ·æ¥å¾ææ¯ä¹ï¼é£å°±ä¸¾ä¾è¯´æä¸ä¸å§ï¼å°±ç¨é¢ç®ä¸­çä¾å­ä¸­çæ å¥½äºï¼æ³¨æé¢ç®ä¸­è¯´åªè¦è½æNåæ ç¼ç æäºåæ ï¼ç¶ååè§£ç ååNåæ ï¼å¹¶ä¸ care å°åºç¼ç æå¥æ ·çäºåæ ï¼ã N-ary Tree: 1 / | \ 3 2 4 / \ 5 6 Binary Tree: 1 / 3 / \ 5 2 \ \ 6 4 æä»¬å¯ä»¥çåºï¼Nåæ æ ¹ç»ç¹1çç¬¬ä¸ä¸ªå­ç»ç¹3è¢«æå°äºäºåæ çå·¦å­ç»ç¹ä¸ï¼åä¸å±çç»ç¹2æå°äºç»ç¹3çå³å­ç»ç¹ä¸ï¼åä¸å±çç»ç¹4è¢«æå°äºç»ç¹2çå³å­ç»ç¹ä¸ãèç»ç¹3æ¬èº«çå­ç»ç¹ä¹æç§è¿ä¸ªè§å¾ï¼ç¬¬ä¸ä¸ªå­ç»ç¹5æå°äºç»ç¹3çå·¦å­ç»ç¹ä¸ï¼èåä¸æçç»ç¹6æå°äºç»ç¹5çå³å­ç»ç¹ä¸ã å¯¹äºè§£ç ï¼ä¹æ¯åæ ·çè§å¾ï¼åæ ¹æ®æ ¹ç»ç¹å¼æ°å»ºä¸ä¸ªç©ºçNåæ ç»ç¹ï¼ç±äºæä»¬çç¼ç è§å¾ï¼æ ¹ç»ç¹æ¯ä¸å®æ²¡æå³å­ç»ç¹çï¼æä»¥ååºå·¦å­ç»ç¹ curï¼å¹¶ä¸å¼å§å¾ªç¯ï¼å¦æ cur ç»ç¹å­å¨ï¼é£ä¹æä»¬å¯¹ cur éå½è°ç¨è§£ç å½æ°ï¼å°è¿åçç»ç¹å å¥å½åNåæ ç»ç¹ç children æ°ç»ä¸­ï¼ç¶å cur åèµå¼ä¸ºå¶å³å­ç»ç¹ï¼ç»§ç»­éå½è°ç¨è§£ç å½æ°ï¼åå å¥ children æ°ç»ï¼å¦æ­¤ä¾¿å¯å°äºåæ è¿åä¸ºä¹åçNåæ ï¼åè§ä»£ç å¦ä¸ï¼ Java C++ Python Go TypeScript /* // Definition for a Node. class Node { public int val; public List&amp;lt;Node&amp;gt; children; public Node() {} public Node(int _val) { val = _val; } public Node(int _val, List&amp;lt;Node&amp;gt; _children) { val = _val; children = _children; } }; */ /** * Definition for a binary tree node. * public class TreeNode { * int val; * TreeNode left; * TreeNode right; * TreeNode(int x) { val = x; } * } */ class Codec { // Encodes an n-ary tree to a binary tree. public TreeNode encode(Node root) { if (root == null) { return null; } TreeNode node = new TreeNode(root.val); if (root.children == null || root.children.isEmpty()) { return node; } TreeNode left = encode(root.children.get(0)); node.left = left; for (int i = 1; i &amp;lt; root.children.size(); i++) { left.right = encode(root.children.get(i)); left = left.right; } return node; } // Decodes your binary tree to an n-ary tree. public Node decode(TreeNode data) { if (data == null) { return null; } Node node = new Node(data.val, new ArrayList&amp;lt;&amp;gt;()); if (data.left == null) { return node; } TreeNode left = data.left; while (left != null) { node.children.add(decode(left)); left = left.right; } return node; } } // Your Codec object will be instantiated and called as such: // Codec codec = new Codec(); // codec.decode(codec.encode(root)); class Codec { public: // Encodes an n-ary tree to a binary tree. TreeNode* encode(Node* root) { if (!root) return NULL; TreeNode *res = new TreeNode(root-&amp;gt;val); if (!root-&amp;gt;children.empty()) { res-&amp;gt;left = encode(root-&amp;gt;children[0]); } TreeNode *cur = res-&amp;gt;left; for (int i = 1; i &amp;lt; root-&amp;gt;children.size(); ++i) { cur-&amp;gt;right = encode(root-&amp;gt;children[i]); cur =..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-02-03T21:21:01-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-02-03-431-Encode-N-ary-Tree-to-Binary-Tree/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-431.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="431 - Encode N-ary Tree to Binary Tree" property="twitter:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/431.html Design an algorithm to encode an N-ary tree into a binary tree and decode the binary tree to get the original N-ary tree. An N-ary tree is a rooted tree in which each node has no more than N children. Similarly, a binary tree is a rooted tree in which each node has no more than 2 children. There is no restriction on how your encode/decode algorithm should work. You just need to ensure that an N-ary tree can be encoded to a binary tree and this binary tree can be decoded to the original N-nary tree structure. For example, you may encode the following 3-ary tree to a binary tree in this way: Note that the above is just an example which might or might not work. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself. Note: N is in the range of [1, 1000] Do not use class member/global/static variables to store states. Your encode and decode algorithms should be stateless. è¿éé¢è®©æä»¬å°ä¸æ£µNåæ ç¼ç ä¸ºäºåæ ï¼å¶å®è¿éè¦å°äºåæ è§£ç åNåæ ãé¢ç®ä¸­è¯´äºå·ä½çç¼è§£ç çæ¹æ³æ æè°ï¼é£ä¹å°±æä¹ç®åæä¹æ¥åãé¦åæ³ä¸ä¸è¿éé¢çé¾ç¹æ¯ä»ä¹ï¼Nåæ çç¹ç¹çæ¯ä¸ªç»ç¹æå¤æNä¸ªå­ç»ç¹ï¼èäºåæ çæ¯ä¸ªç»ç¹æå¤åªè½æä¸¤ä¸ªå­ç»ç¹ï¼é£ä¹å¤ä½çå­ç»ç¹æä¹åï¼å½ç¶åªè½ç»§ç»­å­ç»ç¹ä¸ç»§ç»­ç´¯å ï¼å°±åæ³¡æ³¡é¾æ¸¸æä¸æ ·ï¼ä¸ä¸ªæä¸ä¸ªçãå¦ä½ç´¯ï¼å¾ç¡®å®ä¸å¥å·ä½çè§åï¼è¿æ ·è§£ç çæ¶åï¼ååæ¥ä¸éå°±å¯ä»¥äºãå¯¹äºå½åç»ç¹ root çNä¸ªå­ç»ç¹çå¤çåæ³æ¯ï¼å°ç¬¬ä¸ä¸ªç»ç¹æå°äºåæ çå·¦å­ç»ç¹ä¸ï¼ç¶åå°åé¢çç»ç¹ä¾æ¬¡æå°å³å­ç»ç¹ï¼åå³å­ç»ç¹çå³å­ç»ç¹ä¸ï¼è¿æ ·åçå¥½å¤æ¯ï¼åä¸å±çå­ç»ç¹é½æå¨å³å­ç»ç¹ä¸ï¼èè¿äºå­ç»ç¹èªå·±çå­ç»ç¹é½ä¼æå¨å·¦å­ç»ç¹ä¸ï¼å¬èµ·æ¥å¾ææ¯ä¹ï¼é£å°±ä¸¾ä¾è¯´æä¸ä¸å§ï¼å°±ç¨é¢ç®ä¸­çä¾å­ä¸­çæ å¥½äºï¼æ³¨æé¢ç®ä¸­è¯´åªè¦è½æNåæ ç¼ç æäºåæ ï¼ç¶ååè§£ç ååNåæ ï¼å¹¶ä¸ care å°åºç¼ç æå¥æ ·çäºåæ ï¼ã N-ary Tree: 1 / | \ 3 2 4 / \ 5 6 Binary Tree: 1 / 3 / \ 5 2 \ \ 6 4 æä»¬å¯ä»¥çåºï¼Nåæ æ ¹ç»ç¹1çç¬¬ä¸ä¸ªå­ç»ç¹3è¢«æå°äºäºåæ çå·¦å­ç»ç¹ä¸ï¼åä¸å±çç»ç¹2æå°äºç»ç¹3çå³å­ç»ç¹ä¸ï¼åä¸å±çç»ç¹4è¢«æå°äºç»ç¹2çå³å­ç»ç¹ä¸ãèç»ç¹3æ¬èº«çå­ç»ç¹ä¹æç§è¿ä¸ªè§å¾ï¼ç¬¬ä¸ä¸ªå­ç»ç¹5æå°äºç»ç¹3çå·¦å­ç»ç¹ä¸ï¼èåä¸æçç»ç¹6æå°äºç»ç¹5çå³å­ç»ç¹ä¸ã å¯¹äºè§£ç ï¼ä¹æ¯åæ ·çè§å¾ï¼åæ ¹æ®æ ¹ç»ç¹å¼æ°å»ºä¸ä¸ªç©ºçNåæ ç»ç¹ï¼ç±äºæä»¬çç¼ç è§å¾ï¼æ ¹ç»ç¹æ¯ä¸å®æ²¡æå³å­ç»ç¹çï¼æä»¥ååºå·¦å­ç»ç¹ curï¼å¹¶ä¸å¼å§å¾ªç¯ï¼å¦æ cur ç»ç¹å­å¨ï¼é£ä¹æä»¬å¯¹ cur éå½è°ç¨è§£ç å½æ°ï¼å°è¿åçç»ç¹å å¥å½åNåæ ç»ç¹ç children æ°ç»ä¸­ï¼ç¶å cur åèµå¼ä¸ºå¶å³å­ç»ç¹ï¼ç»§ç»­éå½è°ç¨è§£ç å½æ°ï¼åå å¥ children æ°ç»ï¼å¦æ­¤ä¾¿å¯å°äºåæ è¿åä¸ºä¹åçNåæ ï¼åè§ä»£ç å¦ä¸ï¼ Java C++ Python Go TypeScript /* // Definition for a Node. class Node { public int val; public List&amp;lt;Node&amp;gt; children; public Node() {} public Node(int _val) { val = _val; } public Node(int _val, List&amp;lt;Node&amp;gt; _children) { val = _val; children = _children; } }; */ /** * Definition for a binary tree node. * public class TreeNode { * int val; * TreeNode left; * TreeNode right; * TreeNode(int x) { val = x; } * } */ class Codec { // Encodes an n-ary tree to a binary tree. public TreeNode encode(Node root) { if (root == null) { return null; } TreeNode node = new TreeNode(root.val); if (root.children == null || root.children.isEmpty()) { return node; } TreeNode left = encode(root.children.get(0)); node.left = left; for (int i = 1; i &amp;lt; root.children.size(); i++) { left.right = encode(root.children.get(i)); left = left.right; } return node; } // Decodes your binary tree to an n-ary tree. public Node decode(TreeNode data) { if (data == null) { return null; } Node node = new Node(data.val, new ArrayList&amp;lt;&amp;gt;()); if (data.left == null) { return node; } TreeNode left = data.left; while (left != null) { node.children.add(decode(left)); left = left.right; } return node; } } // Your Codec object will be instantiated and called as such: // Codec codec = new Codec(); // codec.decode(codec.encode(root)); class Codec { public: // Encodes an n-ary tree to a binary tree. TreeNode* encode(Node* root) { if (!root) return NULL; TreeNode *res = new TreeNode(root-&amp;gt;val); if (!root-&amp;gt;children.empty()) { res-&amp;gt;left = encode(root-&amp;gt;children[0]); } TreeNode *cur = res-&amp;gt;left; for (int i = 1; i &amp;lt; root-&amp;gt;children.size(); ++i) { cur-&amp;gt;right = encode(root-&amp;gt;children[i]); cur =..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    431 - Encode N-ary Tree to Binary Tree | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="431 - Encode N-ary Tree to Binary Tree" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-431.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-02-03-431-Encode-N-ary-Tree-to-Binary-Tree/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-02-03T21:21:01-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"431 - Encode N-ary Tree to Binary Tree","dateModified":"2017-02-03T21:21:01-08:00","datePublished":"2017-02-03T21:21:01-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-02-03-431-Encode-N-ary-Tree-to-Binary-Tree/"},"url":"https://leetcode.ca/2017-02-03-431-Encode-N-ary-Tree-to-Binary-Tree/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h2 id="question">
+       Question
+      </h2>
+      <p>
+       Formatted question description:
+       <a href="solution-431.html">
+        https://leetcode.ca/all/431.html
+       </a>
+      </p>
+      <p>
+       Design an algorithm to encode an N-ary tree into a binary tree and decode the binary tree to get the original N-ary tree. An N-ary tree is a rooted tree in which each node has no more than N children. Similarly, a binary tree is a rooted tree in which each node has no more than 2 children. There is no restriction on how your encode/decode algorithm should work. You just need to ensure that an N-ary tree can be encoded to a binary tree and this binary tree can be decoded to the original N-nary tree structure.
+      </p>
+      <p>
+       For example, you may encode the following
+       <code class="language-plaintext highlighter-rouge">
+        3-ary
+       </code>
+       tree to a binary tree in this way:
+      </p>
+      <p>
+       <img alt="" src="https://assets.leetcode.com/uploads/2018/10/12/narytreebinarytreeexample.png"/>
+      </p>
+      <p>
+       Note that the above is just an example which
+       <em>
+        might or might not
+       </em>
+       work. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+      </p>
+      <p>
+       Note:
+      </p>
+      <ol>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         N
+        </code>
+        is in the range of
+        <code class="language-plaintext highlighter-rouge">
+         [1, 1000]
+        </code>
+       </li>
+       <li>
+        Do not use class member/global/static variables to store states. Your encode and decode algorithms should be stateless.
+       </li>
+      </ol>
+      <p>
+       è¿éé¢è®©æä»¬å°ä¸æ£µNåæ ç¼ç ä¸ºäºåæ ï¼å¶å®è¿éè¦å°äºåæ è§£ç åNåæ ãé¢ç®ä¸­è¯´äºå·ä½çç¼è§£ç çæ¹æ³æ æè°ï¼é£ä¹å°±æä¹ç®åæä¹æ¥åãé¦åæ³ä¸ä¸è¿éé¢çé¾ç¹æ¯ä»ä¹ï¼Nåæ çç¹ç¹çæ¯ä¸ªç»ç¹æå¤æNä¸ªå­ç»ç¹ï¼èäºåæ çæ¯ä¸ªç»ç¹æå¤åªè½æä¸¤ä¸ªå­ç»ç¹ï¼é£ä¹å¤ä½çå­ç»ç¹æä¹åï¼å½ç¶åªè½ç»§ç»­å­ç»ç¹ä¸ç»§ç»­ç´¯å ï¼å°±åæ³¡æ³¡é¾æ¸¸æä¸æ ·ï¼ä¸ä¸ªæä¸ä¸ªçãå¦ä½ç´¯ï¼å¾ç¡®å®ä¸å¥å·ä½çè§åï¼è¿æ ·è§£ç çæ¶åï¼ååæ¥ä¸éå°±å¯ä»¥äºãå¯¹äºå½åç»ç¹ root çNä¸ªå­ç»ç¹çå¤çåæ³æ¯ï¼å°ç¬¬ä¸ä¸ªç»ç¹æå°äºåæ çå·¦å­ç»ç¹ä¸ï¼ç¶åå°åé¢çç»ç¹ä¾æ¬¡æå°å³å­ç»ç¹ï¼åå³å­ç»ç¹çå³å­ç»ç¹ä¸ï¼è¿æ ·åçå¥½å¤æ¯ï¼åä¸å±çå­ç»ç¹é½æå¨å³å­ç»ç¹ä¸ï¼èè¿äºå­ç»ç¹èªå·±çå­ç»ç¹é½ä¼æå¨å·¦å­ç»ç¹ä¸ï¼å¬èµ·æ¥å¾ææ¯ä¹ï¼é£å°±ä¸¾ä¾è¯´æä¸ä¸å§ï¼å°±ç¨é¢ç®ä¸­çä¾å­ä¸­çæ å¥½äºï¼æ³¨æé¢ç®ä¸­è¯´åªè¦è½æNåæ ç¼ç æäºåæ ï¼ç¶ååè§£ç ååNåæ ï¼å¹¶ä¸ care å°åºç¼ç æå¥æ ·çäºåæ ï¼ã
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>N-ary Tree:
+
+      1
+   /  |  \
+  3   2   4
+ / \
+5   6
+
+
+Binary Tree:
+
+    1
+   /
+  3
+ / \
+5   2
+ \   \
+  6   4
+</code></pre>
+       </div>
+      </div>
+      <p>
+       æä»¬å¯ä»¥çåºï¼Nåæ æ ¹ç»ç¹1çç¬¬ä¸ä¸ªå­ç»ç¹3è¢«æå°äºäºåæ çå·¦å­ç»ç¹ä¸ï¼åä¸å±çç»ç¹2æå°äºç»ç¹3çå³å­ç»ç¹ä¸ï¼åä¸å±çç»ç¹4è¢«æå°äºç»ç¹2çå³å­ç»ç¹ä¸ãèç»ç¹3æ¬èº«çå­ç»ç¹ä¹æç§è¿ä¸ªè§å¾ï¼ç¬¬ä¸ä¸ªå­ç»ç¹5æå°äºç»ç¹3çå·¦å­ç»ç¹ä¸ï¼èåä¸æçç»ç¹6æå°äºç»ç¹5çå³å­ç»ç¹ä¸ã
+      </p>
+      <p>
+       å¯¹äºè§£ç ï¼ä¹æ¯åæ ·çè§å¾ï¼åæ ¹æ®æ ¹ç»ç¹å¼æ°å»ºä¸ä¸ªç©ºçNåæ ç»ç¹ï¼ç±äºæä»¬çç¼ç è§å¾ï¼æ ¹ç»ç¹æ¯ä¸å®æ²¡æå³å­ç»ç¹çï¼æä»¥ååºå·¦å­ç»ç¹ curï¼å¹¶ä¸å¼å§å¾ªç¯ï¼å¦æ cur ç»ç¹å­å¨ï¼é£ä¹æä»¬å¯¹ cur éå½è°ç¨è§£ç å½æ°ï¼å°è¿åçç»ç¹å å¥å½åNåæ ç»ç¹ç children æ°ç»ä¸­ï¼ç¶å cur åèµå¼ä¸ºå¶å³å­ç»ç¹ï¼ç»§ç»­éå½è°ç¨è§£ç å½æ°ï¼åå å¥ children æ°ç»ï¼å¦æ­¤ä¾¿å¯å°äºåæ è¿åä¸ºä¹åçNåæ ï¼åè§ä»£ç å¦ä¸ï¼
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#dabe6ad6-8ede-4bfc-855f-0a0501f973c8'}">
+       <li class="uk-active">
+        <a href="solution-431.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-431.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-431.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-431.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-431.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="dabe6ad6-8ede-4bfc-855f-0a0501f973c8">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List&lt;Node&gt; children;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, List&lt;Node&gt; _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/</span>
+
+<span class="cm">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */</span>
+
+<span class="kd">class</span> <span class="nc">Codec</span> <span class="o">{</span>
+    <span class="c1">// Encodes an n-ary tree to a binary tree.</span>
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">encode</span><span class="o">(</span><span class="nc">Node</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">TreeNode</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">children</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">root</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">TreeNode</span> <span class="n">left</span> <span class="o">=</span> <span class="n">encode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">root</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">left</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">encode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Decodes your binary tree to an n-ary tree.</span>
+    <span class="kd">public</span> <span class="nc">Node</span> <span class="nf">decode</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">data</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">val</span><span class="o">,</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">TreeNode</span> <span class="n">left</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">decode</span><span class="o">(</span><span class="n">left</span><span class="o">));</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// Your Codec object will be instantiated and called as such:</span>
+<span class="c1">// Codec codec = new Codec();</span>
+<span class="c1">// codec.decode(codec.encode(root));</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code>    <span class="k">class</span> <span class="nc">Codec</span> <span class="p">{</span>
+    <span class="nl">public:</span>
+    
+        <span class="c1">// Encodes an n-ary tree to a binary tree.</span>
+        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">encode</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+            <span class="n">TreeNode</span> <span class="o">*</span><span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">res</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">encode</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="n">TreeNode</span> <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">res</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">encode</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+        <span class="p">}</span>
+    
+        <span class="c1">// Decodes your binary tree to an n-ary tree.</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">decode</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+            <span class="n">Node</span> <span class="o">*</span><span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">,</span> <span class="p">{});</span>
+            <span class="n">TreeNode</span> <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cur</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">res</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">decode</span><span class="p">(</span><span class="n">cur</span><span class="p">));</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="s">"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: Optional[int] = None, children: Optional[List['Node']] = None):
+        self.val = val
+        self.children = children
+"""</span>
+
+<span class="s">"""
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+"""</span>
+
+
+<span class="k">class</span> <span class="nc">Codec</span><span class="p">:</span>
+    <span class="c1"># Encodes an n-ary tree to a binary tree.
+</span>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="s">"Optional[Node]"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">node</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">root</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">left</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="p">.</span><span class="n">right</span>
+        <span class="k">return</span> <span class="n">node</span>
+
+    <span class="c1"># Decodes your binary tree to an n-ary tree.
+</span>    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s">"Optional[Node]"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">val</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">.</span><span class="n">left</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">node</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">left</span>
+        <span class="k">while</span> <span class="n">left</span><span class="p">:</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">children</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="p">.</span><span class="n">right</span>
+        <span class="k">return</span> <span class="n">node</span>
+
+
+<span class="c1"># Your Codec object will be instantiated and called as such:
+# codec = Codec()
+# codec.decode(codec.encode(root))
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c">/**
+ * Definition for a Node.
+ * type Node struct {
+ *     Val int
+ *     Children []*Node
+ * }
+ */</span>
+
+<span class="c">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */</span>
+
+<span class="k">type</span> <span class="n">Codec</span> <span class="k">struct</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="o">*</span><span class="n">Codec</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">Codec</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c">// Encodes an n-ary tree to a binary tree.</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Codec</span><span class="p">)</span> <span class="n">encode</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">nil</span>
+	<span class="p">}</span>
+	<span class="n">node</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">TreeNode</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">root</span><span class="o">.</span><span class="n">Val</span><span class="p">}</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Children</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">node</span>
+	<span class="p">}</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Children</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+	<span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">=</span> <span class="n">left</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Children</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">left</span><span class="o">.</span><span class="n">Right</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Children</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+		<span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">Right</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">node</span>
+<span class="p">}</span>
+
+<span class="c">// Decodes your binary tree to an n-ary tree.</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Codec</span><span class="p">)</span> <span class="n">decode</span><span class="p">(</span><span class="n">data</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="n">Node</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">nil</span>
+	<span class="p">}</span>
+	<span class="n">node</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Node</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">data</span><span class="o">.</span><span class="n">Val</span><span class="p">,</span> <span class="n">Children</span><span class="o">:</span> <span class="p">[]</span><span class="o">*</span><span class="n">Node</span><span class="p">{}</span> <span class="p">}</span>
+	<span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">Left</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">node</span>
+	<span class="p">}</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="n">data</span><span class="o">.</span><span class="n">Left</span>
+	<span class="k">for</span> <span class="n">left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">Children</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Children</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+		<span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">Right</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">node</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your Codec object will be instantiated and called as such:
+ * obj := Constructor();
+ * bst := obj.encode(root);
+ * ans := obj.decode(bst);
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * Definition for _Node.
+ * class _Node {
+ *     val: number
+ *     children: _Node[]
+ *
+ *     constructor(v: number) {
+ *         this.val = v;
+ *         this.children = [];
+ *     }
+ * }
+ */</span>
+
+<span class="cm">/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */</span>
+
+<span class="kd">class</span> <span class="nx">Codec</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{}</span>
+
+    <span class="c1">// Encodes an n-ary tree to a binary tree.</span>
+    <span class="nx">serialize</span><span class="p">(</span><span class="nx">root</span><span class="p">:</span> <span class="nx">_Node</span> <span class="o">|</span> <span class="kc">null</span><span class="p">):</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TreeNode</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">val</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">node</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">let</span> <span class="nx">left</span><span class="p">:</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">serialize</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">left</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">left</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">left</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">serialize</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+                <span class="nx">left</span> <span class="o">=</span> <span class="nx">left</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Decodes your binary tree back to an n-ary tree.</span>
+    <span class="nx">deserialize</span><span class="p">(</span><span class="nx">root</span><span class="p">:</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span><span class="p">):</span> <span class="nx">_Node</span> <span class="o">|</span> <span class="kc">null</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">_Node</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">val</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">left</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">node</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">let</span> <span class="nx">left</span><span class="p">:</span> <span class="nx">TreeNode</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">left</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">deserialize</span><span class="p">(</span><span class="nx">left</span><span class="p">));</span>
+            <span class="nx">left</span> <span class="o">=</span> <span class="nx">left</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Your Codec object will be instantiated and called as such:</span>
+<span class="c1">// Codec codec = new Codec();</span>
+<span class="c1">// codec.deserialize(codec.serialize(root));</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-431.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2692.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2692.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2692 - Make Object Immutable</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2692. Make Object Immutable Description Write a function that takes an object&amp;nbsp;obj and returns a new&amp;nbsp;immutable&amp;nbsp;version of this object. An&amp;nbsp;immutable&amp;nbsp;object is an object that can&amp;#39;t be altered and will throw an error if any attempt is made to alter it. There are three types of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2692.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2692.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2692.html" rel="stylesheet"/>
+   <link href="solution-2692.html" rel="stylesheet"/>
+   <link href="solution-2692.html" rel="stylesheet"/>
+   <link href="solution-2692.html" rel="stylesheet"/>
+   <link href="solution-2692.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2692 - Make Object Immutable" property="og:title"/>
+   <meta content="Leetcode 2692. Make Object Immutable Description Write a function that takes an object&amp;nbsp;obj and returns a new&amp;nbsp;immutable&amp;nbsp;version of this object. An&amp;nbsp;immutable&amp;nbsp;object is an object that can&amp;#39;t be altered and will throw an error if any attempt is made to alter it. There are three types of error messages that can be produced from this new object. Attempting to modify a key on the object will result in this&amp;nbsp;error message: `Error Modifying: ${key}`. Attempting to modify an index on an array will result in this error message: `Error Modifying&amp;nbsp;Index: ${index}`. Attempting to call a method that mutates an array will result in this error message: `Error Calling Method: ${methodName}`. You may assume the only methods that can mutate&amp;nbsp;an array are&amp;nbsp;[&amp;#39;pop&amp;#39;, &amp;#39;push&amp;#39;, &amp;#39;shift&amp;#39;, &amp;#39;unshift&amp;#39;, &amp;#39;splice&amp;#39;, &amp;#39;sort&amp;#39;, &amp;#39;reverse&amp;#39;]. obj&amp;nbsp;is a valid JSON object or array, meaning it is the output of JSON.parse(). Note that a string literal should be thrown, not an&amp;nbsp;Error. &amp;nbsp; Example 1: Input: obj = { &amp;nbsp; &amp;quot;x&amp;quot;: 5 } fn = (obj) =&amp;gt; { &amp;nbsp; obj.x = 5; &amp;nbsp; return obj.x; } Output: {&amp;quot;value&amp;quot;: null, &amp;quot;error&amp;quot;: &amp;quot;Error Modifying:&amp;nbsp;x&amp;quot;} Explanation: Attempting to modify a key on an object resuts in a thrown error. Note that it doesn&amp;#39;t matter that the value was set to the same value as it was before. Example 2: Input: obj = [1, 2, 3] fn = (arr) =&amp;gt; { &amp;nbsp; arr[1] = {}; &amp;nbsp; return arr[2]; } Output: {&amp;quot;value&amp;quot;: null, &amp;quot;error&amp;quot;: &amp;quot;Error Modifying&amp;nbsp;Index: 1&amp;quot;} Explanation: Attempting to modify an array results in a thrown error. Example 3: Input: obj = { &amp;nbsp; &amp;quot;arr&amp;quot;: [1, 2, 3] } fn = (obj) =&amp;gt; { &amp;nbsp; obj.arr.push(4); &amp;nbsp; return 42; } Output: { &amp;quot;value&amp;quot;: null, &amp;quot;error&amp;quot;: &amp;quot;Error Calling Method: push&amp;quot;} Explanation: Calling a method that can result in a mutation results in a thrown error. Example 4: Input: obj = { &amp;nbsp; &amp;quot;x&amp;quot;: 2, &amp;nbsp; &amp;quot;y&amp;quot;: 2 } fn = (obj) =&amp;gt; { &amp;nbsp; return Object.keys(obj); } Output: {&amp;quot;value&amp;quot;: [&amp;quot;x&amp;quot;, &amp;quot;y&amp;quot;], &amp;quot;error&amp;quot;: null} Explanation: No mutations were attempted so the function returns as normal. &amp;nbsp; Constraints: obj&amp;nbsp;is a valid JSON object or array 2 &amp;lt;= JSON.stringify(obj).length &amp;lt;= 105 Solutions TypeScript type Obj = Array&amp;lt;any&amp;gt; | Record&amp;lt;any, any&amp;gt;; function makeImmutable(obj: Obj): Obj { const arrayHandler: ProxyHandler&amp;lt;Array&amp;lt;any&amp;gt;&amp;gt; = { set: (_, prop) =&amp;gt; { throw `Error Modifying Index: ${String(prop)}`; }, }; const objectHandler: ProxyHandler&amp;lt;Record&amp;lt;any, any&amp;gt;&amp;gt; = { set: (_, prop) =&amp;gt; { throw `Error Modifying: ${String(prop)}`; }, }; const fnHandler: ProxyHandler&amp;lt;Function&amp;gt; = { apply: target =&amp;gt; { throw `Error Calling Method: ${target.name}`; }, }; const fn = ['pop', 'push', 'shift', 'unshift', 'splice', 'sort', 'reverse']; const dfs = (obj: Obj) =&amp;gt; { for (const key in obj) { if (typeof obj[key] === 'object' &amp;amp;&amp;amp; obj[key] !== null) { obj[key] = dfs(obj[key]); } } if (Array.isArray(obj)) { fn.forEach(f =&amp;gt; (obj[f] = new Proxy(obj[f], fnHandler))); return new Proxy(obj, arrayHandler); } return new Proxy(obj, objectHandler); }; return dfs(obj); } /** * const obj = makeImmutable({x: 5}); * obj.x = 6; // throws &quot;Error Modifying x&quot; */ All Problems All Solutions..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-04-14T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-04-14-2692-Make-Object-Immutable/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2692.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2692 - Make Object Immutable" property="twitter:title"/>
+   <meta content="Leetcode 2692. Make Object Immutable Description Write a function that takes an object&amp;nbsp;obj and returns a new&amp;nbsp;immutable&amp;nbsp;version of this object. An&amp;nbsp;immutable&amp;nbsp;object is an object that can&amp;#39;t be altered and will throw an error if any attempt is made to alter it. There are three types of error messages that can be produced from this new object. Attempting to modify a key on the object will result in this&amp;nbsp;error message: `Error Modifying: ${key}`. Attempting to modify an index on an array will result in this error message: `Error Modifying&amp;nbsp;Index: ${index}`. Attempting to call a method that mutates an array will result in this error message: `Error Calling Method: ${methodName}`. You may assume the only methods that can mutate&amp;nbsp;an array are&amp;nbsp;[&amp;#39;pop&amp;#39;, &amp;#39;push&amp;#39;, &amp;#39;shift&amp;#39;, &amp;#39;unshift&amp;#39;, &amp;#39;splice&amp;#39;, &amp;#39;sort&amp;#39;, &amp;#39;reverse&amp;#39;]. obj&amp;nbsp;is a valid JSON object or array, meaning it is the output of JSON.parse(). Note that a string literal should be thrown, not an&amp;nbsp;Error. &amp;nbsp; Example 1: Input: obj = { &amp;nbsp; &amp;quot;x&amp;quot;: 5 } fn = (obj) =&amp;gt; { &amp;nbsp; obj.x = 5; &amp;nbsp; return obj.x; } Output: {&amp;quot;value&amp;quot;: null, &amp;quot;error&amp;quot;: &amp;quot;Error Modifying:&amp;nbsp;x&amp;quot;} Explanation: Attempting to modify a key on an object resuts in a thrown error. Note that it doesn&amp;#39;t matter that the value was set to the same value as it was before. Example 2: Input: obj = [1, 2, 3] fn = (arr) =&amp;gt; { &amp;nbsp; arr[1] = {}; &amp;nbsp; return arr[2]; } Output: {&amp;quot;value&amp;quot;: null, &amp;quot;error&amp;quot;: &amp;quot;Error Modifying&amp;nbsp;Index: 1&amp;quot;} Explanation: Attempting to modify an array results in a thrown error. Example 3: Input: obj = { &amp;nbsp; &amp;quot;arr&amp;quot;: [1, 2, 3] } fn = (obj) =&amp;gt; { &amp;nbsp; obj.arr.push(4); &amp;nbsp; return 42; } Output: { &amp;quot;value&amp;quot;: null, &amp;quot;error&amp;quot;: &amp;quot;Error Calling Method: push&amp;quot;} Explanation: Calling a method that can result in a mutation results in a thrown error. Example 4: Input: obj = { &amp;nbsp; &amp;quot;x&amp;quot;: 2, &amp;nbsp; &amp;quot;y&amp;quot;: 2 } fn = (obj) =&amp;gt; { &amp;nbsp; return Object.keys(obj); } Output: {&amp;quot;value&amp;quot;: [&amp;quot;x&amp;quot;, &amp;quot;y&amp;quot;], &amp;quot;error&amp;quot;: null} Explanation: No mutations were attempted so the function returns as normal. &amp;nbsp; Constraints: obj&amp;nbsp;is a valid JSON object or array 2 &amp;lt;= JSON.stringify(obj).length &amp;lt;= 105 Solutions TypeScript type Obj = Array&amp;lt;any&amp;gt; | Record&amp;lt;any, any&amp;gt;; function makeImmutable(obj: Obj): Obj { const arrayHandler: ProxyHandler&amp;lt;Array&amp;lt;any&amp;gt;&amp;gt; = { set: (_, prop) =&amp;gt; { throw `Error Modifying Index: ${String(prop)}`; }, }; const objectHandler: ProxyHandler&amp;lt;Record&amp;lt;any, any&amp;gt;&amp;gt; = { set: (_, prop) =&amp;gt; { throw `Error Modifying: ${String(prop)}`; }, }; const fnHandler: ProxyHandler&amp;lt;Function&amp;gt; = { apply: target =&amp;gt; { throw `Error Calling Method: ${target.name}`; }, }; const fn = ['pop', 'push', 'shift', 'unshift', 'splice', 'sort', 'reverse']; const dfs = (obj: Obj) =&amp;gt; { for (const key in obj) { if (typeof obj[key] === 'object' &amp;amp;&amp;amp; obj[key] !== null) { obj[key] = dfs(obj[key]); } } if (Array.isArray(obj)) { fn.forEach(f =&amp;gt; (obj[f] = new Proxy(obj[f], fnHandler))); return new Proxy(obj, arrayHandler); } return new Proxy(obj, objectHandler); }; return dfs(obj); } /** * const obj = makeImmutable({x: 5}); * obj.x = 6; // throws &quot;Error Modifying x&quot; */ All Problems All Solutions..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2692 - Make Object Immutable | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2692 - Make Object Immutable" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2692.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-04-14-2692-Make-Object-Immutable/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-04-14T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2692 - Make Object Immutable","dateModified":"2023-04-14T00:00:00-07:00","datePublished":"2023-04-14T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-04-14-2692-Make-Object-Immutable/"},"url":"https://leetcode.ca/2023-04-14-2692-Make-Object-Immutable/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2692-make-object-immutable">
+       <a href="solution-2692.html">
+        2692. Make Object Immutable
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Write a function that takes an object
+       <code>
+        obj
+       </code>
+       and returns a new
+       <strong>
+        immutable
+       </strong>
+       version of this object.
+      </p>
+      <p>
+       An
+       <strong>
+        immutable
+       </strong>
+       object is an object that can't be altered and will throw an error if any attempt is made to alter it.
+      </p>
+      <p>
+       There are three types of error messages that can be produced from this new object.
+      </p>
+      <ul>
+       <li>
+        Attempting to modify a key on the object will result in this error message:
+        <code>
+         `Error Modifying: ${key}`
+        </code>
+        .
+       </li>
+       <li>
+        Attempting to modify an index on an array will result in this error message:
+        <code>
+         `Error Modifying Index: ${index}`
+        </code>
+        .
+       </li>
+       <li>
+        Attempting to call a method that mutates an array will result in this error message:
+        <code>
+         `Error Calling Method: ${methodName}`
+        </code>
+        . You may assume the only methods that can mutate an array are
+        <code>
+         ['pop', 'push', 'shift', 'unshift', 'splice', 'sort', 'reverse']
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       <code>
+        obj
+       </code>
+       is a valid JSON object or array, meaning it is the output of
+       <code>
+        JSON.parse()
+       </code>
+       .
+      </p>
+      <p>
+       Note that a string literal should be thrown, not an
+       <code>
+        Error
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+obj = {
+  "x": 5
+}
+fn = (obj) =&gt; { 
+  obj.x = 5;
+  return obj.x;
+}
+<strong>Output:</strong> {"value": null, "error": "Error Modifying: x"}
+<strong>Explanation: </strong>Attempting to modify a key on an object resuts in a thrown error. Note that it doesn't matter that the value was set to the same value as it was before.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+obj = [1, 2, 3]
+fn = (arr) =&gt; { 
+  arr[1] = {}; 
+  return arr[2]; 
+}
+<strong>Output:</strong> {"value": null, "error": "Error Modifying Index: 1"}
+<strong>Explanation: </strong>Attempting to modify an array results in a thrown error.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+obj = {
+  "arr": [1, 2, 3]
+}
+fn = (obj) =&gt; { 
+  obj.arr.push(4);
+  return 42;
+}
+<strong>Output:</strong> { "value": null, "error": "Error Calling Method: push"}
+<strong>Explanation: </strong>Calling a method that can result in a mutation results in a thrown error.
+</pre>
+      <p>
+       <strong class="example">
+        Example 4:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+obj = {
+  "x": 2,
+  "y": 2
+}
+fn = (obj) =&gt; { 
+  return Object.keys(obj);
+}
+<strong>Output:</strong> {"value": ["x", "y"], "error": null}
+<strong>Explanation: </strong>No mutations were attempted so the function returns as normal.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         obj
+        </code>
+        is a valid JSON object or array
+       </li>
+       <li>
+        <code>
+         2 &lt;= JSON.stringify(obj).length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#78fa26f5-5d36-4422-8782-9a5cab5c5413'}">
+       <li class="uk-active">
+        <a href="solution-2692.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="78fa26f5-5d36-4422-8782-9a5cab5c5413">
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">type</span> <span class="nx">Obj</span> <span class="o">=</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span> <span class="o">|</span> <span class="nb">Record</span><span class="o">&lt;</span><span class="kr">any</span><span class="p">,</span> <span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">makeImmutable</span><span class="p">(</span><span class="nx">obj</span><span class="p">:</span> <span class="nx">Obj</span><span class="p">):</span> <span class="nx">Obj</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">arrayHandler</span><span class="p">:</span> <span class="nx">ProxyHandler</span><span class="o">&lt;</span><span class="nb">Array</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">set</span><span class="p">:</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="s2">`Error Modifying Index: </span><span class="p">${</span><span class="nb">String</span><span class="p">(</span><span class="nx">prop</span><span class="p">)}</span><span class="s2">`</span><span class="p">;</span>
+        <span class="p">},</span>
+    <span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">objectHandler</span><span class="p">:</span> <span class="nx">ProxyHandler</span><span class="o">&lt;</span><span class="nb">Record</span><span class="o">&lt;</span><span class="kr">any</span><span class="p">,</span> <span class="kr">any</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">set</span><span class="p">:</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="s2">`Error Modifying: </span><span class="p">${</span><span class="nb">String</span><span class="p">(</span><span class="nx">prop</span><span class="p">)}</span><span class="s2">`</span><span class="p">;</span>
+        <span class="p">},</span>
+    <span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">fnHandler</span><span class="p">:</span> <span class="nx">ProxyHandler</span><span class="o">&lt;</span><span class="nb">Function</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">apply</span><span class="p">:</span> <span class="nx">target</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="s2">`Error Calling Method: </span><span class="p">${</span><span class="nx">target</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+        <span class="p">},</span>
+    <span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">fn</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">pop</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">push</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">shift</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">unshift</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">splice</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">sort</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">];</span>
+    <span class="kd">const</span> <span class="nx">dfs</span> <span class="o">=</span> <span class="p">(</span><span class="nx">obj</span><span class="p">:</span> <span class="nx">Obj</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">object</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">fn</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">f</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">f</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Proxy</span><span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">f</span><span class="p">],</span> <span class="nx">fnHandler</span><span class="p">)));</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nb">Proxy</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">arrayHandler</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Proxy</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">objectHandler</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="k">return</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * const obj = makeImmutable({x: 5});
+ * obj.x = 6; // throws "Error Modifying x"
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2692.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

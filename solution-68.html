@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-68.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-68.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>68 - Text Justification</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 68. Text Justification Description Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified. You should pack your words in a greedy approach; that is, pack as...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-68.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-68.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-68.html" rel="stylesheet"/>
+   <link href="solution-68.html" rel="stylesheet"/>
+   <link href="solution-68.html" rel="stylesheet"/>
+   <link href="solution-68.html" rel="stylesheet"/>
+   <link href="solution-68.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="68 - Text Justification" property="og:title"/>
+   <meta content='Leetcode 68. Text Justification Description Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified. You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces &amp;#39; &amp;#39; when necessary so that each line has exactly maxWidth characters. Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right. For the last line of text, it should be left-justified, and no extra space is inserted between words. Note: A word is defined as a character sequence consisting of non-space characters only. Each word&amp;#39;s length is guaranteed to be greater than 0 and not exceed maxWidth. The input array words contains at least one word. &amp;nbsp; Example 1: Input: words = [&amp;quot;This&amp;quot;, &amp;quot;is&amp;quot;, &amp;quot;an&amp;quot;, &amp;quot;example&amp;quot;, &amp;quot;of&amp;quot;, &amp;quot;text&amp;quot;, &amp;quot;justification.&amp;quot;], maxWidth = 16 Output: [ &amp;nbsp; &amp;nbsp;&amp;quot;This &amp;nbsp; &amp;nbsp;is &amp;nbsp; &amp;nbsp;an&amp;quot;, &amp;nbsp; &amp;nbsp;&amp;quot;example &amp;nbsp;of text&amp;quot;, &amp;nbsp; &amp;nbsp;&amp;quot;justification. &amp;nbsp;&amp;quot; ] Example 2: Input: words = [&amp;quot;What&amp;quot;,&amp;quot;must&amp;quot;,&amp;quot;be&amp;quot;,&amp;quot;acknowledgment&amp;quot;,&amp;quot;shall&amp;quot;,&amp;quot;be&amp;quot;], maxWidth = 16 Output: [ &amp;nbsp; &amp;quot;What &amp;nbsp; must &amp;nbsp; be&amp;quot;, &amp;nbsp; &amp;quot;acknowledgment &amp;nbsp;&amp;quot;, &amp;nbsp; &amp;quot;shall be &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;quot; ] Explanation: Note that the last line is &amp;quot;shall be &amp;quot; instead of &amp;quot;shall be&amp;quot;, because the last line must be left-justified instead of fully-justified. Note that the second line is also left-justified because it contains only one word. Example 3: Input: words = [&amp;quot;Science&amp;quot;,&amp;quot;is&amp;quot;,&amp;quot;what&amp;quot;,&amp;quot;we&amp;quot;,&amp;quot;understand&amp;quot;,&amp;quot;well&amp;quot;,&amp;quot;enough&amp;quot;,&amp;quot;to&amp;quot;,&amp;quot;explain&amp;quot;,&amp;quot;to&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;computer.&amp;quot;,&amp;quot;Art&amp;quot;,&amp;quot;is&amp;quot;,&amp;quot;everything&amp;quot;,&amp;quot;else&amp;quot;,&amp;quot;we&amp;quot;,&amp;quot;do&amp;quot;], maxWidth = 20 Output: [ &amp;nbsp; &amp;quot;Science &amp;nbsp;is &amp;nbsp;what we&amp;quot;, &amp;quot;understand &amp;nbsp; &amp;nbsp; &amp;nbsp;well&amp;quot;, &amp;nbsp; &amp;quot;enough to explain to&amp;quot;, &amp;nbsp; &amp;quot;a &amp;nbsp;computer. &amp;nbsp;Art is&amp;quot;, &amp;nbsp; &amp;quot;everything &amp;nbsp;else &amp;nbsp;we&amp;quot;, &amp;nbsp; &amp;quot;do &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;quot; ] &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 300 1 &amp;lt;= words[i].length &amp;lt;= 20 words[i] consists of only English letters and symbols. 1 &amp;lt;= maxWidth &amp;lt;= 100 words[i].length &amp;lt;= maxWidth Solutions Solution 1: Simulation We can simulate the process according to the problemâs requirements. Note that if it is the last line, or if there is only one word in the line, then we should align to the left. Otherwise, we should distribute the spaces evenly. The time complexity is $O(L)$, and the space complexity is $O(L)$. Here, $L$ is the sum of the lengths of all words. Java C++ Python Go TypeScript C# class Solution { public List&amp;lt;String&amp;gt; fullJustify(String[] words, int maxWidth) { List&amp;lt;String&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0, n = words.length; i &amp;lt; n;) { List&amp;lt;String&amp;gt; t = new ArrayList&amp;lt;&amp;gt;(); t.add(words[i]); int cnt = words[i].length(); ++i; while (i &amp;lt; n &amp;amp;&amp;amp; cnt + 1 + words[i].length() &amp;lt;= maxWidth) { cnt += 1 + words[i].length(); t.add(words[i++]); } if (i == n || t.size() == 1) { String left = String.join(" ", t); String right = " ".repeat(maxWidth - left.length()); ans.add(left + right); continue;...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-02-06T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-02-06-68-Text-Justification/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-68.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="68 - Text Justification" property="twitter:title"/>
+   <meta content='Leetcode 68. Text Justification Description Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified. You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces &amp;#39; &amp;#39; when necessary so that each line has exactly maxWidth characters. Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right. For the last line of text, it should be left-justified, and no extra space is inserted between words. Note: A word is defined as a character sequence consisting of non-space characters only. Each word&amp;#39;s length is guaranteed to be greater than 0 and not exceed maxWidth. The input array words contains at least one word. &amp;nbsp; Example 1: Input: words = [&amp;quot;This&amp;quot;, &amp;quot;is&amp;quot;, &amp;quot;an&amp;quot;, &amp;quot;example&amp;quot;, &amp;quot;of&amp;quot;, &amp;quot;text&amp;quot;, &amp;quot;justification.&amp;quot;], maxWidth = 16 Output: [ &amp;nbsp; &amp;nbsp;&amp;quot;This &amp;nbsp; &amp;nbsp;is &amp;nbsp; &amp;nbsp;an&amp;quot;, &amp;nbsp; &amp;nbsp;&amp;quot;example &amp;nbsp;of text&amp;quot;, &amp;nbsp; &amp;nbsp;&amp;quot;justification. &amp;nbsp;&amp;quot; ] Example 2: Input: words = [&amp;quot;What&amp;quot;,&amp;quot;must&amp;quot;,&amp;quot;be&amp;quot;,&amp;quot;acknowledgment&amp;quot;,&amp;quot;shall&amp;quot;,&amp;quot;be&amp;quot;], maxWidth = 16 Output: [ &amp;nbsp; &amp;quot;What &amp;nbsp; must &amp;nbsp; be&amp;quot;, &amp;nbsp; &amp;quot;acknowledgment &amp;nbsp;&amp;quot;, &amp;nbsp; &amp;quot;shall be &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;quot; ] Explanation: Note that the last line is &amp;quot;shall be &amp;quot; instead of &amp;quot;shall be&amp;quot;, because the last line must be left-justified instead of fully-justified. Note that the second line is also left-justified because it contains only one word. Example 3: Input: words = [&amp;quot;Science&amp;quot;,&amp;quot;is&amp;quot;,&amp;quot;what&amp;quot;,&amp;quot;we&amp;quot;,&amp;quot;understand&amp;quot;,&amp;quot;well&amp;quot;,&amp;quot;enough&amp;quot;,&amp;quot;to&amp;quot;,&amp;quot;explain&amp;quot;,&amp;quot;to&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;computer.&amp;quot;,&amp;quot;Art&amp;quot;,&amp;quot;is&amp;quot;,&amp;quot;everything&amp;quot;,&amp;quot;else&amp;quot;,&amp;quot;we&amp;quot;,&amp;quot;do&amp;quot;], maxWidth = 20 Output: [ &amp;nbsp; &amp;quot;Science &amp;nbsp;is &amp;nbsp;what we&amp;quot;, &amp;quot;understand &amp;nbsp; &amp;nbsp; &amp;nbsp;well&amp;quot;, &amp;nbsp; &amp;quot;enough to explain to&amp;quot;, &amp;nbsp; &amp;quot;a &amp;nbsp;computer. &amp;nbsp;Art is&amp;quot;, &amp;nbsp; &amp;quot;everything &amp;nbsp;else &amp;nbsp;we&amp;quot;, &amp;nbsp; &amp;quot;do &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;quot; ] &amp;nbsp; Constraints: 1 &amp;lt;= words.length &amp;lt;= 300 1 &amp;lt;= words[i].length &amp;lt;= 20 words[i] consists of only English letters and symbols. 1 &amp;lt;= maxWidth &amp;lt;= 100 words[i].length &amp;lt;= maxWidth Solutions Solution 1: Simulation We can simulate the process according to the problemâs requirements. Note that if it is the last line, or if there is only one word in the line, then we should align to the left. Otherwise, we should distribute the spaces evenly. The time complexity is $O(L)$, and the space complexity is $O(L)$. Here, $L$ is the sum of the lengths of all words. Java C++ Python Go TypeScript C# class Solution { public List&amp;lt;String&amp;gt; fullJustify(String[] words, int maxWidth) { List&amp;lt;String&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0, n = words.length; i &amp;lt; n;) { List&amp;lt;String&amp;gt; t = new ArrayList&amp;lt;&amp;gt;(); t.add(words[i]); int cnt = words[i].length(); ++i; while (i &amp;lt; n &amp;amp;&amp;amp; cnt + 1 + words[i].length() &amp;lt;= maxWidth) { cnt += 1 + words[i].length(); t.add(words[i++]); } if (i == n || t.size() == 1) { String left = String.join(" ", t); String right = " ".repeat(maxWidth - left.length()); ans.add(left + right); continue;...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    68 - Text Justification | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="68 - Text Justification" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-68.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-02-06-68-Text-Justification/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-02-06T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"68 - Text Justification","dateModified":"2016-02-06T00:00:00-08:00","datePublished":"2016-02-06T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-02-06-68-Text-Justification/"},"url":"https://leetcode.ca/2016-02-06-68-Text-Justification/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="68-text-justification">
+       <a href="solution-68.html">
+        68. Text Justification
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an array of strings
+       <code>
+        words
+       </code>
+       and a width
+       <code>
+        maxWidth
+       </code>
+       , format the text such that each line has exactly
+       <code>
+        maxWidth
+       </code>
+       characters and is fully (left and right) justified.
+      </p>
+      <p>
+       You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces
+       <code>
+        ' '
+       </code>
+       when necessary so that each line has exactly
+       <code>
+        maxWidth
+       </code>
+       characters.
+      </p>
+      <p>
+       Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+      </p>
+      <p>
+       For the last line of text, it should be left-justified, and no extra space is inserted between words.
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        A word is defined as a character sequence consisting of non-space characters only.
+       </li>
+       <li>
+        Each word's length is guaranteed to be greater than
+        <code>
+         0
+        </code>
+        and not exceed
+        <code>
+         maxWidth
+        </code>
+        .
+       </li>
+       <li>
+        The input array
+        <code>
+         words
+        </code>
+        contains at least one word.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["This", "is", "an", "example", "of", "text", "justification."], maxWidth = 16
+<strong>Output:</strong>
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["What","must","be","acknowledgment","shall","be"], maxWidth = 16
+<strong>Output:</strong>
+[
+  "What   must   be",
+  "acknowledgment  ",
+  "shall be        "
+]
+<strong>Explanation:</strong> Note that the last line is "shall be    " instead of "shall     be", because the last line must be left-justified instead of fully-justified.
+Note that the second line is also left-justified because it contains only one word.</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> words = ["Science","is","what","we","understand","well","enough","to","explain","to","a","computer.","Art","is","everything","else","we","do"], maxWidth = 20
+<strong>Output:</strong>
+[
+  "Science  is  what we",
+  "understand      well",
+  "enough to explain to",
+  "a  computer.  Art is",
+  "everything  else  we",
+  "do                  "
+]</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= words.length &lt;= 300
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= words[i].length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         words[i]
+        </code>
+        consists of only English letters and symbols.
+       </li>
+       <li>
+        <code>
+         1 &lt;= maxWidth &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         words[i].length &lt;= maxWidth
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Simulation
+       </strong>
+      </p>
+      <p>
+       We can simulate the process according to the problemâs requirements. Note that if it is the last line, or if there is only one word in the line, then we should align to the left. Otherwise, we should distribute the spaces evenly.
+      </p>
+      <p>
+       The time complexity is $O(L)$, and the space complexity is $O(L)$. Here, $L$ is the sum of the lengths of all words.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#61c43c4b-1a3d-4d31-ba76-a4664b5326ea'}">
+       <li class="uk-active">
+        <a href="solution-68.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-68.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-68.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-68.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-68.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-68.html">
+         C#
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="61c43c4b-1a3d-4d31-ba76-a4664b5326ea">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">fullJustify</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">,</span> <span class="kt">int</span> <span class="n">maxWidth</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">words</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;)</span> <span class="o">{</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">words</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+            <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="n">words</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">();</span>
+            <span class="o">++</span><span class="n">i</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">words</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">()</span> <span class="o">&lt;=</span> <span class="n">maxWidth</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">words</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">();</span>
+                <span class="n">t</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">words</span><span class="o">[</span><span class="n">i</span><span class="o">++]);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">left</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">" "</span><span class="o">,</span> <span class="n">t</span><span class="o">);</span>
+                <span class="nc">String</span> <span class="n">right</span> <span class="o">=</span> <span class="s">" "</span><span class="o">.</span><span class="na">repeat</span><span class="o">(</span><span class="n">maxWidth</span> <span class="o">-</span> <span class="n">left</span><span class="o">.</span><span class="na">length</span><span class="o">());</span>
+                <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="o">);</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">spaceWidth</span> <span class="o">=</span> <span class="n">maxWidth</span> <span class="o">-</span> <span class="o">(</span><span class="n">cnt</span> <span class="o">-</span> <span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">spaceWidth</span> <span class="o">/</span> <span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">spaceWidth</span> <span class="o">%</span> <span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="nc">StringBuilder</span> <span class="n">row</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">row</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">));</span>
+                <span class="n">row</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">" "</span><span class="o">.</span><span class="na">repeat</span><span class="o">(</span><span class="n">w</span> <span class="o">+</span> <span class="o">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)));</span>
+            <span class="o">}</span>
+            <span class="n">row</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">row</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">fullJustify</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxWidth</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">words</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="p">{</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]};</span>
+            <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+            <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">maxWidth</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">string</span> <span class="n">left</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">left</span> <span class="o">+=</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="p">}</span>
+                <span class="n">string</span> <span class="n">right</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="n">maxWidth</span> <span class="o">-</span> <span class="n">left</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="sc">' '</span><span class="p">);</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kt">int</span> <span class="n">spaceWidth</span> <span class="o">=</span> <span class="n">maxWidth</span> <span class="o">-</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">-</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">spaceWidth</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">spaceWidth</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">string</span> <span class="n">row</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">row</span> <span class="o">+=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">string</span><span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">),</span> <span class="sc">' '</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="n">t</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">row</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="s">'''
+Explanation:
+
+- The function `fullJustify` takes a list of words and a maximum width `maxWidth` as inputs.
+- It iterates over each word, deciding whether to add the current word to the current line (`cur`) or to start a new line.
+- If adding the current word to the line would exceed `maxWidth`, it justifies the current line by adding extra spaces between words as needed, then starts a new line.
+- Once all words are processed, it left-justifies the last line by joining the remaining words in `cur` with a single space and then using `.ljust(maxWidth)` to ensure the line is of maximum width.
+- The result is a list of strings, where each string represents a justified line of text.
+
+This solution carefully handles edge cases, such as when there's only one word in the line (avoiding division by zero) and ensuring the last line is left-justified instead of fully justified.
+'''</span>
+
+<span class="s">'''
+&gt;&gt;&gt; cur = [1]
+&gt;&gt;&gt; len(cur) - 1
+0
+&gt;&gt;&gt; ( len(cur) - 1 or 1 )
+1
+'''</span>
+
+<span class="s">'''
+# api: string.ljust(width[, fillchar])
+
+&gt;&gt;&gt; "Hello".ljust(10)
+'Hello     '
+&gt;&gt;&gt; "Hello".ljust(10, '-')
+'Hello-----'
+&gt;&gt;&gt; "Hello".ljust(2)
+'Hello'
+
+&gt;&gt;&gt; "Hello World".ljust(20)
+'Hello World         '
+&gt;&gt;&gt; "Hello World".ljust(20, '-')
+'Hello World---------'
+
+
+# api: string.rjust(width[, fillchar])
+&gt;&gt;&gt; "Hello".rjust(10)
+'     Hello'
+&gt;&gt;&gt; "Hello".rjust(10, '-')
+'-----Hello'
+&gt;&gt;&gt; "Hello".rjust(2)
+'Hello'
+
+&gt;&gt;&gt; "Hello World".rjust(20)
+'         Hello World'
+&gt;&gt;&gt; "Hello World".rjust(20, '-')
+'---------Hello World'
+
+'''</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">fullJustify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">maxWidth</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">cur</span><span class="p">,</span> <span class="n">num_of_letters</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="c1"># len(cur) is the space count, from last round, right one less after adding 'w'
+</span>            <span class="k">if</span> <span class="n">num_of_letters</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">maxWidth</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxWidth</span> <span class="o">-</span> <span class="n">num_of_letters</span><span class="p">):</span>
+                    <span class="c1"># The "or 1" part is for dealing with the edge case 'len(cur) == 1'
+</span>                    <span class="n">cur</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">1</span> <span class="p">)]</span> <span class="o">+=</span> <span class="s">' '</span>
+                <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur</span><span class="p">))</span>
+                <span class="n">cur</span><span class="p">,</span> <span class="n">num_of_letters</span> <span class="o">=</span> <span class="p">[],</span> <span class="mi">0</span>
+            <span class="n">cur</span> <span class="o">+=</span> <span class="p">[</span><span class="n">w</span><span class="p">]</span>
+            <span class="n">num_of_letters</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">res</span> <span class="o">+</span> <span class="p">[</span><span class="s">' '</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur</span><span class="p">).</span><span class="n">ljust</span><span class="p">(</span><span class="n">maxWidth</span><span class="p">)]</span>
+
+
+<span class="c1">############
+</span>
+<span class="s">'''
+&gt;&gt;&gt; 17 % 3
+2
+&gt;&gt;&gt; divmod(17,3)
+(5, 2)
+'''</span>
+
+<span class="s">'''
+&gt;&gt;&gt; ['This', 'is', 'an']
+['This', 'is', 'an']
+&gt;&gt;&gt; t = ['This', 'is', 'an']
+&gt;&gt;&gt; spaces = ['    ', '    ']
+
+# note: here j starts from 0
+&gt;&gt;&gt; for j, word in enumerate(t[1:]):
+...     print(j)
+...     print(word)
+...
+0
+is
+1
+an
+'''</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">fullJustify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">maxWidth</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">partition</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">cnt</span><span class="p">):</span>
+            <span class="n">base</span><span class="p">,</span> <span class="n">mod</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">cnt</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="s">' '</span> <span class="o">*</span> <span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">mod</span><span class="p">))</span><span class="si">}</span><span class="s">"</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cnt</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">res</span>
+
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span> <span class="c1"># one line per iteration
+</span>            <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">cnt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># move to next word
+</span>            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">maxWidth</span><span class="p">:</span> <span class="c1"># greedy search for one line
+</span>                <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># this is the last line or only one (super-long) word in a line
+</span>                <span class="n">left</span> <span class="o">=</span> <span class="s">' '</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="s">' '</span> <span class="o">*</span> <span class="p">(</span><span class="n">maxWidth</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">left</span><span class="si">}{</span><span class="n">right</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+                <span class="k">continue</span> <span class="c1"># so i != n , so only one word, no need to add spaces. 
+</span>                         <span class="c1"># e.g. a word with the same length as maxWidth, 
+</span>                         <span class="c1"># or, e.g. the 2nd word is super long and cannot fit in current line
+</span>                <span class="c1"># if i==n, then will not enter next while
+</span>            <span class="n">words_width</span> <span class="o">=</span> <span class="n">cnt</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># pure words total length, with no spaces
+</span>                                             <span class="c1"># spaces in-between these words in t[]: len(t) - 1
+</span>            <span class="n">space_width</span> <span class="o">=</span> <span class="n">maxWidth</span> <span class="o">-</span> <span class="n">words_width</span>
+            <span class="n">spaces</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span><span class="n">space_width</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">sb</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="c1"># 1st word of this line, no space before it
+</span>            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span> <span class="c1"># last word has no following space
+</span>                <span class="n">sb</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">spaces</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="c1"># j starts from 0
+</span>                <span class="n">sb</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">sb</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+<span class="c1">###########
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">fullJustify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">maxWidth</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">findRight</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">maxWidth</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">justify</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">maxWidth</span><span class="p">))</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">right</span> <span class="o">+</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="n">result</span>
+    
+    <span class="k">def</span> <span class="nf">findRight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">maxWidth</span><span class="p">):</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="n">word_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">right</span><span class="p">])</span>
+        
+        <span class="k">while</span> <span class="p">(</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">word_length</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&lt;=</span> <span class="n">maxWidth</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">word_length</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">right</span><span class="p">])</span>
+        
+        <span class="k">return</span> <span class="n">right</span>
+    
+    <span class="k">def</span> <span class="nf">justify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">maxWidth</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">padResult</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="n">maxWidth</span><span class="p">)</span>
+        
+        <span class="n">is_last_line</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">num_spaces</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span>
+        <span class="n">total_space</span> <span class="o">=</span> <span class="n">maxWidth</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">wordsLength</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+        
+        <span class="n">space</span> <span class="o">=</span> <span class="s">" "</span> <span class="k">if</span> <span class="n">is_last_line</span> <span class="k">else</span> <span class="s">" "</span> <span class="o">*</span> <span class="p">(</span><span class="n">total_space</span> <span class="o">//</span> <span class="n">num_spaces</span><span class="p">)</span>
+        <span class="n">remainder</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">is_last_line</span> <span class="k">else</span> <span class="n">total_space</span> <span class="o">%</span> <span class="n">num_spaces</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="s">""</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">space</span>
+            <span class="k">if</span> <span class="n">remainder</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s">" "</span>
+                <span class="n">remainder</span> <span class="o">-=</span> <span class="mi">1</span>
+        
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">words</span><span class="p">[</span><span class="n">right</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s">" "</span> <span class="o">*</span> <span class="p">(</span><span class="n">maxWidth</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">result</span>
+    
+    <span class="k">def</span> <span class="nf">wordsLength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">words</span><span class="p">):</span>
+        <span class="n">words_length</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">words_length</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">words_length</span>
+    
+    <span class="k">def</span> <span class="nf">padResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">maxWidth</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">result</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">*</span> <span class="p">(</span><span class="n">maxWidth</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">fullJustify</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="n">maxWidth</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">);</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="p">{</span>
+		<span class="n">t</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+		<span class="n">cnt</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+		<span class="n">i</span><span class="o">++</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">cnt</span><span class="o">+</span><span class="m">1</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">maxWidth</span> <span class="p">{</span>
+			<span class="n">cnt</span> <span class="o">+=</span> <span class="m">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+			<span class="n">left</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Join</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s">" "</span><span class="p">)</span>
+			<span class="n">right</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Repeat</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">maxWidth</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="n">spaceWidth</span> <span class="o">:=</span> <span class="n">maxWidth</span> <span class="o">-</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span>
+		<span class="n">w</span> <span class="o">:=</span> <span class="n">spaceWidth</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span>
+		<span class="n">m</span> <span class="o">:=</span> <span class="n">spaceWidth</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span>
+		<span class="n">row</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Builder</span><span class="p">{}</span>
+		<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">t</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">row</span><span class="o">.</span><span class="n">WriteString</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+			<span class="n">row</span><span class="o">.</span><span class="n">WriteString</span><span class="p">(</span><span class="n">strings</span><span class="o">.</span><span class="n">Repeat</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+			<span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="p">{</span>
+				<span class="n">row</span><span class="o">.</span><span class="n">WriteString</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">row</span><span class="o">.</span><span class="n">WriteString</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">])</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">String</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">fullJustify</span><span class="p">(</span><span class="nx">words</span><span class="p">:</span> <span class="kr">string</span><span class="p">[],</span> <span class="nx">maxWidth</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">string</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">words</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">t</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">words</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+        <span class="kd">let</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="nx">words</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="nx">cnt</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">words</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">length</span> <span class="o">&lt;=</span> <span class="nx">maxWidth</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">words</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+            <span class="nx">cnt</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">words</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">n</span> <span class="o">||</span> <span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">left</span><span class="p">:</span> <span class="kr">string</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">);</span>
+            <span class="kd">const</span> <span class="nx">right</span><span class="p">:</span> <span class="kr">string</span> <span class="o">=</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">maxWidth</span> <span class="o">-</span> <span class="nx">left</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+            <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">right</span><span class="p">);</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">spaceWidth</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">maxWidth</span> <span class="o">-</span> <span class="p">(</span><span class="nx">cnt</span> <span class="o">-</span> <span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="kd">const</span> <span class="nx">w</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">spaceWidth</span> <span class="o">/</span> <span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="kd">const</span> <span class="nx">m</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">spaceWidth</span> <span class="o">%</span> <span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="kd">const</span> <span class="nx">row</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">row</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">t</span><span class="p">[</span><span class="nx">j</span><span class="p">]);</span>
+            <span class="nx">row</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">w</span> <span class="o">+</span> <span class="p">(</span><span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">m</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)));</span>
+        <span class="p">}</span>
+        <span class="nx">row</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">t</span><span class="p">[</span><span class="nx">t</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">''</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="n">IList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="nf">FullJustify</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">words</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxWidth</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">ans</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span> <span class="p">=</span> <span class="n">words</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">n</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">t</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+            <span class="n">t</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="kt">int</span> <span class="n">cnt</span> <span class="p">=</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Length</span><span class="p">;</span>
+            <span class="p">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="p">&lt;</span> <span class="n">n</span> <span class="p">&amp;&amp;</span> <span class="n">cnt</span> <span class="p">+</span> <span class="m">1</span> <span class="p">+</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Length</span> <span class="p">&lt;=</span> <span class="n">maxWidth</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">t</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">cnt</span> <span class="p">+=</span> <span class="m">1</span> <span class="p">+</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Length</span><span class="p">;</span>
+                <span class="p">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">==</span> <span class="n">n</span> <span class="p">||</span> <span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">string</span> <span class="n">left</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+                <span class="kt">string</span> <span class="n">right</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">(</span><span class="sc">' '</span><span class="p">,</span> <span class="n">maxWidth</span> <span class="p">-</span> <span class="n">left</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+                <span class="n">ans</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">left</span> <span class="p">+</span> <span class="n">right</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kt">int</span> <span class="n">spaceWidth</span> <span class="p">=</span> <span class="n">maxWidth</span> <span class="p">-</span> <span class="p">(</span><span class="n">cnt</span> <span class="p">-</span> <span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">+</span> <span class="m">1</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">w</span> <span class="p">=</span> <span class="n">spaceWidth</span> <span class="p">/</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="p">=</span> <span class="n">spaceWidth</span> <span class="p">%</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">);</span>
+            <span class="kt">var</span> <span class="n">row</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">row</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+                <span class="n">row</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="k">new</span> <span class="kt">string</span><span class="p">(</span><span class="sc">' '</span><span class="p">,</span> <span class="n">w</span> <span class="p">+</span> <span class="p">(</span><span class="n">j</span> <span class="p">&lt;</span> <span class="n">m</span> <span class="p">?</span> <span class="m">1</span> <span class="p">:</span> <span class="m">0</span><span class="p">)));</span>
+            <span class="p">}</span>
+            <span class="n">row</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">t</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">]);</span>
+            <span class="n">ans</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-68.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

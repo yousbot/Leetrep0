@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-727.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-727.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>727 - Minimum Window Subsequence</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 727. Minimum Window Subsequence Description Given strings s1 and s2, return the minimum contiguous&amp;nbsp;substring part of s1, so that s2 is a subsequence of the part. If there is no such window in s1 that covers all characters in s2, return the empty string &amp;quot;&amp;quot;....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-727.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-727.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-727.html" rel="stylesheet"/>
+   <link href="solution-727.html" rel="stylesheet"/>
+   <link href="solution-727.html" rel="stylesheet"/>
+   <link href="solution-727.html" rel="stylesheet"/>
+   <link href="solution-727.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="727 - Minimum Window Subsequence" property="og:title"/>
+   <meta content='Leetcode 727. Minimum Window Subsequence Description Given strings s1 and s2, return the minimum contiguous&amp;nbsp;substring part of s1, so that s2 is a subsequence of the part. If there is no such window in s1 that covers all characters in s2, return the empty string &amp;quot;&amp;quot;. If there are multiple such minimum-length windows, return the one with the left-most starting index. &amp;nbsp; Example 1: Input: s1 = &amp;quot;abcdebdde&amp;quot;, s2 = &amp;quot;bde&amp;quot; Output: &amp;quot;bcde&amp;quot; Explanation: &amp;quot;bcde&amp;quot; is the answer because it occurs before &amp;quot;bdde&amp;quot; which has the same length. &amp;quot;deb&amp;quot; is not a smaller window because the elements of s2 in the window must occur in order. Example 2: Input: s1 = &amp;quot;jmeqksfrsdcmsiwvaovztaqenprpvnbstl&amp;quot;, s2 = &amp;quot;u&amp;quot; Output: &amp;quot;&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= s1.length &amp;lt;= 2 * 104 1 &amp;lt;= s2.length &amp;lt;= 100 s1 and s2 consist of lowercase English letters. Solutions Java C++ Python Go TypeScript class Solution { public String minWindow(String s1, String s2) { int m = s1.length(), n = s2.length(); int[][] f = new int[m + 1][n + 1]; for (int i = 1; i &amp;lt;= m; ++i) { for (int j = 1; j &amp;lt;= n; ++j) { if (s1.charAt(i - 1) == s2.charAt(j - 1)) { f[i][j] = j == 1 ? i : f[i - 1][j - 1]; } else { f[i][j] = f[i - 1][j]; } } } int p = 0, k = m + 1; for (int i = 1; i &amp;lt;= m; ++i) { if (s1.charAt(i - 1) == s2.charAt(n - 1) &amp;amp;&amp;amp; f[i][n] &amp;gt; 0) { int j = f[i][n] - 1; if (i - j &amp;lt; k) { k = i - j; p = j; } } } return k &amp;gt; m ? "" : s1.substring(p, p + k); } } class Solution { public: string minWindow(string s1, string s2) { int m = s1.size(), n = s2.size(); int f[m + 1][n + 1]; memset(f, 0, sizeof(f)); for (int i = 1; i &amp;lt;= m; ++i) { for (int j = 1; j &amp;lt;= n; ++j) { if (s1[i - 1] == s2[j - 1]) { f[i][j] = j == 1 ? i : f[i - 1][j - 1]; } else { f[i][j] = f[i - 1][j]; } } } int p = 0, k = m + 1; for (int i = 1; i &amp;lt;= m; ++i) { if (s1[i - 1] == s2[n - 1] &amp;amp;&amp;amp; f[i][n]) { int j = f[i][n] - 1; if (i - j &amp;lt; k) { k = i - j; p = j; } } } return k &amp;gt; m ? "" : s1.substr(p, k); } }; class Solution: def minWindow(self, s1: str, s2: str) -&amp;gt; str: m, n = len(s1), len(s2) f = [[0] * (n + 1) for _ in range(m + 1)] for i, a in enumerate(s1, 1): for j, b in enumerate(s2, 1): if a == b: f[i][j] = i if j == 1 else f[i - 1][j - 1] else: f[i][j]...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-11-26T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-11-26-727-Minimum-Window-Subsequence/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-727.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="727 - Minimum Window Subsequence" property="twitter:title"/>
+   <meta content='Leetcode 727. Minimum Window Subsequence Description Given strings s1 and s2, return the minimum contiguous&amp;nbsp;substring part of s1, so that s2 is a subsequence of the part. If there is no such window in s1 that covers all characters in s2, return the empty string &amp;quot;&amp;quot;. If there are multiple such minimum-length windows, return the one with the left-most starting index. &amp;nbsp; Example 1: Input: s1 = &amp;quot;abcdebdde&amp;quot;, s2 = &amp;quot;bde&amp;quot; Output: &amp;quot;bcde&amp;quot; Explanation: &amp;quot;bcde&amp;quot; is the answer because it occurs before &amp;quot;bdde&amp;quot; which has the same length. &amp;quot;deb&amp;quot; is not a smaller window because the elements of s2 in the window must occur in order. Example 2: Input: s1 = &amp;quot;jmeqksfrsdcmsiwvaovztaqenprpvnbstl&amp;quot;, s2 = &amp;quot;u&amp;quot; Output: &amp;quot;&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= s1.length &amp;lt;= 2 * 104 1 &amp;lt;= s2.length &amp;lt;= 100 s1 and s2 consist of lowercase English letters. Solutions Java C++ Python Go TypeScript class Solution { public String minWindow(String s1, String s2) { int m = s1.length(), n = s2.length(); int[][] f = new int[m + 1][n + 1]; for (int i = 1; i &amp;lt;= m; ++i) { for (int j = 1; j &amp;lt;= n; ++j) { if (s1.charAt(i - 1) == s2.charAt(j - 1)) { f[i][j] = j == 1 ? i : f[i - 1][j - 1]; } else { f[i][j] = f[i - 1][j]; } } } int p = 0, k = m + 1; for (int i = 1; i &amp;lt;= m; ++i) { if (s1.charAt(i - 1) == s2.charAt(n - 1) &amp;amp;&amp;amp; f[i][n] &amp;gt; 0) { int j = f[i][n] - 1; if (i - j &amp;lt; k) { k = i - j; p = j; } } } return k &amp;gt; m ? "" : s1.substring(p, p + k); } } class Solution { public: string minWindow(string s1, string s2) { int m = s1.size(), n = s2.size(); int f[m + 1][n + 1]; memset(f, 0, sizeof(f)); for (int i = 1; i &amp;lt;= m; ++i) { for (int j = 1; j &amp;lt;= n; ++j) { if (s1[i - 1] == s2[j - 1]) { f[i][j] = j == 1 ? i : f[i - 1][j - 1]; } else { f[i][j] = f[i - 1][j]; } } } int p = 0, k = m + 1; for (int i = 1; i &amp;lt;= m; ++i) { if (s1[i - 1] == s2[n - 1] &amp;amp;&amp;amp; f[i][n]) { int j = f[i][n] - 1; if (i - j &amp;lt; k) { k = i - j; p = j; } } } return k &amp;gt; m ? "" : s1.substr(p, k); } }; class Solution: def minWindow(self, s1: str, s2: str) -&amp;gt; str: m, n = len(s1), len(s2) f = [[0] * (n + 1) for _ in range(m + 1)] for i, a in enumerate(s1, 1): for j, b in enumerate(s2, 1): if a == b: f[i][j] = i if j == 1 else f[i - 1][j - 1] else: f[i][j]...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    727 - Minimum Window Subsequence | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="727 - Minimum Window Subsequence" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-727.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-11-26-727-Minimum-Window-Subsequence/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-11-26T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"727 - Minimum Window Subsequence","dateModified":"2017-11-26T00:00:00-08:00","datePublished":"2017-11-26T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-11-26-727-Minimum-Window-Subsequence/"},"url":"https://leetcode.ca/2017-11-26-727-Minimum-Window-Subsequence/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="727-minimum-window-subsequence">
+       <a href="solution-727.html">
+        727. Minimum Window Subsequence
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given strings
+       <code>
+        s1
+       </code>
+       and
+       <code>
+        s2
+       </code>
+       , return
+       <em>
+        the minimum contiguous substring part of
+       </em>
+       <code>
+        s1
+       </code>
+       <em>
+        , so that
+       </em>
+       <code>
+        s2
+       </code>
+       <em>
+        is a subsequence of the part
+       </em>
+       .
+      </p>
+      <p>
+       If there is no such window in
+       <code>
+        s1
+       </code>
+       that covers all characters in
+       <code>
+        s2
+       </code>
+       , return the empty string
+       <code>
+        ""
+       </code>
+       . If there are multiple such minimum-length windows, return the one with the
+       <strong>
+        left-most starting index
+       </strong>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s1 = "abcdebdde", s2 = "bde"
+<strong>Output:</strong> "bcde"
+<strong>Explanation:</strong> 
+"bcde" is the answer because it occurs before "bdde" which has the same length.
+"deb" is not a smaller window because the elements of s2 in the window must occur in order.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s1 = "jmeqksfrsdcmsiwvaovztaqenprpvnbstl", s2 = "u"
+<strong>Output:</strong> ""
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s1.length &lt;= 2 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= s2.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         s1
+        </code>
+        and
+        <code>
+         s2
+        </code>
+        consist of lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#cc6dfcd0-4af0-41ce-9308-eafde8d9127f'}">
+       <li class="uk-active">
+        <a href="solution-727.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-727.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-727.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-727.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-727.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="cc6dfcd0-4af0-41ce-9308-eafde8d9127f">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">minWindow</span><span class="o">(</span><span class="nc">String</span> <span class="n">s1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">s2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">s1</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="n">s2</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="n">i</span> <span class="o">:</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s1</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="n">s2</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">n</span><span class="o">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">n</span><span class="o">]</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="o">;</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">m</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">s1</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="n">p</span> <span class="o">+</span> <span class="n">k</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">string</span> <span class="n">minWindow</span><span class="p">(</span><span class="n">string</span> <span class="n">s1</span><span class="p">,</span> <span class="n">string</span> <span class="n">s2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s2</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="n">i</span> <span class="o">:</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s2</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span><span class="p">])</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">;</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">m</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">s1</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">s2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">:</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">s2</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span><span class="p">]:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">j</span>
+        <span class="k">return</span> <span class="s">""</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">m</span> <span class="k">else</span> <span class="n">s1</span><span class="p">[</span><span class="n">p</span> <span class="p">:</span> <span class="n">p</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minWindow</span><span class="p">(</span><span class="n">s1</span> <span class="kt">string</span><span class="p">,</span> <span class="n">s2</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span> <span class="p">{</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+					<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+				<span class="p">}</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s2</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">j</span> <span class="o">:=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="m">1</span>
+			<span class="k">if</span> <span class="n">i</span><span class="o">-</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">k</span> <span class="p">{</span>
+				<span class="n">k</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span>
+				<span class="n">p</span> <span class="o">=</span> <span class="n">j</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">m</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="s">""</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">s1</span><span class="p">[</span><span class="n">p</span> <span class="o">:</span> <span class="n">p</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minWindow</span><span class="p">(</span><span class="nx">s1</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">s2</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">string</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">s1</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">s2</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">s1</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="nx">s2</span><span class="p">[</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="nx">i</span> <span class="p">:</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kd">let</span> <span class="nx">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">s1</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="nx">s2</span><span class="p">[</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">n</span><span class="p">])</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">n</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">-</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">k</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">-</span> <span class="nx">j</span><span class="p">;</span>
+                <span class="nx">p</span> <span class="o">=</span> <span class="nx">j</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">k</span> <span class="o">&gt;</span> <span class="nx">m</span> <span class="p">?</span> <span class="dl">''</span> <span class="p">:</span> <span class="nx">s1</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="nx">p</span> <span class="o">+</span> <span class="nx">k</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-727.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

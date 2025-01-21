@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3076.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3076.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3076 - Shortest Uncommon Substring in an Array</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3076. Shortest Uncommon Substring in an Array Description You are given an array arr of size n consisting of non-empty strings. Find a string array answer of size n such that: answer[i] is the shortest substring of arr[i] that does not occur as a substring...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3076.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3076.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3076.html" rel="stylesheet"/>
+   <link href="solution-3076.html" rel="stylesheet"/>
+   <link href="solution-3076.html" rel="stylesheet"/>
+   <link href="solution-3076.html" rel="stylesheet"/>
+   <link href="solution-3076.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3076 - Shortest Uncommon Substring in an Array" property="og:title"/>
+   <meta content='Leetcode 3076. Shortest Uncommon Substring in an Array Description You are given an array arr of size n consisting of non-empty strings. Find a string array answer of size n such that: answer[i] is the shortest substring of arr[i] that does not occur as a substring in any other string in arr. If multiple such substrings exist, answer[i] should be the lexicographically smallest. And if no such substring exists, answer[i] should be an empty string. Return the array answer. &amp;nbsp; Example 1: Input: arr = [&amp;quot;cab&amp;quot;,&amp;quot;ad&amp;quot;,&amp;quot;bad&amp;quot;,&amp;quot;c&amp;quot;] Output: [&amp;quot;ab&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;ba&amp;quot;,&amp;quot;&amp;quot;] Explanation: We have the following: - For the string &amp;quot;cab&amp;quot;, the shortest substring that does not occur in any other string is either &amp;quot;ca&amp;quot; or &amp;quot;ab&amp;quot;, we choose the lexicographically smaller substring, which is &amp;quot;ab&amp;quot;. - For the string &amp;quot;ad&amp;quot;, there is no substring that does not occur in any other string. - For the string &amp;quot;bad&amp;quot;, the shortest substring that does not occur in any other string is &amp;quot;ba&amp;quot;. - For the string &amp;quot;c&amp;quot;, there is no substring that does not occur in any other string. Example 2: Input: arr = [&amp;quot;abc&amp;quot;,&amp;quot;bcd&amp;quot;,&amp;quot;abcd&amp;quot;] Output: [&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;abcd&amp;quot;] Explanation: We have the following: - For the string &amp;quot;abc&amp;quot;, there is no substring that does not occur in any other string. - For the string &amp;quot;bcd&amp;quot;, there is no substring that does not occur in any other string. - For the string &amp;quot;abcd&amp;quot;, the shortest substring that does not occur in any other string is &amp;quot;abcd&amp;quot;. &amp;nbsp; Constraints: n == arr.length 2 &amp;lt;= n &amp;lt;= 100 1 &amp;lt;= arr[i].length &amp;lt;= 20 arr[i] consists only of lowercase English letters. Solutions Solution 1: Enumeration Given the small data scale, we can directly enumerate all substrings of each string and then determine whether it is a substring of other strings. Specifically, we first enumerate each string arr[i], then enumerate the length $j$ of each substring from small to large, and then enumerate the starting position $l$ of each substring. We can get the current substring as sub = arr[i][l:l+j]. Then we determine whether sub is a substring of other strings. If it is, we skip the current substring; otherwise, we update the answer. The time complexity is $O(n^2 \times m^4)$, and the space complexity is $O(m)$. Where $n$ is the length of the string array arr, and $m$ is the maximum length of the string. In this problem, $m \le 20$. Java C++ Python Go TypeScript class Solution { public String[] shortestSubstrings(String[] arr) { int n = arr.length; String[] ans = new String[n]; Arrays.fill(ans, ""); for (int i = 0; i &amp;lt; n; ++i) { int m = arr[i].length(); for (int j = 1; j &amp;lt;= m &amp;amp;&amp;amp; ans[i].isEmpty(); ++j) { for (int l = 0; l &amp;lt;= m - j; ++l) { String sub = arr[i].substring(l, l + j); if (ans[i].isEmpty() || sub.compareTo(ans[i]) &amp;lt; 0) { boolean ok = true; for (int k = 0; k &amp;lt; n &amp;amp;&amp;amp; ok; ++k) { if (k != i &amp;amp;&amp;amp; arr[k].contains(sub)) { ok = false; } }...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-03-27T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-03-27-3076-Shortest-Uncommon-Substring-in-an-Array/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3076.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3076 - Shortest Uncommon Substring in an Array" property="twitter:title"/>
+   <meta content='Leetcode 3076. Shortest Uncommon Substring in an Array Description You are given an array arr of size n consisting of non-empty strings. Find a string array answer of size n such that: answer[i] is the shortest substring of arr[i] that does not occur as a substring in any other string in arr. If multiple such substrings exist, answer[i] should be the lexicographically smallest. And if no such substring exists, answer[i] should be an empty string. Return the array answer. &amp;nbsp; Example 1: Input: arr = [&amp;quot;cab&amp;quot;,&amp;quot;ad&amp;quot;,&amp;quot;bad&amp;quot;,&amp;quot;c&amp;quot;] Output: [&amp;quot;ab&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;ba&amp;quot;,&amp;quot;&amp;quot;] Explanation: We have the following: - For the string &amp;quot;cab&amp;quot;, the shortest substring that does not occur in any other string is either &amp;quot;ca&amp;quot; or &amp;quot;ab&amp;quot;, we choose the lexicographically smaller substring, which is &amp;quot;ab&amp;quot;. - For the string &amp;quot;ad&amp;quot;, there is no substring that does not occur in any other string. - For the string &amp;quot;bad&amp;quot;, the shortest substring that does not occur in any other string is &amp;quot;ba&amp;quot;. - For the string &amp;quot;c&amp;quot;, there is no substring that does not occur in any other string. Example 2: Input: arr = [&amp;quot;abc&amp;quot;,&amp;quot;bcd&amp;quot;,&amp;quot;abcd&amp;quot;] Output: [&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;abcd&amp;quot;] Explanation: We have the following: - For the string &amp;quot;abc&amp;quot;, there is no substring that does not occur in any other string. - For the string &amp;quot;bcd&amp;quot;, there is no substring that does not occur in any other string. - For the string &amp;quot;abcd&amp;quot;, the shortest substring that does not occur in any other string is &amp;quot;abcd&amp;quot;. &amp;nbsp; Constraints: n == arr.length 2 &amp;lt;= n &amp;lt;= 100 1 &amp;lt;= arr[i].length &amp;lt;= 20 arr[i] consists only of lowercase English letters. Solutions Solution 1: Enumeration Given the small data scale, we can directly enumerate all substrings of each string and then determine whether it is a substring of other strings. Specifically, we first enumerate each string arr[i], then enumerate the length $j$ of each substring from small to large, and then enumerate the starting position $l$ of each substring. We can get the current substring as sub = arr[i][l:l+j]. Then we determine whether sub is a substring of other strings. If it is, we skip the current substring; otherwise, we update the answer. The time complexity is $O(n^2 \times m^4)$, and the space complexity is $O(m)$. Where $n$ is the length of the string array arr, and $m$ is the maximum length of the string. In this problem, $m \le 20$. Java C++ Python Go TypeScript class Solution { public String[] shortestSubstrings(String[] arr) { int n = arr.length; String[] ans = new String[n]; Arrays.fill(ans, ""); for (int i = 0; i &amp;lt; n; ++i) { int m = arr[i].length(); for (int j = 1; j &amp;lt;= m &amp;amp;&amp;amp; ans[i].isEmpty(); ++j) { for (int l = 0; l &amp;lt;= m - j; ++l) { String sub = arr[i].substring(l, l + j); if (ans[i].isEmpty() || sub.compareTo(ans[i]) &amp;lt; 0) { boolean ok = true; for (int k = 0; k &amp;lt; n &amp;amp;&amp;amp; ok; ++k) { if (k != i &amp;amp;&amp;amp; arr[k].contains(sub)) { ok = false; } }...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3076 - Shortest Uncommon Substring in an Array | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3076 - Shortest Uncommon Substring in an Array" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3076.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-03-27-3076-Shortest-Uncommon-Substring-in-an-Array/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-03-27T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3076 - Shortest Uncommon Substring in an Array","dateModified":"2024-03-27T00:00:00-07:00","datePublished":"2024-03-27T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-03-27-3076-Shortest-Uncommon-Substring-in-an-Array/"},"url":"https://leetcode.ca/2024-03-27-3076-Shortest-Uncommon-Substring-in-an-Array/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="3076-shortest-uncommon-substring-in-an-array">
+       <a href="solution-3076.html">
+        3076. Shortest Uncommon Substring in an Array
+       </a>
+      </h1>
+      <!-- tags:Trie,Array,Hash Table,String -->
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an array
+       <code>
+        arr
+       </code>
+       of size
+       <code>
+        n
+       </code>
+       consisting of
+       <strong>
+        non-empty
+       </strong>
+       strings.
+      </p>
+      <p>
+       Find a string array
+       <code>
+        answer
+       </code>
+       of size
+       <code>
+        n
+       </code>
+       such that:
+      </p>
+      <ul>
+       <li>
+        <code>
+         answer[i]
+        </code>
+        is the
+        <strong>
+         shortest
+        </strong>
+        <span data-keyword="substring">
+         substring
+        </span>
+        of
+        <code>
+         arr[i]
+        </code>
+        that does
+        <strong>
+         not
+        </strong>
+        occur as a substring in any other string in
+        <code>
+         arr
+        </code>
+        . If multiple such substrings exist,
+        <code>
+         answer[i]
+        </code>
+        should be the
+        <span data-keyword="lexicographically-smaller-string">
+         lexicographically smallest
+        </span>
+        . And if no such substring exists,
+        <code>
+         answer[i]
+        </code>
+        should be an empty string.
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the array
+       </em>
+       <code>
+        answer
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> arr = ["cab","ad","bad","c"]
+<strong>Output:</strong> ["ab","","ba",""]
+<strong>Explanation:</strong> We have the following:
+- For the string "cab", the shortest substring that does not occur in any other string is either "ca" or "ab", we choose the lexicographically smaller substring, which is "ab".
+- For the string "ad", there is no substring that does not occur in any other string.
+- For the string "bad", the shortest substring that does not occur in any other string is "ba".
+- For the string "c", there is no substring that does not occur in any other string.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> arr = ["abc","bcd","abcd"]
+<strong>Output:</strong> ["","","abcd"]
+<strong>Explanation:</strong> We have the following:
+- For the string "abc", there is no substring that does not occur in any other string.
+- For the string "bcd", there is no substring that does not occur in any other string.
+- For the string "abcd", the shortest substring that does not occur in any other string is "abcd".
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         n == arr.length
+        </code>
+       </li>
+       <li>
+        <code>
+         2 &lt;= n &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= arr[i].length &lt;= 20
+        </code>
+       </li>
+       <li>
+        <code>
+         arr[i]
+        </code>
+        consists only of lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <h3 id="solution-1-enumeration">
+       Solution 1: Enumeration
+      </h3>
+      <p>
+       Given the small data scale, we can directly enumerate all substrings of each string and then determine whether it is a substring of other strings.
+      </p>
+      <p>
+       Specifically, we first enumerate each string
+       <code class="language-plaintext highlighter-rouge">
+        arr[i]
+       </code>
+       , then enumerate the length $j$ of each substring from small to large, and then enumerate the starting position $l$ of each substring. We can get the current substring as
+       <code class="language-plaintext highlighter-rouge">
+        sub = arr[i][l:l+j]
+       </code>
+       . Then we determine whether
+       <code class="language-plaintext highlighter-rouge">
+        sub
+       </code>
+       is a substring of other strings. If it is, we skip the current substring; otherwise, we update the answer.
+      </p>
+      <p>
+       The time complexity is $O(n^2 \times m^4)$, and the space complexity is $O(m)$. Where $n$ is the length of the string array
+       <code class="language-plaintext highlighter-rouge">
+        arr
+       </code>
+       , and $m$ is the maximum length of the string. In this problem, $m \le 20$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#cb39f999-6209-4865-a9bd-a896f396c3d4'}">
+       <li class="uk-active">
+        <a href="solution-3076.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3076.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3076.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3076.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3076.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="cb39f999-6209-4865-a9bd-a896f396c3d4">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span><span class="o">[]</span> <span class="nf">shortestSubstrings</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="nc">String</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">isEmpty</span><span class="o">();</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">j</span><span class="o">;</span> <span class="o">++</span><span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nc">String</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">substring</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">l</span> <span class="o">+</span> <span class="n">j</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">sub</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="kt">boolean</span> <span class="n">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">ok</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">!=</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="o">[</span><span class="n">k</span><span class="o">].</span><span class="na">contains</span><span class="o">(</span><span class="n">sub</span><span class="o">))</span> <span class="o">{</span>
+                                <span class="n">ok</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">ok</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">sub</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">shortestSubstrings</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">arr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">arr</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">empty</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">j</span><span class="p">;</span> <span class="o">++</span><span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">string</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">substr</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">empty</span><span class="p">()</span> <span class="o">||</span> <span class="n">sub</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="kt">bool</span> <span class="n">ok</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">ok</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">!=</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">find</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span> <span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="n">ok</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">ok</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">shortestSubstrings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[</span><span class="s">""</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">sub</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">l</span> <span class="p">:</span> <span class="n">l</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">sub</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="n">i</span> <span class="ow">or</span> <span class="n">sub</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">t</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arr</span><span class="p">)):</span>
+                            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub</span>
+                <span class="k">if</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="k">break</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">shortestSubstrings</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">arr</span> <span class="p">{</span>
+		<span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">l</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">-</span><span class="n">j</span><span class="p">;</span> <span class="n">l</span><span class="o">++</span> <span class="p">{</span>
+				<span class="n">sub</span> <span class="o">:=</span> <span class="n">s</span><span class="p">[</span><span class="n">l</span> <span class="o">:</span> <span class="n">l</span><span class="o">+</span><span class="n">j</span><span class="p">]</span>
+				<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">sub</span> <span class="p">{</span>
+					<span class="n">ok</span> <span class="o">:=</span> <span class="no">true</span>
+					<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">arr</span> <span class="p">{</span>
+						<span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">strings</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span> <span class="p">{</span>
+							<span class="n">ok</span> <span class="o">=</span> <span class="no">false</span>
+							<span class="k">break</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+					<span class="k">if</span> <span class="n">ok</span> <span class="p">{</span>
+						<span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">shortestSubstrings</span><span class="p">(</span><span class="nx">arr</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]):</span> <span class="kr">string</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">m</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">m</span> <span class="o">&amp;&amp;</span> <span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="dl">''</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">l</span> <span class="o">&lt;=</span> <span class="nx">m</span> <span class="o">-</span> <span class="nx">j</span><span class="p">;</span> <span class="o">++</span><span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">const</span> <span class="nx">sub</span><span class="p">:</span> <span class="kr">string</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">slice</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">l</span> <span class="o">+</span> <span class="nx">j</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="dl">''</span> <span class="o">||</span> <span class="nx">sub</span><span class="p">.</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">let</span> <span class="nx">ok</span><span class="p">:</span> <span class="nx">boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="nx">ok</span><span class="p">;</span> <span class="o">++</span><span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">k</span> <span class="o">!==</span> <span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">k</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="nx">sub</span><span class="p">))</span> <span class="p">{</span>
+                            <span class="nx">ok</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">sub</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3076.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

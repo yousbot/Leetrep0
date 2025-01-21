@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2120.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2120.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2120 - Execution of All Suffix Instructions Staying in a Grid</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2120. Execution of All Suffix Instructions Staying in a Grid Description There is an n x n grid, with the top-left cell at (0, 0) and the bottom-right cell at (n - 1, n - 1). You are given the integer n and an integer...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2120.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2120.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2120.html" rel="stylesheet"/>
+   <link href="solution-2120.html" rel="stylesheet"/>
+   <link href="solution-2120.html" rel="stylesheet"/>
+   <link href="solution-2120.html" rel="stylesheet"/>
+   <link href="solution-2120.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2120 - Execution of All Suffix Instructions Staying in a Grid" property="og:title"/>
+   <meta content="Leetcode 2120. Execution of All Suffix Instructions Staying in a Grid Description There is an n x n grid, with the top-left cell at (0, 0) and the bottom-right cell at (n - 1, n - 1). You are given the integer n and an integer array startPos where startPos = [startrow, startcol] indicates that a robot is initially at cell (startrow, startcol). You are also given a 0-indexed string s of length m where s[i] is the ith instruction for the robot: &amp;#39;L&amp;#39; (move left), &amp;#39;R&amp;#39; (move right), &amp;#39;U&amp;#39; (move up), and &amp;#39;D&amp;#39; (move down). The robot can begin executing from any ith instruction in s. It executes the instructions one by one towards the end of s but it stops if either of these conditions is met: The next instruction will move the robot off the grid. There are no more instructions left to execute. Return an array answer of length m where answer[i] is the number of instructions the robot can execute if the robot begins executing from the ith instruction in s. &amp;nbsp; Example 1: Input: n = 3, startPos = [0,1], s = &amp;quot;RRDDLU&amp;quot; Output: [1,5,4,3,1,0] Explanation: Starting from startPos and beginning execution from the ith instruction: - 0th: &amp;quot;RRDDLU&amp;quot;. Only one instruction &amp;quot;R&amp;quot; can be executed before it moves off the grid. - 1st: &amp;quot;RDDLU&amp;quot;. All five instructions can be executed while it stays in the grid and ends at (1, 1). - 2nd: &amp;quot;DDLU&amp;quot;. All four instructions can be executed while it stays in the grid and ends at (1, 0). - 3rd: &amp;quot;DLU&amp;quot;. All three instructions can be executed while it stays in the grid and ends at (0, 0). - 4th: &amp;quot;LU&amp;quot;. Only one instruction &amp;quot;L&amp;quot; can be executed before it moves off the grid. - 5th: &amp;quot;U&amp;quot;. If moving up, it would move off the grid. Example 2: Input: n = 2, startPos = [1,1], s = &amp;quot;LURD&amp;quot; Output: [4,1,0,0] Explanation: - 0th: &amp;quot;LURD&amp;quot;. - 1st: &amp;quot;URD&amp;quot;. - 2nd: &amp;quot;RD&amp;quot;. - 3rd: &amp;quot;D&amp;quot;. Example 3: Input: n = 1, startPos = [0,0], s = &amp;quot;LRUD&amp;quot; Output: [0,0,0,0] Explanation: No matter which instruction the robot begins execution from, it would move off the grid. &amp;nbsp; Constraints: m == s.length 1 &amp;lt;= n, m &amp;lt;= 500 startPos.length == 2 0 &amp;lt;= startrow, startcol &amp;lt; n s consists of &amp;#39;L&amp;#39;, &amp;#39;R&amp;#39;, &amp;#39;U&amp;#39;, and &amp;#39;D&amp;#39;. Solutions Java C++ Python Go TypeScript RenderScript class Solution { public int[] executeInstructions(int n, int[] startPos, String s) { int m = s.length(); int[] ans = new int[m]; Map&amp;lt;Character, int[]&amp;gt; mp = new HashMap&amp;lt;&amp;gt;(4); mp.put('L', new int[] {0, -1}); mp.put('R', new int[] {0, 1}); mp.put('U', new int[] {-1, 0}); mp.put('D', new int[] {1, 0}); for (int i = 0; i &amp;lt; m; ++i) { int x = startPos[0], y = startPos[1]; int t = 0; for (int j = i; j &amp;lt; m; ++j) { char c = s.charAt(j); int a = mp.get(c)[0], b = mp.get(c)[1]; if (0 &amp;lt;= x + a &amp;amp;&amp;amp; x +..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-09-19T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-09-19-2120-Execution-of-All-Suffix-Instructions-Staying-in-a-Grid/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2120.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2120 - Execution of All Suffix Instructions Staying in a Grid" property="twitter:title"/>
+   <meta content="Leetcode 2120. Execution of All Suffix Instructions Staying in a Grid Description There is an n x n grid, with the top-left cell at (0, 0) and the bottom-right cell at (n - 1, n - 1). You are given the integer n and an integer array startPos where startPos = [startrow, startcol] indicates that a robot is initially at cell (startrow, startcol). You are also given a 0-indexed string s of length m where s[i] is the ith instruction for the robot: &amp;#39;L&amp;#39; (move left), &amp;#39;R&amp;#39; (move right), &amp;#39;U&amp;#39; (move up), and &amp;#39;D&amp;#39; (move down). The robot can begin executing from any ith instruction in s. It executes the instructions one by one towards the end of s but it stops if either of these conditions is met: The next instruction will move the robot off the grid. There are no more instructions left to execute. Return an array answer of length m where answer[i] is the number of instructions the robot can execute if the robot begins executing from the ith instruction in s. &amp;nbsp; Example 1: Input: n = 3, startPos = [0,1], s = &amp;quot;RRDDLU&amp;quot; Output: [1,5,4,3,1,0] Explanation: Starting from startPos and beginning execution from the ith instruction: - 0th: &amp;quot;RRDDLU&amp;quot;. Only one instruction &amp;quot;R&amp;quot; can be executed before it moves off the grid. - 1st: &amp;quot;RDDLU&amp;quot;. All five instructions can be executed while it stays in the grid and ends at (1, 1). - 2nd: &amp;quot;DDLU&amp;quot;. All four instructions can be executed while it stays in the grid and ends at (1, 0). - 3rd: &amp;quot;DLU&amp;quot;. All three instructions can be executed while it stays in the grid and ends at (0, 0). - 4th: &amp;quot;LU&amp;quot;. Only one instruction &amp;quot;L&amp;quot; can be executed before it moves off the grid. - 5th: &amp;quot;U&amp;quot;. If moving up, it would move off the grid. Example 2: Input: n = 2, startPos = [1,1], s = &amp;quot;LURD&amp;quot; Output: [4,1,0,0] Explanation: - 0th: &amp;quot;LURD&amp;quot;. - 1st: &amp;quot;URD&amp;quot;. - 2nd: &amp;quot;RD&amp;quot;. - 3rd: &amp;quot;D&amp;quot;. Example 3: Input: n = 1, startPos = [0,0], s = &amp;quot;LRUD&amp;quot; Output: [0,0,0,0] Explanation: No matter which instruction the robot begins execution from, it would move off the grid. &amp;nbsp; Constraints: m == s.length 1 &amp;lt;= n, m &amp;lt;= 500 startPos.length == 2 0 &amp;lt;= startrow, startcol &amp;lt; n s consists of &amp;#39;L&amp;#39;, &amp;#39;R&amp;#39;, &amp;#39;U&amp;#39;, and &amp;#39;D&amp;#39;. Solutions Java C++ Python Go TypeScript RenderScript class Solution { public int[] executeInstructions(int n, int[] startPos, String s) { int m = s.length(); int[] ans = new int[m]; Map&amp;lt;Character, int[]&amp;gt; mp = new HashMap&amp;lt;&amp;gt;(4); mp.put('L', new int[] {0, -1}); mp.put('R', new int[] {0, 1}); mp.put('U', new int[] {-1, 0}); mp.put('D', new int[] {1, 0}); for (int i = 0; i &amp;lt; m; ++i) { int x = startPos[0], y = startPos[1]; int t = 0; for (int j = i; j &amp;lt; m; ++j) { char c = s.charAt(j); int a = mp.get(c)[0], b = mp.get(c)[1]; if (0 &amp;lt;= x + a &amp;amp;&amp;amp; x +..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2120 - Execution of All Suffix Instructions Staying in a Grid | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2120 - Execution of All Suffix Instructions Staying in a Grid" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2120.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-09-19-2120-Execution-of-All-Suffix-Instructions-Staying-in-a-Grid/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-09-19T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2120 - Execution of All Suffix Instructions Staying in a Grid","dateModified":"2021-09-19T00:00:00-07:00","datePublished":"2021-09-19T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-09-19-2120-Execution-of-All-Suffix-Instructions-Staying-in-a-Grid/"},"url":"https://leetcode.ca/2021-09-19-2120-Execution-of-All-Suffix-Instructions-Staying-in-a-Grid/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2120-execution-of-all-suffix-instructions-staying-in-a-grid">
+       <a href="solution-2120.html">
+        2120. Execution of All Suffix Instructions Staying in a Grid
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       There is an
+       <code>
+        n x n
+       </code>
+       grid, with the top-left cell at
+       <code>
+        (0, 0)
+       </code>
+       and the bottom-right cell at
+       <code>
+        (n - 1, n - 1)
+       </code>
+       . You are given the integer
+       <code>
+        n
+       </code>
+       and an integer array
+       <code>
+        startPos
+       </code>
+       where
+       <code>
+        startPos = [start
+        <sub>
+         row
+        </sub>
+        , start
+        <sub>
+         col
+        </sub>
+        ]
+       </code>
+       indicates that a robot is initially at cell
+       <code>
+        (start
+        <sub>
+         row
+        </sub>
+        , start
+        <sub>
+         col
+        </sub>
+        )
+       </code>
+       .
+      </p>
+      <p>
+       You are also given a
+       <strong>
+        0-indexed
+       </strong>
+       string
+       <code>
+        s
+       </code>
+       of length
+       <code>
+        m
+       </code>
+       where
+       <code>
+        s[i]
+       </code>
+       is the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       instruction for the robot:
+       <code>
+        'L'
+       </code>
+       (move left),
+       <code>
+        'R'
+       </code>
+       (move right),
+       <code>
+        'U'
+       </code>
+       (move up), and
+       <code>
+        'D'
+       </code>
+       (move down).
+      </p>
+      <p>
+       The robot can begin executing from any
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       instruction in
+       <code>
+        s
+       </code>
+       . It executes the instructions one by one towards the end of
+       <code>
+        s
+       </code>
+       but it stops if either of these conditions is met:
+      </p>
+      <ul>
+       <li>
+        The next instruction will move the robot off the grid.
+       </li>
+       <li>
+        There are no more instructions left to execute.
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        an array
+       </em>
+       <code>
+        answer
+       </code>
+       <em>
+        of length
+       </em>
+       <code>
+        m
+       </code>
+       <em>
+        where
+       </em>
+       <code>
+        answer[i]
+       </code>
+       <em>
+        is
+        <strong>
+         the number of instructions
+        </strong>
+        the robot can execute if the robot
+        <strong>
+         begins executing from
+        </strong>
+        the
+       </em>
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       <em>
+        instruction in
+       </em>
+       <code>
+        s
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2100-2199/2120.Execution%20of%20All%20Suffix%20Instructions%20Staying%20in%20a%20Grid/images/1.png" style="width: 145px; height: 142px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 3, startPos = [0,1], s = "RRDDLU"
+<strong>Output:</strong> [1,5,4,3,1,0]
+<strong>Explanation:</strong> Starting from startPos and beginning execution from the i<sup>th</sup> instruction:
+- 0<sup>th</sup>: "<u><strong>R</strong></u>RDDLU". Only one instruction "R" can be executed before it moves off the grid.
+- 1<sup>st</sup>:  "<u><strong>RDDLU</strong></u>". All five instructions can be executed while it stays in the grid and ends at (1, 1).
+- 2<sup>nd</sup>:   "<u><strong>DDLU</strong></u>". All four instructions can be executed while it stays in the grid and ends at (1, 0).
+- 3<sup>rd</sup>:    "<u><strong>DLU</strong></u>". All three instructions can be executed while it stays in the grid and ends at (0, 0).
+- 4<sup>th</sup>:     "<u><strong>L</strong></u>U". Only one instruction "L" can be executed before it moves off the grid.
+- 5<sup>th</sup>:      "U". If moving up, it would move off the grid.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2100-2199/2120.Execution%20of%20All%20Suffix%20Instructions%20Staying%20in%20a%20Grid/images/2.png" style="width: 106px; height: 103px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 2, startPos = [1,1], s = "LURD"
+<strong>Output:</strong> [4,1,0,0]
+<strong>Explanation:</strong>
+- 0<sup>th</sup>: "<u><strong>LURD</strong></u>".
+- 1<sup>st</sup>:  "<u><strong>U</strong></u>RD".
+- 2<sup>nd</sup>:   "RD".
+- 3<sup>rd</sup>:    "D".
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2100-2199/2120.Execution%20of%20All%20Suffix%20Instructions%20Staying%20in%20a%20Grid/images/3.png" style="width: 67px; height: 64px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 1, startPos = [0,0], s = "LRUD"
+<strong>Output:</strong> [0,0,0,0]
+<strong>Explanation:</strong> No matter which instruction the robot begins execution from, it would move off the grid.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         m == s.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= n, m &lt;= 500
+        </code>
+       </li>
+       <li>
+        <code>
+         startPos.length == 2
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= start
+         <sub>
+          row
+         </sub>
+         , start
+         <sub>
+          col
+         </sub>
+         &lt; n
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists of
+        <code>
+         'L'
+        </code>
+        ,
+        <code>
+         'R'
+        </code>
+        ,
+        <code>
+         'U'
+        </code>
+        , and
+        <code>
+         'D'
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#2954b990-ca6b-4d5f-bffd-924ecad9520a'}">
+       <li class="uk-active">
+        <a href="solution-2120.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2120.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2120.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2120.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2120.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-2120.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="2954b990-ca6b-4d5f-bffd-924ecad9520a">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">executeInstructions</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">startPos</span><span class="o">,</span> <span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span><span class="o">];</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">mp</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;(</span><span class="mi">4</span><span class="o">);</span>
+        <span class="n">mp</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'L'</span><span class="o">,</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">});</span>
+        <span class="n">mp</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'R'</span><span class="o">,</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">});</span>
+        <span class="n">mp</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'U'</span><span class="o">,</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">});</span>
+        <span class="n">mp</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'D'</span><span class="o">,</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">});</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">startPos</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">startPos</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">c</span><span class="o">)[</span><span class="mi">0</span><span class="o">],</span> <span class="n">b</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">c</span><span class="o">)[</span><span class="mi">1</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">x</span> <span class="o">+=</span> <span class="n">a</span><span class="o">;</span>
+                    <span class="n">y</span> <span class="o">+=</span> <span class="n">b</span><span class="o">;</span>
+                    <span class="o">++</span><span class="n">t</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">executeInstructions</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">startPos</span><span class="p">,</span> <span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">mp</span><span class="p">;</span>
+        <span class="n">mp</span><span class="p">[</span><span class="sc">'L'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+        <span class="n">mp</span><span class="p">[</span><span class="sc">'R'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+        <span class="n">mp</span><span class="p">[</span><span class="sc">'U'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
+        <span class="n">mp</span><span class="p">[</span><span class="sc">'D'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">startPos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">startPos</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">mp</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="n">mp</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="mi">1</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">x</span> <span class="o">+=</span> <span class="n">a</span><span class="p">;</span>
+                    <span class="n">y</span> <span class="o">+=</span> <span class="n">b</span><span class="p">;</span>
+                    <span class="o">++</span><span class="n">t</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">executeInstructions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">startPos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">mp</span> <span class="o">=</span> <span class="p">{</span><span class="s">"L"</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s">"R"</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">"U"</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s">"D"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">startPos</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+                <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">mp</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">executeInstructions</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">startPos</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">mp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">byte</span><span class="p">][]</span><span class="kt">int</span><span class="p">)</span>
+	<span class="n">mp</span><span class="p">[</span><span class="sc">'L'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+	<span class="n">mp</span><span class="p">[</span><span class="sc">'R'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">}</span>
+	<span class="n">mp</span><span class="p">[</span><span class="sc">'U'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">}</span>
+	<span class="n">mp</span><span class="p">[</span><span class="sc">'D'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">}</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">startPos</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">startPos</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">t</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">mp</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="m">0</span><span class="p">],</span> <span class="n">mp</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="m">1</span><span class="p">]</span>
+			<span class="k">if</span> <span class="m">0</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="o">+</span><span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">x</span><span class="o">+</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="m">0</span> <span class="o">&lt;=</span> <span class="n">y</span><span class="o">+</span><span class="n">b</span> <span class="o">&amp;&amp;</span> <span class="n">y</span><span class="o">+</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+				<span class="n">x</span> <span class="o">+=</span> <span class="n">a</span>
+				<span class="n">y</span> <span class="o">+=</span> <span class="n">b</span>
+				<span class="n">t</span><span class="o">++</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">executeInstructions</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">startPos</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">m</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="p">[</span><span class="nx">y</span><span class="p">,</span> <span class="nx">x</span><span class="p">]</span> <span class="o">=</span> <span class="nx">startPos</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">j</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">s</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">U</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">y</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">D</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">y</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">c</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">L</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">x</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">x</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">y</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">y</span> <span class="o">===</span> <span class="nx">n</span> <span class="o">||</span> <span class="nx">x</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">x</span> <span class="o">===</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">ans</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">execute_instructions</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="nf">.as_bytes</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">ans</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="n">m</span><span class="p">];</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">m</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">y</span> <span class="o">=</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">x</span> <span class="o">=</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="p">{</span>
+                <span class="k">match</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="sc">b'U'</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                        <span class="n">y</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="sc">b'D'</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                        <span class="n">y</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="sc">b'L'</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                        <span class="n">x</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">_</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                        <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">||</span> <span class="n">y</span> <span class="o">==</span> <span class="n">n</span> <span class="p">||</span> <span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">||</span> <span class="n">x</span> <span class="o">==</span> <span class="n">n</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="k">as</span> <span class="nb">i32</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">ans</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2120.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

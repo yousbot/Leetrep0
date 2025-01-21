@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1225.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1225.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1225 - Report Contiguous Dates</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1225. Report Contiguous Dates Description Table: Failed +--------------+---------+ | Column Name | Type | +--------------+---------+ | fail_date | date | +--------------+---------+ fail_date is the primary key (column with unique values) for this table. This table contains the days of failed tasks. &amp;nbsp; Table: Succeeded +--------------+---------+...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1225.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1225.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1225.html" rel="stylesheet"/>
+   <link href="solution-1225.html" rel="stylesheet"/>
+   <link href="solution-1225.html" rel="stylesheet"/>
+   <link href="solution-1225.html" rel="stylesheet"/>
+   <link href="solution-1225.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1225 - Report Contiguous Dates" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1225. Report Contiguous Dates
+
+Description
+
+Table: Failed
+
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| fail_date    | date    |
++--------------+---------+
+fail_date is the primary key (column with unique values) for this table.
+This table contains the days of failed tasks.
+
+
+&amp;nbsp;
+
+Table: Succeeded
+
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| success_date | date    |
++--------------+---------+
+success_date is the primary key (column with unique values) for this table.
+This table contains the days of succeeded tasks.
+
+
+&amp;nbsp;
+
+A system is running one task every day. Every task is independent of the previous tasks. The tasks can fail or succeed.
+
+Write a solution&amp;nbsp;to report the&amp;nbsp;period_state for each continuous interval of days in the period from 2019-01-01 to 2019-12-31.
+
+period_state is &amp;#39;failed&amp;#39; if tasks in this interval failed or &amp;#39;succeeded&amp;#39; if tasks in this interval succeeded. Interval of days are retrieved as start_date and end_date.
+
+Return the result table ordered by start_date.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Failed table:
++-------------------+
+| fail_date         |
++-------------------+
+| 2018-12-28        |
+| 2018-12-29        |
+| 2019-01-04        |
+| 2019-01-05        |
++-------------------+
+Succeeded table:
++-------------------+
+| success_date      |
++-------------------+
+| 2018-12-30        |
+| 2018-12-31        |
+| 2019-01-01        |
+| 2019-01-02        |
+| 2019-01-03        |
+| 2019-01-06        |
++-------------------+
+Output: 
++--------------+--------------+--------------+
+| period_state | start_date   | end_date     |
++--------------+--------------+--------------+
+| succeeded    | 2019-01-01   | 2019-01-03   |
+| failed       | 2019-01-04   | 2019-01-05   |
+| succeeded    | 2019-01-06   | 2019-01-06   |
++--------------+--------------+--------------+
+Explanation: 
+The report ignored the system state in 2018 as we care about the system in the period 2019-01-01 to 2019-12-31.
+From 2019-01-01 to 2019-01-03 all tasks succeeded and the system state was &amp;quot;succeeded&amp;quot;.
+From 2019-01-04 to 2019-01-05 all tasks failed and the system state was &amp;quot;failed&amp;quot;.
+From 2019-01-06 to 2019-01-06 all tasks succeeded and the system state was &amp;quot;succeeded&amp;quot;.
+
+
+Solutions
+
+Solution 1: Union + Window Function + Group By
+
+We can merge the two tables into one table with a field st representing the status, where failed indicates failure and succeeded indicates success. Then, we can use a window function to group the records with the same status into one group, and calculate the difference between each date and its rank within the group as pt, which serves as the identifier for the same continuous status. Finally, we can group by st and pt, and calculate the minimum and maximum dates for each group, and sort by the minimum date.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT fail_date AS dt, 'failed' AS st
+        FROM Failed
+        WHERE YEAR(fail_date) = 2019
+        UNION ALL
+        SELECT success_date AS dt, 'succeeded' AS st
+        FROM Succeeded
+        WHERE YEAR(success_date) = 2019
+    )
+SELECT
+    st AS period_state,
+    MIN(dt) AS start_date,
+    MAX(dt) AS end_date
+FROM
+    (
+        SELECT
+            *,
+            SUBDATE(
+                dt,
+                RANK() OVER (
+                    PARTITION BY st
+                    ORDER BY dt
+                )
+            ) AS pt
+        FROM T
+    ) AS t
+GROUP BY 1, pt
+ORDER BY 2;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-04-08T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-04-08-1225-Report-Contiguous-Dates/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1225.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1225 - Report Contiguous Dates" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1225. Report Contiguous Dates
+
+Description
+
+Table: Failed
+
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| fail_date    | date    |
++--------------+---------+
+fail_date is the primary key (column with unique values) for this table.
+This table contains the days of failed tasks.
+
+
+&amp;nbsp;
+
+Table: Succeeded
+
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| success_date | date    |
++--------------+---------+
+success_date is the primary key (column with unique values) for this table.
+This table contains the days of succeeded tasks.
+
+
+&amp;nbsp;
+
+A system is running one task every day. Every task is independent of the previous tasks. The tasks can fail or succeed.
+
+Write a solution&amp;nbsp;to report the&amp;nbsp;period_state for each continuous interval of days in the period from 2019-01-01 to 2019-12-31.
+
+period_state is &amp;#39;failed&amp;#39; if tasks in this interval failed or &amp;#39;succeeded&amp;#39; if tasks in this interval succeeded. Interval of days are retrieved as start_date and end_date.
+
+Return the result table ordered by start_date.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Failed table:
++-------------------+
+| fail_date         |
++-------------------+
+| 2018-12-28        |
+| 2018-12-29        |
+| 2019-01-04        |
+| 2019-01-05        |
++-------------------+
+Succeeded table:
++-------------------+
+| success_date      |
++-------------------+
+| 2018-12-30        |
+| 2018-12-31        |
+| 2019-01-01        |
+| 2019-01-02        |
+| 2019-01-03        |
+| 2019-01-06        |
++-------------------+
+Output: 
++--------------+--------------+--------------+
+| period_state | start_date   | end_date     |
++--------------+--------------+--------------+
+| succeeded    | 2019-01-01   | 2019-01-03   |
+| failed       | 2019-01-04   | 2019-01-05   |
+| succeeded    | 2019-01-06   | 2019-01-06   |
++--------------+--------------+--------------+
+Explanation: 
+The report ignored the system state in 2018 as we care about the system in the period 2019-01-01 to 2019-12-31.
+From 2019-01-01 to 2019-01-03 all tasks succeeded and the system state was &amp;quot;succeeded&amp;quot;.
+From 2019-01-04 to 2019-01-05 all tasks failed and the system state was &amp;quot;failed&amp;quot;.
+From 2019-01-06 to 2019-01-06 all tasks succeeded and the system state was &amp;quot;succeeded&amp;quot;.
+
+
+Solutions
+
+Solution 1: Union + Window Function + Group By
+
+We can merge the two tables into one table with a field st representing the status, where failed indicates failure and succeeded indicates success. Then, we can use a window function to group the records with the same status into one group, and calculate the difference between each date and its rank within the group as pt, which serves as the identifier for the same continuous status. Finally, we can group by st and pt, and calculate the minimum and maximum dates for each group, and sort by the minimum date.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT fail_date AS dt, 'failed' AS st
+        FROM Failed
+        WHERE YEAR(fail_date) = 2019
+        UNION ALL
+        SELECT success_date AS dt, 'succeeded' AS st
+        FROM Succeeded
+        WHERE YEAR(success_date) = 2019
+    )
+SELECT
+    st AS period_state,
+    MIN(dt) AS start_date,
+    MAX(dt) AS end_date
+FROM
+    (
+        SELECT
+            *,
+            SUBDATE(
+                dt,
+                RANK() OVER (
+                    PARTITION BY st
+                    ORDER BY dt
+                )
+            ) AS pt
+        FROM T
+    ) AS t
+GROUP BY 1, pt
+ORDER BY 2;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1225 - Report Contiguous Dates | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1225 - Report Contiguous Dates" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1225.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-04-08-1225-Report-Contiguous-Dates/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-04-08T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1225 - Report Contiguous Dates","dateModified":"2019-04-08T00:00:00-07:00","datePublished":"2019-04-08T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-04-08-1225-Report-Contiguous-Dates/"},"url":"https://leetcode.ca/2019-04-08-1225-Report-Contiguous-Dates/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1225-report-contiguous-dates">
+       <a href="solution-1225.html">
+        1225. Report Contiguous Dates
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        Failed
+       </code>
+      </p>
+      <pre>
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| fail_date    | date    |
++--------------+---------+
+fail_date is the primary key (column with unique values) for this table.
+This table contains the days of failed tasks.
+</pre>
+      <p>
+      </p>
+      <p>
+       Table:
+       <code>
+        Succeeded
+       </code>
+      </p>
+      <pre>
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| success_date | date    |
++--------------+---------+
+success_date is the primary key (column with unique values) for this table.
+This table contains the days of succeeded tasks.
+</pre>
+      <p>
+      </p>
+      <p>
+       A system is running one task
+       <strong>
+        every day
+       </strong>
+       . Every task is independent of the previous tasks. The tasks can fail or succeed.
+      </p>
+      <p>
+       Write a solution to report the
+       <code>
+        period_state
+       </code>
+       for each continuous interval of days in the period from
+       <code>
+        2019-01-01
+       </code>
+       to
+       <code>
+        2019-12-31
+       </code>
+       .
+      </p>
+      <p>
+       <code>
+        period_state
+       </code>
+       is
+       <em>
+        '
+       </em>
+       <code>
+        failed'
+       </code>
+       <em>
+       </em>
+       if tasks in this interval failed or
+       <code>
+        'succeeded'
+       </code>
+       if tasks in this interval succeeded. Interval of days are retrieved as
+       <code>
+        start_date
+       </code>
+       and
+       <code>
+        end_date.
+       </code>
+      </p>
+      <p>
+       Return the result table ordered by
+       <code>
+        start_date
+       </code>
+       .
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+Failed table:
++-------------------+
+| fail_date         |
++-------------------+
+| 2018-12-28        |
+| 2018-12-29        |
+| 2019-01-04        |
+| 2019-01-05        |
++-------------------+
+Succeeded table:
++-------------------+
+| success_date      |
++-------------------+
+| 2018-12-30        |
+| 2018-12-31        |
+| 2019-01-01        |
+| 2019-01-02        |
+| 2019-01-03        |
+| 2019-01-06        |
++-------------------+
+<strong>Output:</strong> 
++--------------+--------------+--------------+
+| period_state | start_date   | end_date     |
++--------------+--------------+--------------+
+| succeeded    | 2019-01-01   | 2019-01-03   |
+| failed       | 2019-01-04   | 2019-01-05   |
+| succeeded    | 2019-01-06   | 2019-01-06   |
++--------------+--------------+--------------+
+<strong>Explanation:</strong> 
+The report ignored the system state in 2018 as we care about the system in the period 2019-01-01 to 2019-12-31.
+From 2019-01-01 to 2019-01-03 all tasks succeeded and the system state was "succeeded".
+From 2019-01-04 to 2019-01-05 all tasks failed and the system state was "failed".
+From 2019-01-06 to 2019-01-06 all tasks succeeded and the system state was "succeeded".
+</pre>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Union + Window Function + Group By
+       </strong>
+      </p>
+      <p>
+       We can merge the two tables into one table with a field
+       <code class="language-plaintext highlighter-rouge">
+        st
+       </code>
+       representing the status, where
+       <code class="language-plaintext highlighter-rouge">
+        failed
+       </code>
+       indicates failure and
+       <code class="language-plaintext highlighter-rouge">
+        succeeded
+       </code>
+       indicates success. Then, we can use a window function to group the records with the same status into one group, and calculate the difference between each date and its rank within the group as
+       <code class="language-plaintext highlighter-rouge">
+        pt
+       </code>
+       , which serves as the identifier for the same continuous status. Finally, we can group by
+       <code class="language-plaintext highlighter-rouge">
+        st
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        pt
+       </code>
+       , and calculate the minimum and maximum dates for each group, and sort by the minimum date.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8e6dca38-6155-483b-b8f4-7b9a3a3d0e03'}">
+       <li class="uk-active">
+        <a href="solution-1225.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8e6dca38-6155-483b-b8f4-7b9a3a3d0e03">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">WITH</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="n">fail_date</span> <span class="k">AS</span> <span class="n">dt</span><span class="p">,</span> <span class="s1">'failed'</span> <span class="k">AS</span> <span class="n">st</span>
+        <span class="k">FROM</span> <span class="n">Failed</span>
+        <span class="k">WHERE</span> <span class="nb">YEAR</span><span class="p">(</span><span class="n">fail_date</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2019</span>
+        <span class="k">UNION</span> <span class="k">ALL</span>
+        <span class="k">SELECT</span> <span class="n">success_date</span> <span class="k">AS</span> <span class="n">dt</span><span class="p">,</span> <span class="s1">'succeeded'</span> <span class="k">AS</span> <span class="n">st</span>
+        <span class="k">FROM</span> <span class="n">Succeeded</span>
+        <span class="k">WHERE</span> <span class="nb">YEAR</span><span class="p">(</span><span class="n">success_date</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2019</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span>
+    <span class="n">st</span> <span class="k">AS</span> <span class="n">period_state</span><span class="p">,</span>
+    <span class="k">MIN</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="k">AS</span> <span class="n">start_date</span><span class="p">,</span>
+    <span class="k">MAX</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="k">AS</span> <span class="n">end_date</span>
+<span class="k">FROM</span>
+    <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">SUBDATE</span><span class="p">(</span>
+                <span class="n">dt</span><span class="p">,</span>
+                <span class="n">RANK</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">(</span>
+                    <span class="k">PARTITION</span> <span class="k">BY</span> <span class="n">st</span>
+                    <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">dt</span>
+                <span class="p">)</span>
+            <span class="p">)</span> <span class="k">AS</span> <span class="n">pt</span>
+        <span class="k">FROM</span> <span class="n">T</span>
+    <span class="p">)</span> <span class="k">AS</span> <span class="n">t</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pt</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1225.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

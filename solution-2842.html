@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2842.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2842.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2842 - Count K-Subsequences of a String With Maximum Beauty</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2842. Count K-Subsequences of a String With Maximum Beauty Description You are given a string s and an integer k. A k-subsequence is a subsequence of s, having length k, and all its characters are unique, i.e., every character occurs once. Let f(c) denote the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2842.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2842.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2842.html" rel="stylesheet"/>
+   <link href="solution-2842.html" rel="stylesheet"/>
+   <link href="solution-2842.html" rel="stylesheet"/>
+   <link href="solution-2842.html" rel="stylesheet"/>
+   <link href="solution-2842.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2842 - Count K-Subsequences of a String With Maximum Beauty" property="og:title"/>
+   <meta content="Leetcode 2842. Count K-Subsequences of a String With Maximum Beauty Description You are given a string s and an integer k. A k-subsequence is a subsequence of s, having length k, and all its characters are unique, i.e., every character occurs once. Let f(c) denote the number of times the character c occurs in s. The beauty of a k-subsequence is the sum of f(c) for every character c in the k-subsequence. For example, consider s = &amp;quot;abbbdd&amp;quot; and k = 2: f(&amp;#39;a&amp;#39;) = 1, f(&amp;#39;b&amp;#39;) = 3, f(&amp;#39;d&amp;#39;) = 2 Some k-subsequences of s are: &amp;quot;abbbdd&amp;quot; -&amp;gt; &amp;quot;ab&amp;quot; having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;b&amp;#39;) = 4 &amp;quot;abbbdd&amp;quot; -&amp;gt; &amp;quot;ad&amp;quot; having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;d&amp;#39;) = 3 &amp;quot;abbbdd&amp;quot; -&amp;gt; &amp;quot;bd&amp;quot; having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;d&amp;#39;) = 5 Return an integer denoting the number of k-subsequences whose beauty is the maximum among all k-subsequences. Since the answer may be too large, return it modulo 109 + 7. A subsequence of a string is a new string formed from the original string by deleting some (possibly none) of the characters without disturbing the relative positions of the remaining characters. Notes f(c) is the number of times a character c occurs in s, not a k-subsequence. Two k-subsequences are considered different if one is formed by an index that is not present in the other. So, two k-subsequences may form the same string. &amp;nbsp; Example 1: Input: s = &amp;quot;bcca&amp;quot;, k = 2 Output: 4 Explanation: From s we have f(&amp;#39;a&amp;#39;) = 1, f(&amp;#39;b&amp;#39;) = 1, and f(&amp;#39;c&amp;#39;) = 2. The k-subsequences of s are: bcca having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) = 3 bcca having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) = 3 bcca having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;a&amp;#39;) = 2 bcca having a beauty of f(&amp;#39;c&amp;#39;) + f(&amp;#39;a&amp;#39;) = 3 bcca having a beauty of f(&amp;#39;c&amp;#39;) + f(&amp;#39;a&amp;#39;) = 3 There are 4 k-subsequences that have the maximum beauty, 3. Hence, the answer is 4. Example 2: Input: s = &amp;quot;abbcd&amp;quot;, k = 4 Output: 2 Explanation: From s we have f(&amp;#39;a&amp;#39;) = 1, f(&amp;#39;b&amp;#39;) = 2, f(&amp;#39;c&amp;#39;) = 1, and f(&amp;#39;d&amp;#39;) = 1. The k-subsequences of s are: abbcd having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) + f(&amp;#39;d&amp;#39;) = 5 abbcd having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) + f(&amp;#39;d&amp;#39;) = 5 There are 2 k-subsequences that have the maximum beauty, 5. Hence, the answer is 2. &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 2 * 105 1 &amp;lt;= k &amp;lt;= s.length s consists only of lowercase English letters. Solutions Solution 1: Greedy + Combinatorial Mathematics First, we use a hash table $f$ to count the occurrence of each character in the string $s$, i.e., $f[c]$ represents the number of times character $c$ appears in the string $s$. Since a $k$-subsequence is a subsequence of length $k$ in the string $s$ with unique characters, if the number of different characters in $f$ is less than..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-09-11T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-09-11-2842-Count-K-Subsequences-of-a-String-With-Maximum-Beauty/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2842.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2842 - Count K-Subsequences of a String With Maximum Beauty" property="twitter:title"/>
+   <meta content="Leetcode 2842. Count K-Subsequences of a String With Maximum Beauty Description You are given a string s and an integer k. A k-subsequence is a subsequence of s, having length k, and all its characters are unique, i.e., every character occurs once. Let f(c) denote the number of times the character c occurs in s. The beauty of a k-subsequence is the sum of f(c) for every character c in the k-subsequence. For example, consider s = &amp;quot;abbbdd&amp;quot; and k = 2: f(&amp;#39;a&amp;#39;) = 1, f(&amp;#39;b&amp;#39;) = 3, f(&amp;#39;d&amp;#39;) = 2 Some k-subsequences of s are: &amp;quot;abbbdd&amp;quot; -&amp;gt; &amp;quot;ab&amp;quot; having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;b&amp;#39;) = 4 &amp;quot;abbbdd&amp;quot; -&amp;gt; &amp;quot;ad&amp;quot; having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;d&amp;#39;) = 3 &amp;quot;abbbdd&amp;quot; -&amp;gt; &amp;quot;bd&amp;quot; having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;d&amp;#39;) = 5 Return an integer denoting the number of k-subsequences whose beauty is the maximum among all k-subsequences. Since the answer may be too large, return it modulo 109 + 7. A subsequence of a string is a new string formed from the original string by deleting some (possibly none) of the characters without disturbing the relative positions of the remaining characters. Notes f(c) is the number of times a character c occurs in s, not a k-subsequence. Two k-subsequences are considered different if one is formed by an index that is not present in the other. So, two k-subsequences may form the same string. &amp;nbsp; Example 1: Input: s = &amp;quot;bcca&amp;quot;, k = 2 Output: 4 Explanation: From s we have f(&amp;#39;a&amp;#39;) = 1, f(&amp;#39;b&amp;#39;) = 1, and f(&amp;#39;c&amp;#39;) = 2. The k-subsequences of s are: bcca having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) = 3 bcca having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) = 3 bcca having a beauty of f(&amp;#39;b&amp;#39;) + f(&amp;#39;a&amp;#39;) = 2 bcca having a beauty of f(&amp;#39;c&amp;#39;) + f(&amp;#39;a&amp;#39;) = 3 bcca having a beauty of f(&amp;#39;c&amp;#39;) + f(&amp;#39;a&amp;#39;) = 3 There are 4 k-subsequences that have the maximum beauty, 3. Hence, the answer is 4. Example 2: Input: s = &amp;quot;abbcd&amp;quot;, k = 4 Output: 2 Explanation: From s we have f(&amp;#39;a&amp;#39;) = 1, f(&amp;#39;b&amp;#39;) = 2, f(&amp;#39;c&amp;#39;) = 1, and f(&amp;#39;d&amp;#39;) = 1. The k-subsequences of s are: abbcd having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) + f(&amp;#39;d&amp;#39;) = 5 abbcd having a beauty of f(&amp;#39;a&amp;#39;) + f(&amp;#39;b&amp;#39;) + f(&amp;#39;c&amp;#39;) + f(&amp;#39;d&amp;#39;) = 5 There are 2 k-subsequences that have the maximum beauty, 5. Hence, the answer is 2. &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 2 * 105 1 &amp;lt;= k &amp;lt;= s.length s consists only of lowercase English letters. Solutions Solution 1: Greedy + Combinatorial Mathematics First, we use a hash table $f$ to count the occurrence of each character in the string $s$, i.e., $f[c]$ represents the number of times character $c$ appears in the string $s$. Since a $k$-subsequence is a subsequence of length $k$ in the string $s$ with unique characters, if the number of different characters in $f$ is less than..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2842 - Count K-Subsequences of a String With Maximum Beauty | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2842 - Count K-Subsequences of a String With Maximum Beauty" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2842.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-09-11-2842-Count-K-Subsequences-of-a-String-With-Maximum-Beauty/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-09-11T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2842 - Count K-Subsequences of a String With Maximum Beauty","dateModified":"2023-09-11T00:00:00-07:00","datePublished":"2023-09-11T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-09-11-2842-Count-K-Subsequences-of-a-String-With-Maximum-Beauty/"},"url":"https://leetcode.ca/2023-09-11-2842-Count-K-Subsequences-of-a-String-With-Maximum-Beauty/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2842-count-k-subsequences-of-a-string-with-maximum-beauty">
+       <a href="solution-2842.html">
+        2842. Count K-Subsequences of a String With Maximum Beauty
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a string
+       <code>
+        s
+       </code>
+       and an integer
+       <code>
+        k
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        k-subsequence
+       </strong>
+       is a
+       <strong>
+        subsequence
+       </strong>
+       of
+       <code>
+        s
+       </code>
+       , having length
+       <code>
+        k
+       </code>
+       , and all its characters are
+       <strong>
+        unique
+       </strong>
+       ,
+       <strong>
+        i.e
+       </strong>
+       ., every character occurs once.
+      </p>
+      <p>
+       Let
+       <code>
+        f(c)
+       </code>
+       denote the number of times the character
+       <code>
+        c
+       </code>
+       occurs in
+       <code>
+        s
+       </code>
+       .
+      </p>
+      <p>
+       The
+       <strong>
+        beauty
+       </strong>
+       of a
+       <strong>
+        k-subsequence
+       </strong>
+       is the
+       <strong>
+        sum
+       </strong>
+       of
+       <code>
+        f(c)
+       </code>
+       for every character
+       <code>
+        c
+       </code>
+       in the k-subsequence.
+      </p>
+      <p>
+       For example, consider
+       <code>
+        s = "abbbdd"
+       </code>
+       and
+       <code>
+        k = 2
+       </code>
+       :
+      </p>
+      <ul>
+       <li>
+        <code>
+         f('a') = 1
+        </code>
+        ,
+        <code>
+         f('b') = 3
+        </code>
+        ,
+        <code>
+         f('d') = 2
+        </code>
+       </li>
+       <li>
+        Some k-subsequences of
+        <code>
+         s
+        </code>
+        are:
+        <ul>
+         <li>
+          <code>
+           "
+           <u>
+            <strong>
+             ab
+            </strong>
+           </u>
+           bbdd"
+          </code>
+          -&gt;
+          <code>
+           "ab"
+          </code>
+          having a beauty of
+          <code>
+           f('a') + f('b') = 4
+          </code>
+         </li>
+         <li>
+          <code>
+           "
+           <u>
+            <strong>
+             a
+            </strong>
+           </u>
+           bbb
+           <strong>
+            <u>
+             d
+            </u>
+           </strong>
+           d"
+          </code>
+          -&gt;
+          <code>
+           "ad"
+          </code>
+          having a beauty of
+          <code>
+           f('a') + f('d') = 3
+          </code>
+         </li>
+         <li>
+          <code>
+           "a
+           <strong>
+            <u>
+             b
+            </u>
+           </strong>
+           bb
+           <u>
+            <strong>
+             d
+            </strong>
+           </u>
+           d"
+          </code>
+          -&gt;
+          <code>
+           "bd"
+          </code>
+          having a beauty of
+          <code>
+           f('b') + f('d') = 5
+          </code>
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        an integer denoting the number of k-subsequences
+       </em>
+       <em>
+        whose
+        <strong>
+         beauty
+        </strong>
+        is the
+        <strong>
+         maximum
+        </strong>
+        among all
+        <strong>
+         k-subsequences
+        </strong>
+       </em>
+       . Since the answer may be too large, return it modulo
+       <code>
+        10
+        <sup>
+         9
+        </sup>
+        + 7
+       </code>
+       .
+      </p>
+      <p>
+       A subsequence of a string is a new string formed from the original string by deleting some (possibly none) of the characters without disturbing the relative positions of the remaining characters.
+      </p>
+      <p>
+       <strong>
+        Notes
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         f(c)
+        </code>
+        is the number of times a character
+        <code>
+         c
+        </code>
+        occurs in
+        <code>
+         s
+        </code>
+        , not a k-subsequence.
+       </li>
+       <li>
+        Two k-subsequences are considered different if one is formed by an index that is not present in the other. So, two k-subsequences may form the same string.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "bcca", k = 2
+<strong>Output:</strong> 4
+<strong>Explanation:</strong> <span style="white-space: normal">From s we have f('a') = 1, f('b') = 1, and f('c') = 2.</span>
+The k-subsequences of s are: 
+<strong><u>bc</u></strong>ca having a beauty of f('b') + f('c') = 3 
+<strong><u>b</u></strong>c<u><strong>c</strong></u>a having a beauty of f('b') + f('c') = 3 
+<strong><u>b</u></strong>cc<strong><u>a</u></strong> having a beauty of f('b') + f('a') = 2 
+b<strong><u>c</u></strong>c<u><strong>a</strong></u><strong> </strong>having a beauty of f('c') + f('a') = 3
+bc<strong><u>ca</u></strong> having a beauty of f('c') + f('a') = 3 
+There are 4 k-subsequences that have the maximum beauty, 3. 
+Hence, the answer is 4. 
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "abbcd", k = 4
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> From s we have f('a') = 1, f('b') = 2, f('c') = 1, and f('d') = 1. 
+The k-subsequences of s are: 
+<u><strong>ab</strong></u>b<strong><u>cd</u></strong> having a beauty of f('a') + f('b') + f('c') + f('d') = 5
+<u style="white-space: normal;"><strong>a</strong></u>b<u><strong>bcd</strong></u> having a beauty of f('a') + f('b') + f('c') + f('d') = 5 
+There are 2 k-subsequences that have the maximum beauty, 5. 
+Hence, the answer is 2. 
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 2 * 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= k &lt;= s.length
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists only of lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Greedy + Combinatorial Mathematics
+       </strong>
+      </p>
+      <p>
+       First, we use a hash table $f$ to count the occurrence of each character in the string $s$, i.e., $f[c]$ represents the number of times character $c$ appears in the string $s$.
+      </p>
+      <p>
+       Since a $k$-subsequence is a subsequence of length $k$ in the string $s$ with unique characters, if the number of different characters in $f$ is less than $k$, then there is no $k$-subsequence, and we can directly return $0$.
+      </p>
+      <p>
+       Otherwise, to maximize the beauty value of the $k$-subsequence, we need to make characters with high beauty values appear as much as possible in the $k$-subsequence. Therefore, we can sort the values in $f$ in reverse order to get an array $vs$.
+      </p>
+      <p>
+       We denote the occurrence of the $k$th character in the array $vs$ as $val$, and there are $x$ characters with an occurrence of $val$.
+      </p>
+      <p>
+       Then we first find out the characters with occurrences greater than $val$, multiply the occurrences of each character to get the initial answer $ans$, and update the remaining number of characters to be selected to $k$. We need to select $k$ characters from $x$ characters, so the answer needs to be multiplied by the combination number $C_x^k$, and finally multiplied by $val^k$, i.e., $ans = ans \times C_x^k \times val^k$.
+      </p>
+      <p>
+       Note that we need to use fast power and modulo operations here.
+      </p>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(|\Sigma|)$. Here, $n$ is the length of the string, and $\Sigma$ is the character set. In this problem, the character set is lowercase letters, so $|\Sigma| = 26$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#9e103f21-1e33-4476-b796-b31465408e40'}">
+       <li class="uk-active">
+        <a href="solution-2842.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2842.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2842.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2842.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2842.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="9e103f21-1e33-4476-b796-b31465408e40">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">countKSubsequencesWithMaxBeauty</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(++</span><span class="n">f</span><span class="o">[</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">]</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">cnt</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">Integer</span><span class="o">[]</span> <span class="n">vs</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Integer</span><span class="o">[</span><span class="n">cnt</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">vs</span><span class="o">[</span><span class="n">j</span><span class="o">++]</span> <span class="o">=</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">vs</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">vs</span><span class="o">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">vs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">==</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">x</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">vs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">==</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="o">--</span><span class="n">k</span><span class="o">;</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">v</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">c</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">c</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">])</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="o">((</span><span class="n">ans</span> <span class="o">*</span> <span class="n">c</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">k</span><span class="o">])</span> <span class="o">%</span> <span class="n">mod</span><span class="o">)</span> <span class="o">*</span> <span class="n">qpow</span><span class="o">(</span><span class="n">val</span><span class="o">,</span> <span class="n">k</span><span class="o">)</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">long</span> <span class="nf">qpow</span><span class="o">(</span><span class="kt">long</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(;</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">n</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">a</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">countKSubsequencesWithMaxBeauty</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">26</span><span class="p">]{};</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="n">f</span><span class="p">[</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vs</span><span class="p">(</span><span class="n">cnt</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">vs</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">vs</span><span class="p">.</span><span class="n">rbegin</span><span class="p">(),</span> <span class="n">vs</span><span class="p">.</span><span class="n">rend</span><span class="p">());</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mf">1e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">vs</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">v</span> <span class="o">==</span> <span class="n">val</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">vs</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="o">--</span><span class="n">k</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">v</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">c</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">auto</span> <span class="n">qpow</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">long</span> <span class="kt">long</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">n</span><span class="p">;</span> <span class="n">n</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">a</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="p">};</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">%</span> <span class="n">mod</span><span class="p">)</span> <span class="o">*</span> <span class="n">qpow</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">countKSubsequencesWithMaxBeauty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span>
+        <span class="n">vs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">vs</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">val</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">k</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">v</span> <span class="o">%</span> <span class="n">mod</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">comb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">countKSubsequencesWithMaxBeauty</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span><span class="o">++</span>
+		<span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+			<span class="n">cnt</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">k</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="m">0</span>
+	<span class="p">}</span>
+	<span class="n">vs</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">vs</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">vs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">vs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+	<span class="p">})</span>
+	<span class="k">const</span> <span class="n">mod</span> <span class="kt">int</span> <span class="o">=</span> <span class="m">1e9</span> <span class="o">+</span> <span class="m">7</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">1</span>
+	<span class="n">val</span> <span class="o">:=</span> <span class="n">vs</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="n">x</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">vs</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">val</span> <span class="p">{</span>
+			<span class="n">x</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">vs</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">val</span> <span class="p">{</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="n">k</span><span class="o">--</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">v</span> <span class="o">%</span> <span class="n">mod</span>
+	<span class="p">}</span>
+	<span class="n">c</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">c</span> <span class="p">{</span>
+		<span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+		<span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">qpow</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">:=</span> <span class="m">1</span>
+		<span class="k">for</span> <span class="p">;</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&gt;&gt;=</span> <span class="m">1</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">n</span><span class="o">&amp;</span><span class="m">1</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">a</span> <span class="o">%</span> <span class="n">mod</span>
+			<span class="p">}</span>
+			<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">ans</span>
+	<span class="p">}</span>
+	<span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">%</span> <span class="n">mod</span><span class="p">)</span> <span class="o">*</span> <span class="n">qpow</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">countKSubsequencesWithMaxBeauty</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">26</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">c</span> <span class="k">of</span> <span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mi">97</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="nx">cnt</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cnt</span> <span class="o">&lt;</span> <span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">mod</span> <span class="o">=</span> <span class="nx">BigInt</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">vs</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">v</span> <span class="o">=&gt;</span> <span class="nx">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">).</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">b</span> <span class="o">-</span> <span class="nx">a</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">vs</span><span class="p">[</span><span class="nx">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">vs</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">v</span> <span class="o">=&gt;</span> <span class="nx">v</span> <span class="o">===</span> <span class="nx">val</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="nx">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">v</span> <span class="k">of</span> <span class="nx">vs</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="o">===</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">--</span><span class="nx">k</span><span class="p">;</span>
+        <span class="nx">ans</span> <span class="o">=</span> <span class="p">(</span><span class="nx">ans</span> <span class="o">*</span> <span class="nx">BigInt</span><span class="p">(</span><span class="nx">v</span><span class="p">))</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">c</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">x</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">c</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">k</span><span class="p">);</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">c</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">c</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="nx">c</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">mod</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">qpow</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">,</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">bigint</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="nx">n</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">n</span> <span class="o">&gt;&gt;&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">ans</span> <span class="o">=</span> <span class="p">(</span><span class="nx">ans</span> <span class="o">*</span> <span class="nx">a</span><span class="p">)</span> <span class="o">%</span> <span class="nx">BigInt</span><span class="p">(</span><span class="nx">mod</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="nx">a</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">a</span><span class="p">)</span> <span class="o">%</span> <span class="nx">BigInt</span><span class="p">(</span><span class="nx">mod</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="nx">ans</span> <span class="o">=</span> <span class="p">(((</span><span class="nx">ans</span> <span class="o">*</span> <span class="nx">BigInt</span><span class="p">(</span><span class="nx">c</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">k</span><span class="p">]))</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">)</span> <span class="o">*</span> <span class="nx">qpow</span><span class="p">(</span><span class="nx">BigInt</span><span class="p">(</span><span class="nx">val</span><span class="p">),</span> <span class="nx">k</span><span class="p">))</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">ans</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2842.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

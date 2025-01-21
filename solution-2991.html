@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2991.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2991.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2991 - Top Three Wineries</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2991. Top Three Wineries Description Table: Wineries +-------------+----------+ | Column Name | Type | +-------------+----------+ | id | int | | country | varchar | | points | int | | winery | varchar | +-------------+----------+ id is column of unique values for this table....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2991.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2991.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2991.html" rel="stylesheet"/>
+   <link href="solution-2991.html" rel="stylesheet"/>
+   <link href="solution-2991.html" rel="stylesheet"/>
+   <link href="solution-2991.html" rel="stylesheet"/>
+   <link href="solution-2991.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2991 - Top Three Wineries" property="og:title"/>
+   <meta content="Leetcode 2991. Top Three Wineries Description Table: Wineries +-------------+----------+ | Column Name | Type | +-------------+----------+ | id | int | | country | varchar | | points | int | | winery | varchar | +-------------+----------+ id is column of unique values for this table. This table contains id, country, points, and winery. Write a solution to find the top three wineries in each country based on their total points. If multiple wineries have the same total points, order them by winery name in ascending order. If there&amp;#39;s no second winery, output &amp;#39;No Second Winery,&amp;#39; and if there&amp;#39;s no third winery, output &amp;#39;No Third Winery.&amp;#39; Return the result table ordered by country in ascending order. The result format is in the following example. &amp;nbsp; Example 1: Input: Sessions table: +-----+-----------+--------+-----------------+ | id | country | points | winery | +-----+-----------+--------+-----------------+ | 103 | Australia | 84 | WhisperingPines | | 737 | Australia | 85 | GrapesGalore | | 848 | Australia | 100 | HarmonyHill | | 222 | Hungary | 60 | MoonlitCellars | | 116 | USA | 47 | RoyalVines | | 124 | USA | 45 | Eagle&amp;#39;sNest | | 648 | India | 69 | SunsetVines | | 894 | USA | 39 | RoyalVines | | 677 | USA | 9 | PacificCrest | +-----+-----------+--------+-----------------+ Output: +-----------+---------------------+-------------------+----------------------+ | country | top_winery | second_winery | third_winery | +-----------+---------------------+-------------------+----------------------+ | Australia | HarmonyHill (100) | GrapesGalore (85) | WhisperingPines (84) | | Hungary | MoonlitCellars (60) | No second winery | No third winery | | India | SunsetVines (69) | No second winery | No third winery | | USA | RoyalVines (86) | Eagle&amp;#39;sNest (45) | PacificCrest (9) | +-----------+---------------------+-------------------+----------------------+ Explanation For Australia - HarmonyHill Winery accumulates the highest score of 100 points in Australia. - GrapesGalore Winery has a total of 85 points, securing the second-highest position in Australia. - WhisperingPines Winery has a total of 80 points, ranking as the third-highest. For Hungary - MoonlitCellars is the sole winery, accruing 60 points, automatically making it the highest. There is no second or third winery. For India - SunsetVines is the sole winery, earning 69 points, making it the top winery. There is no second or third winery. For the USA - RoyalVines Wines accumulates a total of 47 + 39 = 86 points, claiming the highest position in the USA. - Eagle&amp;#39;sNest has a total of 45 points, securing the second-highest position in the USA. - PacificCrest accumulates 9 points, ranking as the third-highest winery in the USA Output table is ordered by country in ascending order. Solutions Solution 1: Grouping + Window Function + Left Join We can first group the Wineries table by country and winery, calculate the total score points for each group, then use the window function RANK() to group the data by country again, sort by points in descending order and winery in ascending order, and use the CONCAT() function to..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-01-06T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-01-06-2991-Top-Three-Wineries/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2991.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2991 - Top Three Wineries" property="twitter:title"/>
+   <meta content="Leetcode 2991. Top Three Wineries Description Table: Wineries +-------------+----------+ | Column Name | Type | +-------------+----------+ | id | int | | country | varchar | | points | int | | winery | varchar | +-------------+----------+ id is column of unique values for this table. This table contains id, country, points, and winery. Write a solution to find the top three wineries in each country based on their total points. If multiple wineries have the same total points, order them by winery name in ascending order. If there&amp;#39;s no second winery, output &amp;#39;No Second Winery,&amp;#39; and if there&amp;#39;s no third winery, output &amp;#39;No Third Winery.&amp;#39; Return the result table ordered by country in ascending order. The result format is in the following example. &amp;nbsp; Example 1: Input: Sessions table: +-----+-----------+--------+-----------------+ | id | country | points | winery | +-----+-----------+--------+-----------------+ | 103 | Australia | 84 | WhisperingPines | | 737 | Australia | 85 | GrapesGalore | | 848 | Australia | 100 | HarmonyHill | | 222 | Hungary | 60 | MoonlitCellars | | 116 | USA | 47 | RoyalVines | | 124 | USA | 45 | Eagle&amp;#39;sNest | | 648 | India | 69 | SunsetVines | | 894 | USA | 39 | RoyalVines | | 677 | USA | 9 | PacificCrest | +-----+-----------+--------+-----------------+ Output: +-----------+---------------------+-------------------+----------------------+ | country | top_winery | second_winery | third_winery | +-----------+---------------------+-------------------+----------------------+ | Australia | HarmonyHill (100) | GrapesGalore (85) | WhisperingPines (84) | | Hungary | MoonlitCellars (60) | No second winery | No third winery | | India | SunsetVines (69) | No second winery | No third winery | | USA | RoyalVines (86) | Eagle&amp;#39;sNest (45) | PacificCrest (9) | +-----------+---------------------+-------------------+----------------------+ Explanation For Australia - HarmonyHill Winery accumulates the highest score of 100 points in Australia. - GrapesGalore Winery has a total of 85 points, securing the second-highest position in Australia. - WhisperingPines Winery has a total of 80 points, ranking as the third-highest. For Hungary - MoonlitCellars is the sole winery, accruing 60 points, automatically making it the highest. There is no second or third winery. For India - SunsetVines is the sole winery, earning 69 points, making it the top winery. There is no second or third winery. For the USA - RoyalVines Wines accumulates a total of 47 + 39 = 86 points, claiming the highest position in the USA. - Eagle&amp;#39;sNest has a total of 45 points, securing the second-highest position in the USA. - PacificCrest accumulates 9 points, ranking as the third-highest winery in the USA Output table is ordered by country in ascending order. Solutions Solution 1: Grouping + Window Function + Left Join We can first group the Wineries table by country and winery, calculate the total score points for each group, then use the window function RANK() to group the data by country again, sort by points in descending order and winery in ascending order, and use the CONCAT() function to..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2991 - Top Three Wineries | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2991 - Top Three Wineries" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2991.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-01-06-2991-Top-Three-Wineries/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-01-06T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2991 - Top Three Wineries","dateModified":"2024-01-06T00:00:00-08:00","datePublished":"2024-01-06T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-01-06-2991-Top-Three-Wineries/"},"url":"https://leetcode.ca/2024-01-06-2991-Top-Three-Wineries/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2991-top-three-wineries">
+       <a href="solution-2991.html">
+        2991. Top Three Wineries
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        Wineries
+       </code>
+      </p>
+      <pre>
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| id          | int      |
+| country     | varchar  |
+| points      | int      |
+| winery      | varchar  |
++-------------+----------+
+id is column of unique values for this table.
+This table contains id, country, points, and winery.
+</pre>
+      <p>
+       Write a solution to find the
+       <strong>
+        top three wineries
+       </strong>
+       in
+       <strong>
+        each
+       </strong>
+       <strong>
+        country
+       </strong>
+       based on their
+       <strong>
+        total points
+       </strong>
+       . If
+       <strong>
+        multiple wineries
+       </strong>
+       have the
+       <strong>
+        same
+       </strong>
+       total points, order them by
+       <code>
+        winery
+       </code>
+       name in
+       <strong>
+        ascending
+       </strong>
+       order. If there's
+       <strong>
+        no second winery
+       </strong>
+       , output 'No Second Winery,' and if there's
+       <strong>
+        no third winery
+       </strong>
+       , output 'No Third Winery.'
+      </p>
+      <p>
+       Return
+       <em>
+        the result table ordered by
+       </em>
+       <code>
+        country
+       </code>
+       <em>
+        in
+        <strong>
+         ascending
+        </strong>
+        order
+       </em>
+       <em>
+        .
+       </em>
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+Sessions table:
++-----+-----------+--------+-----------------+
+| id  | country   | points | winery          | 
++-----+-----------+--------+-----------------+
+| 103 | Australia | 84     | WhisperingPines | 
+| 737 | Australia | 85     | GrapesGalore    |    
+| 848 | Australia | 100    | HarmonyHill     | 
+| 222 | Hungary   | 60     | MoonlitCellars  | 
+| 116 | USA       | 47     | RoyalVines      | 
+| 124 | USA       | 45     | Eagle'sNest     | 
+| 648 | India     | 69     | SunsetVines     | 
+| 894 | USA       | 39     | RoyalVines      |  
+| 677 | USA       | 9      | PacificCrest    |  
++-----+-----------+--------+-----------------+
+<strong>Output:</strong> 
++-----------+---------------------+-------------------+----------------------+
+| country   | top_winery          | second_winery     | third_winery         |
++-----------+---------------------+-------------------+----------------------+
+| Australia | HarmonyHill (100)   | GrapesGalore (85) | WhisperingPines (84) |
+| Hungary   | MoonlitCellars (60) | No second winery  | No third winery      | 
+| India     | SunsetVines (69)    | No second winery  | No third winery      |  
+| USA       | RoyalVines (86)     | Eagle'sNest (45)  | PacificCrest (9)     | 
++-----------+---------------------+-------------------+----------------------+
+<strong>Explanation</strong>
+For Australia
+ - HarmonyHill Winery accumulates the highest score of 100 points in Australia.
+ - GrapesGalore Winery has a total of 85 points, securing the second-highest position in Australia.
+ - WhisperingPines Winery has a total of 80 points, ranking as the third-highest.
+For Hungary
+ - MoonlitCellars is the sole winery, accruing 60 points, automatically making it the highest. There is no second or third winery.
+For India
+ - SunsetVines is the sole winery, earning 69 points, making it the top winery. There is no second or third winery.
+For the USA
+ - RoyalVines Wines accumulates a total of 47 + 39 = 86 points, claiming the highest position in the USA.
+ - Eagle'sNest has a total of 45 points, securing the second-highest position in the USA.
+ - PacificCrest accumulates 9 points, ranking as the third-highest winery in the USA
+Output table is ordered by country in ascending order.
+</pre>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Grouping + Window Function + Left Join
+       </strong>
+      </p>
+      <p>
+       We can first group the
+       <code class="language-plaintext highlighter-rouge">
+        Wineries
+       </code>
+       table by
+       <code class="language-plaintext highlighter-rouge">
+        country
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        winery
+       </code>
+       , calculate the total score
+       <code class="language-plaintext highlighter-rouge">
+        points
+       </code>
+       for each group, then use the window function
+       <code class="language-plaintext highlighter-rouge">
+        RANK()
+       </code>
+       to group the data by
+       <code class="language-plaintext highlighter-rouge">
+        country
+       </code>
+       again, sort by
+       <code class="language-plaintext highlighter-rouge">
+        points
+       </code>
+       in descending order and
+       <code class="language-plaintext highlighter-rouge">
+        winery
+       </code>
+       in ascending order, and use the
+       <code class="language-plaintext highlighter-rouge">
+        CONCAT()
+       </code>
+       function to concatenate
+       <code class="language-plaintext highlighter-rouge">
+        winery
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        points
+       </code>
+       , resulting in the following data, denoted as table
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       :
+      </p>
+      <table>
+       <thead>
+        <tr>
+         <th>
+          country
+         </th>
+         <th>
+          winery
+         </th>
+         <th>
+          rk
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td>
+          Australia
+         </td>
+         <td>
+          HarmonyHill (100)
+         </td>
+         <td>
+          1
+         </td>
+        </tr>
+        <tr>
+         <td>
+          Australia
+         </td>
+         <td>
+          GrapesGalore (85)
+         </td>
+         <td>
+          2
+         </td>
+        </tr>
+        <tr>
+         <td>
+          Australia
+         </td>
+         <td>
+          WhisperingPines (84)
+         </td>
+         <td>
+          3
+         </td>
+        </tr>
+        <tr>
+         <td>
+          Hungary
+         </td>
+         <td>
+          MoonlitCellars (60)
+         </td>
+         <td>
+          1
+         </td>
+        </tr>
+        <tr>
+         <td>
+          India
+         </td>
+         <td>
+          SunsetVines (69)
+         </td>
+         <td>
+          1
+         </td>
+        </tr>
+        <tr>
+         <td>
+          USA
+         </td>
+         <td>
+          RoyalVines (86)
+         </td>
+         <td>
+          1
+         </td>
+        </tr>
+        <tr>
+         <td>
+          USA
+         </td>
+         <td>
+          EagleâsNest (45)
+         </td>
+         <td>
+          2
+         </td>
+        </tr>
+        <tr>
+         <td>
+          USA
+         </td>
+         <td>
+          PacificCrest (9)
+         </td>
+         <td>
+          3
+         </td>
+        </tr>
+       </tbody>
+      </table>
+      <p>
+       Next, we just need to filter out the data where
+       <code class="language-plaintext highlighter-rouge">
+        rk = 1
+       </code>
+       , then join table
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       to itself twice, connecting the data where
+       <code class="language-plaintext highlighter-rouge">
+        rk = 2
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        rk = 3
+       </code>
+       respectively, to get the final result.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#f3c26e66-96c6-42ef-a860-b9db7f31b972'}">
+       <li class="uk-active">
+        <a href="solution-2991.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="f3c26e66-96c6-42ef-a860-b9db7f31b972">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">WITH</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">country</span><span class="p">,</span>
+            <span class="n">CONCAT</span><span class="p">(</span><span class="n">winery</span><span class="p">,</span> <span class="s1">' ('</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="s1">')'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">winery</span><span class="p">,</span>
+            <span class="n">RANK</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">(</span>
+                <span class="k">PARTITION</span> <span class="k">BY</span> <span class="n">country</span>
+                <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">points</span> <span class="k">DESC</span><span class="p">,</span> <span class="n">winery</span>
+            <span class="p">)</span> <span class="k">AS</span> <span class="n">rk</span>
+        <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">country</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="k">AS</span> <span class="n">points</span><span class="p">,</span> <span class="n">winery</span> <span class="k">FROM</span> <span class="n">Wineries</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">AS</span> <span class="n">t</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span>
+    <span class="n">t1</span><span class="p">.</span><span class="n">country</span><span class="p">,</span>
+    <span class="n">t1</span><span class="p">.</span><span class="n">winery</span> <span class="k">AS</span> <span class="n">top_winery</span><span class="p">,</span>
+    <span class="n">IFNULL</span><span class="p">(</span><span class="n">t2</span><span class="p">.</span><span class="n">winery</span><span class="p">,</span> <span class="s1">'No second winery'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">second_winery</span><span class="p">,</span>
+    <span class="n">IFNULL</span><span class="p">(</span><span class="n">t3</span><span class="p">.</span><span class="n">winery</span><span class="p">,</span> <span class="s1">'No third winery'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">third_winery</span>
+<span class="k">FROM</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="n">t1</span>
+    <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">T</span> <span class="k">AS</span> <span class="n">t2</span> <span class="k">ON</span> <span class="n">t1</span><span class="p">.</span><span class="n">country</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">country</span> <span class="k">AND</span> <span class="n">t1</span><span class="p">.</span><span class="n">rk</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">rk</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">T</span> <span class="k">AS</span> <span class="n">t3</span> <span class="k">ON</span> <span class="n">t2</span><span class="p">.</span><span class="n">country</span> <span class="o">=</span> <span class="n">t3</span><span class="p">.</span><span class="n">country</span> <span class="k">AND</span> <span class="n">t2</span><span class="p">.</span><span class="n">rk</span> <span class="o">=</span> <span class="n">t3</span><span class="p">.</span><span class="n">rk</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="k">WHERE</span> <span class="n">t1</span><span class="p">.</span><span class="n">rk</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2991.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

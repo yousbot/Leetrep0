@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2911.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2911.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2911 - Minimum Changes to Make K Semi-palindromes</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2911. Minimum Changes to Make K Semi-palindromes Description Given a string s and an integer k, partition s into k substrings such that the sum of the number of letter changes required to turn each substring into a semi-palindrome is minimized. Return an integer denoting...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2911.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2911.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2911.html" rel="stylesheet"/>
+   <link href="solution-2911.html" rel="stylesheet"/>
+   <link href="solution-2911.html" rel="stylesheet"/>
+   <link href="solution-2911.html" rel="stylesheet"/>
+   <link href="solution-2911.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2911 - Minimum Changes to Make K Semi-palindromes" property="og:title"/>
+   <meta content="Leetcode 2911. Minimum Changes to Make K Semi-palindromes Description Given a string s and an integer k, partition s into k substrings such that the sum of the number of letter changes required to turn each substring into a semi-palindrome is minimized. Return an integer denoting the minimum number of letter changes required. Notes A string is a palindrome if it can be read the same way from left to right and right to left. A string with a length of len is considered a semi-palindrome if there exists a positive integer d such that 1 &amp;lt;= d &amp;lt; len and len % d == 0, and if we take indices that have the same modulo by d, they form a palindrome. For example, &amp;quot;aa&amp;quot;, &amp;quot;aba&amp;quot;, &amp;quot;adbgad&amp;quot;, and, &amp;quot;abab&amp;quot; are semi-palindrome and &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, and, &amp;quot;abca&amp;quot; are not. A substring is a contiguous sequence of characters within a string. &amp;nbsp; Example 1: Input: s = &amp;quot;abcac&amp;quot;, k = 2 Output: 1 Explanation: We can divide s into substrings &amp;quot;ab&amp;quot; and &amp;quot;cac&amp;quot;. The string &amp;quot;cac&amp;quot; is already a semi-palindrome. If we change &amp;quot;ab&amp;quot; to &amp;quot;aa&amp;quot;, it becomes a semi-palindrome with d = 1. It can be shown that there is no way to divide the string &amp;quot;abcac&amp;quot; into two semi-palindrome substrings. Therefore, the answer would be at least 1. Example 2: Input: s = &amp;quot;abcdef&amp;quot;, k = 2 Output: 2 Explanation: We can divide it into substrings &amp;quot;abc&amp;quot; and &amp;quot;def&amp;quot;. Each of the substrings &amp;quot;abc&amp;quot; and &amp;quot;def&amp;quot; requires one change to become a semi-palindrome, so we need 2 changes in total to make all substrings semi-palindrome. It can be shown that we cannot divide the given string into two substrings in a way that it would require less than 2 changes. Example 3: Input: s = &amp;quot;aabbaa&amp;quot;, k = 3 Output: 0 Explanation: We can divide it into substrings &amp;quot;aa&amp;quot;, &amp;quot;bb&amp;quot; and &amp;quot;aa&amp;quot;. The strings &amp;quot;aa&amp;quot; and &amp;quot;bb&amp;quot; are already semi-palindromes. Thus, the answer is zero. &amp;nbsp; Constraints: 2 &amp;lt;= s.length &amp;lt;= 200 1 &amp;lt;= k &amp;lt;= s.length / 2 s consists only of lowercase English letters. Solutions Optimization: Preprocessing Divisors List We can calculate the divisors list for each length, which can save a lot of division operations in the inner loop. Java C++ Python Go TypeScript class Solution { public int minimumChanges(String s, int k) { int n = s.length(); int[][] g = new int[n + 1][n + 1]; int[][] f = new int[n + 1][k + 1]; final int inf = 1 &amp;lt;&amp;lt; 30; for (int i = 0; i &amp;lt;= n; ++i) { Arrays.fill(g[i], inf); Arrays.fill(f[i], inf); } for (int i = 1; i &amp;lt;= n; ++i) { for (int j = i; j &amp;lt;= n; ++j) { int m = j - i + 1; for (int d = 1; d &amp;lt; m; ++d) { if (m % d == 0) { int cnt = 0; for (int l = 0; l &amp;lt; m; ++l) { int r = (m / d..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-11-19T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-11-19-2911-Minimum-Changes-to-Make-K-Semi-palindromes/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2911.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2911 - Minimum Changes to Make K Semi-palindromes" property="twitter:title"/>
+   <meta content="Leetcode 2911. Minimum Changes to Make K Semi-palindromes Description Given a string s and an integer k, partition s into k substrings such that the sum of the number of letter changes required to turn each substring into a semi-palindrome is minimized. Return an integer denoting the minimum number of letter changes required. Notes A string is a palindrome if it can be read the same way from left to right and right to left. A string with a length of len is considered a semi-palindrome if there exists a positive integer d such that 1 &amp;lt;= d &amp;lt; len and len % d == 0, and if we take indices that have the same modulo by d, they form a palindrome. For example, &amp;quot;aa&amp;quot;, &amp;quot;aba&amp;quot;, &amp;quot;adbgad&amp;quot;, and, &amp;quot;abab&amp;quot; are semi-palindrome and &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, and, &amp;quot;abca&amp;quot; are not. A substring is a contiguous sequence of characters within a string. &amp;nbsp; Example 1: Input: s = &amp;quot;abcac&amp;quot;, k = 2 Output: 1 Explanation: We can divide s into substrings &amp;quot;ab&amp;quot; and &amp;quot;cac&amp;quot;. The string &amp;quot;cac&amp;quot; is already a semi-palindrome. If we change &amp;quot;ab&amp;quot; to &amp;quot;aa&amp;quot;, it becomes a semi-palindrome with d = 1. It can be shown that there is no way to divide the string &amp;quot;abcac&amp;quot; into two semi-palindrome substrings. Therefore, the answer would be at least 1. Example 2: Input: s = &amp;quot;abcdef&amp;quot;, k = 2 Output: 2 Explanation: We can divide it into substrings &amp;quot;abc&amp;quot; and &amp;quot;def&amp;quot;. Each of the substrings &amp;quot;abc&amp;quot; and &amp;quot;def&amp;quot; requires one change to become a semi-palindrome, so we need 2 changes in total to make all substrings semi-palindrome. It can be shown that we cannot divide the given string into two substrings in a way that it would require less than 2 changes. Example 3: Input: s = &amp;quot;aabbaa&amp;quot;, k = 3 Output: 0 Explanation: We can divide it into substrings &amp;quot;aa&amp;quot;, &amp;quot;bb&amp;quot; and &amp;quot;aa&amp;quot;. The strings &amp;quot;aa&amp;quot; and &amp;quot;bb&amp;quot; are already semi-palindromes. Thus, the answer is zero. &amp;nbsp; Constraints: 2 &amp;lt;= s.length &amp;lt;= 200 1 &amp;lt;= k &amp;lt;= s.length / 2 s consists only of lowercase English letters. Solutions Optimization: Preprocessing Divisors List We can calculate the divisors list for each length, which can save a lot of division operations in the inner loop. Java C++ Python Go TypeScript class Solution { public int minimumChanges(String s, int k) { int n = s.length(); int[][] g = new int[n + 1][n + 1]; int[][] f = new int[n + 1][k + 1]; final int inf = 1 &amp;lt;&amp;lt; 30; for (int i = 0; i &amp;lt;= n; ++i) { Arrays.fill(g[i], inf); Arrays.fill(f[i], inf); } for (int i = 1; i &amp;lt;= n; ++i) { for (int j = i; j &amp;lt;= n; ++j) { int m = j - i + 1; for (int d = 1; d &amp;lt; m; ++d) { if (m % d == 0) { int cnt = 0; for (int l = 0; l &amp;lt; m; ++l) { int r = (m / d..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2911 - Minimum Changes to Make K Semi-palindromes | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2911 - Minimum Changes to Make K Semi-palindromes" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2911.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-11-19-2911-Minimum-Changes-to-Make-K-Semi-palindromes/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-11-19T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2911 - Minimum Changes to Make K Semi-palindromes","dateModified":"2023-11-19T00:00:00-08:00","datePublished":"2023-11-19T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-11-19-2911-Minimum-Changes-to-Make-K-Semi-palindromes/"},"url":"https://leetcode.ca/2023-11-19-2911-Minimum-Changes-to-Make-K-Semi-palindromes/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2911-minimum-changes-to-make-k-semi-palindromes">
+       <a href="solution-2911.html">
+        2911. Minimum Changes to Make K Semi-palindromes
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string
+       <code>
+        s
+       </code>
+       and an integer
+       <code>
+        k
+       </code>
+       , partition
+       <code>
+        s
+       </code>
+       into
+       <code>
+        k
+       </code>
+       <strong>
+        substrings
+       </strong>
+       such that the sum of the number of letter changes required to turn each
+       <strong>
+        substring
+       </strong>
+       into a
+       <strong>
+        semi-palindrome
+       </strong>
+       is minimized.
+      </p>
+      <p>
+       Return
+       <em>
+        an integer denoting the
+        <strong>
+         minimum
+        </strong>
+        number of letter changes required.
+       </em>
+      </p>
+      <p>
+       <strong>
+        Notes
+       </strong>
+      </p>
+      <ul>
+       <li>
+        A string is a
+        <strong>
+         palindrome
+        </strong>
+        if it can be read the same way from left to right and right to left.
+       </li>
+       <li>
+        A string with a length of
+        <code>
+         len
+        </code>
+        is considered a
+        <strong>
+         semi-palindrome
+        </strong>
+        if there exists a positive integer
+        <code>
+         d
+        </code>
+        such that
+        <code>
+         1 &lt;= d &lt; len
+        </code>
+        and
+        <code>
+         len % d == 0
+        </code>
+        , and if we take indices that have the same modulo by
+        <code>
+         d
+        </code>
+        , they form a
+        <strong>
+         palindrome
+        </strong>
+        . For example,
+        <code>
+         "aa"
+        </code>
+        ,
+        <code>
+         "aba"
+        </code>
+        ,
+        <code>
+         "adbgad"
+        </code>
+        , and,
+        <code>
+         "abab"
+        </code>
+        are
+        <strong>
+         semi-palindrome
+        </strong>
+        and
+        <code>
+         "a"
+        </code>
+        ,
+        <code>
+         "ab"
+        </code>
+        , and,
+        <code>
+         "abca"
+        </code>
+        are not.
+       </li>
+       <li>
+        A
+        <strong>
+         substring
+        </strong>
+        is a contiguous sequence of characters within a string.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "abcac", k = 2
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> We can divide s into substrings "ab" and "cac". The string "cac" is already a semi-palindrome. If we change "ab" to "aa", it becomes a semi-palindrome with d = 1.
+It can be shown that there is no way to divide the string "abcac" into two semi-palindrome substrings. Therefore, the answer would be at least 1.</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "abcdef", k = 2
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> We can divide it into substrings "abc" and "def". Each of the substrings "abc" and "def" requires one change to become a semi-palindrome, so we need 2 changes in total to make all substrings semi-palindrome.
+It can be shown that we cannot divide the given string into two substrings in a way that it would require less than 2 changes.</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "aabbaa", k = 3
+<strong>Output:</strong> 0
+<strong>Explanation:</strong> We can divide it into substrings "aa", "bb" and "aa".
+The strings "aa" and "bb" are already semi-palindromes. Thus, the answer is zero.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         2 &lt;= s.length &lt;= 200
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= k &lt;= s.length / 2
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists only of lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Optimization: Preprocessing Divisors List
+       </strong>
+      </p>
+      <p>
+       We can calculate the divisors list for each length, which can save a lot of division operations in the inner loop.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#701386cc-5dd8-4f47-b340-6d598f58b5da'}">
+       <li class="uk-active">
+        <a href="solution-2911.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2911.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2911.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2911.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2911.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="701386cc-5dd8-4f47-b340-6d598f58b5da">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minimumChanges</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">inf</span><span class="o">);</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">inf</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">m</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="o">(</span><span class="n">m</span> <span class="o">/</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">l</span> <span class="o">/</span> <span class="n">d</span><span class="o">)</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="n">l</span> <span class="o">%</span> <span class="n">d</span><span class="o">;</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="k">break</span><span class="o">;</span>
+                            <span class="o">}</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">l</span><span class="o">)</span> <span class="o">!=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="o">))</span> <span class="o">{</span>
+                                <span class="o">++</span><span class="n">cnt</span><span class="o">;</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                        <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">],</span> <span class="n">cnt</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">f</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">h</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">],</span> <span class="n">f</span><span class="o">[</span><span class="n">h</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">g</span><span class="o">[</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">i</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">k</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">minimumChanges</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">g</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mh">0x3f</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">g</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mh">0x3f</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span> <span class="o">/</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">l</span> <span class="o">/</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="n">l</span> <span class="o">%</span> <span class="n">d</span><span class="p">;</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="k">break</span><span class="p">;</span>
+                            <span class="p">}</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">l</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="p">])</span> <span class="p">{</span>
+                                <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                        <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">cnt</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">h</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minimumChanges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">[[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">m</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+                            <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span> <span class="o">//</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">l</span> <span class="o">//</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="n">l</span> <span class="o">%</span> <span class="n">d</span>
+                            <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;=</span> <span class="n">r</span><span class="p">:</span>
+                                <span class="k">break</span>
+                            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">l</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="p">]:</span>
+                                <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">cnt</span><span class="p">)</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">h</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minimumChanges</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">const</span> <span class="n">inf</span> <span class="kt">int</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">30</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">f</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">m</span> <span class="o">:=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span>
+			<span class="k">for</span> <span class="n">d</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">m</span><span class="o">%</span><span class="n">d</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+					<span class="n">cnt</span> <span class="o">:=</span> <span class="m">0</span>
+					<span class="k">for</span> <span class="n">l</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">l</span><span class="o">++</span> <span class="p">{</span>
+						<span class="n">r</span> <span class="o">:=</span> <span class="p">(</span><span class="n">m</span><span class="o">/</span><span class="n">d</span><span class="o">-</span><span class="m">1</span><span class="o">-</span><span class="n">l</span><span class="o">/</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="n">l</span><span class="o">%</span><span class="n">d</span>
+						<span class="k">if</span> <span class="n">l</span> <span class="o">&gt;=</span> <span class="n">r</span> <span class="p">{</span>
+							<span class="k">break</span>
+						<span class="p">}</span>
+						<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="o">+</span><span class="n">l</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="o">+</span><span class="n">r</span><span class="p">]</span> <span class="p">{</span>
+							<span class="n">cnt</span><span class="o">++</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+					<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">cnt</span><span class="p">)</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">h</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">h</span><span class="o">++</span> <span class="p">{</span>
+				<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="n">h</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">+</span><span class="n">g</span><span class="p">[</span><span class="n">h</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minimumChanges</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="kc">Infinity</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="kc">Infinity</span><span class="p">));</span>
+    <span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">d</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">d</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">m</span> <span class="o">%</span> <span class="nx">d</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">let</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">l</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="kd">const</span> <span class="nx">r</span> <span class="o">=</span> <span class="p">(((</span><span class="nx">m</span> <span class="o">/</span> <span class="nx">d</span><span class="p">)</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="nx">l</span> <span class="o">/</span> <span class="nx">d</span><span class="p">)</span> <span class="o">|</span> <span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="nx">d</span> <span class="o">+</span> <span class="p">(</span><span class="nx">l</span> <span class="o">%</span> <span class="nx">d</span><span class="p">);</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">l</span> <span class="o">&gt;=</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">break</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">l</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">s</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">r</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="o">++</span><span class="nx">cnt</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">],</span> <span class="nx">cnt</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">k</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">h</span> <span class="o">&lt;</span> <span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">],</span> <span class="nx">f</span><span class="p">[</span><span class="nx">h</span><span class="p">][</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">g</span><span class="p">[</span><span class="nx">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">i</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">[</span><span class="nx">n</span><span class="p">][</span><span class="nx">k</span><span class="p">];</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2911.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

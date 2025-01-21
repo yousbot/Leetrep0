@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1182.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1182.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1182 - Shortest Distance to Target Color</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1182. Shortest Distance to Target Color Description You are given an array colors, in which there are three colors: 1, 2 and&amp;nbsp;3. You are also given some queries. Each query consists of two integers i&amp;nbsp;and c, return&amp;nbsp;the shortest distance between the given index&amp;nbsp;i and the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1182.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1182.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1182.html" rel="stylesheet"/>
+   <link href="solution-1182.html" rel="stylesheet"/>
+   <link href="solution-1182.html" rel="stylesheet"/>
+   <link href="solution-1182.html" rel="stylesheet"/>
+   <link href="solution-1182.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1182 - Shortest Distance to Target Color" property="og:title"/>
+   <meta content="Leetcode 1182. Shortest Distance to Target Color Description You are given an array colors, in which there are three colors: 1, 2 and&amp;nbsp;3. You are also given some queries. Each query consists of two integers i&amp;nbsp;and c, return&amp;nbsp;the shortest distance between the given index&amp;nbsp;i and the target color c. If there is no solution return -1. &amp;nbsp; Example 1: Input: colors = [1,1,2,1,3,2,2,3,3], queries = [[1,3],[2,2],[6,1]] Output: [3,0,3] Explanation: The nearest 3 from index 1 is at index 4 (3 steps away). The nearest 2 from index 2 is at index 2 itself (0 steps away). The nearest 1 from index 6 is at index 3 (3 steps away). Example 2: Input: colors = [1,2], queries = [[0,3]] Output: [-1] Explanation: There is no 3 in the array. &amp;nbsp; Constraints: 1 &amp;lt;= colors.length &amp;lt;= 5*10^4 1 &amp;lt;= colors[i] &amp;lt;= 3 1&amp;nbsp;&amp;lt;= queries.length &amp;lt;= 5*10^4 queries[i].length == 2 0 &amp;lt;= queries[i][0] &amp;lt;&amp;nbsp;colors.length 1 &amp;lt;= queries[i][1] &amp;lt;= 3 Solutions Solution 1: Preprocessing We can preprocess the distance from each position to the nearest color $1$, $2$, $3$ on the left, and the distance from each position to the nearest color $1$, $2$, $3$ on the right, and record them in the arrays $left$ and $right$. Initially, $left[0][0] = left[0][1] = left[0][2] = -\infty$, and $right[n][0] = right[n][1] = right[n][2] = \infty$, where $n$ is the length of the array colors. Then for each query $(i, c)$, the minimum distance is $d = \min(i - left[i + 1][c - 1], right[i][c - 1] - i)$. If $d &amp;gt; n$, there is no solution, and the answer to this query is $-1$. The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array colors. Java C++ Python Go TypeScript class Solution { public List&amp;lt;Integer&amp;gt; shortestDistanceColor(int[] colors, int[][] queries) { int n = colors.length; final int inf = 1 &amp;lt;&amp;lt; 30; int[][] right = new int[n + 1][3]; Arrays.fill(right[n], inf); for (int i = n - 1; i &amp;gt;= 0; --i) { for (int j = 0; j &amp;lt; 3; ++j) { right[i][j] = right[i + 1][j]; } right[i][colors[i] - 1] = i; } int[][] left = new int[n + 1][3]; Arrays.fill(left[0], -inf); for (int i = 1; i &amp;lt;= n; ++i) { for (int j = 0; j &amp;lt; 3; ++j) { left[i][j] = left[i - 1][j]; } left[i][colors[i - 1] - 1] = i - 1; } List&amp;lt;Integer&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int[] q : queries) { int i = q[0], c = q[1] - 1; int d = Math.min(i - left[i + 1][c], right[i][c] - i); ans.add(d &amp;gt; n ? -1 : d); } return ans; } } class Solution { public: vector&amp;lt;int&amp;gt; shortestDistanceColor(vector&amp;lt;int&amp;gt;&amp;amp; colors, vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; queries) { int n = colors.size(); int right[n + 1][3]; const int inf = 1 &amp;lt;&amp;lt; 30; fill(right[n], right[n] + 3, inf); for (int i = n - 1; i &amp;gt;= 0; --i) { for (int j = 0; j &amp;lt; 3; ++j)..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-02-24T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-02-24-1182-Shortest-Distance-to-Target-Color/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1182.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1182 - Shortest Distance to Target Color" property="twitter:title"/>
+   <meta content="Leetcode 1182. Shortest Distance to Target Color Description You are given an array colors, in which there are three colors: 1, 2 and&amp;nbsp;3. You are also given some queries. Each query consists of two integers i&amp;nbsp;and c, return&amp;nbsp;the shortest distance between the given index&amp;nbsp;i and the target color c. If there is no solution return -1. &amp;nbsp; Example 1: Input: colors = [1,1,2,1,3,2,2,3,3], queries = [[1,3],[2,2],[6,1]] Output: [3,0,3] Explanation: The nearest 3 from index 1 is at index 4 (3 steps away). The nearest 2 from index 2 is at index 2 itself (0 steps away). The nearest 1 from index 6 is at index 3 (3 steps away). Example 2: Input: colors = [1,2], queries = [[0,3]] Output: [-1] Explanation: There is no 3 in the array. &amp;nbsp; Constraints: 1 &amp;lt;= colors.length &amp;lt;= 5*10^4 1 &amp;lt;= colors[i] &amp;lt;= 3 1&amp;nbsp;&amp;lt;= queries.length &amp;lt;= 5*10^4 queries[i].length == 2 0 &amp;lt;= queries[i][0] &amp;lt;&amp;nbsp;colors.length 1 &amp;lt;= queries[i][1] &amp;lt;= 3 Solutions Solution 1: Preprocessing We can preprocess the distance from each position to the nearest color $1$, $2$, $3$ on the left, and the distance from each position to the nearest color $1$, $2$, $3$ on the right, and record them in the arrays $left$ and $right$. Initially, $left[0][0] = left[0][1] = left[0][2] = -\infty$, and $right[n][0] = right[n][1] = right[n][2] = \infty$, where $n$ is the length of the array colors. Then for each query $(i, c)$, the minimum distance is $d = \min(i - left[i + 1][c - 1], right[i][c - 1] - i)$. If $d &amp;gt; n$, there is no solution, and the answer to this query is $-1$. The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array colors. Java C++ Python Go TypeScript class Solution { public List&amp;lt;Integer&amp;gt; shortestDistanceColor(int[] colors, int[][] queries) { int n = colors.length; final int inf = 1 &amp;lt;&amp;lt; 30; int[][] right = new int[n + 1][3]; Arrays.fill(right[n], inf); for (int i = n - 1; i &amp;gt;= 0; --i) { for (int j = 0; j &amp;lt; 3; ++j) { right[i][j] = right[i + 1][j]; } right[i][colors[i] - 1] = i; } int[][] left = new int[n + 1][3]; Arrays.fill(left[0], -inf); for (int i = 1; i &amp;lt;= n; ++i) { for (int j = 0; j &amp;lt; 3; ++j) { left[i][j] = left[i - 1][j]; } left[i][colors[i - 1] - 1] = i - 1; } List&amp;lt;Integer&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (int[] q : queries) { int i = q[0], c = q[1] - 1; int d = Math.min(i - left[i + 1][c], right[i][c] - i); ans.add(d &amp;gt; n ? -1 : d); } return ans; } } class Solution { public: vector&amp;lt;int&amp;gt; shortestDistanceColor(vector&amp;lt;int&amp;gt;&amp;amp; colors, vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; queries) { int n = colors.size(); int right[n + 1][3]; const int inf = 1 &amp;lt;&amp;lt; 30; fill(right[n], right[n] + 3, inf); for (int i = n - 1; i &amp;gt;= 0; --i) { for (int j = 0; j &amp;lt; 3; ++j)..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1182 - Shortest Distance to Target Color | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1182 - Shortest Distance to Target Color" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1182.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-02-24-1182-Shortest-Distance-to-Target-Color/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-02-24T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1182 - Shortest Distance to Target Color","dateModified":"2019-02-24T00:00:00-08:00","datePublished":"2019-02-24T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-02-24-1182-Shortest-Distance-to-Target-Color/"},"url":"https://leetcode.ca/2019-02-24-1182-Shortest-Distance-to-Target-Color/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1182-shortest-distance-to-target-color">
+       <a href="solution-1182.html">
+        1182. Shortest Distance to Target Color
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an array
+       <code>
+        colors
+       </code>
+       , in which there are three colors:
+       <code>
+        1
+       </code>
+       ,
+       <code>
+        2
+       </code>
+       and
+       <code>
+        3
+       </code>
+       .
+      </p>
+      <p>
+       You are also given some queries. Each query consists of two integers
+       <code>
+        i
+       </code>
+       and
+       <code>
+        c
+       </code>
+       , return the shortest distance between the given index
+       <code>
+        i
+       </code>
+       and the target color
+       <code>
+        c
+       </code>
+       . If there is no solution return
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> colors = [1,1,2,1,3,2,2,3,3], queries = [[1,3],[2,2],[6,1]]
+<strong>Output:</strong> [3,0,3]
+<strong>Explanation: </strong>
+The nearest 3 from index 1 is at index 4 (3 steps away).
+The nearest 2 from index 2 is at index 2 itself (0 steps away).
+The nearest 1 from index 6 is at index 3 (3 steps away).
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> colors = [1,2], queries = [[0,3]]
+<strong>Output:</strong> [-1]
+<strong>Explanation: </strong>There is no 3 in the array.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= colors.length &lt;= 5*10^4
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= colors[i] &lt;= 3
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= queries.length &lt;= 5*10^4
+        </code>
+       </li>
+       <li>
+        <code>
+         queries[i].length == 2
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= queries[i][0] &lt; colors.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= queries[i][1] &lt;= 3
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Preprocessing
+       </strong>
+      </p>
+      <p>
+       We can preprocess the distance from each position to the nearest color $1$, $2$, $3$ on the left, and the distance from each position to the nearest color $1$, $2$, $3$ on the right, and record them in the arrays $left$ and $right$. Initially, $left[0][0] = left[0][1] = left[0][2] = -\infty$, and $right[n][0] = right[n][1] = right[n][2] = \infty$, where $n$ is the length of the array
+       <code class="language-plaintext highlighter-rouge">
+        colors
+       </code>
+       .
+      </p>
+      <p>
+       Then for each query $(i, c)$, the minimum distance is $d = \min(i - left[i + 1][c - 1], right[i][c - 1] - i)$. If $d &gt; n$, there is no solution, and the answer to this query is $-1$.
+      </p>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array
+       <code class="language-plaintext highlighter-rouge">
+        colors
+       </code>
+       .
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#ca8dd87c-00bf-4e28-8fbe-06f3aa5fb5ef'}">
+       <li class="uk-active">
+        <a href="solution-1182.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1182.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1182.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1182.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1182.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="ca8dd87c-00bf-4e28-8fbe-06f3aa5fb5ef">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">shortestDistanceColor</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">colors</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">queries</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">right</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="mi">3</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">right</span><span class="o">[</span><span class="n">n</span><span class="o">],</span> <span class="n">inf</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="o">--</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">right</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="n">right</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">colors</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">left</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="mi">3</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">left</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="o">-</span><span class="n">inf</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">left</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">left</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="n">left</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">colors</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">q</span> <span class="o">:</span> <span class="n">queries</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">q</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">c</span> <span class="o">=</span> <span class="n">q</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">c</span><span class="o">],</span> <span class="n">right</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">c</span><span class="o">]</span> <span class="o">-</span> <span class="n">i</span><span class="o">);</span>
+            <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">d</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">shortestDistanceColor</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">colors</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">queries</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">colors</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">right</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">];</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span><span class="p">;</span>
+        <span class="n">fill</span><span class="p">(</span><span class="n">right</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">right</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">inf</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">left</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">];</span>
+        <span class="n">fill</span><span class="p">(</span><span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="n">inf</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">left</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">q</span> <span class="o">:</span> <span class="n">queries</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">c</span><span class="p">],</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span><span class="p">);</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">d</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">shortestDistanceColor</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="p">[[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">left</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="k">else</span> <span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">shortestDistanceColor</span><span class="p">(</span><span class="n">colors</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">queries</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+	<span class="k">const</span> <span class="n">inf</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">30</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">3</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">3</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">right</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">inf</span><span class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span class="n">inf</span><span class="p">}</span>
+	<span class="n">left</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">inf</span><span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="m">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="m">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">q</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">queries</span> <span class="p">{</span>
+		<span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">-</span><span class="m">1</span>
+		<span class="n">d</span> <span class="o">:=</span> <span class="n">min</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">c</span><span class="p">],</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">c</span><span class="p">]</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="p">{</span>
+			<span class="n">d</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+		<span class="p">}</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">shortestDistanceColor</span><span class="p">(</span><span class="nx">colors</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">queries</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">inf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">right</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="nx">inf</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">left</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="o">-</span><span class="nx">inf</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">right</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">right</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="nx">right</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">colors</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">left</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">left</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="nx">left</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">colors</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">i</span><span class="p">,</span> <span class="nx">c</span><span class="p">]</span> <span class="k">of</span> <span class="nx">queries</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">d</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">i</span> <span class="o">-</span> <span class="nx">left</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">right</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">i</span><span class="p">);</span>
+        <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">d</span> <span class="o">&gt;</span> <span class="nx">n</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="nx">d</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1182.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

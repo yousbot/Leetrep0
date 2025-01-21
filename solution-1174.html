@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1174.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1174.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1174 - Immediate Food Delivery II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1174. Immediate Food Delivery II Description Table: Delivery +-----------------------------+---------+ | Column Name | Type | +-----------------------------+---------+ | delivery_id | int | | customer_id | int | | order_date | date | | customer_pref_delivery_date | date | +-----------------------------+---------+ delivery_id is the column of unique values of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1174.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1174.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1174.html" rel="stylesheet"/>
+   <link href="solution-1174.html" rel="stylesheet"/>
+   <link href="solution-1174.html" rel="stylesheet"/>
+   <link href="solution-1174.html" rel="stylesheet"/>
+   <link href="solution-1174.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1174 - Immediate Food Delivery II" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1174. Immediate Food Delivery II
+
+Description
+
+Table: Delivery
+
+
++-----------------------------+---------+
+| Column Name                 | Type    |
++-----------------------------+---------+
+| delivery_id                 | int     |
+| customer_id                 | int     |
+| order_date                  | date    |
+| customer_pref_delivery_date | date    |
++-----------------------------+---------+
+delivery_id is the column of unique values of this table.
+The table holds information about food delivery to customers that make orders at some date and specify a preferred delivery date (on the same order date or after it).
+
+
+&amp;nbsp;
+
+If the customer&amp;#39;s preferred delivery date is the same as the order date, then the order is called immediate; otherwise, it is called scheduled.
+
+The first order of a customer is the order with the earliest order date that the customer made. It is guaranteed that a customer has precisely one first order.
+
+Write a solution to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Delivery table:
++-------------+-------------+------------+-----------------------------+
+| delivery_id | customer_id | order_date | customer_pref_delivery_date |
++-------------+-------------+------------+-----------------------------+
+| 1           | 1           | 2019-08-01 | 2019-08-02                  |
+| 2           | 2           | 2019-08-02 | 2019-08-02                  |
+| 3           | 1           | 2019-08-11 | 2019-08-12                  |
+| 4           | 3           | 2019-08-24 | 2019-08-24                  |
+| 5           | 3           | 2019-08-21 | 2019-08-22                  |
+| 6           | 2           | 2019-08-11 | 2019-08-13                  |
+| 7           | 4           | 2019-08-09 | 2019-08-09                  |
++-------------+-------------+------------+-----------------------------+
+Output: 
++----------------------+
+| immediate_percentage |
++----------------------+
+| 50.00                |
++----------------------+
+Explanation: 
+The customer id 1 has a first order with delivery id 1 and it is scheduled.
+The customer id 2 has a first order with delivery id 2 and it is immediate.
+The customer id 3 has a first order with delivery id 5 and it is scheduled.
+The customer id 4 has a first order with delivery id 7 and it is immediate.
+Hence, half the customers have immediate first orders.
+
+
+Solutions
+
+Solution 1: Subquery
+
+We can use a subquery to first find the first order of each user, and then calculate the proportion of instant orders.
+
+Solution 2: Window Function
+
+We can use the RANK() window function to rank the orders of each user in ascending order by order date, and then filter out the orders with a rank of $1$, which are the first orders of each user. After that, we can calculate the proportion of instant orders.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+SELECT
+    ROUND(AVG(order_date = customer_pref_delivery_date) * 100, 2) AS immediate_percentage
+FROM Delivery
+WHERE
+    (customer_id, order_date) IN (
+        SELECT customer_id, MIN(order_date)
+        FROM Delivery
+        GROUP BY 1
+    );
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-02-16T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-02-16-1174-Immediate-Food-Delivery-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1174.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1174 - Immediate Food Delivery II" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1174. Immediate Food Delivery II
+
+Description
+
+Table: Delivery
+
+
++-----------------------------+---------+
+| Column Name                 | Type    |
++-----------------------------+---------+
+| delivery_id                 | int     |
+| customer_id                 | int     |
+| order_date                  | date    |
+| customer_pref_delivery_date | date    |
++-----------------------------+---------+
+delivery_id is the column of unique values of this table.
+The table holds information about food delivery to customers that make orders at some date and specify a preferred delivery date (on the same order date or after it).
+
+
+&amp;nbsp;
+
+If the customer&amp;#39;s preferred delivery date is the same as the order date, then the order is called immediate; otherwise, it is called scheduled.
+
+The first order of a customer is the order with the earliest order date that the customer made. It is guaranteed that a customer has precisely one first order.
+
+Write a solution to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.
+
+The&amp;nbsp;result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Delivery table:
++-------------+-------------+------------+-----------------------------+
+| delivery_id | customer_id | order_date | customer_pref_delivery_date |
++-------------+-------------+------------+-----------------------------+
+| 1           | 1           | 2019-08-01 | 2019-08-02                  |
+| 2           | 2           | 2019-08-02 | 2019-08-02                  |
+| 3           | 1           | 2019-08-11 | 2019-08-12                  |
+| 4           | 3           | 2019-08-24 | 2019-08-24                  |
+| 5           | 3           | 2019-08-21 | 2019-08-22                  |
+| 6           | 2           | 2019-08-11 | 2019-08-13                  |
+| 7           | 4           | 2019-08-09 | 2019-08-09                  |
++-------------+-------------+------------+-----------------------------+
+Output: 
++----------------------+
+| immediate_percentage |
++----------------------+
+| 50.00                |
++----------------------+
+Explanation: 
+The customer id 1 has a first order with delivery id 1 and it is scheduled.
+The customer id 2 has a first order with delivery id 2 and it is immediate.
+The customer id 3 has a first order with delivery id 5 and it is scheduled.
+The customer id 4 has a first order with delivery id 7 and it is immediate.
+Hence, half the customers have immediate first orders.
+
+
+Solutions
+
+Solution 1: Subquery
+
+We can use a subquery to first find the first order of each user, and then calculate the proportion of instant orders.
+
+Solution 2: Window Function
+
+We can use the RANK() window function to rank the orders of each user in ascending order by order date, and then filter out the orders with a rank of $1$, which are the first orders of each user. After that, we can calculate the proportion of instant orders.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+SELECT
+    ROUND(AVG(order_date = customer_pref_delivery_date) * 100, 2) AS immediate_percentage
+FROM Delivery
+WHERE
+    (customer_id, order_date) IN (
+        SELECT customer_id, MIN(order_date)
+        FROM Delivery
+        GROUP BY 1
+    );
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1174 - Immediate Food Delivery II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1174 - Immediate Food Delivery II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1174.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-02-16-1174-Immediate-Food-Delivery-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-02-16T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1174 - Immediate Food Delivery II","dateModified":"2019-02-16T00:00:00-08:00","datePublished":"2019-02-16T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-02-16-1174-Immediate-Food-Delivery-II/"},"url":"https://leetcode.ca/2019-02-16-1174-Immediate-Food-Delivery-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1174-immediate-food-delivery-ii">
+       <a href="solution-1174.html">
+        1174. Immediate Food Delivery II
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        Delivery
+       </code>
+      </p>
+      <pre>
++-----------------------------+---------+
+| Column Name                 | Type    |
++-----------------------------+---------+
+| delivery_id                 | int     |
+| customer_id                 | int     |
+| order_date                  | date    |
+| customer_pref_delivery_date | date    |
++-----------------------------+---------+
+delivery_id is the column of unique values of this table.
+The table holds information about food delivery to customers that make orders at some date and specify a preferred delivery date (on the same order date or after it).
+</pre>
+      <p>
+      </p>
+      <p>
+       If the customer's preferred delivery date is the same as the order date, then the order is called
+       <strong>
+        immediate;
+       </strong>
+       otherwise, it is called
+       <strong>
+        scheduled
+       </strong>
+       .
+      </p>
+      <p>
+       The
+       <strong>
+        first order
+       </strong>
+       of a customer is the order with the earliest order date that the customer made. It is guaranteed that a customer has precisely one first order.
+      </p>
+      <p>
+       Write a solution to find the percentage of immediate orders in the first orders of all customers,
+       <strong>
+        rounded to 2 decimal places
+       </strong>
+       .
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+Delivery table:
++-------------+-------------+------------+-----------------------------+
+| delivery_id | customer_id | order_date | customer_pref_delivery_date |
++-------------+-------------+------------+-----------------------------+
+| 1           | 1           | 2019-08-01 | 2019-08-02                  |
+| 2           | 2           | 2019-08-02 | 2019-08-02                  |
+| 3           | 1           | 2019-08-11 | 2019-08-12                  |
+| 4           | 3           | 2019-08-24 | 2019-08-24                  |
+| 5           | 3           | 2019-08-21 | 2019-08-22                  |
+| 6           | 2           | 2019-08-11 | 2019-08-13                  |
+| 7           | 4           | 2019-08-09 | 2019-08-09                  |
++-------------+-------------+------------+-----------------------------+
+<strong>Output:</strong> 
++----------------------+
+| immediate_percentage |
++----------------------+
+| 50.00                |
++----------------------+
+<strong>Explanation:</strong> 
+The customer id 1 has a first order with delivery id 1 and it is scheduled.
+The customer id 2 has a first order with delivery id 2 and it is immediate.
+The customer id 3 has a first order with delivery id 5 and it is scheduled.
+The customer id 4 has a first order with delivery id 7 and it is immediate.
+Hence, half the customers have immediate first orders.
+</pre>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Subquery
+       </strong>
+      </p>
+      <p>
+       We can use a subquery to first find the first order of each user, and then calculate the proportion of instant orders.
+      </p>
+      <p>
+       <strong>
+        Solution 2: Window Function
+       </strong>
+      </p>
+      <p>
+       We can use the
+       <code class="language-plaintext highlighter-rouge">
+        RANK()
+       </code>
+       window function to rank the orders of each user in ascending order by order date, and then filter out the orders with a rank of $1$, which are the first orders of each user. After that, we can calculate the proportion of instant orders.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#4694de1d-66a5-4625-9a3f-f6c96703b61c'}">
+       <li class="uk-active">
+        <a href="solution-1174.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="4694de1d-66a5-4625-9a3f-f6c96703b61c">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">SELECT</span>
+    <span class="n">ROUND</span><span class="p">(</span><span class="k">AVG</span><span class="p">(</span><span class="n">order_date</span> <span class="o">=</span> <span class="n">customer_pref_delivery_date</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">immediate_percentage</span>
+<span class="k">FROM</span> <span class="n">Delivery</span>
+<span class="k">WHERE</span>
+    <span class="p">(</span><span class="n">customer_id</span><span class="p">,</span> <span class="n">order_date</span><span class="p">)</span> <span class="k">IN</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="n">customer_id</span><span class="p">,</span> <span class="k">MIN</span><span class="p">(</span><span class="n">order_date</span><span class="p">)</span>
+        <span class="k">FROM</span> <span class="n">Delivery</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+    <span class="p">);</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1174.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

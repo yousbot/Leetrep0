@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-902.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-902.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>902 - Numbers At Most N Given Digit Set</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 902. Numbers At Most N Given Digit Set Description Given an array of digits which is sorted in non-decreasing order. You can write numbers using each digits[i] as many times as we want. For example, if digits = [&amp;#39;1&amp;#39;,&amp;#39;3&amp;#39;,&amp;#39;5&amp;#39;], we may write numbers such as...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-902.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-902.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-902.html" rel="stylesheet"/>
+   <link href="solution-902.html" rel="stylesheet"/>
+   <link href="solution-902.html" rel="stylesheet"/>
+   <link href="solution-902.html" rel="stylesheet"/>
+   <link href="solution-902.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="902 - Numbers At Most N Given Digit Set" property="og:title"/>
+   <meta content="Leetcode 902. Numbers At Most N Given Digit Set Description Given an array of digits which is sorted in non-decreasing order. You can write numbers using each digits[i] as many times as we want. For example, if digits = [&amp;#39;1&amp;#39;,&amp;#39;3&amp;#39;,&amp;#39;5&amp;#39;], we may write numbers such as &amp;#39;13&amp;#39;, &amp;#39;551&amp;#39;, and &amp;#39;1351315&amp;#39;. Return the number of positive integers that can be generated that are less than or equal to a given integer n. &amp;nbsp; Example 1: Input: digits = [&amp;quot;1&amp;quot;,&amp;quot;3&amp;quot;,&amp;quot;5&amp;quot;,&amp;quot;7&amp;quot;], n = 100 Output: 20 Explanation: The 20 numbers that can be written are: 1, 3, 5, 7, 11, 13, 15, 17, 31, 33, 35, 37, 51, 53, 55, 57, 71, 73, 75, 77. Example 2: Input: digits = [&amp;quot;1&amp;quot;,&amp;quot;4&amp;quot;,&amp;quot;9&amp;quot;], n = 1000000000 Output: 29523 Explanation: We can write 3 one digit numbers, 9 two digit numbers, 27 three digit numbers, 81 four digit numbers, 243 five digit numbers, 729 six digit numbers, 2187 seven digit numbers, 6561 eight digit numbers, and 19683 nine digit numbers. In total, this is 29523 integers that can be written using the digits array. Example 3: Input: digits = [&amp;quot;7&amp;quot;], n = 8 Output: 1 &amp;nbsp; Constraints: 1 &amp;lt;= digits.length &amp;lt;= 9 digits[i].length == 1 digits[i] is a digit from&amp;nbsp;&amp;#39;1&amp;#39;&amp;nbsp;to &amp;#39;9&amp;#39;. All the values in&amp;nbsp;digits are unique. digits is sorted in&amp;nbsp;non-decreasing order. 1 &amp;lt;= n &amp;lt;= 109 Solutions Java C++ Python Go TypeScript class Solution { private int[] a = new int[12]; private int[][] dp = new int[12][2]; private Set&amp;lt;Integer&amp;gt; s = new HashSet&amp;lt;&amp;gt;(); public int atMostNGivenDigitSet(String[] digits, int n) { for (var e : dp) { Arrays.fill(e, -1); } for (String d : digits) { s.add(Integer.parseInt(d)); } int len = 0; while (n &amp;gt; 0) { a[++len] = n % 10; n /= 10; } return dfs(len, 1, true); } private int dfs(int pos, int lead, boolean limit) { if (pos &amp;lt;= 0) { return lead ^ 1; } if (!limit &amp;amp;&amp;amp; lead != 1 &amp;amp;&amp;amp; dp[pos][lead] != -1) { return dp[pos][lead]; } int ans = 0; int up = limit ? a[pos] : 9; for (int i = 0; i &amp;lt;= up; ++i) { if (i == 0 &amp;amp;&amp;amp; lead == 1) { ans += dfs(pos - 1, lead, limit &amp;amp;&amp;amp; i == up); } else if (s.contains(i)) { ans += dfs(pos - 1, 0, limit &amp;amp;&amp;amp; i == up); } } if (!limit &amp;amp;&amp;amp; lead == 0) { dp[pos][lead] = ans; } return ans; } } class Solution { public: int a[12]; int dp[12][2]; unordered_set&amp;lt;int&amp;gt; s; int atMostNGivenDigitSet(vector&amp;lt;string&amp;gt;&amp;amp; digits, int n) { memset(dp, -1, sizeof dp); for (auto&amp;amp; d : digits) { s.insert(stoi(d)); } int len = 0; while (n) { a[++len] = n % 10; n /= 10; } return dfs(len, 1, true); } int dfs(int pos, int lead, bool limit) { if (pos &amp;lt;= 0) { return lead ^ 1; } if (!limit &amp;amp;&amp;amp; !lead &amp;amp;&amp;amp; dp[pos][lead] != -1) { return dp[pos][lead]; } int ans = 0; int up = limit ? a[pos] : 9; for (int..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-05-20T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-05-20-902-Numbers-At-Most-N-Given-Digit-Set/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-902.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="902 - Numbers At Most N Given Digit Set" property="twitter:title"/>
+   <meta content="Leetcode 902. Numbers At Most N Given Digit Set Description Given an array of digits which is sorted in non-decreasing order. You can write numbers using each digits[i] as many times as we want. For example, if digits = [&amp;#39;1&amp;#39;,&amp;#39;3&amp;#39;,&amp;#39;5&amp;#39;], we may write numbers such as &amp;#39;13&amp;#39;, &amp;#39;551&amp;#39;, and &amp;#39;1351315&amp;#39;. Return the number of positive integers that can be generated that are less than or equal to a given integer n. &amp;nbsp; Example 1: Input: digits = [&amp;quot;1&amp;quot;,&amp;quot;3&amp;quot;,&amp;quot;5&amp;quot;,&amp;quot;7&amp;quot;], n = 100 Output: 20 Explanation: The 20 numbers that can be written are: 1, 3, 5, 7, 11, 13, 15, 17, 31, 33, 35, 37, 51, 53, 55, 57, 71, 73, 75, 77. Example 2: Input: digits = [&amp;quot;1&amp;quot;,&amp;quot;4&amp;quot;,&amp;quot;9&amp;quot;], n = 1000000000 Output: 29523 Explanation: We can write 3 one digit numbers, 9 two digit numbers, 27 three digit numbers, 81 four digit numbers, 243 five digit numbers, 729 six digit numbers, 2187 seven digit numbers, 6561 eight digit numbers, and 19683 nine digit numbers. In total, this is 29523 integers that can be written using the digits array. Example 3: Input: digits = [&amp;quot;7&amp;quot;], n = 8 Output: 1 &amp;nbsp; Constraints: 1 &amp;lt;= digits.length &amp;lt;= 9 digits[i].length == 1 digits[i] is a digit from&amp;nbsp;&amp;#39;1&amp;#39;&amp;nbsp;to &amp;#39;9&amp;#39;. All the values in&amp;nbsp;digits are unique. digits is sorted in&amp;nbsp;non-decreasing order. 1 &amp;lt;= n &amp;lt;= 109 Solutions Java C++ Python Go TypeScript class Solution { private int[] a = new int[12]; private int[][] dp = new int[12][2]; private Set&amp;lt;Integer&amp;gt; s = new HashSet&amp;lt;&amp;gt;(); public int atMostNGivenDigitSet(String[] digits, int n) { for (var e : dp) { Arrays.fill(e, -1); } for (String d : digits) { s.add(Integer.parseInt(d)); } int len = 0; while (n &amp;gt; 0) { a[++len] = n % 10; n /= 10; } return dfs(len, 1, true); } private int dfs(int pos, int lead, boolean limit) { if (pos &amp;lt;= 0) { return lead ^ 1; } if (!limit &amp;amp;&amp;amp; lead != 1 &amp;amp;&amp;amp; dp[pos][lead] != -1) { return dp[pos][lead]; } int ans = 0; int up = limit ? a[pos] : 9; for (int i = 0; i &amp;lt;= up; ++i) { if (i == 0 &amp;amp;&amp;amp; lead == 1) { ans += dfs(pos - 1, lead, limit &amp;amp;&amp;amp; i == up); } else if (s.contains(i)) { ans += dfs(pos - 1, 0, limit &amp;amp;&amp;amp; i == up); } } if (!limit &amp;amp;&amp;amp; lead == 0) { dp[pos][lead] = ans; } return ans; } } class Solution { public: int a[12]; int dp[12][2]; unordered_set&amp;lt;int&amp;gt; s; int atMostNGivenDigitSet(vector&amp;lt;string&amp;gt;&amp;amp; digits, int n) { memset(dp, -1, sizeof dp); for (auto&amp;amp; d : digits) { s.insert(stoi(d)); } int len = 0; while (n) { a[++len] = n % 10; n /= 10; } return dfs(len, 1, true); } int dfs(int pos, int lead, bool limit) { if (pos &amp;lt;= 0) { return lead ^ 1; } if (!limit &amp;amp;&amp;amp; !lead &amp;amp;&amp;amp; dp[pos][lead] != -1) { return dp[pos][lead]; } int ans = 0; int up = limit ? a[pos] : 9; for (int..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    902 - Numbers At Most N Given Digit Set | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="902 - Numbers At Most N Given Digit Set" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-902.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-05-20-902-Numbers-At-Most-N-Given-Digit-Set/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-05-20T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"902 - Numbers At Most N Given Digit Set","dateModified":"2018-05-20T00:00:00-07:00","datePublished":"2018-05-20T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-05-20-902-Numbers-At-Most-N-Given-Digit-Set/"},"url":"https://leetcode.ca/2018-05-20-902-Numbers-At-Most-N-Given-Digit-Set/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="902-numbers-at-most-n-given-digit-set">
+       <a href="solution-902.html">
+        902. Numbers At Most N Given Digit Set
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an array of
+       <code>
+        digits
+       </code>
+       which is sorted in
+       <strong>
+        non-decreasing
+       </strong>
+       order. You can write numbers using each
+       <code>
+        digits[i]
+       </code>
+       as many times as we want. For example, if
+       <code>
+        digits = ['1','3','5']
+       </code>
+       , we may write numbers such as
+       <code>
+        '13'
+       </code>
+       ,
+       <code>
+        '551'
+       </code>
+       , and
+       <code>
+        '1351315'
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the number of positive integers that can be generated
+       </em>
+       that are less than or equal to a given integer
+       <code>
+        n
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> digits = ["1","3","5","7"], n = 100
+<strong>Output:</strong> 20
+<strong>Explanation: </strong>
+The 20 numbers that can be written are:
+1, 3, 5, 7, 11, 13, 15, 17, 31, 33, 35, 37, 51, 53, 55, 57, 71, 73, 75, 77.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> digits = ["1","4","9"], n = 1000000000
+<strong>Output:</strong> 29523
+<strong>Explanation: </strong>
+We can write 3 one digit numbers, 9 two digit numbers, 27 three digit numbers,
+81 four digit numbers, 243 five digit numbers, 729 six digit numbers,
+2187 seven digit numbers, 6561 eight digit numbers, and 19683 nine digit numbers.
+In total, this is 29523 integers that can be written using the digits array.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> digits = ["7"], n = 8
+<strong>Output:</strong> 1
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= digits.length &lt;= 9
+        </code>
+       </li>
+       <li>
+        <code>
+         digits[i].length == 1
+        </code>
+       </li>
+       <li>
+        <code>
+         digits[i]
+        </code>
+        is a digit from
+        <code>
+         '1'
+        </code>
+        to
+        <code>
+         '9'
+        </code>
+        .
+       </li>
+       <li>
+        All the values in
+        <code>
+         digits
+        </code>
+        are
+        <strong>
+         unique
+        </strong>
+        .
+       </li>
+       <li>
+        <code>
+         digits
+        </code>
+        is sorted in
+        <strong>
+         non-decreasing
+        </strong>
+        order.
+       </li>
+       <li>
+        <code>
+         1 &lt;= n &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#1102a1b2-ab49-4017-a6cd-d1f4e308362d'}">
+       <li class="uk-active">
+        <a href="solution-902.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-902.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-902.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-902.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-902.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="1102a1b2-ab49-4017-a6cd-d1f4e308362d">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">12</span><span class="o">];</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">12</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">atMostNGivenDigitSet</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">digits</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">dp</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">e</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">d</span> <span class="o">:</span> <span class="n">digits</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">s</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">d</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">a</span><span class="o">[++</span><span class="n">len</span><span class="o">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">10</span><span class="o">;</span>
+            <span class="n">n</span> <span class="o">/=</span> <span class="mi">10</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">len</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">pos</span><span class="o">,</span> <span class="kt">int</span> <span class="n">lead</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">pos</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">lead</span> <span class="o">^</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">lead</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="o">[</span><span class="n">pos</span><span class="o">][</span><span class="n">lead</span><span class="o">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">pos</span><span class="o">][</span><span class="n">lead</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">up</span> <span class="o">=</span> <span class="n">limit</span> <span class="o">?</span> <span class="n">a</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span> <span class="o">:</span> <span class="mi">9</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">up</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">lead</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">lead</span><span class="o">,</span> <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">i</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">lead</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dp</span><span class="o">[</span><span class="n">pos</span><span class="o">][</span><span class="n">lead</span><span class="o">]</span> <span class="o">=</span> <span class="n">ans</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">12</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="mi">12</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span>
+    <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">atMostNGivenDigitSet</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">digits</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">dp</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">d</span> <span class="o">:</span> <span class="n">digits</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">stoi</span><span class="p">(</span><span class="n">d</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">a</span><span class="p">[</span><span class="o">++</span><span class="n">len</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="n">n</span> <span class="o">/=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">len</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lead</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">lead</span> <span class="o">^</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">lead</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">lead</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">lead</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">up</span> <span class="o">=</span> <span class="n">limit</span> <span class="o">?</span> <span class="n">a</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">:</span> <span class="mi">9</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">up</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">lead</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lead</span><span class="p">,</span> <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">lead</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">lead</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">atMostNGivenDigitSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="o">@</span><span class="n">cache</span>
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">lead</span><span class="p">,</span> <span class="n">limit</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">lead</span> <span class="o">==</span> <span class="bp">False</span>
+            <span class="n">up</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="k">if</span> <span class="n">limit</span> <span class="k">else</span> <span class="mi">9</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">up</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">lead</span><span class="p">:</span>
+                    <span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lead</span><span class="p">,</span> <span class="n">limit</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                    <span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">limit</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ans</span>
+
+        <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">12</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">digits</span><span class="p">}</span>
+        <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">10</span>
+            <span class="n">n</span> <span class="o">//=</span> <span class="mi">10</span>
+        <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">atMostNGivenDigitSet</span><span class="p">(</span><span class="n">digits</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">s</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">d</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">digits</span> <span class="p">{</span>
+		<span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Atoi</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+		<span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+	<span class="p">}</span>
+	<span class="n">a</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">12</span><span class="p">)</span>
+	<span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="m">12</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">a</span> <span class="p">{</span>
+		<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">l</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">l</span><span class="o">++</span>
+		<span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">%</span> <span class="m">10</span>
+		<span class="n">n</span> <span class="o">/=</span> <span class="m">10</span>
+	<span class="p">}</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">int</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">lead</span> <span class="kt">int</span><span class="p">,</span> <span class="n">limit</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;=</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">lead</span> <span class="o">^</span> <span class="m">1</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="o">!</span><span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">lead</span> <span class="o">==</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">dp</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">lead</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">lead</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">up</span> <span class="o">:=</span> <span class="m">9</span>
+		<span class="k">if</span> <span class="n">limit</span> <span class="p">{</span>
+			<span class="n">up</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">up</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">lead</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+				<span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">lead</span><span class="p">,</span> <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="p">)</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">ans</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="n">up</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="o">!</span><span class="n">limit</span> <span class="p">{</span>
+			<span class="n">dp</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">lead</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">ans</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="no">true</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">atMostNGivenDigitSet</span><span class="p">(</span><span class="nx">digits</span><span class="p">:</span> <span class="kr">string</span><span class="p">[],</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">m</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">digits</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">d</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">)));</span>
+    <span class="kd">const</span> <span class="nx">dfs</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">lead</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">,</span> <span class="nx">limit</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">):</span> <span class="kr">number</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;=</span> <span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">lead</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">lead</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">limit</span> <span class="o">&amp;&amp;</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="nx">up</span> <span class="o">=</span> <span class="nx">limit</span> <span class="p">?</span> <span class="o">+</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">:</span> <span class="mi">9</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;=</span> <span class="nx">up</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">j</span> <span class="o">&amp;&amp;</span> <span class="nx">lead</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">ans</span> <span class="o">+=</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">limit</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">===</span> <span class="nx">up</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">nums</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">j</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">ans</span> <span class="o">+=</span> <span class="nx">dfs</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">limit</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">===</span> <span class="nx">up</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">lead</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">limit</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">ans</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">return</span> <span class="nx">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-902.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

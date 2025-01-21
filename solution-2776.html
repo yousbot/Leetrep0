@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2776.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2776.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2776 - Convert Callback Based Function to Promise Based Function</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2776. Convert Callback Based Function to Promise Based Function Description Write a function that accepts another function fn and converts the callback-based function&amp;nbsp;into a promise-based function.&amp;nbsp; The function fn takes a callback as its first argument, along with any additional arguments args&amp;nbsp;passed as separate inputs....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2776.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2776.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2776.html" rel="stylesheet"/>
+   <link href="solution-2776.html" rel="stylesheet"/>
+   <link href="solution-2776.html" rel="stylesheet"/>
+   <link href="solution-2776.html" rel="stylesheet"/>
+   <link href="solution-2776.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2776 - Convert Callback Based Function to Promise Based Function" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+2776. Convert Callback Based Function to Promise Based Function
+
+Description
+
+Write a function that accepts another function fn and converts the callback-based function&amp;nbsp;into a promise-based function.&amp;nbsp;
+
+The function fn takes a callback as its first argument, along with any additional arguments args&amp;nbsp;passed as separate inputs.
+
+The&amp;nbsp;promisify&amp;nbsp;function returns a new function that should return a promise. The promise should resolve with the argument passed as the first parameter of the callback when the callback is invoked without error, and reject with the error when the callback is called with an error as the second argument.
+
+The following is an example of a function that could be passed into&amp;nbsp;promisify.
+
+
+function sum(callback, a, b) {
+  if (a &amp;lt; 0 || b &amp;lt; 0) {
+&amp;nbsp;   const err = Error(&amp;#39;a and b must be positive&amp;#39;);
+    callback(undefined, err);
+&amp;nbsp; } else {
+    callback(a + b);
+&amp;nbsp; }
+}
+
+
+This is the equivalent code based on promises:
+
+
+async function sum(a, b) {
+  if (a &amp;lt; 0 || b &amp;lt; 0) {
+    throw Error(&amp;#39;a and b must be positive&amp;#39;);
+&amp;nbsp; } else {
+    return a + b;
+&amp;nbsp; }
+}
+
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+fn = (callback, a, b, c) =&amp;gt; {
+    callback(a * b * c);
+}
+args = [1, 2, 3]
+Output: {&amp;quot;resolved&amp;quot;: 6}
+Explanation: 
+const asyncFunc = promisify(fn);
+asyncFunc(1, 2, 3).then(console.log); // 6
+
+fn is called with a callback as the first argument and args as the rest. The promise based version of fn resolves a value of 6 when called with (1, 2, 3).
+
+
+Example 2:
+
+
+Input: 
+fn = (callback, a, b, c) =&amp;gt; {
+    callback(a * b * c, &amp;quot;Promise Rejected&amp;quot;);
+}
+args = [4, 5, 6]
+Output: {&amp;quot;rejected&amp;quot;: &amp;quot;Promise Rejected&amp;quot;}
+Explanation: 
+const asyncFunc = promisify(fn);
+asyncFunc(4, 5, 6).catch(console.log); // &amp;quot;Promise Rejected&amp;quot;
+
+fn is called with a callback as the first argument and args as the rest. As the second argument, the callback accepts an error message, so when fn is called, the promise is rejected with a error message provided in the callback. Note that it did not matter what was passed as the first argument into the callback.
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= args.length &amp;lt;= 100
+	0 &amp;lt;= args[i] &amp;lt;= 104
+
+
+Solutions
+
+
+
+	TypeScript
+
+
+
+
+
+	
+type CallbackFn = (next: (data: number, error: string) =&amp;gt; void, ...args: number[]) =&amp;gt; void;
+type Promisified = (...args: number[]) =&amp;gt; Promise&amp;lt;number&amp;gt;;
+
+function promisify(fn: CallbackFn): Promisified {
+    return async function (...args) {
+        return new Promise((resolve, reject) =&amp;gt; {
+            fn((data, error) =&amp;gt; {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(data);
+                }
+            }, ...args);
+        });
+    };
+}
+
+/**
+ * const asyncFunc = promisify(callback =&amp;gt; callback(42));
+ * asyncFunc().then(console.log); // 42
+ */
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-07-07T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-07-07-2776-Convert-Callback-Based-Function-to-Promise-Based-Function/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2776.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2776 - Convert Callback Based Function to Promise Based Function" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+2776. Convert Callback Based Function to Promise Based Function
+
+Description
+
+Write a function that accepts another function fn and converts the callback-based function&amp;nbsp;into a promise-based function.&amp;nbsp;
+
+The function fn takes a callback as its first argument, along with any additional arguments args&amp;nbsp;passed as separate inputs.
+
+The&amp;nbsp;promisify&amp;nbsp;function returns a new function that should return a promise. The promise should resolve with the argument passed as the first parameter of the callback when the callback is invoked without error, and reject with the error when the callback is called with an error as the second argument.
+
+The following is an example of a function that could be passed into&amp;nbsp;promisify.
+
+
+function sum(callback, a, b) {
+  if (a &amp;lt; 0 || b &amp;lt; 0) {
+&amp;nbsp;   const err = Error(&amp;#39;a and b must be positive&amp;#39;);
+    callback(undefined, err);
+&amp;nbsp; } else {
+    callback(a + b);
+&amp;nbsp; }
+}
+
+
+This is the equivalent code based on promises:
+
+
+async function sum(a, b) {
+  if (a &amp;lt; 0 || b &amp;lt; 0) {
+    throw Error(&amp;#39;a and b must be positive&amp;#39;);
+&amp;nbsp; } else {
+    return a + b;
+&amp;nbsp; }
+}
+
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+fn = (callback, a, b, c) =&amp;gt; {
+    callback(a * b * c);
+}
+args = [1, 2, 3]
+Output: {&amp;quot;resolved&amp;quot;: 6}
+Explanation: 
+const asyncFunc = promisify(fn);
+asyncFunc(1, 2, 3).then(console.log); // 6
+
+fn is called with a callback as the first argument and args as the rest. The promise based version of fn resolves a value of 6 when called with (1, 2, 3).
+
+
+Example 2:
+
+
+Input: 
+fn = (callback, a, b, c) =&amp;gt; {
+    callback(a * b * c, &amp;quot;Promise Rejected&amp;quot;);
+}
+args = [4, 5, 6]
+Output: {&amp;quot;rejected&amp;quot;: &amp;quot;Promise Rejected&amp;quot;}
+Explanation: 
+const asyncFunc = promisify(fn);
+asyncFunc(4, 5, 6).catch(console.log); // &amp;quot;Promise Rejected&amp;quot;
+
+fn is called with a callback as the first argument and args as the rest. As the second argument, the callback accepts an error message, so when fn is called, the promise is rejected with a error message provided in the callback. Note that it did not matter what was passed as the first argument into the callback.
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= args.length &amp;lt;= 100
+	0 &amp;lt;= args[i] &amp;lt;= 104
+
+
+Solutions
+
+
+
+	TypeScript
+
+
+
+
+
+	
+type CallbackFn = (next: (data: number, error: string) =&amp;gt; void, ...args: number[]) =&amp;gt; void;
+type Promisified = (...args: number[]) =&amp;gt; Promise&amp;lt;number&amp;gt;;
+
+function promisify(fn: CallbackFn): Promisified {
+    return async function (...args) {
+        return new Promise((resolve, reject) =&amp;gt; {
+            fn((data, error) =&amp;gt; {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(data);
+                }
+            }, ...args);
+        });
+    };
+}
+
+/**
+ * const asyncFunc = promisify(callback =&amp;gt; callback(42));
+ * asyncFunc().then(console.log); // 42
+ */
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2776 - Convert Callback Based Function to Promise Based Function | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2776 - Convert Callback Based Function to Promise Based Function" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2776.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-07-07-2776-Convert-Callback-Based-Function-to-Promise-Based-Function/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-07-07T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2776 - Convert Callback Based Function to Promise Based Function","dateModified":"2023-07-07T00:00:00-07:00","datePublished":"2023-07-07T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-07-07-2776-Convert-Callback-Based-Function-to-Promise-Based-Function/"},"url":"https://leetcode.ca/2023-07-07-2776-Convert-Callback-Based-Function-to-Promise-Based-Function/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2776-convert-callback-based-function-to-promise-based-function">
+       <a href="solution-2776.html">
+        2776. Convert Callback Based Function to Promise Based Function
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Write a function that accepts another function
+       <code>
+        fn
+       </code>
+       and converts the callback-based function into a promise-based function.
+      </p>
+      <p>
+       The function
+       <code>
+        fn
+       </code>
+       takes a callback as its first argument, along with any additional arguments
+       <code>
+        args
+       </code>
+       passed as separate inputs.
+      </p>
+      <p>
+       The
+       <code>
+        promisify
+       </code>
+       function returns a new function that should return a promise. The promise should resolve with the argument passed as the first parameter of the callback when the callback is invoked without error, and reject with the error when the callback is called with an error as the second argument.
+      </p>
+      <p>
+       The following is an example of a function that could be passed into
+       <code>
+        promisify
+       </code>
+       .
+      </p>
+      <pre>
+function sum(callback, a, b) {
+  if (a &lt; 0 || b &lt; 0) {
+    const err = Error('a and b must be positive');
+    callback(undefined, err);
+  } else {
+    callback(a + b);
+  }
+}
+</pre>
+      <p>
+       This is the equivalent code based on promises:
+      </p>
+      <pre>
+async function sum(a, b) {
+  if (a &lt; 0 || b &lt; 0) {
+    throw Error('a and b must be positive');
+  } else {
+    return a + b;
+  }
+}
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+fn = (callback, a, b, c) =&gt; {
+    callback(a * b * c);
+}
+args = [1, 2, 3]
+<strong>Output:</strong> {"resolved": 6}
+<strong>Explanation:</strong> 
+const asyncFunc = promisify(fn);
+asyncFunc(1, 2, 3).then(console.log); // 6
+
+fn is called with a callback as the first argument and args as the rest. The promise based version of fn resolves a value of 6 when called with (1, 2, 3).
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+fn = (callback, a, b, c) =&gt; {
+    callback(a * b * c, "Promise Rejected");
+}
+args = [4, 5, 6]
+<strong>Output:</strong> {"rejected": "Promise Rejected"}
+<strong>Explanation:</strong> 
+const asyncFunc = promisify(fn);
+asyncFunc(4, 5, 6).catch(console.log); // "Promise Rejected"
+
+fn is called with a callback as the first argument and args as the rest. As the second argument, the callback accepts an error message, so when fn is called, the promise is rejected with a error message provided in the callback. Note that it did not matter what was passed as the first argument into the callback.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= args.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= args[i] &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#2d77ed9a-e568-4006-bffc-dc21d2bfbc1c'}">
+       <li class="uk-active">
+        <a href="solution-2776.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="2d77ed9a-e568-4006-bffc-dc21d2bfbc1c">
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">type</span> <span class="nx">CallbackFn</span> <span class="o">=</span> <span class="p">(</span><span class="nx">next</span><span class="p">:</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">error</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">,</span> <span class="p">...</span><span class="nx">args</span><span class="p">:</span> <span class="kr">number</span><span class="p">[])</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">;</span>
+<span class="kd">type</span> <span class="nx">Promisified</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">args</span><span class="p">:</span> <span class="kr">number</span><span class="p">[])</span> <span class="o">=&gt;</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">promisify</span><span class="p">(</span><span class="nx">fn</span><span class="p">:</span> <span class="nx">CallbackFn</span><span class="p">):</span> <span class="nx">Promisified</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">async</span> <span class="kd">function</span> <span class="p">(...</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">fn</span><span class="p">((</span><span class="nx">data</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">reject</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">},</span> <span class="p">...</span><span class="nx">args</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * const asyncFunc = promisify(callback =&gt; callback(42));
+ * asyncFunc().then(console.log); // 42
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2776.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

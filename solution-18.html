@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-18.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-18.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>18 - 4Sum</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 18. 4Sum Description Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that: 0 &amp;lt;= a, b, c, d&amp;nbsp;&amp;lt; n a, b, c, and d are distinct. nums[a] + nums[b] + nums[c] + nums[d]...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-18.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-18.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-18.html" rel="stylesheet"/>
+   <link href="solution-18.html" rel="stylesheet"/>
+   <link href="solution-18.html" rel="stylesheet"/>
+   <link href="solution-18.html" rel="stylesheet"/>
+   <link href="solution-18.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="18 - 4Sum" property="og:title"/>
+   <meta content="Leetcode 18. 4Sum Description Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that: 0 &amp;lt;= a, b, c, d&amp;nbsp;&amp;lt; n a, b, c, and d are distinct. nums[a] + nums[b] + nums[c] + nums[d] == target You may return the answer in any order. &amp;nbsp; Example 1: Input: nums = [1,0,-1,0,-2,2], target = 0 Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]] Example 2: Input: nums = [2,2,2,2,2], target = 8 Output: [[2,2,2,2]] &amp;nbsp; Constraints: 1 &amp;lt;= nums.length &amp;lt;= 200 -109 &amp;lt;= nums[i] &amp;lt;= 109 -109 &amp;lt;= target &amp;lt;= 109 Solutions Solution 1: Sorting + Double Pointers We notice that the problem requires us to find non-repeating quadruplets. Therefore, we can first sort the array, which makes it easy to skip duplicate elements. Next, we enumerate the first two elements of the quadruplet, $nums[i]$ and $nums[j]$, where $i \lt j$. During the enumeration process, we skip duplicate $nums[i]$ and $nums[j]$. Then, we use two pointers $k$ and $l$ to point to the two ends behind $nums[i]$ and $nums[j]$. Let $x = nums[i] + nums[j] + nums[k] + nums[l]$, we compare $x$ with $target$ and perform the following operations: If $x \lt target$, then update $k = k + 1$ to get a larger $x$; If $x \gt target$, then update $l = l - 1$ to get a smaller $x$; Otherwise, it means that a quadruplet $(nums[i], nums[j], nums[k], nums[l])$ is found. Add it to the answer, then we update the pointers $k$ and $l$, and skip all duplicate elements to prevent the answer from containing duplicate quadruplets, and continue to find the next quadruplet. The time complexity is $O(n^3)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array. Java C++ Python Go TypeScript Javascript C# Php class Solution { public List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; fourSum(int[] nums, int target) { int n = nums.length; List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); if (n &amp;lt; 4) { return ans; } Arrays.sort(nums); for (int i = 0; i &amp;lt; n - 3; ++i) { if (i &amp;gt; 0 &amp;amp;&amp;amp; nums[i] == nums[i - 1]) { continue; } for (int j = i + 1; j &amp;lt; n - 2; ++j) { if (j &amp;gt; i + 1 &amp;amp;&amp;amp; nums[j] == nums[j - 1]) { continue; } int k = j + 1, l = n - 1; while (k &amp;lt; l) { long x = (long) nums[i] + nums[j] + nums[k] + nums[l]; if (x &amp;lt; target) { ++k; } else if (x &amp;gt; target) { --l; } else { ans.add(List.of(nums[i], nums[j], nums[k++], nums[l--])); while (k &amp;lt; l &amp;amp;&amp;amp; nums[k] == nums[k - 1]) { ++k; } while (k &amp;lt; l &amp;amp;&amp;amp; nums[l] == nums[l + 1]) { --l; } } } } } return ans; } } // // general solution, k-sum // https://leetcode.com/problems/4sum/solution/ // below kSum() divide-and-conquer idea is good, but not passing Online-Judge class Solution { public List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; fourSum(int[] nums, int target) { Arrays.sort(nums); return kSum(nums, target, 0,..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2015-12-18T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2015-12-18-18-4Sum/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-18.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="18 - 4Sum" property="twitter:title"/>
+   <meta content="Leetcode 18. 4Sum Description Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that: 0 &amp;lt;= a, b, c, d&amp;nbsp;&amp;lt; n a, b, c, and d are distinct. nums[a] + nums[b] + nums[c] + nums[d] == target You may return the answer in any order. &amp;nbsp; Example 1: Input: nums = [1,0,-1,0,-2,2], target = 0 Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]] Example 2: Input: nums = [2,2,2,2,2], target = 8 Output: [[2,2,2,2]] &amp;nbsp; Constraints: 1 &amp;lt;= nums.length &amp;lt;= 200 -109 &amp;lt;= nums[i] &amp;lt;= 109 -109 &amp;lt;= target &amp;lt;= 109 Solutions Solution 1: Sorting + Double Pointers We notice that the problem requires us to find non-repeating quadruplets. Therefore, we can first sort the array, which makes it easy to skip duplicate elements. Next, we enumerate the first two elements of the quadruplet, $nums[i]$ and $nums[j]$, where $i \lt j$. During the enumeration process, we skip duplicate $nums[i]$ and $nums[j]$. Then, we use two pointers $k$ and $l$ to point to the two ends behind $nums[i]$ and $nums[j]$. Let $x = nums[i] + nums[j] + nums[k] + nums[l]$, we compare $x$ with $target$ and perform the following operations: If $x \lt target$, then update $k = k + 1$ to get a larger $x$; If $x \gt target$, then update $l = l - 1$ to get a smaller $x$; Otherwise, it means that a quadruplet $(nums[i], nums[j], nums[k], nums[l])$ is found. Add it to the answer, then we update the pointers $k$ and $l$, and skip all duplicate elements to prevent the answer from containing duplicate quadruplets, and continue to find the next quadruplet. The time complexity is $O(n^3)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array. Java C++ Python Go TypeScript Javascript C# Php class Solution { public List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; fourSum(int[] nums, int target) { int n = nums.length; List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); if (n &amp;lt; 4) { return ans; } Arrays.sort(nums); for (int i = 0; i &amp;lt; n - 3; ++i) { if (i &amp;gt; 0 &amp;amp;&amp;amp; nums[i] == nums[i - 1]) { continue; } for (int j = i + 1; j &amp;lt; n - 2; ++j) { if (j &amp;gt; i + 1 &amp;amp;&amp;amp; nums[j] == nums[j - 1]) { continue; } int k = j + 1, l = n - 1; while (k &amp;lt; l) { long x = (long) nums[i] + nums[j] + nums[k] + nums[l]; if (x &amp;lt; target) { ++k; } else if (x &amp;gt; target) { --l; } else { ans.add(List.of(nums[i], nums[j], nums[k++], nums[l--])); while (k &amp;lt; l &amp;amp;&amp;amp; nums[k] == nums[k - 1]) { ++k; } while (k &amp;lt; l &amp;amp;&amp;amp; nums[l] == nums[l + 1]) { --l; } } } } } return ans; } } // // general solution, k-sum // https://leetcode.com/problems/4sum/solution/ // below kSum() divide-and-conquer idea is good, but not passing Online-Judge class Solution { public List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; fourSum(int[] nums, int target) { Arrays.sort(nums); return kSum(nums, target, 0,..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    18 - 4Sum | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="18 - 4Sum" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-18.html" rel="canonical">
+          <meta content="https://leetcode.ca/2015-12-18-18-4Sum/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2015-12-18T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"18 - 4Sum","dateModified":"2015-12-18T00:00:00-08:00","datePublished":"2015-12-18T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2015-12-18-18-4Sum/"},"url":"https://leetcode.ca/2015-12-18-18-4Sum/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="18-4sum">
+       <a href="solution-18.html">
+        18. 4Sum
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an array
+       <code>
+        nums
+       </code>
+       of
+       <code>
+        n
+       </code>
+       integers, return
+       <em>
+        an array of all the
+        <strong>
+         unique
+        </strong>
+        quadruplets
+       </em>
+       <code>
+        [nums[a], nums[b], nums[c], nums[d]]
+       </code>
+       such that:
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= a, b, c, d &lt; n
+        </code>
+       </li>
+       <li>
+        <code>
+         a
+        </code>
+        ,
+        <code>
+         b
+        </code>
+        ,
+        <code>
+         c
+        </code>
+        , and
+        <code>
+         d
+        </code>
+        are
+        <strong>
+         distinct
+        </strong>
+        .
+       </li>
+       <li>
+        <code>
+         nums[a] + nums[b] + nums[c] + nums[d] == target
+        </code>
+       </li>
+      </ul>
+      <p>
+       You may return the answer in
+       <strong>
+        any order
+       </strong>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [1,0,-1,0,-2,2], target = 0
+<strong>Output:</strong> [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [2,2,2,2,2], target = 8
+<strong>Output:</strong> [[2,2,2,2]]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= nums.length &lt;= 200
+        </code>
+       </li>
+       <li>
+        <code>
+         -10
+         <sup>
+          9
+         </sup>
+         &lt;= nums[i] &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         -10
+         <sup>
+          9
+         </sup>
+         &lt;= target &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Sorting + Double Pointers
+       </strong>
+      </p>
+      <p>
+       We notice that the problem requires us to find non-repeating quadruplets. Therefore, we can first sort the array, which makes it easy to skip duplicate elements.
+      </p>
+      <p>
+       Next, we enumerate the first two elements of the quadruplet, $nums[i]$ and $nums[j]$, where $i \lt j$. During the enumeration process, we skip duplicate $nums[i]$ and $nums[j]$. Then, we use two pointers $k$ and $l$ to point to the two ends behind $nums[i]$ and $nums[j]$. Let $x = nums[i] + nums[j] + nums[k] + nums[l]$, we compare $x$ with $target$ and perform the following operations:
+      </p>
+      <ul>
+       <li>
+        If $x \lt target$, then update $k = k + 1$ to get a larger $x$;
+       </li>
+       <li>
+        If $x \gt target$, then update $l = l - 1$ to get a smaller $x$;
+       </li>
+       <li>
+        Otherwise, it means that a quadruplet $(nums[i], nums[j], nums[k], nums[l])$ is found. Add it to the answer, then we update the pointers $k$ and $l$, and skip all duplicate elements to prevent the answer from containing duplicate quadruplets, and continue to find the next quadruplet.
+       </li>
+      </ul>
+      <p>
+       The time complexity is $O(n^3)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#4936ba5e-a5b4-44eb-805c-abec830dc6f8'}">
+       <li class="uk-active">
+        <a href="solution-18.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-18.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-18.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-18.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-18.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-18.html">
+         Javascript
+        </a>
+       </li>
+       <li>
+        <a href="solution-18.html">
+         C#
+        </a>
+       </li>
+       <li>
+        <a href="solution-18.html">
+         Php
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="4936ba5e-a5b4-44eb-805c-abec830dc6f8">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">fourSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">nums</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">3</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">long</span> <span class="n">x</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">l</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="o">++</span><span class="n">k</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="o">--</span><span class="n">l</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="n">k</span><span class="o">++],</span> <span class="n">nums</span><span class="o">[</span><span class="n">l</span><span class="o">--]));</span>
+                        <span class="k">while</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                            <span class="o">++</span><span class="n">k</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="k">while</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                            <span class="o">--</span><span class="n">l</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+<span class="c1">//</span>
+
+<span class="c1">// general solution, k-sum</span>
+<span class="c1">// https://leetcode.com/problems/4sum/solution/</span>
+<span class="c1">// below kSum() divide-and-conquer idea is good, but not passing Online-Judge</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">fourSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">nums</span><span class="o">);</span>
+		<span class="k">return</span> <span class="nf">kSum</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="n">target</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">4</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">kSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">start</span> <span class="o">==</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">||</span> <span class="n">nums</span><span class="o">[</span><span class="n">start</span><span class="o">]</span> <span class="o">*</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">target</span> <span class="o">||</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">*</span> <span class="n">k</span><span class="o">)</span>
+			<span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">2</span><span class="o">)</span>
+			<span class="k">return</span> <span class="nf">twoSum</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="n">target</span><span class="o">,</span> <span class="n">start</span><span class="o">);</span>
+		<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">start</span> <span class="o">||</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="c1">// 'i == start' is key, since it could be in a following recurion of [1,1,1] where start is 3rd '1'</span>
+				<span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">:</span> <span class="n">kSum</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">])));</span>
+					<span class="n">res</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">res</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">).</span><span class="na">addAll</span><span class="o">(</span><span class="n">set</span><span class="o">);</span>
+				<span class="o">}</span>
+		<span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">twoSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+		<span class="kt">int</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">start</span><span class="o">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+		<span class="k">while</span> <span class="o">(</span><span class="n">lo</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="o">)</span> <span class="o">{</span>
+			<span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">lo</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">hi</span><span class="o">];</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="o">||</span> <span class="o">(</span><span class="n">lo</span> <span class="o">&gt;</span> <span class="n">start</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">lo</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">lo</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]))</span>
+				<span class="o">++</span><span class="n">lo</span><span class="o">;</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="n">target</span> <span class="o">||</span> <span class="o">(</span><span class="n">hi</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">hi</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">hi</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]))</span>
+				<span class="o">--</span><span class="n">hi</span><span class="o">;</span>
+			<span class="k">else</span>
+				<span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">lo</span><span class="o">++],</span> <span class="n">nums</span><span class="o">[</span><span class="n">hi</span><span class="o">--]));</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Four_Sum</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Four_Sum</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Four_Sum</span><span class="o">();</span>
+        <span class="nc">Solution</span> <span class="n">s</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="na">new</span> <span class="nf">Solution</span><span class="o">();</span>
+<span class="c1">//		SolutionForLoop s= out.new SolutionForLoop();</span>
+
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">fourSum</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">},</span> <span class="mi">0</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">each</span> <span class="o">:</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">one</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">e</span> <span class="o">:</span> <span class="n">each</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">one</span> <span class="o">=</span> <span class="n">one</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">e</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">one</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c1">// time: O(NlogN)</span>
+    <span class="c1">// space: O(1)</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">fourSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">nums</span><span class="o">);</span>
+
+            <span class="c1">// improved based on 3-sum</span>
+            <span class="kt">int</span> <span class="n">layer4</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">layer4</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="c1">// @note: below is causing me trouble when convert for to while</span>
+                <span class="c1">// 			in while, here "layer4" is never updated for case like {0,0,0,0}</span>
+                <span class="c1">// if(layer4 &gt; 0 &amp;&amp; nums[layer4] == nums[layer4 - 1]) continue;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">layer4</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">layer4</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">layer4</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">layer4</span><span class="o">++;</span>
+                <span class="o">}</span>
+
+                <span class="c1">// hold one pointer, other two pointer moving</span>
+                <span class="kt">int</span> <span class="n">ancher</span> <span class="o">=</span> <span class="n">layer4</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">ancher</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">ancher</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+
+                    <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">layer4</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">ancher</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+
+                        <span class="k">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+
+                            <span class="c1">// @note: Arrays.asList()</span>
+                            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">layer4</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="n">ancher</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]));</span>
+
+                            <span class="c1">// @note: dont forget move pointers</span>
+                            <span class="n">i</span><span class="o">++;</span>
+                            <span class="n">j</span><span class="o">--;</span>
+
+                            <span class="c1">// @note: optimization. above i,j is updated already, compare with previous position</span>
+                            <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                                <span class="n">i</span><span class="o">++;</span>
+                            <span class="o">}</span>
+                            <span class="k">while</span> <span class="o">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                                <span class="n">j</span><span class="o">--;</span>
+                            <span class="o">}</span>
+
+                        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">i</span><span class="o">++;</span>
+
+                            <span class="c1">// @note: same here, possibly updated already, note i-1 or i+1</span>
+                            <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                                <span class="n">i</span><span class="o">++;</span>
+                            <span class="o">}</span>
+
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                            <span class="n">j</span><span class="o">--;</span>
+
+                            <span class="c1">// @note: same here, possibly updated already, note i-1 or i+1</span>
+                            <span class="k">while</span> <span class="o">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                                <span class="n">j</span><span class="o">--;</span>
+                            <span class="o">}</span>
+
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+
+                    <span class="n">ancher</span><span class="o">++;</span>
+
+                    <span class="c1">// optimize for 2nd pointer</span>
+                    <span class="k">while</span> <span class="o">(</span><span class="n">ancher</span> <span class="o">&gt;</span> <span class="n">layer4</span> <span class="o">&amp;&amp;</span> <span class="n">ancher</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">ancher</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">ancher</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="n">ancher</span><span class="o">++;</span>
+                    <span class="o">}</span>
+
+                <span class="o">}</span>
+
+                <span class="n">layer4</span><span class="o">++;</span>
+
+                <span class="c1">// optimize for 2nd pointer</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">layer4</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">layer4</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">layer4</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">layer4</span><span class="o">++;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">fourSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">long</span> <span class="kt">long</span> <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">)</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="o">++</span><span class="n">k</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="o">--</span><span class="n">l</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="o">--</span><span class="p">]});</span>
+                        <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="o">++</span><span class="n">k</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="o">--</span><span class="n">l</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1"># k-sum
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">fourSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">nums</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">kSum</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">kSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="ow">or</span> <span class="n">nums</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">*</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">target</span> <span class="ow">or</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">k</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">res</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">twoSum</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">start</span> <span class="ow">or</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="c1"># here is a hidden matching target==0
+</span>                <span class="c1"># if not matching target, then kSum() will return empty list
+</span>                <span class="k">for</span> <span class="n">sset</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">kSum</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="c1"># if kSum(k-1) return empty, it will not execute this line
+</span>                    <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">([</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">]</span> <span class="o">+</span> <span class="n">sset</span><span class="p">)</span> <span class="c1"># put nums[i] in a list
+</span>        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">twoSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">lo</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">hi</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="ow">or</span> <span class="p">(</span><span class="n">lo</span> <span class="o">&gt;</span> <span class="n">start</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">lo</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">lo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]):</span>
+                <span class="n">lo</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">target</span> <span class="ow">or</span> <span class="p">(</span><span class="n">hi</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">hi</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">hi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+                <span class="n">hi</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="n">nums</span><span class="p">[</span><span class="n">lo</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">hi</span><span class="p">]])</span>
+                <span class="c1"># continue searching, could be multiple answers
+</span>                <span class="n">lo</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">hi</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1">#########
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">fourSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ans</span>
+        <span class="n">nums</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="n">k</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+                        <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">:</span>
+                        <span class="n">l</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]])</span>
+                        <span class="n">k</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">1</span>
+                        <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                            <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                            <span class="n">l</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">fourSum</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="m">4</span> <span class="p">{</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">-</span><span class="m">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">-</span><span class="m">2</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span><span class="o">+</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="n">k</span><span class="p">,</span> <span class="n">l</span> <span class="o">:=</span> <span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="m">1</span>
+			<span class="k">for</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="p">{</span>
+				<span class="n">x</span> <span class="o">:=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="p">{</span>
+					<span class="n">k</span><span class="o">++</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">target</span> <span class="p">{</span>
+					<span class="n">l</span><span class="o">--</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]})</span>
+					<span class="n">k</span><span class="o">++</span>
+					<span class="n">l</span><span class="o">--</span>
+					<span class="k">for</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+						<span class="n">k</span><span class="o">++</span>
+					<span class="p">}</span>
+					<span class="k">for</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+						<span class="n">l</span><span class="o">--</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">fourSum</span><span class="p">(</span><span class="nx">nums</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">target</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span><span class="p">[][]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">nums</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">j</span> <span class="o">&gt;</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kd">let</span> <span class="p">[</span><span class="nx">k</span><span class="p">,</span> <span class="nx">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">+</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="o">++</span><span class="nx">k</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="o">--</span><span class="nx">l</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">],</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span><span class="o">++</span><span class="p">],</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span><span class="o">--</span><span class="p">]]);</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="o">++</span><span class="nx">k</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="o">--</span><span class="nx">l</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[][]}
+ */</span>
+<span class="kd">var</span> <span class="nx">fourSum</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">nums</span><span class="p">,</span> <span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">ans</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">nums</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">j</span> <span class="o">&gt;</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kd">let</span> <span class="p">[</span><span class="nx">k</span><span class="p">,</span> <span class="nx">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">+</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="o">++</span><span class="nx">k</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="o">--</span><span class="nx">l</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">ans</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">],</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span><span class="o">++</span><span class="p">],</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span><span class="o">--</span><span class="p">]]);</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="o">++</span><span class="nx">k</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="o">--</span><span class="nx">l</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="n">IList</span><span class="p">&lt;</span><span class="n">IList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="nf">FourSum</span><span class="p">(</span><span class="kt">int</span><span class="p">[]</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">ans</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">IList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;&gt;();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="p">&lt;</span> <span class="m">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">Array</span><span class="p">.</span><span class="nf">Sort</span><span class="p">(</span><span class="n">nums</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">n</span> <span class="p">-</span> <span class="m">3</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">n</span> <span class="p">-</span> <span class="m">2</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="p">&gt;</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span> <span class="p">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="p">-</span> <span class="m">1</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="kt">int</span> <span class="n">k</span> <span class="p">=</span> <span class="n">j</span> <span class="p">+</span> <span class="m">1</span><span class="p">,</span> <span class="n">l</span> <span class="p">=</span> <span class="n">n</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="p">&lt;</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">long</span> <span class="n">x</span> <span class="p">=</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="p">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="p">&lt;</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="p">++</span><span class="n">k</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="p">&gt;</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="p">--</span><span class="n">l</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">ans</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="p">{</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">++],</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">--]});</span>
+                        <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="p">&lt;</span> <span class="n">l</span> <span class="p">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="p">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">k</span> <span class="p">-</span> <span class="m">1</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="p">++</span><span class="n">k</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="p">&lt;</span> <span class="n">l</span> <span class="p">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="p">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span> <span class="p">+</span> <span class="m">1</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="p">--</span><span class="n">l</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-php highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="cd">/**
+     * @param int[] $nums
+     * @param int $target
+     * @return int[][]
+     */</span>
+
+    <span class="k">function</span> <span class="n">fourSum</span><span class="p">(</span><span class="nv">$nums</span><span class="p">,</span> <span class="nv">$target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$result</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="nv">$n</span> <span class="o">=</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$nums</span><span class="p">);</span>
+
+        <span class="nb">sort</span><span class="p">(</span><span class="nv">$nums</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$n</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">===</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="nv">$j</span> <span class="o">=</span> <span class="nv">$i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nv">$j</span> <span class="o">&lt;</span> <span class="nv">$n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="nv">$j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$j</span> <span class="o">&gt;</span> <span class="nv">$i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$j</span><span class="p">]</span> <span class="o">===</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="nv">$left</span> <span class="o">=</span> <span class="nv">$j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="nv">$right</span> <span class="o">=</span> <span class="nv">$n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+
+                <span class="k">while</span> <span class="p">(</span><span class="nv">$left</span> <span class="o">&lt;</span> <span class="nv">$right</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$sum</span> <span class="o">=</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">+</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$j</span><span class="p">]</span> <span class="o">+</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$left</span><span class="p">]</span> <span class="o">+</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$right</span><span class="p">];</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="nv">$sum</span> <span class="o">===</span> <span class="nv">$target</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nv">$result</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="nv">$nums</span><span class="p">[</span><span class="nv">$i</span><span class="p">],</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$j</span><span class="p">],</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$left</span><span class="p">],</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$right</span><span class="p">]];</span>
+
+                        <span class="k">while</span> <span class="p">(</span><span class="nv">$left</span> <span class="o">&lt;</span> <span class="nv">$right</span> <span class="o">&amp;&amp;</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$left</span><span class="p">]</span> <span class="o">===</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="nv">$left</span><span class="o">++</span><span class="p">;</span>
+                        <span class="p">}</span>
+
+                        <span class="k">while</span> <span class="p">(</span><span class="nv">$left</span> <span class="o">&lt;</span> <span class="nv">$right</span> <span class="o">&amp;&amp;</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$right</span><span class="p">]</span> <span class="o">===</span> <span class="nv">$nums</span><span class="p">[</span><span class="nv">$right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                            <span class="nv">$right</span><span class="o">--</span><span class="p">;</span>
+                        <span class="p">}</span>
+
+                        <span class="nv">$left</span><span class="o">++</span><span class="p">;</span>
+                        <span class="nv">$right</span><span class="o">--</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$sum</span> <span class="o">&lt;</span> <span class="nv">$target</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nv">$left</span><span class="o">++</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="nv">$right</span><span class="o">--</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-18.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

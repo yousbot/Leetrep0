@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-705.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-705.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>705 - Design HashSet</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 705. Design HashSet Description Design a HashSet without using any built-in hash table libraries. Implement MyHashSet class: void add(key) Inserts the value key into the HashSet. bool contains(key) Returns whether the value key exists in the HashSet or not. void remove(key) Removes the value key...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-705.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-705.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-705.html" rel="stylesheet"/>
+   <link href="solution-705.html" rel="stylesheet"/>
+   <link href="solution-705.html" rel="stylesheet"/>
+   <link href="solution-705.html" rel="stylesheet"/>
+   <link href="solution-705.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="705 - Design HashSet" property="og:title"/>
+   <meta content="Leetcode 705. Design HashSet Description Design a HashSet without using any built-in hash table libraries. Implement MyHashSet class: void add(key) Inserts the value key into the HashSet. bool contains(key) Returns whether the value key exists in the HashSet or not. void remove(key) Removes the value key in the HashSet. If key does not exist in the HashSet, do nothing. &amp;nbsp; Example 1: Input [&amp;quot;MyHashSet&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;contains&amp;quot;, &amp;quot;contains&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;contains&amp;quot;, &amp;quot;remove&amp;quot;, &amp;quot;contains&amp;quot;] [[], [1], [2], [1], [3], [2], [2], [2], [2]] Output [null, null, null, true, false, null, true, null, false] Explanation MyHashSet myHashSet = new MyHashSet(); myHashSet.add(1); // set = [1] myHashSet.add(2); // set = [1, 2] myHashSet.contains(1); // return True myHashSet.contains(3); // return False, (not found) myHashSet.add(2); // set = [1, 2] myHashSet.contains(2); // return True myHashSet.remove(2); // set = [1] myHashSet.contains(2); // return False, (already removed) &amp;nbsp; Constraints: 0 &amp;lt;= key &amp;lt;= 106 At most 104 calls will be made to add, remove, and contains. Solutions There are multiple ways to implement a hash set, but one straightforward method is to use a list of lists (also known as bucketing or chaining) to handle collisions (when two different elements have the same hash). List of lists, ie. bucketing or chaining Since all values are in the range of [0, 1000000], create an array with length 1000001, which has boolean type. If a value is added, set the element at the corresponding index in the array to true. If a value is removed, set the element at the corresponding index in the array to false. For the contains function, simply return the element at the corresponding index in the array, where true means the element exists in the HashSet and false means the element does not exist in the HashSet. Open Addressing with Linear Probing In open addressing, all elements occupy the hash table array itself. When a collision occurs (two keys hash to the same index), the hash table searches for the next empty slot in the array by probing subsequent indices until an empty slot is found. For simplicity, below code assumes keys are positive integers and uses deletion markers for removed elements. Explanation Initialization: Sets initial capacity and creates an array (self.data) to store the elements. It also defines a load factor to determine when to resize the hash table to maintain efficiency. _hash Method: Computes the hash index of a given key. _resize Method: Doubles the capacity of the hash table and rehashes all existing elements when the load factor is exceeded. add Method: Inserts a new key if itâs not already present, resizing the table if necessary. It linearly probes for an empty slot if thereâs a collision. remove Method: Searches for the key and marks its slot as âDELâ if found. It uses linear probing to handle collisions. contains Method: Checks if a key exists in the hash table, returning True if found. Differences from Chaining Space Efficiency: Open addressing might be more space-efficient since it doesnât use..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-11-04T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-11-04-705-Design-HashSet/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-705.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="705 - Design HashSet" property="twitter:title"/>
+   <meta content="Leetcode 705. Design HashSet Description Design a HashSet without using any built-in hash table libraries. Implement MyHashSet class: void add(key) Inserts the value key into the HashSet. bool contains(key) Returns whether the value key exists in the HashSet or not. void remove(key) Removes the value key in the HashSet. If key does not exist in the HashSet, do nothing. &amp;nbsp; Example 1: Input [&amp;quot;MyHashSet&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;contains&amp;quot;, &amp;quot;contains&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;contains&amp;quot;, &amp;quot;remove&amp;quot;, &amp;quot;contains&amp;quot;] [[], [1], [2], [1], [3], [2], [2], [2], [2]] Output [null, null, null, true, false, null, true, null, false] Explanation MyHashSet myHashSet = new MyHashSet(); myHashSet.add(1); // set = [1] myHashSet.add(2); // set = [1, 2] myHashSet.contains(1); // return True myHashSet.contains(3); // return False, (not found) myHashSet.add(2); // set = [1, 2] myHashSet.contains(2); // return True myHashSet.remove(2); // set = [1] myHashSet.contains(2); // return False, (already removed) &amp;nbsp; Constraints: 0 &amp;lt;= key &amp;lt;= 106 At most 104 calls will be made to add, remove, and contains. Solutions There are multiple ways to implement a hash set, but one straightforward method is to use a list of lists (also known as bucketing or chaining) to handle collisions (when two different elements have the same hash). List of lists, ie. bucketing or chaining Since all values are in the range of [0, 1000000], create an array with length 1000001, which has boolean type. If a value is added, set the element at the corresponding index in the array to true. If a value is removed, set the element at the corresponding index in the array to false. For the contains function, simply return the element at the corresponding index in the array, where true means the element exists in the HashSet and false means the element does not exist in the HashSet. Open Addressing with Linear Probing In open addressing, all elements occupy the hash table array itself. When a collision occurs (two keys hash to the same index), the hash table searches for the next empty slot in the array by probing subsequent indices until an empty slot is found. For simplicity, below code assumes keys are positive integers and uses deletion markers for removed elements. Explanation Initialization: Sets initial capacity and creates an array (self.data) to store the elements. It also defines a load factor to determine when to resize the hash table to maintain efficiency. _hash Method: Computes the hash index of a given key. _resize Method: Doubles the capacity of the hash table and rehashes all existing elements when the load factor is exceeded. add Method: Inserts a new key if itâs not already present, resizing the table if necessary. It linearly probes for an empty slot if thereâs a collision. remove Method: Searches for the key and marks its slot as âDELâ if found. It uses linear probing to handle collisions. contains Method: Checks if a key exists in the hash table, returning True if found. Differences from Chaining Space Efficiency: Open addressing might be more space-efficient since it doesnât use..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    705 - Design HashSet | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="705 - Design HashSet" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-705.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-11-04-705-Design-HashSet/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-11-04T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"705 - Design HashSet","dateModified":"2017-11-04T00:00:00-07:00","datePublished":"2017-11-04T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-11-04-705-Design-HashSet/"},"url":"https://leetcode.ca/2017-11-04-705-Design-HashSet/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="705-design-hashset">
+       <a href="solution-705.html">
+        705. Design HashSet
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Design a HashSet without using any built-in hash table libraries.
+      </p>
+      <p>
+       Implement
+       <code>
+        MyHashSet
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         void add(key)
+        </code>
+        Inserts the value
+        <code>
+         key
+        </code>
+        into the HashSet.
+       </li>
+       <li>
+        <code>
+         bool contains(key)
+        </code>
+        Returns whether the value
+        <code>
+         key
+        </code>
+        exists in the HashSet or not.
+       </li>
+       <li>
+        <code>
+         void remove(key)
+        </code>
+        Removes the value
+        <code>
+         key
+        </code>
+        in the HashSet. If
+        <code>
+         key
+        </code>
+        does not exist in the HashSet, do nothing.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["MyHashSet", "add", "add", "contains", "contains", "add", "contains", "remove", "contains"]
+[[], [1], [2], [1], [3], [2], [2], [2], [2]]
+<strong>Output</strong>
+[null, null, null, true, false, null, true, null, false]
+
+<strong>Explanation</strong>
+MyHashSet myHashSet = new MyHashSet();
+myHashSet.add(1);      // set = [1]
+myHashSet.add(2);      // set = [1, 2]
+myHashSet.contains(1); // return True
+myHashSet.contains(3); // return False, (not found)
+myHashSet.add(2);      // set = [1, 2]
+myHashSet.contains(2); // return True
+myHashSet.remove(2);   // set = [1]
+myHashSet.contains(2); // return False, (already removed)</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= key &lt;= 10
+         <sup>
+          6
+         </sup>
+        </code>
+       </li>
+       <li>
+        At most
+        <code>
+         10
+         <sup>
+          4
+         </sup>
+        </code>
+        calls will be made to
+        <code>
+         add
+        </code>
+        ,
+        <code>
+         remove
+        </code>
+        , and
+        <code>
+         contains
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       There are multiple ways to implement a hash set, but one straightforward method is to use a list of lists (also known as bucketing or chaining) to handle collisions (when two different elements have the same hash).
+      </p>
+      <h3 id="list-of-lists-ie-bucketing-or-chaining">
+       List of lists, ie. bucketing or chaining
+      </h3>
+      <p>
+       Since all values are in the range of
+       <code class="language-plaintext highlighter-rouge">
+        [0, 1000000]
+       </code>
+       , create an array with length 1000001, which has
+       <code class="language-plaintext highlighter-rouge">
+        boolean
+       </code>
+       type.
+      </p>
+      <p>
+       If a value is added, set the element at the corresponding index in the array to
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       . If a value is removed, set the element at the corresponding index in the array to
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       .
+      </p>
+      <p>
+       For the
+       <code class="language-plaintext highlighter-rouge">
+        contains
+       </code>
+       function, simply return the element at the corresponding index in the array, where
+       <code class="language-plaintext highlighter-rouge">
+        true
+       </code>
+       means the element exists in the HashSet and
+       <code class="language-plaintext highlighter-rouge">
+        false
+       </code>
+       means the element does not exist in the HashSet.
+      </p>
+      <h3 id="open-addressing-with-linear-probing">
+       Open Addressing with Linear Probing
+      </h3>
+      <p>
+       In open addressing, all elements occupy the hash table array itself. When a collision occurs (two keys hash to the same index), the hash table searches for the next empty slot in the array by probing subsequent indices until an empty slot is found.
+      </p>
+      <p>
+       For simplicity, below code assumes keys are positive integers and uses deletion markers for removed elements.
+      </p>
+      <h5 id="explanation">
+       Explanation
+      </h5>
+      <ul>
+       <li>
+        <strong>
+         Initialization:
+        </strong>
+        Sets initial capacity and creates an array (
+        <code class="language-plaintext highlighter-rouge">
+         self.data
+        </code>
+        ) to store the elements. It also defines a load factor to determine when to resize the hash table to maintain efficiency.
+       </li>
+       <li>
+        <strong>
+         <code class="language-plaintext highlighter-rouge">
+          _hash
+         </code>
+         Method:
+        </strong>
+        Computes the hash index of a given key.
+       </li>
+       <li>
+        <strong>
+         <code class="language-plaintext highlighter-rouge">
+          _resize
+         </code>
+         Method:
+        </strong>
+        Doubles the capacity of the hash table and rehashes all existing elements when the load factor is exceeded.
+       </li>
+       <li>
+        <strong>
+         <code class="language-plaintext highlighter-rouge">
+          add
+         </code>
+         Method:
+        </strong>
+        Inserts a new key if itâs not already present, resizing the table if necessary. It linearly probes for an empty slot if thereâs a collision.
+       </li>
+       <li>
+        <strong>
+         <code class="language-plaintext highlighter-rouge">
+          remove
+         </code>
+         Method:
+        </strong>
+        Searches for the key and marks its slot as âDELâ if found. It uses linear probing to handle collisions.
+       </li>
+       <li>
+        <strong>
+         <code class="language-plaintext highlighter-rouge">
+          contains
+         </code>
+         Method:
+        </strong>
+        Checks if a key exists in the hash table, returning
+        <code class="language-plaintext highlighter-rouge">
+         True
+        </code>
+        if found.
+       </li>
+      </ul>
+      <h5 id="differences-from-chaining">
+       Differences from Chaining
+      </h5>
+      <ul>
+       <li>
+        <strong>
+         Space Efficiency:
+        </strong>
+        Open addressing might be more space-efficient since it doesnât use additional data structures for chaining. However, it requires careful management of load factors and resizing to maintain performance.
+       </li>
+       <li>
+        <strong>
+         Handling of Deletions:
+        </strong>
+        Open addressing uses special markers to indicate deleted elements (âDELâ in this case), which is necessary to ensure subsequent elements found by probing can still be located.
+       </li>
+       <li>
+        <strong>
+         Resizing Logic:
+        </strong>
+        To maintain efficient access times, the hash table size is increased based on the load factor, requiring all elements to be rehashed to new positions.
+       </li>
+      </ul>
+      <p>
+       This open addressing implementation is just one of many ways to design a hash set. The choice between chaining, open addressing, or other methods depends on the specific requirements, including the expected number of elements, access patterns, and performance criteria.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#cc3a20be-49b6-440a-8096-073b01210deb'}">
+       <li class="uk-active">
+        <a href="solution-705.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-705.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-705.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-705.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-705.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="cc3a20be-49b6-440a-8096-073b01210deb">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyHashSet</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">boolean</span><span class="o">[]</span> <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">1000001</span><span class="o">];</span>
+
+    <span class="kd">public</span> <span class="nf">MyHashSet</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">data</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">data</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">contains</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">data</span><span class="o">[</span><span class="n">key</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * MyHashSet obj = new MyHashSet();
+ * obj.add(key);
+ * obj.remove(key);
+ * boolean param_3 = obj.contains(key);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">MyHashSet</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">data</span><span class="p">[</span><span class="mi">1000001</span><span class="p">];</span>
+
+    <span class="n">MyHashSet</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">remove</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">contains</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * MyHashSet* obj = new MyHashSet();
+ * obj-&gt;add(key);
+ * obj-&gt;remove(key);
+ * bool param_3 = obj-&gt;contains(key);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">MyHashSet</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000001</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+
+<span class="c1"># Your MyHashSet object will be instantiated and called as such:
+# obj = MyHashSet()
+# obj.add(key)
+# obj.remove(key)
+# param_3 = obj.contains(key)
+</span>
+<span class="c1">###############
+</span>
+<span class="k">class</span> <span class="nc">MyHashSet</span><span class="p">:</span> <span class="c1"># hash to bucket
+</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Initialize your data structure here.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Choosing a size for the outer list
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">buckets</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">size</span><span class="p">)]</span>  <span class="c1"># List of lists
+</span>
+    <span class="k">def</span> <span class="nf">_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="s">"""
+        Generate a hash for a given key.
+        """</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">size</span>
+    
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">"""
+        Insert a value into the HashSet.
+        """</span>
+        <span class="n">hash_key</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">buckets</span><span class="p">[</span><span class="n">hash_key</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">buckets</span><span class="p">[</span><span class="n">hash_key</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">"""
+        Remove a value in the HashSet. If the value does not exist, do nothing.
+        """</span>
+        <span class="n">hash_key</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">buckets</span><span class="p">[</span><span class="n">hash_key</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">buckets</span><span class="p">[</span><span class="n">hash_key</span><span class="p">].</span><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="s">"""
+        Returns true if this set contains the specified element.
+        """</span>
+        <span class="n">hash_key</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">buckets</span><span class="p">[</span><span class="n">hash_key</span><span class="p">]</span>
+
+<span class="c1"># Your MyHashSet object will be instantiated and called as such:
+# obj = MyHashSet()
+# obj.add(key)
+# obj.remove(key)
+# param_3 = obj.contains(key)
+</span>
+<span class="c1">############
+</span>
+<span class="c1"># Collision handling, optimized
+</span><span class="k">class</span> <span class="nc">MyHashSet</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">load_factor</span> <span class="o">=</span> <span class="mf">0.7</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">def</span> <span class="nf">_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span>
+    
+    <span class="k">def</span> <span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">/</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="p">.</span><span class="n">load_factor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="n">old_data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">old_data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_resize</span><span class="p">()</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="c1"># Collision handling
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="s">"DEL"</span>  <span class="c1"># Mark as deleted
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">return</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span>
+    
+    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">MyHashSet</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">data</span> <span class="p">[]</span><span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">MyHashSet</span> <span class="p">{</span>
+	<span class="n">data</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="m">1000010</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">MyHashSet</span><span class="p">{</span><span class="n">data</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MyHashSet</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MyHashSet</span><span class="p">)</span> <span class="n">Remove</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MyHashSet</span><span class="p">)</span> <span class="n">Contains</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.Add(key);
+ * obj.Remove(key);
+ * param_3 := obj.Contains(key);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">MyHashSet</span> <span class="p">{</span>
+    <span class="nl">data</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">boolean</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">6</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">add</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">remove</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">contains</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * var obj = new MyHashSet()
+ * obj.add(key)
+ * obj.remove(key)
+ * var param_3 = obj.contains(key)
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-705.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

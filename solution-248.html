@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-248.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-248.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>248 - Strobogrammatic Number III</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Question Formatted question description: https://leetcode.ca/all/248.html Given two strings low and high that represent two integers low and high where low &amp;lt;= high, return the number of strobogrammatic numbers in the range [low, high]. A strobogrammatic number is a number that looks the same when rotated...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-248.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-248.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-248.html" rel="stylesheet"/>
+   <link href="solution-248.html" rel="stylesheet"/>
+   <link href="solution-248.html" rel="stylesheet"/>
+   <link href="solution-248.html" rel="stylesheet"/>
+   <link href="solution-248.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="248 - Strobogrammatic Number III" property="og:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/248.html Given two strings low and high that represent two integers low and high where low &amp;lt;= high, return the number of strobogrammatic numbers in the range [low, high]. A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down). &amp;nbsp; Example 1: Input: low = &quot;50&quot;, high = &quot;100&quot; Output: 3 Example 2: Input: low = &quot;0&quot;, high = &quot;0&quot; Output: 1 &amp;nbsp; Constraints: 1 &amp;lt;= low.length, high.length &amp;lt;= 15 low and high consist of only digits. low &amp;lt;= high low and high do not contain any leading zeros except for zero itself. Algorithm The objective is to determine the count of symmetric numbers within a specified range. Begin by establishing base cases for n=0 and n=1, and proceed with recursive calls based on these cases. During the recursion, iterate from the lower to the upper limit of the range, examining if the current word length matches the target length, len: Upon reaching the target length, initially eliminate numbers that begin with multiple zeros. Next, exclude numbers that are of the same length as the lower limit but smaller, and numbers of the same length as the upper limit but larger. Subsequently, increment the result count by 1. Finally, append the five pairs of symmetric digits to both ends of the current word and continue with the recursive process. Code Java C++ Python Go public class Strobogrammatic_Number_III { public static void main(String[] args) { Strobogrammatic_Number_III out = new Strobogrammatic_Number_III(); Solution s = out.new Solution(); System.out.println(s.strobogrammaticInRange(&quot;50&quot;, &quot;100&quot;)); } public class Solution { int res = 0; public int strobogrammaticInRange(String low, String high) { if (low == null || high == null) { return res; } for (int i = low.length(); i &amp;lt;= high.length(); ++i) { dfs(low, high, &quot;&quot;, i); dfs(low, high, &quot;0&quot;, i); dfs(low, high, &quot;1&quot;, i); dfs(low, high, &quot;8&quot;, i); } return res; } void dfs(String low, String high, String path, int len) { if (path.length() &amp;gt;= len) { if (path.length() != len || (len != 1 &amp;amp;&amp;amp; path.charAt(0) == '0')) { return; } if ((len == low.length() &amp;amp;&amp;amp; path.compareTo(low) &amp;lt; 0) || (len == high.length() &amp;amp;&amp;amp; path.compareTo(high) &amp;gt; 0)) { return; } ++res; } dfs(low, high, &quot;0&quot; + path + &quot;0&quot;, len); dfs(low, high, &quot;1&quot; + path + &quot;1&quot;, len); dfs(low, high, &quot;6&quot; + path + &quot;9&quot;, len); dfs(low, high, &quot;8&quot; + path + &quot;8&quot;, len); dfs(low, high, &quot;9&quot; + path + &quot;6&quot;, len); } } } ############ class Solution { private static final int[][] PAIRS = { {1, 1}, {8, 8}, {6, 9}, {9, 6}}; private int n; public int strobogrammaticInRange(String low, String high) { int a = low.length(), b = high.length(); long l = Long.parseLong(low), r = Long.parseLong(high); int ans = 0; for (n = a; n &amp;lt;= b; ++n) { for (String s : dfs(n)) { long v = Long.parseLong(s); if (l &amp;lt;= v &amp;amp;&amp;amp; v &amp;lt;= r) { ++ans; } } } return ans; } private List&amp;lt;String&amp;gt; dfs(int..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-08-04T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-08-04-248-Strobogrammatic-Number-III/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-248.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="248 - Strobogrammatic Number III" property="twitter:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/248.html Given two strings low and high that represent two integers low and high where low &amp;lt;= high, return the number of strobogrammatic numbers in the range [low, high]. A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down). &amp;nbsp; Example 1: Input: low = &quot;50&quot;, high = &quot;100&quot; Output: 3 Example 2: Input: low = &quot;0&quot;, high = &quot;0&quot; Output: 1 &amp;nbsp; Constraints: 1 &amp;lt;= low.length, high.length &amp;lt;= 15 low and high consist of only digits. low &amp;lt;= high low and high do not contain any leading zeros except for zero itself. Algorithm The objective is to determine the count of symmetric numbers within a specified range. Begin by establishing base cases for n=0 and n=1, and proceed with recursive calls based on these cases. During the recursion, iterate from the lower to the upper limit of the range, examining if the current word length matches the target length, len: Upon reaching the target length, initially eliminate numbers that begin with multiple zeros. Next, exclude numbers that are of the same length as the lower limit but smaller, and numbers of the same length as the upper limit but larger. Subsequently, increment the result count by 1. Finally, append the five pairs of symmetric digits to both ends of the current word and continue with the recursive process. Code Java C++ Python Go public class Strobogrammatic_Number_III { public static void main(String[] args) { Strobogrammatic_Number_III out = new Strobogrammatic_Number_III(); Solution s = out.new Solution(); System.out.println(s.strobogrammaticInRange(&quot;50&quot;, &quot;100&quot;)); } public class Solution { int res = 0; public int strobogrammaticInRange(String low, String high) { if (low == null || high == null) { return res; } for (int i = low.length(); i &amp;lt;= high.length(); ++i) { dfs(low, high, &quot;&quot;, i); dfs(low, high, &quot;0&quot;, i); dfs(low, high, &quot;1&quot;, i); dfs(low, high, &quot;8&quot;, i); } return res; } void dfs(String low, String high, String path, int len) { if (path.length() &amp;gt;= len) { if (path.length() != len || (len != 1 &amp;amp;&amp;amp; path.charAt(0) == '0')) { return; } if ((len == low.length() &amp;amp;&amp;amp; path.compareTo(low) &amp;lt; 0) || (len == high.length() &amp;amp;&amp;amp; path.compareTo(high) &amp;gt; 0)) { return; } ++res; } dfs(low, high, &quot;0&quot; + path + &quot;0&quot;, len); dfs(low, high, &quot;1&quot; + path + &quot;1&quot;, len); dfs(low, high, &quot;6&quot; + path + &quot;9&quot;, len); dfs(low, high, &quot;8&quot; + path + &quot;8&quot;, len); dfs(low, high, &quot;9&quot; + path + &quot;6&quot;, len); } } } ############ class Solution { private static final int[][] PAIRS = { {1, 1}, {8, 8}, {6, 9}, {9, 6}}; private int n; public int strobogrammaticInRange(String low, String high) { int a = low.length(), b = high.length(); long l = Long.parseLong(low), r = Long.parseLong(high); int ans = 0; for (n = a; n &amp;lt;= b; ++n) { for (String s : dfs(n)) { long v = Long.parseLong(s); if (l &amp;lt;= v &amp;amp;&amp;amp; v &amp;lt;= r) { ++ans; } } } return ans; } private List&amp;lt;String&amp;gt; dfs(int..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    248 - Strobogrammatic Number III | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="248 - Strobogrammatic Number III" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-248.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-08-04-248-Strobogrammatic-Number-III/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-08-04T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"248 - Strobogrammatic Number III","dateModified":"2016-08-04T22:21:01-07:00","datePublished":"2016-08-04T22:21:01-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-08-04-248-Strobogrammatic-Number-III/"},"url":"https://leetcode.ca/2016-08-04-248-Strobogrammatic-Number-III/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="question">
+       Question
+      </h1>
+      <p>
+       Formatted question description:
+       <a href="solution-248.html">
+        https://leetcode.ca/all/248.html
+       </a>
+      </p>
+      <p>
+       Given two strings low and high that represent two integers
+       <code>
+        low
+       </code>
+       and
+       <code>
+        high
+       </code>
+       where
+       <code>
+        low &lt;= high
+       </code>
+       , return
+       <em>
+        the number of
+        <strong>
+         strobogrammatic numbers
+        </strong>
+        in the range
+       </em>
+       <code>
+        [low, high]
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        strobogrammatic number
+       </strong>
+       is a number that looks the same when rotated
+       <code>
+        180
+       </code>
+       degrees (looked at upside down).
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre><strong>Input:</strong> low = "50", high = "100"
+<strong>Output:</strong> 3
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre><strong>Input:</strong> low = "0", high = "0"
+<strong>Output:</strong> 1
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= low.length, high.length &lt;= 15
+        </code>
+       </li>
+       <li>
+        <code>
+         low
+        </code>
+        and
+        <code>
+         high
+        </code>
+        consist of only digits.
+       </li>
+       <li>
+        <code>
+         low &lt;= high
+        </code>
+       </li>
+       <li>
+        <code>
+         low
+        </code>
+        and
+        <code>
+         high
+        </code>
+        do not contain any leading zeros except for zero itself.
+       </li>
+      </ul>
+      <h1 id="algorithm">
+       Algorithm
+      </h1>
+      <p>
+       The objective is to determine the count of
+       <code class="language-plaintext highlighter-rouge">
+        symmetric
+       </code>
+       numbers within a specified range.
+      </p>
+      <p>
+       Begin by establishing base cases for
+       <code class="language-plaintext highlighter-rouge">
+        n=0
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        n=1
+       </code>
+       , and proceed with recursive calls based on these cases.
+      </p>
+      <p>
+       During the recursion, iterate from the lower to the upper limit of the range, examining if the current word length matches the target length,
+       <code class="language-plaintext highlighter-rouge">
+        len
+       </code>
+       :
+      </p>
+      <ul>
+       <li>
+        Upon reaching the target length, initially eliminate numbers that begin with multiple zeros.
+       </li>
+       <li>
+        Next, exclude numbers that are of the same length as the lower limit but smaller, and numbers of the same length as the upper limit but larger.
+       </li>
+       <li>
+        Subsequently, increment the result count by 1.
+       </li>
+       <li>
+        Finally, append the five pairs of symmetric digits to both ends of the current word and continue with the recursive process.
+       </li>
+      </ul>
+      <h1 id="code">
+       Code
+      </h1>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#80bcc894-279e-42ee-a3b7-b555d0f2c8ad'}">
+       <li class="uk-active">
+        <a href="solution-248.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-248.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-248.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-248.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="80bcc894-279e-42ee-a3b7-b555d0f2c8ad">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Strobogrammatic_Number_III</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Strobogrammatic_Number_III</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Strobogrammatic_Number_III</span><span class="o">();</span>
+        <span class="nc">Solution</span> <span class="n">s</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="na">new</span> <span class="nf">Solution</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">strobogrammaticInRange</span><span class="o">(</span><span class="s">"50"</span><span class="o">,</span> <span class="s">"100"</span><span class="o">));</span>
+    <span class="o">}</span>
+
+
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">strobogrammaticInRange</span><span class="o">(</span><span class="nc">String</span> <span class="n">low</span><span class="o">,</span> <span class="nc">String</span> <span class="n">high</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">low</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">high</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">low</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"0"</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"1"</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"8"</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">String</span> <span class="n">low</span><span class="o">,</span> <span class="nc">String</span> <span class="n">high</span><span class="o">,</span> <span class="nc">String</span> <span class="n">path</span><span class="o">,</span> <span class="kt">int</span> <span class="n">len</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">path</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;=</span> <span class="n">len</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">path</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">!=</span> <span class="n">len</span> <span class="o">||</span> <span class="o">(</span><span class="n">len</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">path</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'0'</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">((</span><span class="n">len</span> <span class="o">==</span> <span class="n">low</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">path</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">low</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">len</span> <span class="o">==</span> <span class="n">high</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">path</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">high</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="o">++</span><span class="n">res</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"0"</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"0"</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"1"</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"1"</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"6"</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"9"</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"8"</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"8"</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">low</span><span class="o">,</span> <span class="n">high</span><span class="o">,</span> <span class="s">"9"</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"6"</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="err">############</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[][]</span> <span class="no">PAIRS</span> <span class="o">=</span> <span class="o">{</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">},</span> <span class="o">{</span><span class="mi">8</span><span class="o">,</span> <span class="mi">8</span><span class="o">},</span> <span class="o">{</span><span class="mi">6</span><span class="o">,</span> <span class="mi">9</span><span class="o">},</span> <span class="o">{</span><span class="mi">9</span><span class="o">,</span> <span class="mi">6</span><span class="o">}};</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">strobogrammaticInRange</span><span class="o">(</span><span class="nc">String</span> <span class="n">low</span><span class="o">,</span> <span class="nc">String</span> <span class="n">high</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">low</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">high</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">l</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">low</span><span class="o">),</span> <span class="n">r</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">high</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">n</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="o">;</span> <span class="o">++</span><span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">dfs</span><span class="o">(</span><span class="n">n</span><span class="o">))</span> <span class="o">{</span>
+                <span class="kt">long</span> <span class="n">v</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">v</span> <span class="o">&amp;&amp;</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="o">++</span><span class="n">ans</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">singletonList</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">"0"</span><span class="o">,</span> <span class="s">"1"</span><span class="o">,</span> <span class="s">"8"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">v</span> <span class="o">:</span> <span class="n">dfs</span><span class="o">(</span><span class="n">u</span> <span class="o">-</span> <span class="mi">2</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">p</span> <span class="o">:</span> <span class="no">PAIRS</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="n">p</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">!=</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">0</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">using</span> <span class="n">ll</span> <span class="o">=</span> <span class="kt">long</span> <span class="kt">long</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">char</span><span class="o">&gt;&gt;</span> <span class="n">pairs</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="sc">'1'</span><span class="p">,</span> <span class="sc">'1'</span><span class="p">},</span> <span class="p">{</span><span class="sc">'8'</span><span class="p">,</span> <span class="sc">'8'</span><span class="p">},</span> <span class="p">{</span><span class="sc">'6'</span><span class="p">,</span> <span class="sc">'9'</span><span class="p">},</span> <span class="p">{</span><span class="sc">'9'</span><span class="p">,</span> <span class="sc">'6'</span><span class="p">}</span> <span class="p">};</span>
+
+    <span class="kt">int</span> <span class="n">strobogrammaticInRange</span><span class="p">(</span><span class="n">string</span> <span class="n">low</span><span class="p">,</span> <span class="n">string</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">function</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">u</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">{</span><span class="s">""</span><span class="p">};</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">{</span><span class="s">"0"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">,</span> <span class="s">"8"</span><span class="p">};</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">v</span> <span class="o">:</span> <span class="n">dfs</span><span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">]</span> <span class="o">:</span> <span class="n">pairs</span><span class="p">)</span> <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="n">r</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">!=</span> <span class="n">n</span><span class="p">)</span> <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="sc">'0'</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="sc">'0'</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">low</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">high</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">ll</span> <span class="n">l</span> <span class="o">=</span> <span class="n">stoll</span><span class="p">(</span><span class="n">low</span><span class="p">),</span> <span class="n">r</span> <span class="o">=</span> <span class="n">stoll</span><span class="p">(</span><span class="n">high</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">;</span> <span class="o">++</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">s</span> <span class="o">:</span> <span class="n">dfs</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">ll</span> <span class="n">v</span> <span class="o">=</span> <span class="n">stoll</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">v</span> <span class="o">&amp;&amp;</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="o">++</span><span class="n">ans</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="s">'''
+&gt;&gt;&gt; 'abc' &lt; 'def'
+True
+&gt;&gt;&gt; 'abc' &lt; 'aef'
+True
+&gt;&gt;&gt; 'abc' &lt; 'aaf'
+False
+'''</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">strobogrammaticInRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">low</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">high</span> <span class="o">=</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">''</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'0'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'1'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'8'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">count</span>
+
+    <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">low</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">high</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">low</span><span class="p">)</span> <span class="ow">and</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">low</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">high</span><span class="p">)</span> <span class="ow">and</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">high</span><span class="p">):</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">'0'</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">high</span><span class="p">):</span>
+            <span class="c1"># because next step is append 2 chars at beginning and end
+</span>            <span class="k">return</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'0'</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s">'0'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'1'</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s">'1'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'6'</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s">'9'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'8'</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s">'8'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="s">'9'</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s">'6'</span><span class="p">)</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span> <span class="c1"># no trim, just check if low &lt;= int(s) &lt;= high
+</span>    <span class="k">def</span> <span class="nf">strobogrammaticInRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="s">''</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="s">'0'</span><span class="p">,</span> <span class="s">'1'</span><span class="p">,</span> <span class="s">'8'</span><span class="p">]</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="p">(</span><span class="s">'11'</span><span class="p">,</span> <span class="s">'88'</span><span class="p">,</span> <span class="s">'69'</span><span class="p">,</span> <span class="s">'96'</span><span class="p">):</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">u</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'0'</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="s">'0'</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ans</span>
+
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">low</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">low</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="c1"># so basically no trimming applied in dfs(), just get all
+</span>                <span class="k">if</span> <span class="n">low</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="p">:</span>
+                    <span class="n">ans</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">findStrobogrammatic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="s">"""
+    :type n: int
+    :rtype: List[str]
+    """</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">"0"</span><span class="p">:</span> <span class="s">"0"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span> <span class="s">"6"</span><span class="p">:</span> <span class="s">"9"</span><span class="p">,</span> <span class="s">"8"</span><span class="p">:</span> <span class="s">"8"</span><span class="p">,</span> <span class="s">"9"</span><span class="p">:</span> <span class="s">"6"</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">half</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="n">half</span><span class="p">:</span>
+        <span class="n">pathStr</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">half</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
+          <span class="n">toAppend</span> <span class="o">=</span> <span class="n">pathStr</span> <span class="o">+</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pathStr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+          <span class="n">toAppendInt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">toAppend</span><span class="p">)</span>
+          <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">low</span> <span class="o">&lt;=</span> <span class="n">toAppendInt</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="p">.</span><span class="n">high</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="s">"018"</span><span class="p">:</span>
+            <span class="n">toAppend</span> <span class="o">=</span> <span class="n">pathStr</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pathStr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="n">toAppendInt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">toAppend</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">low</span> <span class="o">&lt;=</span> <span class="n">toAppendInt</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="p">.</span><span class="n">high</span><span class="p">:</span>
+              <span class="bp">self</span><span class="p">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span>
+
+      <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="s">"01689"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">"0"</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="k">continue</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">half</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[],</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+  <span class="k">def</span> <span class="nf">strobogrammaticInRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+    <span class="s">"""
+    :type low: str
+    :type high: str
+    :rtype: int
+    """</span>
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">low</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">high</span><span class="p">):</span>
+      <span class="k">return</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">low</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">low</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">high</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">findStrobogrammatic</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">count</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">strobogrammaticInRange</span><span class="p">(</span><span class="n">low</span> <span class="kt">string</span><span class="p">,</span> <span class="n">high</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">""</span><span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"0"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">,</span> <span class="s">"8"</span><span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">var</span> <span class="n">ans</span> <span class="p">[]</span><span class="kt">string</span>
+		<span class="n">pairs</span> <span class="o">:=</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">{</span> <span class="p">{</span><span class="s">"1"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">},</span> <span class="p">{</span><span class="s">"8"</span><span class="p">,</span> <span class="s">"8"</span><span class="p">},</span> <span class="p">{</span><span class="s">"6"</span><span class="p">,</span> <span class="s">"9"</span><span class="p">},</span> <span class="p">{</span><span class="s">"9"</span><span class="p">,</span> <span class="s">"6"</span><span class="p">}</span> <span class="p">}</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dfs</span><span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="m">2</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">pairs</span> <span class="p">{</span>
+				<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">+</span><span class="n">v</span><span class="o">+</span><span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="n">u</span> <span class="o">!=</span> <span class="n">n</span> <span class="p">{</span>
+				<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="s">"0"</span><span class="o">+</span><span class="n">v</span><span class="o">+</span><span class="s">"0"</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">ans</span>
+	<span class="p">}</span>
+	<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">low</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+	<span class="n">l</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Atoi</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+	<span class="n">r</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Atoi</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">n</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dfs</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">v</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Atoi</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">v</span> <span class="o">&amp;&amp;</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="p">{</span>
+				<span class="n">ans</span><span class="o">++</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-248.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

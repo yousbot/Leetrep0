@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3108.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3108.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3108 - Minimum Cost Walk in Weighted Graph</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3108. Minimum Cost Walk in Weighted Graph Description There is an undirected weighted graph with n vertices labeled from 0 to n - 1. You are given the integer n and an array edges, where edges[i] = [ui, vi, wi] indicates that there is an...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3108.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3108.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3108.html" rel="stylesheet"/>
+   <link href="solution-3108.html" rel="stylesheet"/>
+   <link href="solution-3108.html" rel="stylesheet"/>
+   <link href="solution-3108.html" rel="stylesheet"/>
+   <link href="solution-3108.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3108 - Minimum Cost Walk in Weighted Graph" property="og:title"/>
+   <meta content="Leetcode 3108. Minimum Cost Walk in Weighted Graph Description There is an undirected weighted graph with n vertices labeled from 0 to n - 1. You are given the integer n and an array edges, where edges[i] = [ui, vi, wi] indicates that there is an edge between vertices ui and vi with a weight of wi. A walk on a graph is a sequence of vertices and edges. The walk starts and ends with a vertex, and each edge connects the vertex that comes before it and the vertex that comes after it. It&amp;#39;s important to note that a walk may visit the same edge or vertex more than once. The cost of a walk starting at node u and ending at node v is defined as the bitwise AND of the weights of the edges traversed during the walk. In other words, if the sequence of edge weights encountered during the walk is w0, w1, w2, ..., wk, then the cost is calculated as w0 &amp;amp; w1 &amp;amp; w2 &amp;amp; ... &amp;amp; wk, where &amp;amp; denotes the bitwise AND operator. You are also given a 2D array query, where query[i] = [si, ti]. For each query, you need to find the minimum cost of the walk starting at vertex si and ending at vertex ti. If there exists no such walk, the answer is -1. Return the array answer, where answer[i] denotes the minimum cost of a walk for query i. &amp;nbsp; Example 1: Input: n = 5, edges = [[0,1,7],[1,3,7],[1,2,1]], query = [[0,3],[3,4]] Output: [1,-1] Explanation: To achieve the cost of 1 in the first query, we need to move on the following edges: 0-&amp;gt;1 (weight 7), 1-&amp;gt;2 (weight 1), 2-&amp;gt;1 (weight 1), 1-&amp;gt;3 (weight 7). In the second query, there is no walk between nodes 3 and 4, so the answer is -1. Example 2: Input: n = 3, edges = [[0,2,7],[0,1,15],[1,2,6],[1,2,1]], query = [[1,2]] Output: [0] Explanation: To achieve the cost of 0 in the first query, we need to move on the following edges: 1-&amp;gt;2 (weight 1), 2-&amp;gt;1 (weight 6), 1-&amp;gt;2 (weight 1). &amp;nbsp; Constraints: 2 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= edges.length &amp;lt;= 105 edges[i].length == 3 0 &amp;lt;= ui, vi &amp;lt;= n - 1 ui != vi 0 &amp;lt;= wi &amp;lt;= 105 1 &amp;lt;= query.length &amp;lt;= 105 query[i].length == 2 0 &amp;lt;= si, ti &amp;lt;= n - 1 si !=&amp;nbsp;ti Solutions Solution 1: Greedy + Union Find We note that a positive integer performing bitwise AND operation with several other positive integers will only get smaller. Therefore, to minimize the cost of the journey, we should perform bitwise AND operation on the weights of all edges in the same connected component, and then perform the query. So, the problem is transformed into how to find all the edges in the same connected component and perform bitwise AND operation. We can use a union-find set to maintain the connected components. Specifically, we traverse each edge $(u, v, w)$ and..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-04-28T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-04-28-3108-Minimum-Cost-Walk-in-Weighted-Graph/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3108.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3108 - Minimum Cost Walk in Weighted Graph" property="twitter:title"/>
+   <meta content="Leetcode 3108. Minimum Cost Walk in Weighted Graph Description There is an undirected weighted graph with n vertices labeled from 0 to n - 1. You are given the integer n and an array edges, where edges[i] = [ui, vi, wi] indicates that there is an edge between vertices ui and vi with a weight of wi. A walk on a graph is a sequence of vertices and edges. The walk starts and ends with a vertex, and each edge connects the vertex that comes before it and the vertex that comes after it. It&amp;#39;s important to note that a walk may visit the same edge or vertex more than once. The cost of a walk starting at node u and ending at node v is defined as the bitwise AND of the weights of the edges traversed during the walk. In other words, if the sequence of edge weights encountered during the walk is w0, w1, w2, ..., wk, then the cost is calculated as w0 &amp;amp; w1 &amp;amp; w2 &amp;amp; ... &amp;amp; wk, where &amp;amp; denotes the bitwise AND operator. You are also given a 2D array query, where query[i] = [si, ti]. For each query, you need to find the minimum cost of the walk starting at vertex si and ending at vertex ti. If there exists no such walk, the answer is -1. Return the array answer, where answer[i] denotes the minimum cost of a walk for query i. &amp;nbsp; Example 1: Input: n = 5, edges = [[0,1,7],[1,3,7],[1,2,1]], query = [[0,3],[3,4]] Output: [1,-1] Explanation: To achieve the cost of 1 in the first query, we need to move on the following edges: 0-&amp;gt;1 (weight 7), 1-&amp;gt;2 (weight 1), 2-&amp;gt;1 (weight 1), 1-&amp;gt;3 (weight 7). In the second query, there is no walk between nodes 3 and 4, so the answer is -1. Example 2: Input: n = 3, edges = [[0,2,7],[0,1,15],[1,2,6],[1,2,1]], query = [[1,2]] Output: [0] Explanation: To achieve the cost of 0 in the first query, we need to move on the following edges: 1-&amp;gt;2 (weight 1), 2-&amp;gt;1 (weight 6), 1-&amp;gt;2 (weight 1). &amp;nbsp; Constraints: 2 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= edges.length &amp;lt;= 105 edges[i].length == 3 0 &amp;lt;= ui, vi &amp;lt;= n - 1 ui != vi 0 &amp;lt;= wi &amp;lt;= 105 1 &amp;lt;= query.length &amp;lt;= 105 query[i].length == 2 0 &amp;lt;= si, ti &amp;lt;= n - 1 si !=&amp;nbsp;ti Solutions Solution 1: Greedy + Union Find We note that a positive integer performing bitwise AND operation with several other positive integers will only get smaller. Therefore, to minimize the cost of the journey, we should perform bitwise AND operation on the weights of all edges in the same connected component, and then perform the query. So, the problem is transformed into how to find all the edges in the same connected component and perform bitwise AND operation. We can use a union-find set to maintain the connected components. Specifically, we traverse each edge $(u, v, w)$ and..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3108 - Minimum Cost Walk in Weighted Graph | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3108 - Minimum Cost Walk in Weighted Graph" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3108.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-04-28-3108-Minimum-Cost-Walk-in-Weighted-Graph/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-04-28T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3108 - Minimum Cost Walk in Weighted Graph","dateModified":"2024-04-28T00:00:00-07:00","datePublished":"2024-04-28T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-04-28-3108-Minimum-Cost-Walk-in-Weighted-Graph/"},"url":"https://leetcode.ca/2024-04-28-3108-Minimum-Cost-Walk-in-Weighted-Graph/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="3108-minimum-cost-walk-in-weighted-graph">
+       <a href="solution-3108.html">
+        3108. Minimum Cost Walk in Weighted Graph
+       </a>
+      </h1>
+      <!-- tags:Bit Manipulation,Union Find,Graph,Array -->
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       There is an undirected weighted graph with
+       <code>
+        n
+       </code>
+       vertices labeled from
+       <code>
+        0
+       </code>
+       to
+       <code>
+        n - 1
+       </code>
+       .
+      </p>
+      <p>
+       You are given the integer
+       <code>
+        n
+       </code>
+       and an array
+       <code>
+        edges
+       </code>
+       , where
+       <code>
+        edges[i] = [u
+        <sub>
+         i
+        </sub>
+        , v
+        <sub>
+         i
+        </sub>
+        , w
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       indicates that there is an edge between vertices
+       <code>
+        u
+        <sub>
+         i
+        </sub>
+       </code>
+       and
+       <code>
+        v
+        <sub>
+         i
+        </sub>
+       </code>
+       with a weight of
+       <code>
+        w
+        <sub>
+         i
+        </sub>
+       </code>
+       .
+      </p>
+      <p>
+       A walk on a graph is a sequence of vertices and edges. The walk starts and ends with a vertex, and each edge connects the vertex that comes before it and the vertex that comes after it. It's important to note that a walk may visit the same edge or vertex more than once.
+      </p>
+      <p>
+       The
+       <strong>
+        cost
+       </strong>
+       of a walk starting at node
+       <code>
+        u
+       </code>
+       and ending at node
+       <code>
+        v
+       </code>
+       is defined as the bitwise
+       <code>
+        AND
+       </code>
+       of the weights of the edges traversed during the walk. In other words, if the sequence of edge weights encountered during the walk is
+       <code>
+        w
+        <sub>
+         0
+        </sub>
+        , w
+        <sub>
+         1
+        </sub>
+        , w
+        <sub>
+         2
+        </sub>
+        , ..., w
+        <sub>
+         k
+        </sub>
+       </code>
+       , then the cost is calculated as
+       <code>
+        w
+        <sub>
+         0
+        </sub>
+        &amp; w
+        <sub>
+         1
+        </sub>
+        &amp; w
+        <sub>
+         2
+        </sub>
+        &amp; ... &amp; w
+        <sub>
+         k
+        </sub>
+       </code>
+       , where
+       <code>
+        &amp;
+       </code>
+       denotes the bitwise
+       <code>
+        AND
+       </code>
+       operator.
+      </p>
+      <p>
+       You are also given a 2D array
+       <code>
+        query
+       </code>
+       , where
+       <code>
+        query[i] = [s
+        <sub>
+         i
+        </sub>
+        , t
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       . For each query, you need to find the minimum cost of the walk starting at vertex
+       <code>
+        s
+        <sub>
+         i
+        </sub>
+       </code>
+       and ending at vertex
+       <code>
+        t
+        <sub>
+         i
+        </sub>
+       </code>
+       . If there exists no such walk, the answer is
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the array
+       </em>
+       <code>
+        answer
+       </code>
+       <em>
+        , where
+       </em>
+       <code>
+        answer[i]
+       </code>
+       <em>
+        denotes the
+        <strong>
+         minimum
+        </strong>
+        cost of a walk for query
+       </em>
+       <code>
+        i
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         n = 5, edges = [[0,1,7],[1,3,7],[1,2,1]], query = [[0,3],[3,4]]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         [1,-1]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/3100-3199/3108.Minimum%20Cost%20Walk%20in%20Weighted%20Graph/images/q4_example1-1.png" style="padding: 10px; background: rgb(255, 255, 255); border-radius: 0.5rem; width: 351px; height: 141px;"/>
+       <p>
+        To achieve the cost of 1 in the first query, we need to move on the following edges:
+        <code>
+         0-&gt;1
+        </code>
+        (weight 7),
+        <code>
+         1-&gt;2
+        </code>
+        (weight 1),
+        <code>
+         2-&gt;1
+        </code>
+        (weight 1),
+        <code>
+         1-&gt;3
+        </code>
+        (weight 7).
+       </p>
+       <p>
+        In the second query, there is no walk between nodes 3 and 4, so the answer is -1.
+       </p>
+       <p>
+        <strong class="example">
+         Example 2:
+        </strong>
+       </p>
+      </div>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         n = 3, edges = [[0,2,7],[0,1,15],[1,2,6],[1,2,1]], query = [[1,2]]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         [0]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/3100-3199/3108.Minimum%20Cost%20Walk%20in%20Weighted%20Graph/images/q4_example2e.png" style="padding: 10px; background: rgb(255, 255, 255); border-radius: 0.5rem; width: 211px; height: 181px;"/>
+       <p>
+        To achieve the cost of 0 in the first query, we need to move on the following edges:
+        <code>
+         1-&gt;2
+        </code>
+        (weight 1),
+        <code>
+         2-&gt;1
+        </code>
+        (weight 6),
+        <code>
+         1-&gt;2
+        </code>
+        (weight 1).
+       </p>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         2 &lt;= n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= edges.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         edges[i].length == 3
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= u
+         <sub>
+          i
+         </sub>
+         , v
+         <sub>
+          i
+         </sub>
+         &lt;= n - 1
+        </code>
+       </li>
+       <li>
+        <code>
+         u
+         <sub>
+          i
+         </sub>
+         != v
+         <sub>
+          i
+         </sub>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= w
+         <sub>
+          i
+         </sub>
+         &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= query.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         query[i].length == 2
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= s
+         <sub>
+          i
+         </sub>
+         , t
+         <sub>
+          i
+         </sub>
+         &lt;= n - 1
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+         <sub>
+          i
+         </sub>
+         != t
+         <sub>
+          i
+         </sub>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <h3 id="solution-1-greedy--union-find">
+       Solution 1: Greedy + Union Find
+      </h3>
+      <p>
+       We note that a positive integer performing bitwise AND operation with several other positive integers will only get smaller. Therefore, to minimize the cost of the journey, we should perform bitwise AND operation on the weights of all edges in the same connected component, and then perform the query.
+      </p>
+      <p>
+       So, the problem is transformed into how to find all the edges in the same connected component and perform bitwise AND operation.
+      </p>
+      <p>
+       We can use a union-find set to maintain the connected components.
+      </p>
+      <p>
+       Specifically, we traverse each edge $(u, v, w)$ and merge $u$ and $v$. Then, we traverse each edge $(u, v, w)$ again, find the root node $root$ of the connected component where $u$ and $v$ are located, and use an array $g$ to record the result of the bitwise AND operation of the weights of all edges in each connected component.
+      </p>
+      <p>
+       Finally, for each query $(s, t)$, we first judge whether $s$ equals $t$. If they are equal, the answer is $0$. Otherwise, we judge whether $s$ and $t$ are in the same connected component. If they are in the same connected component, the answer is the $g$ value of the root node of the connected component of this query. Otherwise, the answer is $-1$.
+      </p>
+      <p>
+       The time complexity is $O((n + m + q) \times \alpha(n))$, and the space complexity is $O(n)$. Here, $n$, $m$, and $q$ represent the number of nodes, edges, and queries, respectively, and $\alpha(n)$ represents the inverse function of the Ackermann function.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8226dd28-2ef6-48a2-bea2-b8b0c2bf907a'}">
+       <li class="uk-active">
+        <a href="solution-3108.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3108.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3108.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3108.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3108.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8226dd28-2ef6-48a2-bea2-b8b0c2bf907a">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">UnionFind</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">p</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">size</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">UnionFind</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="n">size</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">find</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">!=</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">union</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span><span class="o">[</span><span class="n">pa</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">size</span><span class="o">[</span><span class="n">pb</span><span class="o">])</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">[</span><span class="n">pb</span><span class="o">]</span> <span class="o">=</span> <span class="n">pa</span><span class="o">;</span>
+            <span class="n">size</span><span class="o">[</span><span class="n">pa</span><span class="o">]</span> <span class="o">+=</span> <span class="n">size</span><span class="o">[</span><span class="n">pb</span><span class="o">];</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">[</span><span class="n">pa</span><span class="o">]</span> <span class="o">=</span> <span class="n">pb</span><span class="o">;</span>
+            <span class="n">size</span><span class="o">[</span><span class="n">pb</span><span class="o">]</span> <span class="o">+=</span> <span class="n">size</span><span class="o">[</span><span class="n">pa</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">size</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">size</span><span class="o">[</span><span class="n">find</span><span class="o">(</span><span class="n">x</span><span class="o">)];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">UnionFind</span> <span class="n">uf</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">g</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">minimumCost</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">query</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">uf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UnionFind</span><span class="o">(</span><span class="n">n</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">uf</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">root</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">root</span><span class="o">]</span> <span class="o">&amp;=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">query</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">],</span> <span class="n">t</span> <span class="o">=</span> <span class="n">query</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">1</span><span class="o">];</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">t</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">f</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="kt">int</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">==</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">u</span><span class="o">),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">v</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="o">?</span> <span class="n">g</span><span class="o">[</span><span class="n">a</span><span class="o">]</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">UnionFind</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">UnionFind</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">iota</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">p</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">unite</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span><span class="p">;</span>
+            <span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">+=</span> <span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span><span class="p">;</span>
+            <span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">+=</span> <span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">getSize</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">size</span><span class="p">[</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)];</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">minimumCost</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edges</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">query</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">uf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UnionFind</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">uf</span><span class="o">-&gt;</span><span class="n">unite</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">root</span> <span class="o">=</span> <span class="n">uf</span><span class="o">-&gt;</span><span class="n">find</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">q</span> <span class="o">:</span> <span class="n">query</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">UnionFind</span><span class="o">*</span> <span class="n">uf</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">g</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">uf</span><span class="o">-&gt;</span><span class="n">find</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">uf</span><span class="o">-&gt;</span><span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="o">?</span> <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">UnionFind</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="n">pa</span><span class="p">,</span> <span class="n">pb</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="bp">self</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minimumCost</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">query</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="n">uf</span> <span class="o">=</span> <span class="n">UnionFind</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">uf</span><span class="p">.</span><span class="n">union</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">uf</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="n">w</span>
+
+        <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="n">v</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">uf</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">uf</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">query</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">unionFind</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">p</span><span class="p">,</span> <span class="n">size</span> <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newUnionFind</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">unionFind</span> <span class="p">{</span>
+	<span class="n">p</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="n">size</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">p</span> <span class="p">{</span>
+		<span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+		<span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">unionFind</span><span class="p">{</span><span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">uf</span> <span class="o">*</span><span class="n">unionFind</span><span class="p">)</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">uf</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span> <span class="p">{</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">uf</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">uf</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">uf</span> <span class="o">*</span><span class="n">unionFind</span><span class="p">)</span> <span class="n">union</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">pa</span><span class="p">,</span> <span class="n">pb</span> <span class="o">:=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">pa</span> <span class="o">==</span> <span class="n">pb</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="p">{</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">+=</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">pb</span><span class="p">]</span> <span class="o">+=</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">pa</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">uf</span> <span class="o">*</span><span class="n">unionFind</span><span class="p">)</span> <span class="n">getSize</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">minimumCost</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">edges</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">query</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">uf</span> <span class="o">:=</span> <span class="n">newUnionFind</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+		<span class="n">root</span> <span class="o">:=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="n">e</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="n">v</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="m">0</span>
+		<span class="p">}</span>
+		<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">q</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">query</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="p">]))</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">UnionFind</span> <span class="p">{</span>
+    <span class="nl">p</span><span class="p">:</span> <span class="kr">number</span><span class="p">[];</span>
+    <span class="nl">size</span><span class="p">:</span> <span class="kr">number</span><span class="p">[];</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">p</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">i</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">p</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">p</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">p</span><span class="p">[</span><span class="nx">x</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">p</span><span class="p">[</span><span class="nx">x</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="nx">union</span><span class="p">(</span><span class="nx">a</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">b</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">pa</span><span class="p">,</span> <span class="nx">pb</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">b</span><span class="p">)];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">pa</span> <span class="o">===</span> <span class="nx">pb</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">size</span><span class="p">[</span><span class="nx">pa</span><span class="p">]</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">size</span><span class="p">[</span><span class="nx">pb</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">p</span><span class="p">[</span><span class="nx">pb</span><span class="p">]</span> <span class="o">=</span> <span class="nx">pa</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">size</span><span class="p">[</span><span class="nx">pa</span><span class="p">]</span> <span class="o">+=</span> <span class="k">this</span><span class="p">.</span><span class="nx">size</span><span class="p">[</span><span class="nx">pb</span><span class="p">];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">p</span><span class="p">[</span><span class="nx">pa</span><span class="p">]</span> <span class="o">=</span> <span class="nx">pb</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">size</span><span class="p">[</span><span class="nx">pb</span><span class="p">]</span> <span class="o">+=</span> <span class="k">this</span><span class="p">.</span><span class="nx">size</span><span class="p">[</span><span class="nx">pa</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">getSize</span><span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">size</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">)];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">minimumCost</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">edges</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][],</span> <span class="nx">query</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">uf</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UnionFind</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">g</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">_</span><span class="p">]</span> <span class="k">of</span> <span class="nx">edges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">uf</span><span class="p">.</span><span class="nx">union</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">u</span><span class="p">,</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">w</span><span class="p">]</span> <span class="k">of</span> <span class="nx">edges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">root</span> <span class="o">=</span> <span class="nx">uf</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">u</span><span class="p">);</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">root</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="nx">w</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">(</span><span class="nx">u</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">v</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">u</span> <span class="o">===</span> <span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">uf</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">u</span><span class="p">),</span> <span class="nx">uf</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">v</span><span class="p">)];</span>
+        <span class="k">return</span> <span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span> <span class="p">?</span> <span class="nx">g</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">return</span> <span class="nx">query</span><span class="p">.</span><span class="nx">map</span><span class="p">(([</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">])</span> <span class="o">=&gt;</span> <span class="nx">f</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="nx">v</span><span class="p">));</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3108.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

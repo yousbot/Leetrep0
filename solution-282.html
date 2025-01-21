@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-282.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-282.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>282 - Expression Add Operators</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 282. Expression Add Operators Description Given a string num that contains only digits and an integer target, return all possibilities to insert the binary operators &amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;, and/or &amp;#39;*&amp;#39; between the digits of num so that the resultant expression evaluates to the target value. Note...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-282.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-282.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-282.html" rel="stylesheet"/>
+   <link href="solution-282.html" rel="stylesheet"/>
+   <link href="solution-282.html" rel="stylesheet"/>
+   <link href="solution-282.html" rel="stylesheet"/>
+   <link href="solution-282.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="282 - Expression Add Operators" property="og:title"/>
+   <meta content="Leetcode 282. Expression Add Operators Description Given a string num that contains only digits and an integer target, return all possibilities to insert the binary operators &amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;, and/or &amp;#39;*&amp;#39; between the digits of num so that the resultant expression evaluates to the target value. Note that operands in the returned expressions should not contain leading zeros. &amp;nbsp; Example 1: Input: num = &amp;quot;123&amp;quot;, target = 6 Output: [&amp;quot;1*2*3&amp;quot;,&amp;quot;1+2+3&amp;quot;] Explanation: Both &amp;quot;1*2*3&amp;quot; and &amp;quot;1+2+3&amp;quot; evaluate to 6. Example 2: Input: num = &amp;quot;232&amp;quot;, target = 8 Output: [&amp;quot;2*3+2&amp;quot;,&amp;quot;2+3*2&amp;quot;] Explanation: Both &amp;quot;2*3+2&amp;quot; and &amp;quot;2+3*2&amp;quot; evaluate to 8. Example 3: Input: num = &amp;quot;3456237490&amp;quot;, target = 9191 Output: [] Explanation: There are no expressions that can be created from &amp;quot;3456237490&amp;quot; to evaluate to 9191. &amp;nbsp; Constraints: 1 &amp;lt;= num.length &amp;lt;= 10 num consists of only digits. -231 &amp;lt;= target &amp;lt;= 231 - 1 Solutions We need two variables diff and sumUpToPrevNum, one is used to record the value to be changed, the other is the value after the current operation, and they all need to use long type, because the string is converted to int type, it is easy to overflow. For addition and subtraction, diff is the negative value of the number to be added and the number to be subtracted. For multiplication, itâs a bit more complicated, diff is the diff of the last change multiplied by the number to be multiplied. For example, for example, 2+3*2, when the calculation is about to multiply by 2, the last cycle of sumUpToPrevNum = 5, diff = 3, and if we want to calculate this multiplication by 2, the new change value diff should It is 3*2=6, and we need to remove the result of the previous +3 operation, and add a new diff, namely (5-3)+6=8, which is the value of the new expression 2+3*2. Another thing to note is that if the input is â000â, 0, the following errors are prone to occur: Wrong: [&quot;0+0+0&quot;,&quot;0+0-0&quot;,&quot;0+0*0&quot;,&quot;0-0+0&quot;,&quot;0-0-0&quot;,&quot;0-0*0&quot; ,&quot;0*0+0&quot;,&quot;0*0-0&quot;,&quot;0*0*0&quot;,&quot;0+00&quot;,&quot;0-00&quot;,&quot;0*00&quot;,&quot;00+0&quot;,&quot; 00-0&quot;,&quot;00*0&quot;,&quot;000&quot;] Correct:[&quot;0*0*0&quot;,&quot;0*0+0&quot;,&quot;0*0-0&quot;,&quot;0+0*0&quot;,&quot;0+0+0&quot;,&quot;0+0-0&quot; ,&quot;0-0*0&quot;,&quot;0-0+0&quot;,&quot;0-0-0&quot;] Java Python C# class Solution { private List&amp;lt;String&amp;gt; ans; private String num; private int target; public List&amp;lt;String&amp;gt; addOperators(String num, int target) { ans = new ArrayList&amp;lt;&amp;gt;(); this.num = num; this.target = target; dfs(0, 0, 0, &quot;&quot;); return ans; } private void dfs(int u, long prev, long curr, String path) { if (u == num.length()) { if (curr == target) ans.add(path); return; } for (int i = u; i &amp;lt; num.length(); i++) { if (i != u &amp;amp;&amp;amp; num.charAt(u) == '0') { break; } long next = Long.parseLong(num.substring(u, i + 1)); if (u == 0) { dfs(i + 1, next, next, path + next); } else { dfs(i + 1, next, curr + next, path + &quot;+&quot; + next); dfs(i + 1, -next, curr - next, path + &quot;-&quot; + next); dfs(i + 1, prev * next, curr - prev + prev * next, path + &quot;*&quot; + next); } } } } class Solution: def addOperators(self, num: str, target: int) -&amp;gt; List[str]: ans = [] def dfs(start, prev_val,..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-09-07T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-09-07-282-Expression-Add-Operators/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-282.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="282 - Expression Add Operators" property="twitter:title"/>
+   <meta content="Leetcode 282. Expression Add Operators Description Given a string num that contains only digits and an integer target, return all possibilities to insert the binary operators &amp;#39;+&amp;#39;, &amp;#39;-&amp;#39;, and/or &amp;#39;*&amp;#39; between the digits of num so that the resultant expression evaluates to the target value. Note that operands in the returned expressions should not contain leading zeros. &amp;nbsp; Example 1: Input: num = &amp;quot;123&amp;quot;, target = 6 Output: [&amp;quot;1*2*3&amp;quot;,&amp;quot;1+2+3&amp;quot;] Explanation: Both &amp;quot;1*2*3&amp;quot; and &amp;quot;1+2+3&amp;quot; evaluate to 6. Example 2: Input: num = &amp;quot;232&amp;quot;, target = 8 Output: [&amp;quot;2*3+2&amp;quot;,&amp;quot;2+3*2&amp;quot;] Explanation: Both &amp;quot;2*3+2&amp;quot; and &amp;quot;2+3*2&amp;quot; evaluate to 8. Example 3: Input: num = &amp;quot;3456237490&amp;quot;, target = 9191 Output: [] Explanation: There are no expressions that can be created from &amp;quot;3456237490&amp;quot; to evaluate to 9191. &amp;nbsp; Constraints: 1 &amp;lt;= num.length &amp;lt;= 10 num consists of only digits. -231 &amp;lt;= target &amp;lt;= 231 - 1 Solutions We need two variables diff and sumUpToPrevNum, one is used to record the value to be changed, the other is the value after the current operation, and they all need to use long type, because the string is converted to int type, it is easy to overflow. For addition and subtraction, diff is the negative value of the number to be added and the number to be subtracted. For multiplication, itâs a bit more complicated, diff is the diff of the last change multiplied by the number to be multiplied. For example, for example, 2+3*2, when the calculation is about to multiply by 2, the last cycle of sumUpToPrevNum = 5, diff = 3, and if we want to calculate this multiplication by 2, the new change value diff should It is 3*2=6, and we need to remove the result of the previous +3 operation, and add a new diff, namely (5-3)+6=8, which is the value of the new expression 2+3*2. Another thing to note is that if the input is â000â, 0, the following errors are prone to occur: Wrong: [&quot;0+0+0&quot;,&quot;0+0-0&quot;,&quot;0+0*0&quot;,&quot;0-0+0&quot;,&quot;0-0-0&quot;,&quot;0-0*0&quot; ,&quot;0*0+0&quot;,&quot;0*0-0&quot;,&quot;0*0*0&quot;,&quot;0+00&quot;,&quot;0-00&quot;,&quot;0*00&quot;,&quot;00+0&quot;,&quot; 00-0&quot;,&quot;00*0&quot;,&quot;000&quot;] Correct:[&quot;0*0*0&quot;,&quot;0*0+0&quot;,&quot;0*0-0&quot;,&quot;0+0*0&quot;,&quot;0+0+0&quot;,&quot;0+0-0&quot; ,&quot;0-0*0&quot;,&quot;0-0+0&quot;,&quot;0-0-0&quot;] Java Python C# class Solution { private List&amp;lt;String&amp;gt; ans; private String num; private int target; public List&amp;lt;String&amp;gt; addOperators(String num, int target) { ans = new ArrayList&amp;lt;&amp;gt;(); this.num = num; this.target = target; dfs(0, 0, 0, &quot;&quot;); return ans; } private void dfs(int u, long prev, long curr, String path) { if (u == num.length()) { if (curr == target) ans.add(path); return; } for (int i = u; i &amp;lt; num.length(); i++) { if (i != u &amp;amp;&amp;amp; num.charAt(u) == '0') { break; } long next = Long.parseLong(num.substring(u, i + 1)); if (u == 0) { dfs(i + 1, next, next, path + next); } else { dfs(i + 1, next, curr + next, path + &quot;+&quot; + next); dfs(i + 1, -next, curr - next, path + &quot;-&quot; + next); dfs(i + 1, prev * next, curr - prev + prev * next, path + &quot;*&quot; + next); } } } } class Solution: def addOperators(self, num: str, target: int) -&amp;gt; List[str]: ans = [] def dfs(start, prev_val,..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    282 - Expression Add Operators | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="282 - Expression Add Operators" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-282.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-09-07-282-Expression-Add-Operators/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-09-07T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"282 - Expression Add Operators","dateModified":"2016-09-07T00:00:00-07:00","datePublished":"2016-09-07T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-09-07-282-Expression-Add-Operators/"},"url":"https://leetcode.ca/2016-09-07-282-Expression-Add-Operators/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="282-expression-add-operators">
+       <a href="solution-282.html">
+        282. Expression Add Operators
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string
+       <code>
+        num
+       </code>
+       that contains only digits and an integer
+       <code>
+        target
+       </code>
+       , return
+       <em>
+        <strong>
+         all possibilities
+        </strong>
+        to insert the binary operators
+       </em>
+       <code>
+        '+'
+       </code>
+       <em>
+        ,
+       </em>
+       <code>
+        '-'
+       </code>
+       <em>
+        , and/or
+       </em>
+       <code>
+        '*'
+       </code>
+       <em>
+        between the digits of
+       </em>
+       <code>
+        num
+       </code>
+       <em>
+        so that the resultant expression evaluates to the
+       </em>
+       <code>
+        target
+       </code>
+       <em>
+        value
+       </em>
+       .
+      </p>
+      <p>
+       Note that operands in the returned expressions
+       <strong>
+        should not
+       </strong>
+       contain leading zeros.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> num = "123", target = 6
+<strong>Output:</strong> ["1*2*3","1+2+3"]
+<strong>Explanation:</strong> Both "1*2*3" and "1+2+3" evaluate to 6.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> num = "232", target = 8
+<strong>Output:</strong> ["2*3+2","2+3*2"]
+<strong>Explanation:</strong> Both "2*3+2" and "2+3*2" evaluate to 8.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> num = "3456237490", target = 9191
+<strong>Output:</strong> []
+<strong>Explanation:</strong> There are no expressions that can be created from "3456237490" to evaluate to 9191.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= num.length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         num
+        </code>
+        consists of only digits.
+       </li>
+       <li>
+        <code>
+         -2
+         <sup>
+          31
+         </sup>
+         &lt;= target &lt;= 2
+         <sup>
+          31
+         </sup>
+         - 1
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       We need two variables
+       <code class="language-plaintext highlighter-rouge">
+        diff
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        sumUpToPrevNum
+       </code>
+       , one is used to record the value to be changed, the other is the value after the current operation, and they all need to use
+       <code class="language-plaintext highlighter-rouge">
+        long
+       </code>
+       type, because the string is converted to int type, it is easy to
+       <code class="language-plaintext highlighter-rouge">
+        overflow
+       </code>
+       .
+      </p>
+      <p>
+       For
+       <code class="language-plaintext highlighter-rouge">
+        addition
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        subtraction
+       </code>
+       , diff is the negative value of the number to be added and the number to be subtracted.
+      </p>
+      <p>
+       For
+       <code class="language-plaintext highlighter-rouge">
+        multiplication
+       </code>
+       , itâs a bit more complicated, diff is the diff of the last change multiplied by the number to be multiplied.
+      </p>
+      <p>
+       For example, for example,
+       <code class="language-plaintext highlighter-rouge">
+        2+3*2
+       </code>
+       , when the calculation is about to multiply by 2, the last cycle of sumUpToPrevNum = 5, diff = 3, and if we want to calculate this multiplication by 2, the new change value diff should It is
+       <code class="language-plaintext highlighter-rouge">
+        3*2=6
+       </code>
+       , and we need to remove the result of the previous +3 operation, and add a new diff, namely
+       <code class="language-plaintext highlighter-rouge">
+        (5-3)+6=8
+       </code>
+       , which is the value of the new expression
+       <code class="language-plaintext highlighter-rouge">
+        2+3*2
+       </code>
+       .
+      </p>
+      <p>
+       Another thing to note is that if the input is â000â, 0, the following errors are prone to occur:
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>Wrong: ["0+0+0","0+0-0","0+0*0","0-0+0","0-0-0","0-0*0" ,"0*0+0","0*0-0","0*0*0","0+00","0-00","0*00","00+0"," 00-0","00*0","000"]
+
+Correct:["0*0*0","0*0+0","0*0-0","0+0*0","0+0+0","0+0-0" ,"0-0*0","0-0+0","0-0-0"]
+</code></pre>
+       </div>
+      </div>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#e065a191-d2ad-4024-ab8a-30aaba02ca79'}">
+       <li class="uk-active">
+        <a href="solution-282.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-282.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-282.html">
+         C#
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="e065a191-d2ad-4024-ab8a-30aaba02ca79">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">num</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">target</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">addOperators</span><span class="o">(</span><span class="nc">String</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">;</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="kt">long</span> <span class="n">prev</span><span class="o">,</span> <span class="kt">long</span> <span class="n">curr</span><span class="o">,</span> <span class="nc">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">==</span> <span class="n">num</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">curr</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">u</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">u</span> <span class="o">&amp;&amp;</span> <span class="n">num</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">u</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'0'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">long</span> <span class="n">next</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">num</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">u</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">next</span><span class="o">,</span> <span class="n">next</span><span class="o">,</span> <span class="n">path</span> <span class="o">+</span> <span class="n">next</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">next</span><span class="o">,</span> <span class="n">curr</span> <span class="o">+</span> <span class="n">next</span><span class="o">,</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"+"</span> <span class="o">+</span> <span class="n">next</span><span class="o">);</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="n">next</span><span class="o">,</span> <span class="n">curr</span> <span class="o">-</span> <span class="n">next</span><span class="o">,</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="n">next</span><span class="o">);</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">prev</span> <span class="o">*</span> <span class="n">next</span><span class="o">,</span> <span class="n">curr</span> <span class="o">-</span> <span class="n">prev</span> <span class="o">+</span> <span class="n">prev</span> <span class="o">*</span> <span class="n">next</span><span class="o">,</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"*"</span> <span class="o">+</span> <span class="n">next</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">addOperators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">prev_val</span><span class="p">,</span> <span class="n">prev_sum</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="ow">and</span> <span class="n">prev_sum</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="c1"># besides above if check, if start&gt;len(num), it will not go inside for loop
+</span>            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">start</span> <span class="ow">and</span> <span class="n">num</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">==</span> <span class="s">'0'</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">curr_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># or, judege by 'path' string is empty or not
+</span>                    <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">curr_val</span><span class="p">,</span> <span class="n">curr_val</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">curr_val</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">curr_val</span><span class="p">,</span> <span class="n">prev_sum</span> <span class="o">+</span> <span class="n">curr_val</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"+"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">curr_val</span><span class="p">))</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">curr_val</span><span class="p">,</span> <span class="n">prev_sum</span> <span class="o">-</span> <span class="n">curr_val</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">curr_val</span><span class="p">))</span>
+                    <span class="n">dfs</span><span class="p">(</span>
+                        <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="n">prev_val</span> <span class="o">*</span> <span class="n">curr_val</span><span class="p">,</span> <span class="c1"># i.e. diff
+</span>                        <span class="n">prev_sum</span> <span class="o">-</span> <span class="n">prev_val</span> <span class="o">+</span> <span class="n">prev_val</span> <span class="o">*</span> <span class="n">curr_val</span><span class="p">,</span>
+                        <span class="n">path</span> <span class="o">+</span> <span class="s">"*"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">curr_val</span><span class="p">),</span>
+                    <span class="p">)</span>
+
+        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">addOperators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">target</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">target</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"0"</span><span class="p">):</span>  <span class="c1"># prevent "00*" as a number
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">:],</span> <span class="n">num</span><span class="p">[:</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">[:</span><span class="n">i</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">[:</span><span class="n">i</span><span class="p">]),</span> <span class="n">res</span><span class="p">)</span>  <span class="c1"># this step put first number in the string
+</span>    <span class="k">return</span> <span class="n">res</span>
+
+  <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">cur</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">num</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">cur</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">target</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+      <span class="k">return</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+      <span class="n">val</span> <span class="o">=</span> <span class="n">num</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"0"</span><span class="p">):</span>  <span class="c1"># prevent "00*" as a number
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">:],</span> <span class="n">temp</span> <span class="o">+</span> <span class="s">"+"</span> <span class="o">+</span> <span class="n">val</span><span class="p">,</span> <span class="n">cur</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">:],</span> <span class="n">temp</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="n">val</span><span class="p">,</span> <span class="n">cur</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">:],</span> <span class="n">temp</span> <span class="o">+</span> <span class="s">"*"</span> <span class="o">+</span> <span class="n">val</span><span class="p">,</span> <span class="n">cur</span> <span class="o">-</span> <span class="n">last</span> <span class="o">+</span> <span class="n">last</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">last</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span>
+        <span class="s">'''
+            cur - last + last * int(val)
+
+            here the `cur` is the whole/accumlated result from previous recursions
+            `cur` is NOT just the previous number
+        '''</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Expression</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">long</span> <span class="n">Value</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">ToString</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Value</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">BinaryExpression</span> <span class="p">:</span> <span class="n">Expression</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">char</span> <span class="n">Operator</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="n">Expression</span> <span class="n">LeftChild</span><span class="p">;</span>
+    <span class="k">public</span> <span class="n">Expression</span> <span class="n">RightChild</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">ToString</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0}{1}{2}"</span><span class="p">,</span> <span class="n">LeftChild</span><span class="p">,</span> <span class="n">Operator</span><span class="p">,</span> <span class="n">RightChild</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="n">IList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="nf">AddOperators</span><span class="p">(</span><span class="kt">string</span> <span class="n">num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">num</span><span class="p">))</span> <span class="k">return</span> <span class="n">results</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">num</span> <span class="p">=</span> <span class="n">num</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Expression</span><span class="p">&gt;[</span><span class="n">num</span><span class="p">.</span><span class="n">Length</span><span class="p">,</span> <span class="n">num</span><span class="p">.</span><span class="n">Length</span><span class="p">,</span> <span class="m">3</span><span class="p">];</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">ex</span> <span class="k">in</span> <span class="nf">Search</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">num</span><span class="p">.</span><span class="n">Length</span> <span class="p">-</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Value</span> <span class="p">==</span> <span class="n">target</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">results</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">results</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">num</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Expression</span><span class="p">&gt;[,,]</span> <span class="n">results</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Expression</span><span class="p">&gt;</span> <span class="nf">Search</span><span class="p">(</span><span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">,</span> <span class="kt">int</span> <span class="n">level</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">level</span><span class="p">]</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">level</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Expression</span><span class="p">&gt;();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">level</span> <span class="p">&lt;</span> <span class="m">2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="n">left</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;=</span> <span class="n">right</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">List</span><span class="p">&lt;</span><span class="n">Expression</span><span class="p">&gt;</span> <span class="n">leftResult</span><span class="p">,</span> <span class="n">rightResult</span><span class="p">;</span>
+                <span class="n">leftResult</span> <span class="p">=</span> <span class="nf">Search</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">,</span> <span class="n">level</span><span class="p">);</span>
+                <span class="n">rightResult</span> <span class="p">=</span> <span class="nf">Search</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">level</span> <span class="p">+</span> <span class="m">1</span><span class="p">);</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">l</span> <span class="k">in</span> <span class="n">leftResult</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">r</span> <span class="k">in</span> <span class="n">rightResult</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="kt">var</span> <span class="n">newObjects</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">long</span><span class="p">&gt;&gt;();</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">level</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">newObjects</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Tuple</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="sc">'+'</span><span class="p">,</span> <span class="n">l</span><span class="p">.</span><span class="n">Value</span> <span class="p">+</span> <span class="n">r</span><span class="p">.</span><span class="n">Value</span><span class="p">));</span>
+                            <span class="n">newObjects</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Tuple</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="sc">'-'</span><span class="p">,</span> <span class="n">l</span><span class="p">.</span><span class="n">Value</span> <span class="p">-</span> <span class="n">r</span><span class="p">.</span><span class="n">Value</span><span class="p">));</span>
+                        <span class="p">}</span>
+                        <span class="k">else</span>
+                        <span class="p">{</span>
+                            <span class="n">newObjects</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Tuple</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="sc">'*'</span><span class="p">,</span> <span class="n">l</span><span class="p">.</span><span class="n">Value</span> <span class="p">*</span> <span class="n">r</span><span class="p">.</span><span class="n">Value</span><span class="p">));</span>
+                        <span class="p">}</span>
+                        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">newObject</span> <span class="k">in</span> <span class="n">newObjects</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">result</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="n">BinaryExpression</span>
+                            <span class="p">{</span>
+                                <span class="n">Value</span> <span class="p">=</span> <span class="n">newObject</span><span class="p">.</span><span class="n">Item2</span><span class="p">,</span>
+                                <span class="n">Operator</span> <span class="p">=</span> <span class="n">newObject</span><span class="p">.</span><span class="n">Item1</span><span class="p">,</span>
+                                <span class="n">LeftChild</span> <span class="p">=</span> <span class="n">l</span><span class="p">,</span>
+                                <span class="n">RightChild</span> <span class="p">=</span> <span class="n">r</span>
+                            <span class="p">});</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="p">==</span> <span class="n">right</span> <span class="p">||</span> <span class="n">num</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="p">!=</span> <span class="sc">'0'</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">long</span> <span class="n">x</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;=</span> <span class="n">right</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">x</span> <span class="p">=</span> <span class="n">x</span> <span class="p">*</span> <span class="m">10</span> <span class="p">+</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">-</span> <span class="sc">'0'</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">result</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="n">Expression</span>
+                <span class="p">{</span>
+                    <span class="n">Value</span> <span class="p">=</span> <span class="n">x</span>
+                <span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">level</span> <span class="p">&lt;</span> <span class="m">2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">result</span><span class="p">.</span><span class="nf">AddRange</span><span class="p">(</span><span class="nf">Search</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">level</span> <span class="p">+</span> <span class="m">1</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">level</span><span class="p">]</span> <span class="p">=</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-282.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

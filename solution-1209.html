@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1209.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1209.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1209 - Remove All Adjacent Duplicates in String II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1209. Remove All Adjacent Duplicates in String II Description You are given a string s and an integer k, a k duplicate removal consists of choosing k adjacent and equal letters from s and removing them, causing the left and the right side of the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1209.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1209.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1209.html" rel="stylesheet"/>
+   <link href="solution-1209.html" rel="stylesheet"/>
+   <link href="solution-1209.html" rel="stylesheet"/>
+   <link href="solution-1209.html" rel="stylesheet"/>
+   <link href="solution-1209.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1209 - Remove All Adjacent Duplicates in String II" property="og:title"/>
+   <meta content="Leetcode 1209. Remove All Adjacent Duplicates in String II Description You are given a string s and an integer k, a k duplicate removal consists of choosing k adjacent and equal letters from s and removing them, causing the left and the right side of the deleted substring to concatenate together. We repeatedly make k duplicate removals on s until we no longer can. Return the final string after all such duplicate removals have been made. It is guaranteed that the answer is unique. &amp;nbsp; Example 1: Input: s = &amp;quot;abcd&amp;quot;, k = 2 Output: &amp;quot;abcd&amp;quot; Explanation: There&amp;#39;s nothing to delete. Example 2: Input: s = &amp;quot;deeedbbcccbdaa&amp;quot;, k = 3 Output: &amp;quot;aa&amp;quot; Explanation: First delete &amp;quot;eee&amp;quot; and &amp;quot;ccc&amp;quot;, get &amp;quot;ddbbbdaa&amp;quot; Then delete &amp;quot;bbb&amp;quot;, get &amp;quot;dddaa&amp;quot; Finally delete &amp;quot;ddd&amp;quot;, get &amp;quot;aa&amp;quot; Example 3: Input: s = &amp;quot;pbbcggttciiippooaais&amp;quot;, k = 2 Output: &amp;quot;ps&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 105 2 &amp;lt;= k &amp;lt;= 104 s only contains lowercase English letters. Solutions Solution 1: Stack We can traverse the string $s$, maintaining a stack that stores the characters and their occurrence counts. When traversing to character $c$, if the character at the top of the stack is the same as $c$, we increment the count of the top element by one; otherwise, we push the character $c$ and count $1$ into the stack. When the count of the top element equals $k$, we pop the top element from the stack. After traversing the string $s$, the elements remaining in the stack form the final result. We can pop the elements from the stack one by one, concatenate them into a string, and thatâs our answer. The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $s$. Java C++ Python Go class Solution { public String removeDuplicates(String s, int k) { Deque&amp;lt;int[]&amp;gt; stk = new ArrayDeque&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; s.length(); ++i) { int j = s.charAt(i) - 'a'; if (!stk.isEmpty() &amp;amp;&amp;amp; stk.peek()[0] == j) { stk.peek()[1] = (stk.peek()[1] + 1) % k; if (stk.peek()[1] == 0) { stk.pop(); } } else { stk.push(new int[] {j, 1}); } } StringBuilder ans = new StringBuilder(); for (var e : stk) { char c = (char) (e[0] + 'a'); for (int i = 0; i &amp;lt; e[1]; ++i) { ans.append(c); } } ans.reverse(); return ans.toString(); } } class Solution { public: string removeDuplicates(string s, int k) { vector&amp;lt;pair&amp;lt;char, int&amp;gt;&amp;gt; stk; for (char&amp;amp; c : s) { if (stk.size() &amp;amp;&amp;amp; stk.back().first == c) { stk.back().second = (stk.back().second + 1) % k; if (stk.back().second == 0) { stk.pop_back(); } } else { stk.push_back({c, 1}); } } string ans; for (auto [c, v] : stk) { ans += string(v, c); } return ans; } }; class Solution: def removeDuplicates(self, s: str, k: int) -&amp;gt; str: t = [] i, n = 0, len(s) while i &amp;lt; n: j = i while j &amp;lt; n and s[j] == s[i]: j += 1 cnt..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-03-23T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-03-23-1209-Remove-All-Adjacent-Duplicates-in-String-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1209.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1209 - Remove All Adjacent Duplicates in String II" property="twitter:title"/>
+   <meta content="Leetcode 1209. Remove All Adjacent Duplicates in String II Description You are given a string s and an integer k, a k duplicate removal consists of choosing k adjacent and equal letters from s and removing them, causing the left and the right side of the deleted substring to concatenate together. We repeatedly make k duplicate removals on s until we no longer can. Return the final string after all such duplicate removals have been made. It is guaranteed that the answer is unique. &amp;nbsp; Example 1: Input: s = &amp;quot;abcd&amp;quot;, k = 2 Output: &amp;quot;abcd&amp;quot; Explanation: There&amp;#39;s nothing to delete. Example 2: Input: s = &amp;quot;deeedbbcccbdaa&amp;quot;, k = 3 Output: &amp;quot;aa&amp;quot; Explanation: First delete &amp;quot;eee&amp;quot; and &amp;quot;ccc&amp;quot;, get &amp;quot;ddbbbdaa&amp;quot; Then delete &amp;quot;bbb&amp;quot;, get &amp;quot;dddaa&amp;quot; Finally delete &amp;quot;ddd&amp;quot;, get &amp;quot;aa&amp;quot; Example 3: Input: s = &amp;quot;pbbcggttciiippooaais&amp;quot;, k = 2 Output: &amp;quot;ps&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 105 2 &amp;lt;= k &amp;lt;= 104 s only contains lowercase English letters. Solutions Solution 1: Stack We can traverse the string $s$, maintaining a stack that stores the characters and their occurrence counts. When traversing to character $c$, if the character at the top of the stack is the same as $c$, we increment the count of the top element by one; otherwise, we push the character $c$ and count $1$ into the stack. When the count of the top element equals $k$, we pop the top element from the stack. After traversing the string $s$, the elements remaining in the stack form the final result. We can pop the elements from the stack one by one, concatenate them into a string, and thatâs our answer. The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $s$. Java C++ Python Go class Solution { public String removeDuplicates(String s, int k) { Deque&amp;lt;int[]&amp;gt; stk = new ArrayDeque&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; s.length(); ++i) { int j = s.charAt(i) - 'a'; if (!stk.isEmpty() &amp;amp;&amp;amp; stk.peek()[0] == j) { stk.peek()[1] = (stk.peek()[1] + 1) % k; if (stk.peek()[1] == 0) { stk.pop(); } } else { stk.push(new int[] {j, 1}); } } StringBuilder ans = new StringBuilder(); for (var e : stk) { char c = (char) (e[0] + 'a'); for (int i = 0; i &amp;lt; e[1]; ++i) { ans.append(c); } } ans.reverse(); return ans.toString(); } } class Solution { public: string removeDuplicates(string s, int k) { vector&amp;lt;pair&amp;lt;char, int&amp;gt;&amp;gt; stk; for (char&amp;amp; c : s) { if (stk.size() &amp;amp;&amp;amp; stk.back().first == c) { stk.back().second = (stk.back().second + 1) % k; if (stk.back().second == 0) { stk.pop_back(); } } else { stk.push_back({c, 1}); } } string ans; for (auto [c, v] : stk) { ans += string(v, c); } return ans; } }; class Solution: def removeDuplicates(self, s: str, k: int) -&amp;gt; str: t = [] i, n = 0, len(s) while i &amp;lt; n: j = i while j &amp;lt; n and s[j] == s[i]: j += 1 cnt..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1209 - Remove All Adjacent Duplicates in String II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1209 - Remove All Adjacent Duplicates in String II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1209.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-03-23-1209-Remove-All-Adjacent-Duplicates-in-String-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-03-23T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1209 - Remove All Adjacent Duplicates in String II","dateModified":"2019-03-23T00:00:00-07:00","datePublished":"2019-03-23T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-03-23-1209-Remove-All-Adjacent-Duplicates-in-String-II/"},"url":"https://leetcode.ca/2019-03-23-1209-Remove-All-Adjacent-Duplicates-in-String-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1209-remove-all-adjacent-duplicates-in-string-ii">
+       <a href="solution-1209.html">
+        1209. Remove All Adjacent Duplicates in String II
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a string
+       <code>
+        s
+       </code>
+       and an integer
+       <code>
+        k
+       </code>
+       , a
+       <code>
+        k
+       </code>
+       <strong>
+        duplicate removal
+       </strong>
+       consists of choosing
+       <code>
+        k
+       </code>
+       adjacent and equal letters from
+       <code>
+        s
+       </code>
+       and removing them, causing the left and the right side of the deleted substring to concatenate together.
+      </p>
+      <p>
+       We repeatedly make
+       <code>
+        k
+       </code>
+       <strong>
+        duplicate removals
+       </strong>
+       on
+       <code>
+        s
+       </code>
+       until we no longer can.
+      </p>
+      <p>
+       Return
+       <em>
+        the final string after all such duplicate removals have been made
+       </em>
+       . It is guaranteed that the answer is
+       <strong>
+        unique
+       </strong>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "abcd", k = 2
+<strong>Output:</strong> "abcd"
+<strong>Explanation: </strong>There's nothing to delete.</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "deeedbbcccbdaa", k = 3
+<strong>Output:</strong> "aa"
+<strong>Explanation: 
+</strong>First delete "eee" and "ccc", get "ddbbbdaa"
+Then delete "bbb", get "dddaa"
+Finally delete "ddd", get "aa"</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "pbbcggttciiippooaais", k = 2
+<strong>Output:</strong> "ps"
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         2 &lt;= k &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        only contains lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Stack
+       </strong>
+      </p>
+      <p>
+       We can traverse the string $s$, maintaining a stack that stores the characters and their occurrence counts. When traversing to character $c$, if the character at the top of the stack is the same as $c$, we increment the count of the top element by one; otherwise, we push the character $c$ and count $1$ into the stack. When the count of the top element equals $k$, we pop the top element from the stack.
+      </p>
+      <p>
+       After traversing the string $s$, the elements remaining in the stack form the final result. We can pop the elements from the stack one by one, concatenate them into a string, and thatâs our answer.
+      </p>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $s$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#f570426b-69d4-4da8-9dde-a200f0b97485'}">
+       <li class="uk-active">
+        <a href="solution-1209.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1209.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1209.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1209.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="f570426b-69d4-4da8-9dde-a200f0b97485">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">removeDuplicates</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">stk</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">stk</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">stk</span><span class="o">.</span><span class="na">peek</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">peek</span><span class="o">()[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">stk</span><span class="o">.</span><span class="na">peek</span><span class="o">()[</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">%</span> <span class="n">k</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">stk</span><span class="o">.</span><span class="na">peek</span><span class="o">()[</span><span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">stk</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">stk</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">j</span><span class="o">,</span> <span class="mi">1</span><span class="o">});</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">StringBuilder</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">stk</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span> <span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="sc">'a'</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">ans</span><span class="o">.</span><span class="na">reverse</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">string</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">stk</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">first</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">second</span> <span class="o">=</span> <span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">second</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">k</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">second</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">stk</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">string</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">c</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">:</span> <span class="n">stk</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">string</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">removeDuplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">cnt</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span>
+            <span class="n">cnt</span> <span class="o">%=</span> <span class="n">k</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">)</span> <span class="o">%</span> <span class="n">k</span>
+                <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">t</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">cnt</span><span class="p">:</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cnt</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="o">*</span> <span class="n">v</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="n">stk</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">pair</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">stk</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="n">c</span> <span class="p">{</span>
+			<span class="n">stk</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">stk</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">k</span>
+			<span class="k">if</span> <span class="n">stk</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">v</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">stk</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="p">}</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="n">pair</span><span class="p">{</span><span class="n">c</span><span class="p">,</span> <span class="m">1</span><span class="p">})</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">rune</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">stk</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kt">string</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">pair</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">c</span> <span class="kt">rune</span>
+	<span class="n">v</span> <span class="kt">int</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1209.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

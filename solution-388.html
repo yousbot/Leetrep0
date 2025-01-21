@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-388.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-388.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>388 - Longest Absolute File Path</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 388. Longest Absolute File Path Description Suppose we have a file system that stores both files and directories. An example of one system is represented in the following picture: Here, we have dir as the only directory in the root. dir contains two subdirectories, subdir1...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-388.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-388.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-388.html" rel="stylesheet"/>
+   <link href="solution-388.html" rel="stylesheet"/>
+   <link href="solution-388.html" rel="stylesheet"/>
+   <link href="solution-388.html" rel="stylesheet"/>
+   <link href="solution-388.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="388 - Longest Absolute File Path" property="og:title"/>
+   <meta content="Leetcode 388. Longest Absolute File Path Description Suppose we have a file system that stores both files and directories. An example of one system is represented in the following picture: Here, we have dir as the only directory in the root. dir contains two subdirectories, subdir1 and subdir2. subdir1 contains a file file1.ext and subdirectory subsubdir1. subdir2 contains a subdirectory subsubdir2, which contains a file file2.ext. In text form, it looks like this (with â¶ representing the tab character): dir â¶ subdir1 â¶ â¶ file1.ext â¶ â¶ subsubdir1 â¶ subdir2 â¶ â¶ subsubdir2 â¶ â¶ â¶ file2.ext If we were to write this representation in code, it will look like this: &amp;quot;dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext&amp;quot;. Note that the &amp;#39;\n&amp;#39; and &amp;#39;\t&amp;#39; are the new-line and tab characters. Every file and directory has a unique absolute path in the file system, which is the order of directories that must be opened to reach the file/directory itself, all concatenated by &amp;#39;/&amp;#39;s. Using the above example, the absolute path to file2.ext is &amp;quot;dir/subdir2/subsubdir2/file2.ext&amp;quot;. Each directory name consists of letters, digits, and/or spaces. Each file name is of the form name.extension, where name and extension consist of letters, digits, and/or spaces. Given a string input representing the file system in the explained format, return the length of the longest absolute path to a file in the abstracted file system. If there is no file in the system, return 0. Note that the testcases are generated such that the file system is valid and no file or directory name has length 0. &amp;nbsp; Example 1: Input: input = &amp;quot;dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext&amp;quot; Output: 20 Explanation: We have only one file, and the absolute path is &amp;quot;dir/subdir2/file.ext&amp;quot; of length 20. Example 2: Input: input = &amp;quot;dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext&amp;quot; Output: 32 Explanation: We have two files: &amp;quot;dir/subdir1/file1.ext&amp;quot; of length 21 &amp;quot;dir/subdir2/subsubdir2/file2.ext&amp;quot; of length 32. We return 32 since it is the longest absolute path to a file. Example 3: Input: input = &amp;quot;a&amp;quot; Output: 0 Explanation: We do not have any files, just a single directory named &amp;quot;a&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= input.length &amp;lt;= 104 input may contain lowercase or uppercase English letters, a new line character &amp;#39;\n&amp;#39;, a tab character &amp;#39;\t&amp;#39;, a dot &amp;#39;.&amp;#39;, a space &amp;#39; &amp;#39;, and digits. All file and directory names have positive length. Solutions Java C++ Python Go class Solution { public int lengthLongestPath(String input) { int i = 0; int n = input.length(); int ans = 0; Deque&amp;lt;Integer&amp;gt; stack = new ArrayDeque&amp;lt;&amp;gt;(); while (i &amp;lt; n) { int ident = 0; for (; input.charAt(i) == '\t'; i++) { ident++; } int cur = 0; boolean isFile = false; for (; i &amp;lt; n &amp;amp;&amp;amp; input.charAt(i) != '\n'; i++) { cur++; if (input.charAt(i) == '.') { isFile = true; } } i++; // popd while (!stack.isEmpty() &amp;amp;&amp;amp; stack.size() &amp;gt; ident) { stack.pop(); } if (stack.size() &amp;gt; 0) { cur += stack.peek() + 1; } // pushd if (!isFile) { stack.push(cur); continue; } ans = Math.max(ans, cur); } return ans; } } class Solution { public:..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-12-22T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-12-22-388-Longest-Absolute-File-Path/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-388.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="388 - Longest Absolute File Path" property="twitter:title"/>
+   <meta content="Leetcode 388. Longest Absolute File Path Description Suppose we have a file system that stores both files and directories. An example of one system is represented in the following picture: Here, we have dir as the only directory in the root. dir contains two subdirectories, subdir1 and subdir2. subdir1 contains a file file1.ext and subdirectory subsubdir1. subdir2 contains a subdirectory subsubdir2, which contains a file file2.ext. In text form, it looks like this (with â¶ representing the tab character): dir â¶ subdir1 â¶ â¶ file1.ext â¶ â¶ subsubdir1 â¶ subdir2 â¶ â¶ subsubdir2 â¶ â¶ â¶ file2.ext If we were to write this representation in code, it will look like this: &amp;quot;dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext&amp;quot;. Note that the &amp;#39;\n&amp;#39; and &amp;#39;\t&amp;#39; are the new-line and tab characters. Every file and directory has a unique absolute path in the file system, which is the order of directories that must be opened to reach the file/directory itself, all concatenated by &amp;#39;/&amp;#39;s. Using the above example, the absolute path to file2.ext is &amp;quot;dir/subdir2/subsubdir2/file2.ext&amp;quot;. Each directory name consists of letters, digits, and/or spaces. Each file name is of the form name.extension, where name and extension consist of letters, digits, and/or spaces. Given a string input representing the file system in the explained format, return the length of the longest absolute path to a file in the abstracted file system. If there is no file in the system, return 0. Note that the testcases are generated such that the file system is valid and no file or directory name has length 0. &amp;nbsp; Example 1: Input: input = &amp;quot;dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext&amp;quot; Output: 20 Explanation: We have only one file, and the absolute path is &amp;quot;dir/subdir2/file.ext&amp;quot; of length 20. Example 2: Input: input = &amp;quot;dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext&amp;quot; Output: 32 Explanation: We have two files: &amp;quot;dir/subdir1/file1.ext&amp;quot; of length 21 &amp;quot;dir/subdir2/subsubdir2/file2.ext&amp;quot; of length 32. We return 32 since it is the longest absolute path to a file. Example 3: Input: input = &amp;quot;a&amp;quot; Output: 0 Explanation: We do not have any files, just a single directory named &amp;quot;a&amp;quot;. &amp;nbsp; Constraints: 1 &amp;lt;= input.length &amp;lt;= 104 input may contain lowercase or uppercase English letters, a new line character &amp;#39;\n&amp;#39;, a tab character &amp;#39;\t&amp;#39;, a dot &amp;#39;.&amp;#39;, a space &amp;#39; &amp;#39;, and digits. All file and directory names have positive length. Solutions Java C++ Python Go class Solution { public int lengthLongestPath(String input) { int i = 0; int n = input.length(); int ans = 0; Deque&amp;lt;Integer&amp;gt; stack = new ArrayDeque&amp;lt;&amp;gt;(); while (i &amp;lt; n) { int ident = 0; for (; input.charAt(i) == '\t'; i++) { ident++; } int cur = 0; boolean isFile = false; for (; i &amp;lt; n &amp;amp;&amp;amp; input.charAt(i) != '\n'; i++) { cur++; if (input.charAt(i) == '.') { isFile = true; } } i++; // popd while (!stack.isEmpty() &amp;amp;&amp;amp; stack.size() &amp;gt; ident) { stack.pop(); } if (stack.size() &amp;gt; 0) { cur += stack.peek() + 1; } // pushd if (!isFile) { stack.push(cur); continue; } ans = Math.max(ans, cur); } return ans; } } class Solution { public:..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    388 - Longest Absolute File Path | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="388 - Longest Absolute File Path" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-388.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-12-22-388-Longest-Absolute-File-Path/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-12-22T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"388 - Longest Absolute File Path","dateModified":"2016-12-22T00:00:00-08:00","datePublished":"2016-12-22T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-12-22-388-Longest-Absolute-File-Path/"},"url":"https://leetcode.ca/2016-12-22-388-Longest-Absolute-File-Path/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="388-longest-absolute-file-path">
+       <a href="solution-388.html">
+        388. Longest Absolute File Path
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Suppose we have a file system that stores both files and directories. An example of one system is represented in the following picture:
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0300-0399/0388.Longest%20Absolute%20File%20Path/images/mdir.jpg" style="width: 681px; height: 322px;"/>
+      </p>
+      <p>
+       Here, we have
+       <code>
+        dir
+       </code>
+       as the only directory in the root.
+       <code>
+        dir
+       </code>
+       contains two subdirectories,
+       <code>
+        subdir1
+       </code>
+       and
+       <code>
+        subdir2
+       </code>
+       .
+       <code>
+        subdir1
+       </code>
+       contains a file
+       <code>
+        file1.ext
+       </code>
+       and subdirectory
+       <code>
+        subsubdir1
+       </code>
+       .
+       <code>
+        subdir2
+       </code>
+       contains a subdirectory
+       <code>
+        subsubdir2
+       </code>
+       , which contains a file
+       <code>
+        file2.ext
+       </code>
+       .
+      </p>
+      <p>
+       In text form, it looks like this (with â¶ representing the tab character):
+      </p>
+      <pre>
+dir
+â¶ subdir1
+â¶ â¶ file1.ext
+â¶ â¶ subsubdir1
+â¶ subdir2
+â¶ â¶ subsubdir2
+â¶ â¶ â¶ file2.ext
+</pre>
+      <p>
+       If we were to write this representation in code, it will look like this:
+       <code>
+        "dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"
+       </code>
+       . Note that the
+       <code>
+        '\n'
+       </code>
+       and
+       <code>
+        '\t'
+       </code>
+       are the new-line and tab characters.
+      </p>
+      <p>
+       Every file and directory has a unique
+       <strong>
+        absolute path
+       </strong>
+       in the file system, which is the order of directories that must be opened to reach the file/directory itself, all concatenated by
+       <code>
+        '/'s
+       </code>
+       . Using the above example, the
+       <strong>
+        absolute path
+       </strong>
+       to
+       <code>
+        file2.ext
+       </code>
+       is
+       <code>
+        "dir/subdir2/subsubdir2/file2.ext"
+       </code>
+       . Each directory name consists of letters, digits, and/or spaces. Each file name is of the form
+       <code>
+        name.extension
+       </code>
+       , where
+       <code>
+        name
+       </code>
+       and
+       <code>
+        extension
+       </code>
+       consist of letters, digits, and/or spaces.
+      </p>
+      <p>
+       Given a string
+       <code>
+        input
+       </code>
+       representing the file system in the explained format, return
+       <em>
+        the length of the
+        <strong>
+         longest absolute path
+        </strong>
+        to a
+        <strong>
+         file
+        </strong>
+        in the abstracted file system
+       </em>
+       . If there is no file in the system, return
+       <code>
+        0
+       </code>
+       .
+      </p>
+      <p>
+       <strong>
+        Note
+       </strong>
+       that the testcases are generated such that the file system is valid and no file or directory name has length 0.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0300-0399/0388.Longest%20Absolute%20File%20Path/images/dir1.jpg" style="width: 401px; height: 202px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> input = "dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext"
+<strong>Output:</strong> 20
+<strong>Explanation:</strong> We have only one file, and the absolute path is "dir/subdir2/file.ext" of length 20.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0300-0399/0388.Longest%20Absolute%20File%20Path/images/dir2.jpg" style="width: 641px; height: 322px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> input = "dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"
+<strong>Output:</strong> 32
+<strong>Explanation:</strong> We have two files:
+"dir/subdir1/file1.ext" of length 21
+"dir/subdir2/subsubdir2/file2.ext" of length 32.
+We return 32 since it is the longest absolute path to a file.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> input = "a"
+<strong>Output:</strong> 0
+<strong>Explanation:</strong> We do not have any files, just a single directory named "a".
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= input.length &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         input
+        </code>
+        may contain lowercase or uppercase English letters, a new line character
+        <code>
+         '\n'
+        </code>
+        , a tab character
+        <code>
+         '\t'
+        </code>
+        , a dot
+        <code>
+         '.'
+        </code>
+        , a space
+        <code>
+         ' '
+        </code>
+        , and digits.
+       </li>
+       <li>
+        All file and directory names have
+        <strong>
+         positive
+        </strong>
+        length.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#939e4504-49dc-4ab0-83d2-79b51ddb976f'}">
+       <li class="uk-active">
+        <a href="solution-388.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-388.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-388.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-388.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="939e4504-49dc-4ab0-83d2-79b51ddb976f">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthLongestPath</span><span class="o">(</span><span class="nc">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">ident</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(;</span> <span class="n">input</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'\t'</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">ident</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="kt">boolean</span> <span class="n">isFile</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">input</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">cur</span><span class="o">++;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">input</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'.'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">isFile</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">i</span><span class="o">++;</span>
+
+            <span class="c1">// popd</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">ident</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cur</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">// pushd</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">isFile</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">cur</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">lengthLongestPath</span><span class="p">(</span><span class="n">string</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stk</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">ident</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'\t'</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">ident</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="kt">bool</span> <span class="n">isFile</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">cur</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">isFile</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+
+            <span class="c1">// popd</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">stk</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">ident</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">stk</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cur</span> <span class="o">+=</span> <span class="n">stk</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// pushd</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isFile</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">cur</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">lengthLongestPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">stk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">ident</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="nb">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">:</span>
+                <span class="n">ident</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">cur</span><span class="p">,</span> <span class="n">isFile</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">False</span>
+            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="nb">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">:</span>
+                <span class="n">cur</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="nb">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'.'</span><span class="p">:</span>
+                    <span class="n">isFile</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># popd
+</span>            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">ident</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">cur</span> <span class="o">+=</span> <span class="n">stk</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># pushd
+</span>            <span class="k">if</span> <span class="ow">not</span> <span class="n">isFile</span><span class="p">:</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">lengthLongestPath</span><span class="p">(</span><span class="n">input</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">var</span> <span class="n">stk</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+		<span class="n">ident</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="p">;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'\t'</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">ident</span><span class="o">++</span>
+		<span class="p">}</span>
+
+		<span class="n">cur</span><span class="p">,</span> <span class="n">isFile</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="no">false</span>
+		<span class="k">for</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">cur</span><span class="o">++</span>
+			<span class="k">if</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span> <span class="p">{</span>
+				<span class="n">isFile</span> <span class="o">=</span> <span class="no">true</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">i</span><span class="o">++</span>
+
+		<span class="c">// popd</span>
+		<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">ident</span> <span class="p">{</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="n">stk</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">cur</span> <span class="o">+=</span> <span class="n">stk</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stk</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="p">}</span>
+
+		<span class="c">// pushd</span>
+		<span class="k">if</span> <span class="o">!</span><span class="n">isFile</span> <span class="p">{</span>
+			<span class="n">stk</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stk</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+
+		<span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-388.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2622.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2622.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2622 - Cache With Time Limit</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2622. Cache With Time Limit Description Write a class that allows getting and setting&amp;nbsp;key-value pairs, however a&amp;nbsp;time until expiration&amp;nbsp;is associated with each key. The class has three public methods: set(key, value, duration):&amp;nbsp;accepts an integer&amp;nbsp;key, an&amp;nbsp;integer&amp;nbsp;value, and a duration in milliseconds. Once the&amp;nbsp;duration&amp;nbsp;has elapsed, the key...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2622.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2622.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2622.html" rel="stylesheet"/>
+   <link href="solution-2622.html" rel="stylesheet"/>
+   <link href="solution-2622.html" rel="stylesheet"/>
+   <link href="solution-2622.html" rel="stylesheet"/>
+   <link href="solution-2622.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2622 - Cache With Time Limit" property="og:title"/>
+   <meta content="Leetcode 2622. Cache With Time Limit Description Write a class that allows getting and setting&amp;nbsp;key-value pairs, however a&amp;nbsp;time until expiration&amp;nbsp;is associated with each key. The class has three public methods: set(key, value, duration):&amp;nbsp;accepts an integer&amp;nbsp;key, an&amp;nbsp;integer&amp;nbsp;value, and a duration in milliseconds. Once the&amp;nbsp;duration&amp;nbsp;has elapsed, the key should be inaccessible. The method should return&amp;nbsp;true&amp;nbsp;if the same&amp;nbsp;un-expired key already exists and false otherwise. Both the value and duration should be overwritten if the key already exists. get(key): if an un-expired key exists, it should return the associated value. Otherwise it should return&amp;nbsp;-1. count(): returns the count of un-expired keys. &amp;nbsp; Example 1: Input: actions = [&amp;quot;TimeLimitedCache&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;count&amp;quot;, &amp;quot;get&amp;quot;] values = [[], [1, 42, 100], [1], [], [1]] timeDelays = [0, 0, 50, 50, 150] Output: [null, false, 42, 1, -1] Explanation: At t=0, the cache is constructed. At t=0, a key-value pair (1: 42) is added with a time limit of 100ms. The value doesn&amp;#39;t exist so false is returned. At t=50, key=1 is requested and the value of 42 is returned. At t=50, count() is called and there is one active key in the cache. At t=100, key=1 expires. At t=150, get(1) is called but -1 is returned because the cache is empty. Example 2: Input: actions = [&amp;quot;TimeLimitedCache&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;count&amp;quot;] values = [[], [1, 42, 50], [1, 50, 100], [1], [1], [1], []] timeDelays = [0, 0, 40, 50, 120, 200, 250] Output: [null, false, true, 50, 50, -1, 0] Explanation: At t=0, the cache is constructed. At t=0, a key-value pair (1: 42) is added with a time limit of 50ms. The value doesn&amp;#39;t exist so false is returned. At t=40, a key-value pair (1: 50) is added with a time limit of 100ms. A non-expired value already existed so true is returned and the old value was overwritten. At t=50, get(1) is called which returned 50. At t=120, get(1) is called which returned 50. At t=140, key=1 expires. At t=200, get(1) is called but the cache is empty so -1 is returned. At t=250, count() returns 0 because the cache is empty. &amp;nbsp; Constraints: 0 &amp;lt;= key, value &amp;lt;= 109 0 &amp;lt;= duration &amp;lt;= 1000 1 &amp;lt;= actions.length &amp;lt;= 100 actions.length === values.length actions.length === timeDelays.length 0 &amp;lt;= timeDelays[i] &amp;lt;= 1450 actions[i]&amp;nbsp;is one of &amp;quot;TimeLimitedCache&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;get&amp;quot; and&amp;nbsp;&amp;quot;count&amp;quot; First action is always &amp;quot;TimeLimitedCache&amp;quot; and must be executed immediately, with a 0-millisecond delay Solutions TypeScript class TimeLimitedCache { private cache: Map&amp;lt;number, [value: number, expire: number]&amp;gt; = new Map(); constructor() {} set(key: number, value: number, duration: number): boolean { this.removeExpire(); const ans = this.cache.has(key); this.cache.set(key, [value, this.now() + duration]); return ans; } get(key: number): number { this.removeExpire(); return this.cache.get(key)?.[0] ?? -1; } count(): number { this.removeExpire(); return this.cache.size; } private now(): number { return new Date().getTime(); } private removeExpire(): void { const now = this.now(); for (const [key, [, expire]] of this.cache) { if (expire &amp;lt;= now) { this.cache.delete(key); } } } } /** * Your TimeLimitedCache object will be..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-02-03T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-02-03-2622-Cache-With-Time-Limit/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2622.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2622 - Cache With Time Limit" property="twitter:title"/>
+   <meta content="Leetcode 2622. Cache With Time Limit Description Write a class that allows getting and setting&amp;nbsp;key-value pairs, however a&amp;nbsp;time until expiration&amp;nbsp;is associated with each key. The class has three public methods: set(key, value, duration):&amp;nbsp;accepts an integer&amp;nbsp;key, an&amp;nbsp;integer&amp;nbsp;value, and a duration in milliseconds. Once the&amp;nbsp;duration&amp;nbsp;has elapsed, the key should be inaccessible. The method should return&amp;nbsp;true&amp;nbsp;if the same&amp;nbsp;un-expired key already exists and false otherwise. Both the value and duration should be overwritten if the key already exists. get(key): if an un-expired key exists, it should return the associated value. Otherwise it should return&amp;nbsp;-1. count(): returns the count of un-expired keys. &amp;nbsp; Example 1: Input: actions = [&amp;quot;TimeLimitedCache&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;count&amp;quot;, &amp;quot;get&amp;quot;] values = [[], [1, 42, 100], [1], [], [1]] timeDelays = [0, 0, 50, 50, 150] Output: [null, false, 42, 1, -1] Explanation: At t=0, the cache is constructed. At t=0, a key-value pair (1: 42) is added with a time limit of 100ms. The value doesn&amp;#39;t exist so false is returned. At t=50, key=1 is requested and the value of 42 is returned. At t=50, count() is called and there is one active key in the cache. At t=100, key=1 expires. At t=150, get(1) is called but -1 is returned because the cache is empty. Example 2: Input: actions = [&amp;quot;TimeLimitedCache&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;get&amp;quot;, &amp;quot;count&amp;quot;] values = [[], [1, 42, 50], [1, 50, 100], [1], [1], [1], []] timeDelays = [0, 0, 40, 50, 120, 200, 250] Output: [null, false, true, 50, 50, -1, 0] Explanation: At t=0, the cache is constructed. At t=0, a key-value pair (1: 42) is added with a time limit of 50ms. The value doesn&amp;#39;t exist so false is returned. At t=40, a key-value pair (1: 50) is added with a time limit of 100ms. A non-expired value already existed so true is returned and the old value was overwritten. At t=50, get(1) is called which returned 50. At t=120, get(1) is called which returned 50. At t=140, key=1 expires. At t=200, get(1) is called but the cache is empty so -1 is returned. At t=250, count() returns 0 because the cache is empty. &amp;nbsp; Constraints: 0 &amp;lt;= key, value &amp;lt;= 109 0 &amp;lt;= duration &amp;lt;= 1000 1 &amp;lt;= actions.length &amp;lt;= 100 actions.length === values.length actions.length === timeDelays.length 0 &amp;lt;= timeDelays[i] &amp;lt;= 1450 actions[i]&amp;nbsp;is one of &amp;quot;TimeLimitedCache&amp;quot;, &amp;quot;set&amp;quot;, &amp;quot;get&amp;quot; and&amp;nbsp;&amp;quot;count&amp;quot; First action is always &amp;quot;TimeLimitedCache&amp;quot; and must be executed immediately, with a 0-millisecond delay Solutions TypeScript class TimeLimitedCache { private cache: Map&amp;lt;number, [value: number, expire: number]&amp;gt; = new Map(); constructor() {} set(key: number, value: number, duration: number): boolean { this.removeExpire(); const ans = this.cache.has(key); this.cache.set(key, [value, this.now() + duration]); return ans; } get(key: number): number { this.removeExpire(); return this.cache.get(key)?.[0] ?? -1; } count(): number { this.removeExpire(); return this.cache.size; } private now(): number { return new Date().getTime(); } private removeExpire(): void { const now = this.now(); for (const [key, [, expire]] of this.cache) { if (expire &amp;lt;= now) { this.cache.delete(key); } } } } /** * Your TimeLimitedCache object will be..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2622 - Cache With Time Limit | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2622 - Cache With Time Limit" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2622.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-02-03-2622-Cache-With-Time-Limit/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-02-03T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2622 - Cache With Time Limit","dateModified":"2023-02-03T00:00:00-08:00","datePublished":"2023-02-03T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-02-03-2622-Cache-With-Time-Limit/"},"url":"https://leetcode.ca/2023-02-03-2622-Cache-With-Time-Limit/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2622-cache-with-time-limit">
+       <a href="solution-2622.html">
+        2622. Cache With Time Limit
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Write a class that allows getting and setting key-value pairs, however a
+       <strong>
+        time until expiration
+       </strong>
+       is associated with each key.
+      </p>
+      <p>
+       The class has three public methods:
+      </p>
+      <p>
+       <code>
+        set(key, value, duration)
+       </code>
+       : accepts an integer
+       <code>
+        key
+       </code>
+       , an integer
+       <code>
+        value
+       </code>
+       , and a
+       <code>
+        duration
+       </code>
+       in milliseconds. Once the
+       <code>
+        duration
+       </code>
+       has elapsed, the key should be inaccessible. The method should return
+       <code>
+        true
+       </code>
+       if the same un-expired key already exists and
+       <code>
+        false
+       </code>
+       otherwise. Both the value and duration should be overwritten if the key already exists.
+      </p>
+      <p>
+       <code>
+        get(key)
+       </code>
+       : if an un-expired key exists, it should return the associated value. Otherwise it should return
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <p>
+       <code>
+        count()
+       </code>
+       : returns the count of un-expired keys.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+actions = ["TimeLimitedCache", "set", "get", "count", "get"]
+values = [[], [1, 42, 100], [1], [], [1]]
+timeDelays = [0, 0, 50, 50, 150]
+<strong>Output:</strong> [null, false, 42, 1, -1]
+<strong>Explanation:</strong>
+At t=0, the cache is constructed.
+At t=0, a key-value pair (1: 42) is added with a time limit of 100ms. The value doesn't exist so false is returned.
+At t=50, key=1 is requested and the value of 42 is returned.
+At t=50, count() is called and there is one active key in the cache.
+At t=100, key=1 expires.
+At t=150, get(1) is called but -1 is returned because the cache is empty.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+actions = ["TimeLimitedCache", "set", "set", "get", "get", "get", "count"]
+values = [[], [1, 42, 50], [1, 50, 100], [1], [1], [1], []]
+timeDelays = [0, 0, 40, 50, 120, 200, 250]
+<strong>Output:</strong> [null, false, true, 50, 50, -1, 0]
+<strong>Explanation:</strong>
+At t=0, the cache is constructed.
+At t=0, a key-value pair (1: 42) is added with a time limit of 50ms. The value doesn't exist so false is returned.
+At t=40, a key-value pair (1: 50) is added with a time limit of 100ms. A non-expired value already existed so true is returned and the old value was overwritten.
+At t=50, get(1) is called which returned 50.
+At t=120, get(1) is called which returned 50.
+At t=140, key=1 expires.
+At t=200, get(1) is called but the cache is empty so -1 is returned.
+At t=250, count() returns 0 because the cache is empty.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= key, value &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= duration &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= actions.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         actions.length === values.length
+        </code>
+       </li>
+       <li>
+        <code>
+         actions.length === timeDelays.length
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= timeDelays[i] &lt;= 1450
+        </code>
+       </li>
+       <li>
+        <code>
+         actions[i]
+        </code>
+        is one of "TimeLimitedCache", "set", "get" and "count"
+       </li>
+       <li>
+        First action is always "TimeLimitedCache" and must be executed immediately, with a 0-millisecond delay
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#f8a14967-027b-4815-bb3f-e3ae2d9f4bc8'}">
+       <li class="uk-active">
+        <a href="solution-2622.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="f8a14967-027b-4815-bb3f-e3ae2d9f4bc8">
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">TimeLimitedCache</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="nx">cache</span><span class="p">:</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">number</span><span class="p">,</span> <span class="p">[</span><span class="nx">value</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">expire</span><span class="p">:</span> <span class="kr">number</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">();</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{}</span>
+
+    <span class="kd">set</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">duration</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">removeExpire</span><span class="p">();</span>
+        <span class="kd">const</span> <span class="nx">ans</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="p">[</span><span class="nx">value</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">+</span> <span class="nx">duration</span><span class="p">]);</span>
+        <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">get</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">removeExpire</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">key</span><span class="p">)?.[</span><span class="mi">0</span><span class="p">]</span> <span class="o">??</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">count</span><span class="p">():</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">removeExpire</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="nx">size</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="nx">now</span><span class="p">():</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="nx">removeExpire</span><span class="p">():</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">key</span><span class="p">,</span> <span class="p">[,</span> <span class="nx">expire</span><span class="p">]]</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">cache</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">expire</span> <span class="o">&lt;=</span> <span class="nx">now</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your TimeLimitedCache object will be instantiated and called as such:
+ * var obj = new TimeLimitedCache()
+ * obj.set(1, 42, 1000); // false
+ * obj.get(1) // 42
+ * obj.count() // 1
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2622.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

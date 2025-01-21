@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1242.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1242.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1242 - Web Crawler Multithreaded</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Question Formatted question description: https://leetcode.ca/all/1242.html Given a URL startUrl and an interface HtmlParser, implement a Multi-threaded web crawler to crawl all links that are under the same hostname as startUrl. Return all URLs obtained by your web crawler in any order. Your crawler should: Start...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1242.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1242.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1242.html" rel="stylesheet"/>
+   <link href="solution-1242.html" rel="stylesheet"/>
+   <link href="solution-1242.html" rel="stylesheet"/>
+   <link href="solution-1242.html" rel="stylesheet"/>
+   <link href="solution-1242.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1242 - Web Crawler Multithreaded" property="og:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/1242.html Given a URL startUrl and an interface HtmlParser, implement a Multi-threaded web crawler to crawl all links that are under the same hostname as startUrl. Return all URLs obtained by your web crawler in any order. Your crawler should: Start from the page: startUrl Call HtmlParser.getUrls(url) to get all URLs from a webpage of a given URL. Do not crawl the same link twice. Explore only the links that are under the same hostname as startUrl. As shown in the example URL above, the hostname is example.org. For simplicity&amp;#39;s sake, you may assume all URLs use HTTP protocol without any port specified. For example, the URLs http://leetcode.com/problems and http://leetcode.com/contest are under the same hostname, while URLs http://example.org/test and http://example.com/abc are not under the same hostname. The HtmlParser interface is defined as such: interface HtmlParser { // Return a list of all urls from a webpage of given url. // This is a blocking call, that means it will do HTTP request and return when this request is finished. public List&amp;lt;String&amp;gt; getUrls(String url); } Note that getUrls(String url) simulates performing an HTTP request. You can treat it as a blocking function call that waits for an HTTP request to finish. It is guaranteed that getUrls(String url) will return the URLs within 15ms. Single-threaded solutions will exceed the time limit so, can your multi-threaded web crawler do better? Below are two examples explaining the functionality of the problem. For custom testing purposes, you&amp;#39;ll have three variables urls, edges and startUrl. Notice that you will only have access to startUrl in your code, while urls and edges are not directly accessible to you in code. &amp;nbsp; Example 1: Input: urls = [ &amp;nbsp; &amp;quot;http://news.yahoo.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news/topics/&amp;quot;, &amp;nbsp; &amp;quot;http://news.google.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/us&amp;quot; ] edges = [[2,0],[2,1],[3,2],[3,1],[0,4]] startUrl = &amp;quot;http://news.yahoo.com/news/topics/&amp;quot; Output: [ &amp;nbsp; &amp;quot;http://news.yahoo.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news/topics/&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/us&amp;quot; ] Example 2: Input: urls = [ &amp;nbsp; &amp;quot;http://news.yahoo.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news/topics/&amp;quot;, &amp;nbsp; &amp;quot;http://news.google.com&amp;quot; ] edges = [[0,2],[2,1],[3,2],[3,1],[3,0]] startUrl = &amp;quot;http://news.google.com&amp;quot; Output: [&amp;quot;http://news.google.com&amp;quot;] Explanation: The startUrl links to all other pages that do not share the same hostname. &amp;nbsp; Constraints: 1 &amp;lt;= urls.length &amp;lt;= 1000 1 &amp;lt;= urls[i].length &amp;lt;= 300 startUrl&amp;nbsp;is one of the urls. Hostname label must be from 1 to 63 characters long, including the dots, may contain only the ASCII letters from &amp;#39;a&amp;#39; to&amp;nbsp;&amp;#39;z&amp;#39;, digits from &amp;#39;0&amp;#39; to &amp;#39;9&amp;#39; and the&amp;nbsp;hyphen-minus&amp;nbsp;character (&amp;#39;-&amp;#39;). The hostname may not start or end with&amp;nbsp;the hyphen-minus character (&amp;#39;-&amp;#39;).&amp;nbsp; See:&amp;nbsp;&amp;nbsp;https://en.wikipedia.org/wiki/Hostname#Restrictions_on_valid_hostnames You may assume there&amp;#39;re&amp;nbsp;no duplicates in the URL library. &amp;nbsp; Follow up: Assume we have 10,000 nodes and 1 billion URLs to crawl. We will deploy the same software onto each node. The software can know about all the nodes. We have to minimize communication between machines and make sure each node does equal amount of work. How would your web crawler design change? What if one node fails or does not work? How do you know when the crawler is done? Algorithm This topic is..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-04-25T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-04-25-1242-Web-Crawler-Multithreaded/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1242.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1242 - Web Crawler Multithreaded" property="twitter:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/1242.html Given a URL startUrl and an interface HtmlParser, implement a Multi-threaded web crawler to crawl all links that are under the same hostname as startUrl. Return all URLs obtained by your web crawler in any order. Your crawler should: Start from the page: startUrl Call HtmlParser.getUrls(url) to get all URLs from a webpage of a given URL. Do not crawl the same link twice. Explore only the links that are under the same hostname as startUrl. As shown in the example URL above, the hostname is example.org. For simplicity&amp;#39;s sake, you may assume all URLs use HTTP protocol without any port specified. For example, the URLs http://leetcode.com/problems and http://leetcode.com/contest are under the same hostname, while URLs http://example.org/test and http://example.com/abc are not under the same hostname. The HtmlParser interface is defined as such: interface HtmlParser { // Return a list of all urls from a webpage of given url. // This is a blocking call, that means it will do HTTP request and return when this request is finished. public List&amp;lt;String&amp;gt; getUrls(String url); } Note that getUrls(String url) simulates performing an HTTP request. You can treat it as a blocking function call that waits for an HTTP request to finish. It is guaranteed that getUrls(String url) will return the URLs within 15ms. Single-threaded solutions will exceed the time limit so, can your multi-threaded web crawler do better? Below are two examples explaining the functionality of the problem. For custom testing purposes, you&amp;#39;ll have three variables urls, edges and startUrl. Notice that you will only have access to startUrl in your code, while urls and edges are not directly accessible to you in code. &amp;nbsp; Example 1: Input: urls = [ &amp;nbsp; &amp;quot;http://news.yahoo.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news/topics/&amp;quot;, &amp;nbsp; &amp;quot;http://news.google.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/us&amp;quot; ] edges = [[2,0],[2,1],[3,2],[3,1],[0,4]] startUrl = &amp;quot;http://news.yahoo.com/news/topics/&amp;quot; Output: [ &amp;nbsp; &amp;quot;http://news.yahoo.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news/topics/&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/us&amp;quot; ] Example 2: Input: urls = [ &amp;nbsp; &amp;quot;http://news.yahoo.com&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news&amp;quot;, &amp;nbsp; &amp;quot;http://news.yahoo.com/news/topics/&amp;quot;, &amp;nbsp; &amp;quot;http://news.google.com&amp;quot; ] edges = [[0,2],[2,1],[3,2],[3,1],[3,0]] startUrl = &amp;quot;http://news.google.com&amp;quot; Output: [&amp;quot;http://news.google.com&amp;quot;] Explanation: The startUrl links to all other pages that do not share the same hostname. &amp;nbsp; Constraints: 1 &amp;lt;= urls.length &amp;lt;= 1000 1 &amp;lt;= urls[i].length &amp;lt;= 300 startUrl&amp;nbsp;is one of the urls. Hostname label must be from 1 to 63 characters long, including the dots, may contain only the ASCII letters from &amp;#39;a&amp;#39; to&amp;nbsp;&amp;#39;z&amp;#39;, digits from &amp;#39;0&amp;#39; to &amp;#39;9&amp;#39; and the&amp;nbsp;hyphen-minus&amp;nbsp;character (&amp;#39;-&amp;#39;). The hostname may not start or end with&amp;nbsp;the hyphen-minus character (&amp;#39;-&amp;#39;).&amp;nbsp; See:&amp;nbsp;&amp;nbsp;https://en.wikipedia.org/wiki/Hostname#Restrictions_on_valid_hostnames You may assume there&amp;#39;re&amp;nbsp;no duplicates in the URL library. &amp;nbsp; Follow up: Assume we have 10,000 nodes and 1 billion URLs to crawl. We will deploy the same software onto each node. The software can know about all the nodes. We have to minimize communication between machines and make sure each node does equal amount of work. How would your web crawler design change? What if one node fails or does not work? How do you know when the crawler is done? Algorithm This topic is..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1242 - Web Crawler Multithreaded | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1242 - Web Crawler Multithreaded" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1242.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-04-25-1242-Web-Crawler-Multithreaded/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-04-25T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1242 - Web Crawler Multithreaded","dateModified":"2019-04-25T22:21:01-07:00","datePublished":"2019-04-25T22:21:01-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-04-25-1242-Web-Crawler-Multithreaded/"},"url":"https://leetcode.ca/2019-04-25-1242-Web-Crawler-Multithreaded/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="question">
+       Question
+      </h1>
+      <p>
+       Formatted question description:
+       <a href="solution-1242.html">
+        https://leetcode.ca/all/1242.html
+       </a>
+      </p>
+      <p>
+       Given a URL
+       <code>
+        startUrl
+       </code>
+       and an interface
+       <code>
+        HtmlParser
+       </code>
+       , implement
+       <strong>
+        a Multi-threaded web crawler
+       </strong>
+       to crawl all links that are under the
+       <strong>
+        same hostname
+       </strong>
+       as
+       <code>
+        startUrl
+       </code>
+       .
+      </p>
+      <p>
+       Return all URLs obtained by your web crawler in
+       <strong>
+        any
+       </strong>
+       order.
+      </p>
+      <p>
+       Your crawler should:
+      </p>
+      <ul>
+       <li>
+        Start from the page:
+        <code>
+         startUrl
+        </code>
+       </li>
+       <li>
+        Call
+        <code>
+         HtmlParser.getUrls(url)
+        </code>
+        to get all URLs from a webpage of a given URL.
+       </li>
+       <li>
+        Do not crawl the same link twice.
+       </li>
+       <li>
+        Explore only the links that are under the
+        <strong>
+         same hostname
+        </strong>
+        as
+        <code>
+         startUrl
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1242.Web%20Crawler%20Multithreaded/images/urlhostname.png" style="width: 500px; height: 136px;"/>
+      </p>
+      <p>
+       As shown in the example URL above, the hostname is
+       <code>
+        example.org
+       </code>
+       . For simplicity's sake, you may assume all URLs use
+       <strong>
+        HTTP protocol
+       </strong>
+       without any
+       <strong>
+        port
+       </strong>
+       specified. For example, the URLs
+       <code>
+        http://leetcode.com/problems
+       </code>
+       and
+       <code>
+        http://leetcode.com/contest
+       </code>
+       are under the same hostname, while URLs
+       <code>
+        http://example.org/test
+       </code>
+       and
+       <code>
+        http://example.com/abc
+       </code>
+       are not under the same hostname.
+      </p>
+      <p>
+       The
+       <code>
+        HtmlParser
+       </code>
+       interface is defined as such:
+      </p>
+      <pre>
+interface HtmlParser {
+  // Return a list of all urls from a webpage of given <em>url</em>.
+  // This is a blocking call, that means it will do HTTP request and return when this request is finished.
+  public List&lt;String&gt; getUrls(String url);
+}
+</pre>
+      <p>
+       Note that
+       <code>
+        getUrls(String url)
+       </code>
+       simulates performing an HTTP request. You can treat it as a blocking function call that waits for an HTTP request to finish. It is guaranteed that
+       <code>
+        getUrls(String url)
+       </code>
+       will return the URLs within
+       <strong>
+        15ms.
+       </strong>
+       Single-threaded solutions will exceed the time limit so, can your multi-threaded web crawler do better?
+      </p>
+      <p>
+       Below are two examples explaining the functionality of the problem. For custom testing purposes, you'll have three variables
+       <code>
+        urls
+       </code>
+       ,
+       <code>
+        edges
+       </code>
+       and
+       <code>
+        startUrl
+       </code>
+       . Notice that you will only have access to
+       <code>
+        startUrl
+       </code>
+       in your code, while
+       <code>
+        urls
+       </code>
+       and
+       <code>
+        edges
+       </code>
+       are not directly accessible to you in code.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1242.Web%20Crawler%20Multithreaded/images/sample_2_1497.png" style="width: 610px; height: 300px;"/>
+      </p>
+      <pre>
+<strong>Input:
+</strong>urls = [
+  "http://news.yahoo.com",
+  "http://news.yahoo.com/news",
+  "http://news.yahoo.com/news/topics/",
+  "http://news.google.com",
+  "http://news.yahoo.com/us"
+]
+edges = [[2,0],[2,1],[3,2],[3,1],[0,4]]
+startUrl = "http://news.yahoo.com/news/topics/"
+<strong>Output:</strong> [
+  "http://news.yahoo.com",
+  "http://news.yahoo.com/news",
+  "http://news.yahoo.com/news/topics/",
+  "http://news.yahoo.com/us"
+]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <strong>
+        <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1242.Web%20Crawler%20Multithreaded/images/sample_3_1497.png" style="width: 540px; height: 270px;"/>
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+urls = [
+  "http://news.yahoo.com",
+  "http://news.yahoo.com/news",
+  "http://news.yahoo.com/news/topics/",
+  "http://news.google.com"
+]
+edges = [[0,2],[2,1],[3,2],[3,1],[3,0]]
+startUrl = "http://news.google.com"
+<strong>Output:</strong> ["http://news.google.com"]
+<strong>Explanation: </strong>The startUrl links to all other pages that do not share the same hostname.</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= urls.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= urls[i].length &lt;= 300
+        </code>
+       </li>
+       <li>
+        <code>
+         startUrl
+        </code>
+        is one of the
+        <code>
+         urls
+        </code>
+        .
+       </li>
+       <li>
+        Hostname label must be from
+        <code>
+         1
+        </code>
+        to
+        <code>
+         63
+        </code>
+        characters long, including the dots, may contain only the ASCII letters from
+        <code>
+         'a'
+        </code>
+        to
+        <code>
+         'z'
+        </code>
+        , digits from
+        <code>
+         '0'
+        </code>
+        to
+        <code>
+         '9'
+        </code>
+        and the hyphen-minus character (
+        <code>
+         '-'
+        </code>
+        ).
+       </li>
+       <li>
+        The hostname may not start or end with the hyphen-minus character ('-').
+       </li>
+       <li>
+        See:
+        <a href="solution-1242.html" target="_blank">
+         https://en.wikipedia.org/wiki/Hostname#Restrictions_on_valid_hostnames
+        </a>
+       </li>
+       <li>
+        You may assume there're no duplicates in the URL library.
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Follow up:
+       </strong>
+      </p>
+      <ol>
+       <li>
+        Assume we have 10,000 nodes and 1 billion URLs to crawl. We will deploy the same software onto each node. The software can know about all the nodes. We have to minimize communication between machines and make sure each node does equal amount of work. How would your web crawler design change?
+       </li>
+       <li>
+        What if one node fails or does not work?
+       </li>
+       <li>
+        How do you know when the crawler is done?
+       </li>
+      </ol>
+      <h1 id="algorithm">
+       Algorithm
+      </h1>
+      <p>
+       This topic is very novel. It means to write a simulated crawler program to crawl all web pages belonging to this domain name from a start page. LeetCode provides the crawler interface.
+      </p>
+      <p>
+       The topic requires the use of multi-threaded crawlers, otherwise it will time out.
+      </p>
+      <ol>
+       <li>
+        Use set to store crawled web pages. This set needs to support multi-threaded concurrent modification. I use
+        <code class="language-plaintext highlighter-rouge">
+         ConcurrentHashMap
+        </code>
+       </li>
+       <li>
+        As long as the list of stored results supports multi-thread concurrency, I use
+        <code class="language-plaintext highlighter-rouge">
+         Collections.synchronizedList
+        </code>
+       </li>
+      </ol>
+      <h3 id="follow-up">
+       Follow up:
+      </h3>
+      <p>
+       Assume we have 10,000 nodes and 1 billion URLs to crawl. We will deploy the same software onto each node. The software can know about all the nodes. We have to minimize communication between machines and make sure each node does equal amount of work.
+      </p>
+      <h5 id="1--how-would-your-web-crawler-design-change">
+       1 . How would your web crawler design change?
+      </h5>
+      <p>
+       After a node crawls a page, it will get a list of URLs to crawl next.
+      </p>
+      <p>
+       The brute force solution would be that this node communicates with all other nodes to see what are the links that havenât been crawled.
+      </p>
+      <p>
+       A better solution would be that a node use
+       <code class="language-plaintext highlighter-rouge">
+        Consistent Hashing
+       </code>
+       to determine which node should handle that URL and send the URL to that node. In this way, each node becomes a task assigner, and the communication between nodes are minimized.
+      </p>
+      <ul>
+       <li>
+        When a new node is added to the system, a small fraction of links (crawled or not) that were or will be crawled in an old node will get migrated to the new node.
+       </li>
+       <li>
+        When a node becomes offline, the links assigned to this node will be shared across other nodes.
+       </li>
+      </ul>
+      <p>
+       And more:
+      </p>
+      <ul>
+       <li>
+        Add a database to store all the crawled data.
+       </li>
+       <li>
+        Add serialize and de-serialize method, so that code can be distributed to 10k nodes with less bandwitch consumption.
+       </li>
+       <li>
+        Add some centralized monitoring/scheduling strategy, to coordinate between hosts, if a crawler job failed in one stale host, restart it in another healthy host.
+       </li>
+       <li>
+        Add some metric emitting, so that we can have a report of how many pages crawled, space usage to store them, etc.
+       </li>
+       <li>
+        Kill long running thread, potentially something is going wrong.
+       </li>
+      </ul>
+      <p>
+       Things to consider:
+      </p>
+      <ul>
+       <li>
+        Politeness/crawl rate
+       </li>
+       <li>
+        DNS query
+       </li>
+       <li>
+        Distributed crawling
+       </li>
+       <li>
+        Priority crawling
+       </li>
+       <li>
+        How to generate
+        <a href="solution-1242.html">
+         content signature
+        </a>
+        ?
+       </li>
+       <li>
+        Duplicate detection
+        <ul>
+         <li>
+          what to do with similar content?
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <h5 id="2--what-if-one-node-fails-or-does-not-work">
+       2 . What if one node fails or does not work?
+      </h5>
+      <p>
+       Same as above, need a health ping or node management component, to move tasks on a stale host to a healthy host.
+      </p>
+      <h5 id="3--how-do-you-know-when-the-crawler-is-done">
+       3 . How do you know when the crawler is done?
+      </h5>
+      <p>
+       All tasks to all nodes are done, so still, job management componenet is needed.
+      </p>
+      <h1 id="design-question-designing-a-distributed-web-crawler">
+       Design question: Designing a distributed web crawler
+      </h1>
+      <h2 id="summary">
+       Summary
+      </h2>
+      <p>
+       Design a web crawler that fetches every page on en.wikipedia.org exactly 1 time. You have 10,000 servers you can use and you are not allowed to fetch a URL more than once. If a URL fails to be fetched (because of a timeout or server failure), it can be discarded.
+      </p>
+      <h2 id="topics-discussed">
+       Topics Discussed
+      </h2>
+      <ul>
+       <li>
+        Hashing
+       </li>
+       <li>
+        Distributed Systems
+       </li>
+       <li>
+        Consistent Hashing
+       </li>
+       <li>
+        Bloom Filter
+       </li>
+       <li>
+        Trie Data Structures
+       </li>
+       <li>
+        Consumer Groups (Kafka)
+       </li>
+       <li>
+        Paxos
+       </li>
+      </ul>
+      <h2 id="requirements">
+       Requirements
+      </h2>
+      <h3 id="functional">
+       Functional
+      </h3>
+      <ul>
+       <li>
+        Download all (6.5m) URLs from en.wikipedia.com
+       </li>
+       <li>
+        Only download each URL once
+       </li>
+       <li>
+        Using 10k 2-core servers
+       </li>
+       <li>
+        Only processing on the content is extract URLs otherwise persist the content to local storage
+       </li>
+       <li>
+        Donât crawl images
+       </li>
+       <li>
+        Only crawl English Wikipedia
+       </li>
+       <li>
+        Minimize network traffic between each server.
+       </li>
+      </ul>
+      <h3 id="non-functional">
+       Non-functional
+      </h3>
+      <ul>
+       <li>
+        No need to self-rate limit
+       </li>
+       <li>
+        Fetch the content as fast as possible
+       </li>
+      </ul>
+      <h2 id="high-level-analysis">
+       High-level Analysis
+      </h2>
+      <h3 id="how-much-storage-will-we-need-to-store-6500000-urls-and-their-html-documents">
+       How much storage will we need to store 6,500,000 URLs and their HTML documents?
+      </h3>
+      <ul>
+       <li>
+        The average internet URL length is 66 characters. Since we donât need to track the domain name or HTTPS prefix, we will round down to 60 characters.
+        <div class="language-plaintext highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code>  60 characters = 60 bytes
+  60 bytes * 6,500,000 URLs = 390,000,000 bytes or 390 Megabytes
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <p>
+       The average HTML page is about 100kb.
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>100 kilobytes * 6,500,000 documents = 650 Gigabytes
+</code></pre>
+       </div>
+      </div>
+      <h3 id="how-do-we-want-to-store-the-urls">
+       How do we want to store the URLs?
+      </h3>
+      <ul>
+       <li>
+        Similar to the URL shortening system design problems, the most practical way of storing URLs that we have visited is a Set Structure for
+        <code class="language-plaintext highlighter-rouge">
+         O(1)
+        </code>
+        lookup. While the hashes approach will consume more memory, since we will be storing the full URL, than a
+        <code class="language-plaintext highlighter-rouge">
+         Trie
+        </code>
+        Data Structure or binary search tree, the lookups will be much faster (
+        <code class="language-plaintext highlighter-rouge">
+         O(1)
+        </code>
+        vs
+        <code class="language-plaintext highlighter-rouge">
+         O(n)
+        </code>
+        ) and the additional memory cost will be manageable.
+       </li>
+      </ul>
+      <h3 id="where-can-we-store-the-urls">
+       Where can we store the URLs?
+      </h3>
+      <ul>
+       <li>
+        390 Megabytes for all URLs can easily be stored in RAM, meaning we can get away with using an in-memory RAM solution for managing which URLs we have tracked.
+       </li>
+       <li>
+        65 Gigabytes is more than we can cost-effectively store in RAM on a single server. If we need to store the documents on a single server, we will need to write to the local hard drive. Because we have 10,000 servers, we could evenly distribute the documents, so each server would only need to store 3.9 GB of HTML. 3.9 GB can easily be stored in RAM at a reasonable price.
+       </li>
+      </ul>
+      <h3 id="where-will-be-the-limitations-cpu-disk-network">
+       Where will be the limitations? CPU? Disk? Network?
+      </h3>
+      <ul>
+       <li>
+        <strong>
+         CPU
+        </strong>
+        : The most expensive task for the CPU will be extracting the URLs to be crawled from the HTML documents crawled so far. This task should take less than 1ms per document.
+       </li>
+       <li>
+        <strong>
+         Disk
+        </strong>
+        : As mentioned above, we probably donât need to be writing to disk at all since the documents, when distributed across the 10k servers, will fit into memory.
+       </li>
+       <li>
+        <strong>
+         Network
+        </strong>
+        : Round trip to wikipedia.org for a single document may take ~200ms depending on their load and the distance our servers will be from theirs. This will be a Network bound task with the opportunity while waiting for the network responses for our CPUs to parse the existing HTML documents of their URLs.
+       </li>
+      </ul>
+      <h2 id="design-options">
+       Design Options
+      </h2>
+      <h3 id="option-1-single-server">
+       Option 1: Single server
+      </h3>
+      <ul>
+       <li>
+        Naive approach: fetch a URL, extract URLs from the document, and query the next URL.
+       </li>
+       <li>
+        Pros: Simple
+       </li>
+       <li>
+        Cons: Does not utilize the 10k servers, wastes CPU cycles waiting for web requests to complete, server failure results in complete data loss.
+       </li>
+      </ul>
+      <h3 id="option-2-distributed-systems">
+       Option 2: Distributed Systems
+      </h3>
+      <ul>
+       <li>
+        Assign each URL to a specific server based on hashing.
+       </li>
+       <li>
+        Master/slave design: map server IDs to IP addresses using DNS or pre-configuration.
+       </li>
+       <li>
+        Each server tracks URLs it has crawled.
+       </li>
+       <li>
+        Pros: Utilizes all 10k servers, minimizes network activity, fetches each URL once, handles distributed system failures.
+       </li>
+       <li>
+        Cons: Uneven distribution of URLs among groups, some groups may have larger or more time-consuming URLs.
+       </li>
+      </ul>
+      <h2 id="directly-talk-to-the-server">
+       Directly talk to the server
+      </h2>
+      <ul>
+       <li>
+        Retrieve server IP based on server number.
+       </li>
+      </ul>
+      <h2 id="using-a-dns-server">
+       Using a DNS server
+      </h2>
+      <ul>
+       <li>
+        Map hostnames to IP addresses.
+       </li>
+      </ul>
+      <h2 id="apis">
+       APIs
+      </h2>
+      <ul>
+       <li>
+        Implement APIs to receive URLs found by other servers.
+       </li>
+       <li>
+        Use JSON and REST for routing requests.
+       </li>
+      </ul>
+      <h3 id="example-api-request">
+       Example API Request
+      </h3>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>POST /fetch_URLs HTTP/1.1
+Host: 2.crawler.company.com
+Body:
+{
+  URLs: ["/wiki/Consistent_hashing", "/wiki/Hash_table"]
+}
+</code></pre>
+       </div>
+      </div>
+      <ul>
+       <li>
+        Response:
+        <code class="language-plaintext highlighter-rouge">
+         202
+        </code>
+       </li>
+      </ul>
+      <h2 id="distributed-web-crawler-design-flowchart">
+       Distributed Web Crawler Design Flowchart
+      </h2>
+      <ul>
+       <li>
+        See source for the flowchart image.
+        <img alt="fc" src="https://roadtoarchitectcom.files.wordpress.com/2019/03/download.png"/>
+       </li>
+      </ul>
+      <h3 id="follow-up-question-distributing-urls-with-server-failures">
+       Follow-up question: Distributing URLs with server failures
+      </h3>
+      <ul>
+       <li>
+        Use âconsumer groupsâ concept similar to Kafka.
+       </li>
+       <li>
+        Divide the 10,000 servers into groups responsible for managing assigned URLs.
+       </li>
+       <li>
+        Use consistency algorithm (e.g., Paxos) within a group to decide which machine fetches a URL.
+       </li>
+       <li>
+        Consistent hashing with log(M) hashing algorithms can evenly distribute load among groups in case of group failures.
+       </li>
+      </ul>
+      <h3 id="example-of-consistent-hashing">
+       Example of Consistent Hashing
+      </h3>
+      <ul>
+       <li>
+        See source for the example image.
+        <img alt="img" src="https://upload.wikimedia.org/wikipedia/commons/7/71/Consistent_Hashing_Sample_Illustration.png"/>
+       </li>
+      </ul>
+      <p>
+       <img alt="img2" src="https://i.imgur.com/jUDGcKY.png"/>
+      </p>
+      <p>
+       Pros:
+      </p>
+      <ul>
+       <li>
+        Fully utilizes all 10,000 machines
+       </li>
+       <li>
+        Minimizes network activity
+       </li>
+       <li>
+        Fetches each URL once
+       </li>
+       <li>
+        Handles distributed system failures
+       </li>
+      </ul>
+      <p>
+       Cons:
+      </p>
+      <ul>
+       <li>
+        Uneven distribution of URLs among groups
+       </li>
+       <li>
+        Some groups may have larger or more time-consuming URLs
+       </li>
+      </ul>
+      <p>
+       More design examples
+      </p>
+      <ul>
+       <li>
+        <a href="solution-1242.html">
+         https://leetcode.com/discuss/interview-question/system-design/2950256/High-Level-Design-of-a-Web-Crawler
+        </a>
+       </li>
+      </ul>
+      <h1 id="code">
+       Code
+      </h1>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#c4ec10fd-10a4-40a3-8698-50303180f5ea'}">
+       <li class="uk-active">
+        <a href="solution-1242.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1242.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1242.html">
+         Python
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="c4ec10fd-10a4-40a3-8698-50303180f5ea">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.net.URI</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.ConcurrentHashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.ConcurrentSkipListSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.stream.Collectors</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.stream.Stream</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Web_Crawler_Multithreaded</span> <span class="o">{</span>
+
+    <span class="kd">class</span> <span class="nc">Solution_1_synchronizedList</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">newSetFromMap</span><span class="o">(</span><span class="k">new</span> <span class="nc">ConcurrentHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Boolean</span><span class="o">&gt;());</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">synchronizedList</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;());</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="no">HOSTNAME</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">crawl</span><span class="o">(</span><span class="nc">String</span> <span class="n">startUrl</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">initHostName</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+            <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+            <span class="n">getUrlDfs</span><span class="o">(</span><span class="n">startUrl</span><span class="o">,</span> <span class="n">htmlParser</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">judgeHostname</span><span class="o">(</span><span class="nc">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="sc">'/'</span><span class="o">,</span> <span class="mi">7</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">hostName</span> <span class="o">=</span> <span class="o">(</span><span class="n">idx</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">?</span> <span class="n">url</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">idx</span><span class="o">)</span> <span class="o">:</span> <span class="n">url</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">hostName</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="no">HOSTNAME</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">initHostName</span><span class="o">(</span><span class="nc">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="sc">'/'</span><span class="o">,</span> <span class="mi">7</span><span class="o">);</span>
+            <span class="no">HOSTNAME</span> <span class="o">=</span> <span class="o">(</span><span class="n">idx</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">?</span> <span class="n">url</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">idx</span><span class="o">)</span> <span class="o">:</span> <span class="n">url</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">getUrlDfs</span><span class="o">(</span><span class="nc">String</span> <span class="n">startUrl</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">htmlParser</span><span class="o">.</span><span class="na">getUrls</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Thread</span><span class="o">&gt;</span> <span class="n">threads</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">url</span> <span class="o">:</span> <span class="n">res</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">judgeHostname</span><span class="o">(</span><span class="n">url</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">set</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">url</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+                    <span class="n">threads</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Thread</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                        <span class="n">getUrlDfs</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">htmlParser</span><span class="o">);</span>
+                    <span class="o">}));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">thread</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">thread</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">thread</span><span class="o">.</span><span class="na">join</span><span class="o">();</span> <span class="c1">// Waits for this thread to die.</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">class</span> <span class="nc">Solution_2_ConcurrentSkipListSet</span> <span class="o">{</span>
+
+        <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">crawl</span><span class="o">(</span><span class="nc">String</span> <span class="n">startUrl</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c1">// ConcurrentSkipListSet: Constructs a new, empty set that orders its elements</span>
+            <span class="c1">// according to their {@linkplain Comparable natural ordering}</span>
+
+            <span class="c1">// https://stackoverflow.com/questions/1904439/when-is-a-concurrentskiplistset-useful</span>
+            <span class="c1">// ConcurrentSkipListSet and ConcurrentSkipListMap are useful when you need a sorted container</span>
+            <span class="c1">// that will be accessed by multiple threads.</span>
+            <span class="c1">// These are essentially the equivalents of TreeMap and TreeSet for concurrent code.</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ConcurrentSkipListSet</span><span class="o">&lt;&gt;();</span>
+            <span class="nc">String</span> <span class="n">hostname</span> <span class="o">=</span> <span class="n">getHostname</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+            <span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+
+            <span class="k">return</span> <span class="nf">crawlDfs</span><span class="o">(</span><span class="n">startUrl</span><span class="o">,</span> <span class="n">htmlParser</span><span class="o">,</span> <span class="n">hostname</span><span class="o">,</span> <span class="n">visited</span><span class="o">).</span><span class="na">collect</span><span class="o">(</span><span class="nc">Collectors</span><span class="o">.</span><span class="na">toList</span><span class="o">());</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="nc">Stream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">crawlDfs</span><span class="o">(</span><span class="nc">String</span> <span class="n">startUrl</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">,</span> <span class="nc">String</span> <span class="n">hostname</span><span class="o">,</span>
+                                     <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">(</span><span class="nc">Stream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">htmlParser</span><span class="o">.</span><span class="na">getUrls</span><span class="o">(</span><span class="n">startUrl</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">parallelStream</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">url</span> <span class="o">-&gt;</span> <span class="n">isSameHostname</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">hostname</span><span class="o">))</span>
+                <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="nl">visited:</span><span class="o">:</span><span class="n">add</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">flatMap</span><span class="o">(</span><span class="n">url</span> <span class="o">-&gt;</span> <span class="n">crawlDfs</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">htmlParser</span><span class="o">,</span> <span class="n">hostname</span><span class="o">,</span> <span class="n">visited</span><span class="o">)))</span> <span class="o">{</span>
+
+                <span class="k">return</span> <span class="nc">Stream</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">startUrl</span><span class="o">),</span> <span class="n">stream</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="nc">String</span> <span class="nf">getHostname</span><span class="o">(</span><span class="nc">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="sc">'/'</span><span class="o">,</span> <span class="mi">7</span><span class="o">);</span>
+            <span class="k">return</span> <span class="o">(</span><span class="n">idx</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">?</span> <span class="n">url</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">idx</span><span class="o">)</span> <span class="o">:</span> <span class="n">url</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isSameHostname</span><span class="o">(</span><span class="nc">String</span> <span class="n">url</span><span class="o">,</span> <span class="nc">String</span> <span class="n">hostname</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="n">hostname</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">url</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="n">hostname</span><span class="o">.</span><span class="na">length</span><span class="o">()</span>
+                <span class="o">||</span> <span class="n">url</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">hostname</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">==</span> <span class="sc">'/'</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">interface</span> <span class="nc">HtmlParser</span> <span class="o">{</span>
+        <span class="c1">// Return a list of all urls from a webpage of given url.</span>
+        <span class="c1">// This is a blocking call, that means it will do HTTP request and return when this request is finished.</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">getUrls</span><span class="o">(</span><span class="nc">String</span> <span class="n">str</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="kd">class</span> <span class="nc">Solution_CrawlerClass</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">crawl</span><span class="o">(</span><span class="nc">String</span> <span class="n">startUrl</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// åå¾startUrlçåå</span>
+            <span class="nc">String</span> <span class="n">host</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">startUrl</span><span class="o">).</span><span class="na">getHost</span><span class="o">();</span>
+            <span class="c1">// æ°å»ºä¸ä¸ªçº¿ç¨ï¼ç¬åstartUrlä¸­çææé¾æ¥</span>
+            <span class="nc">Crawler</span> <span class="n">crawler</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Crawler</span><span class="o">(</span><span class="n">startUrl</span><span class="o">,</span> <span class="n">host</span><span class="o">,</span> <span class="n">htmlParser</span><span class="o">);</span>
+            <span class="c1">// åå§åçº¿ç¨çè¿åç»æ</span>
+            <span class="n">crawler</span><span class="o">.</span><span class="na">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="c1">// å¼å¯çº¿ç¨ï¼ç¸å½äºä»èµ·ç¹å¼å§dfsï¼</span>
+            <span class="n">crawler</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="c1">// ç­å¾çº¿ç¨æ§è¡ç»æ</span>
+            <span class="nc">Crawler</span><span class="o">.</span><span class="na">joinThread</span><span class="o">(</span><span class="n">crawler</span><span class="o">);</span>
+            <span class="c1">// è¿åçº¿ç¨çæ§è¡ç»æ</span>
+            <span class="k">return</span> <span class="n">crawler</span><span class="o">.</span><span class="na">res</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c1">// ç¬è«çº¿ç¨ï¼ç¸å½äºåå§çdfsæ¹æ³ï¼</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Crawler</span> <span class="kd">extends</span> <span class="nc">Thread</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">startUrl</span><span class="o">;</span> <span class="c1">// å½åurl</span>
+        <span class="nc">String</span> <span class="n">hostname</span><span class="o">;</span> <span class="c1">// åå</span>
+        <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">;</span> <span class="c1">// ç¬è«æ¥å£</span>
+        <span class="c1">// è¿åç»æ</span>
+        <span class="kd">public</span> <span class="kd">volatile</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+        <span class="c1">// åå§åçº¿ç¨</span>
+        <span class="kd">public</span> <span class="nf">Crawler</span><span class="o">(</span><span class="nc">String</span> <span class="n">startUrl</span><span class="o">,</span> <span class="nc">String</span> <span class="n">hostname</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">startUrl</span> <span class="o">=</span> <span class="n">startUrl</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">hostname</span> <span class="o">=</span> <span class="n">hostname</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">htmlParser</span> <span class="o">=</span> <span class="n">htmlParser</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// è·å¾å½åurlçåå</span>
+            <span class="nc">String</span> <span class="n">host</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">startUrl</span><span class="o">).</span><span class="na">getHost</span><span class="o">();</span>
+            <span class="c1">// å¦æå½åååä¸å±äºç®æ ç½ç«ï¼æèå½åååå·²ç»ç¬è¿ï¼ç¥è¿</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">host</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">hostname</span><span class="o">)</span> <span class="o">||</span> <span class="n">res</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">startUrl</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">// å°å½åurlå å¥ç»æé</span>
+            <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+            <span class="c1">// è®°å½å½åurlé¡µé¢åå«çé¾æ¥</span>
+            <span class="c1">// æ¯ä¸ªé¾æ¥å¯å¨ä¸ä¸ªæ°ççº¿ç¨ç»§ç»­dfs</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Thread</span><span class="o">&gt;</span> <span class="n">threads</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">htmlParser</span><span class="o">.</span><span class="na">getUrls</span><span class="o">(</span><span class="n">startUrl</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nc">Crawler</span> <span class="n">crawler</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Crawler</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">hostname</span><span class="o">,</span> <span class="n">htmlParser</span><span class="o">);</span>
+                <span class="n">crawler</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+                <span class="n">threads</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">crawler</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="c1">// ç­å¾æ¯ä¸ªå­çº¿ç¨æ§è¡ç»æåï¼åç»æå½åçº¿ç¨</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">t</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">joinThread</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">joinThread</span><span class="o">(</span><span class="nc">Thread</span> <span class="n">thread</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">thread</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * // This is the HtmlParser's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class HtmlParser {
+ *  public:
+ *   vector&lt;string&gt; getUrls(string url);
+ * };
+ */</span>
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+ <span class="nl">public:</span>
+  <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">crawl</span><span class="p">(</span><span class="n">string</span> <span class="n">startUrl</span><span class="p">,</span> <span class="n">HtmlParser</span> <span class="n">htmlParser</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">{</span> <span class="p">{</span><span class="n">startUrl</span><span class="p">}</span> <span class="p">};</span>
+    <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">seen</span><span class="p">{</span> <span class="p">{</span><span class="n">startUrl</span><span class="p">}</span> <span class="p">};</span>
+    <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">hostname</span> <span class="o">=</span> <span class="n">getHostname</span><span class="p">(</span><span class="n">startUrl</span><span class="p">);</span>
+
+    <span class="c1">// Threading</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">nThreads</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">hardware_concurrency</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span> <span class="n">cv</span><span class="p">;</span>
+
+    <span class="k">auto</span> <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]()</span> <span class="p">{</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+        <span class="n">cv</span><span class="p">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span> <span class="mx">30ms</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">q</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="p">});</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+          <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+        <span class="n">lock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+
+        <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">urls</span> <span class="o">=</span> <span class="n">htmlParser</span><span class="p">.</span><span class="n">getUrls</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+
+        <span class="n">lock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">url</span> <span class="o">:</span> <span class="n">urls</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">seen</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+            <span class="k">continue</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span> <span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+            <span class="n">seen</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">lock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+        <span class="n">cv</span><span class="p">.</span><span class="n">notify_all</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nThreads</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+      <span class="n">threads</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&amp;</span> <span class="n">t</span> <span class="o">:</span> <span class="n">threads</span><span class="p">)</span>
+      <span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">begin</span><span class="p">(</span><span class="n">seen</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">seen</span><span class="p">)};</span>
+  <span class="p">}</span>
+
+ <span class="nl">private:</span>
+  <span class="n">string</span> <span class="n">getHostname</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">firstSlash</span> <span class="o">=</span> <span class="n">url</span><span class="p">.</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">'/'</span><span class="p">);</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">thirdSlash</span> <span class="o">=</span> <span class="n">url</span><span class="p">.</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">'/'</span><span class="p">,</span> <span class="n">firstSlash</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">url</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">firstSlash</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">thirdSlash</span> <span class="o">-</span> <span class="n">firstSlash</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span><span class="p">,</span> <span class="n">Lock</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>  <span class="c1"># To parse URLs and extract hostname for comparison
+</span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">crawl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startUrl</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">htmlParser</span><span class="p">:</span> <span class="s">'HtmlParser'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">hostname</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">startUrl</span><span class="p">).</span><span class="n">hostname</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">startUrl</span><span class="p">])</span>  <span class="c1"># Keep track of seen URLs to avoid re-crawling the same URL
+</span>        <span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>  <span class="c1"># Lock for thread-safe operations on the seen set
+</span>
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">next_url</span> <span class="ow">in</span> <span class="n">htmlParser</span><span class="p">.</span><span class="n">getUrls</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">next_url</span><span class="p">).</span><span class="n">hostname</span> <span class="o">==</span> <span class="n">hostname</span> <span class="ow">and</span> <span class="n">next_url</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>  <span class="c1"># Ensure thread-safe write to the seen set
+</span>                        <span class="k">if</span> <span class="n">next_url</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                            <span class="n">seen</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">next_url</span><span class="p">)</span>
+                            <span class="n">dfs</span><span class="p">(</span><span class="n">next_url</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">worker</span><span class="p">():</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">unseen</span><span class="p">:</span>
+                        <span class="k">return</span>
+                    <span class="n">url</span> <span class="o">=</span> <span class="n">unseen</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">dfs</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="n">unseen</span> <span class="o">=</span> <span class="p">[</span><span class="n">startUrl</span><span class="p">]</span>  <span class="c1"># Stack of URLs to be crawled
+</span>        <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">num_threads</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Or any number you deem appropriate based on the problem constraints
+</span>
+        <span class="c1"># Start threads
+</span>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_threads</span><span class="p">):</span>
+            <span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">worker</span><span class="p">)</span>
+            <span class="n">thread</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">threads</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">thread</span><span class="p">)</span>
+
+        <span class="c1"># Wait for all threads to finish
+</span>        <span class="k">for</span> <span class="n">thread</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+            <span class="n">thread</span><span class="p">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">seen</span><span class="p">)</span>
+
+<span class="c1">###################################
+</span>
+</code></pre>
+         </div>
+        </div>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1"># reference https://levelup.gitconnected.com/multi-threaded-python-web-crawler-for-https-pages-e103f0839b71
+</span>
+
+<span class="k">class</span> <span class="nc">Crawler</span><span class="p">(</span><span class="n">threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">base_url</span><span class="p">,</span> <span class="n">links_to_crawl</span><span class="p">,</span><span class="n">have_visited</span><span class="p">,</span> <span class="n">error_links</span><span class="p">,</span><span class="n">url_lock</span><span class="p">):</span>
+       
+        <span class="n">threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Web Crawler worker </span><span class="si">{</span><span class="n">threading</span><span class="p">.</span><span class="n">current_thread</span><span class="p">()</span><span class="si">}</span><span class="s"> has Started"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">links_to_crawl</span> <span class="o">=</span> <span class="n">links_to_crawl</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">have_visited</span> <span class="o">=</span> <span class="n">have_visited</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">error_links</span> <span class="o">=</span> <span class="n">error_links</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">url_lock</span> <span class="o">=</span> <span class="n">url_lock</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1"># we create a ssl context so that our script can crawl
+</span>            <span class="c1"># the https sties with ssl_handshake.
+</span>
+            <span class="c1">#Create a SSLContext object with default settings.
+</span>            <span class="n">my_ssl</span> <span class="o">=</span> <span class="n">ssl</span><span class="p">.</span><span class="n">create_default_context</span><span class="p">()</span>
+
+            <span class="c1"># by default when creating a default ssl context and making an handshake
+</span>            <span class="c1"># we verify the hostname with the certificate but our objective is to crawl
+</span>            <span class="c1"># the webpage so we will not be checking the validity of the cerfificate.
+</span>            <span class="n">my_ssl</span><span class="p">.</span><span class="n">check_hostname</span> <span class="o">=</span> <span class="bp">False</span>
+
+            <span class="c1"># in this case we are not verifying the certificate and any 
+</span>            <span class="c1"># certificate is accepted in this mode.
+</span>            <span class="n">my_ssl</span><span class="p">.</span><span class="n">verify_mode</span> <span class="o">=</span> <span class="n">ssl</span><span class="p">.</span><span class="n">CERT_NONE</span>
+
+            <span class="c1"># we are defining an infinite while loop so that all the links in our
+</span>            <span class="c1"># queue are processed.
+</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+                <span class="c1"># In this part of the code we create a global lock on our queue of 
+</span>                <span class="c1"># links so that no two threads can access the queue at same time
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">url_lock</span><span class="p">.</span><span class="n">acquire</span><span class="p">()</span>
+                <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Queue Size: </span><span class="si">{</span><span class="bp">self</span><span class="p">.</span><span class="n">links_to_crawl</span><span class="p">.</span><span class="n">qsize</span><span class="p">()</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+                <span class="n">link</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">links_to_crawl</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">url_lock</span><span class="p">.</span><span class="n">release</span><span class="p">()</span>
+
+                <span class="c1"># if the link is None the queue is exhausted or the threads are yet
+</span>                <span class="c1"># process the links.
+</span>
+                <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">break</span>
+                
+                <span class="c1"># if The link is already visited we break the execution.
+</span>                <span class="k">if</span> <span class="n">link</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">have_visited</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"The link </span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s"> is already visited"</span><span class="p">)</span>
+                    <span class="k">break</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># This method constructs a full "absolute" URL by combining the
+</span>                    <span class="c1"># base url with other url. this uses components of the base URL, 
+</span>                    <span class="c1"># in particular the addressing scheme, the network 
+</span>                    <span class="c1"># location and  the path, to provide missing components 
+</span>                    <span class="c1"># in the relative URL.
+</span>                    <span class="c1"># in short we repair our relative url if it is broken.
+</span>                    <span class="n">link</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">base_url</span><span class="p">,</span><span class="n">link</span><span class="p">)</span>
+
+                    <span class="c1"># we use the header parameter to "spoof" the "User-Agent" header
+</span>                    <span class="c1"># value which is used by the browser to identify itself. This is
+</span>                    <span class="c1"># because some servers will only allow the connection if  it comes
+</span>                    <span class="c1"># from a verified browser. In this case we are using FireFox header. 
+</span>                    <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span> <span class="p">{</span><span class="s">'User-Agent'</span><span class="p">:</span> <span class="s">'Mozilla/5.0'</span><span class="p">})</span>
+
+                    <span class="c1"># we are opening the url using a ssl handshake.
+</span>                    <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">my_ssl</span><span class="p">)</span>
+
+                    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"The URL </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">geturl</span><span class="p">()</span><span class="si">}</span><span class="s"> crawled with </span><span class="se">\
+</span><span class="s">                        status </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">getcode</span><span class="p">()</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+                    <span class="c1"># this returns the html representation of the webpage
+</span>                    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span><span class="s">"html.parser"</span><span class="p">)</span>
+
+                    <span class="c1"># in this case we are finding all the links in the page.
+</span>                    <span class="k">for</span> <span class="n">a_tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">):</span>
+                        <span class="c1"># we are checking of the link is already visited and (network location part) is our
+</span>                        <span class="c1"># base url itself.
+</span>                        <span class="k">if</span> <span class="p">(</span><span class="n">a_tag</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"href"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">have_visited</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="n">link</span><span class="p">).</span><span class="n">netloc</span> <span class="o">==</span> <span class="s">"www.python.org"</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">links_to_crawl</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">a_tag</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"href"</span><span class="p">))</span>
+                        
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"The link </span><span class="si">{</span><span class="n">a_tag</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'href'</span><span class="p">)</span><span class="si">}</span><span class="s"> is already visited or is not part </span><span class="se">\
+</span><span class="s">                            of the website"</span><span class="p">)</span>
+
+                    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Adding </span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s"> to the crawled list"</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">have_visited</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+
+                <span class="k">except</span> <span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"URL </span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s"> threw this error </span><span class="si">{</span><span class="n">e</span><span class="p">.</span><span class="n">reason</span><span class="si">}</span><span class="s"> while trying to parse"</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="p">.</span><span class="n">error_links</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">links_to_crawl</span><span class="p">.</span><span class="n">task_done</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"The Crawler is started"</span><span class="p">)</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Please Enter Website to Crawl &gt; "</span><span class="p">)</span>
+    <span class="n">number_of_threads</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Please Enter number of Threads &gt; "</span><span class="p">)</span>
+
+    <span class="n">links_to_crawl</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">Queue</span><span class="p">()</span>
+    <span class="n">url_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="n">Lock</span><span class="p">()</span>
+    <span class="n">links_to_crawl</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span>
+
+    <span class="n">have_visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">crawler_threads</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">error_links</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1">#base_url, links_to_crawl,have_visited, error_links,url_lock
+</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">number_of_threads</span><span class="p">)):</span>
+        <span class="n">crawler</span> <span class="o">=</span> <span class="n">Crawler</span><span class="p">(</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="p">,</span> 
+                        <span class="n">links_to_crawl</span><span class="o">=</span> <span class="n">links_to_crawl</span><span class="p">,</span> 
+                        <span class="n">have_visited</span><span class="o">=</span> <span class="n">have_visited</span><span class="p">,</span>
+                        <span class="n">error_links</span><span class="o">=</span> <span class="n">error_links</span><span class="p">,</span>
+                        <span class="n">url_lock</span><span class="o">=</span><span class="n">url_lock</span><span class="p">)</span>
+        
+        <span class="n">crawler</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="n">crawler_threads</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">crawler</span><span class="p">)</span>
+
+
+    <span class="k">for</span> <span class="n">crawler</span> <span class="ow">in</span> <span class="n">crawler_threads</span><span class="p">:</span>
+        <span class="n">crawler</span><span class="p">.</span><span class="n">join</span><span class="p">()</span>
+
+
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Total Number of pages visited are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">have_visited</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Total Number of Errornous links: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">error_links</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+<span class="c1">###################################
+</span>
+</code></pre>
+         </div>
+        </div>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span><span class="p">,</span> <span class="n">urlparse</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c1"># ThreadPoolExecutor
+</span><span class="k">class</span> <span class="nc">MultiThreadedCrawler</span><span class="p">:</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed_url</span><span class="p">):</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">seed_url</span> <span class="o">=</span> <span class="n">seed_url</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">root_url</span> <span class="o">=</span> <span class="s">'{}://{}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">seed_url</span><span class="p">).</span><span class="n">scheme</span><span class="p">,</span>
+										<span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">seed_url</span><span class="p">).</span><span class="n">netloc</span><span class="p">)</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">scraped_pages</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">crawl_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">crawl_queue</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">seed_url</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">parse_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html</span><span class="p">):</span>
+		<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+		<span class="n">Anchor_Tags</span> <span class="o">=</span> <span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">Anchor_Tags</span><span class="p">:</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">url</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span> <span class="ow">or</span> <span class="n">url</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">root_url</span><span class="p">):</span>
+				<span class="n">url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">root_url</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">url</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">scraped_pages</span><span class="p">:</span>
+					<span class="bp">self</span><span class="p">.</span><span class="n">crawl_queue</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">scrape_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html</span><span class="p">):</span>
+		<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s">"html5lib"</span><span class="p">)</span>
+		<span class="n">web_page_paragraph_contents</span> <span class="o">=</span> <span class="n">soup</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span>
+		<span class="n">text</span> <span class="o">=</span> <span class="s">''</span>
+		<span class="k">for</span> <span class="n">para</span> <span class="ow">in</span> <span class="n">web_page_paragraph_contents</span><span class="p">:</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s">'https:'</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">para</span><span class="p">.</span><span class="n">text</span><span class="p">)):</span>
+				<span class="n">text</span> <span class="o">=</span> <span class="n">text</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">para</span><span class="p">.</span><span class="n">text</span><span class="p">).</span><span class="n">strip</span><span class="p">()</span>
+		<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="se">\n</span><span class="s"> &lt;---Text Present in The WebPage is ---&gt;</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+		<span class="k">return</span>
+
+	<span class="k">def</span> <span class="nf">post_scrape_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">result</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">result</span> <span class="ow">and</span> <span class="n">result</span><span class="p">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+			<span class="bp">self</span><span class="p">.</span><span class="n">parse_links</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+			<span class="bp">self</span><span class="p">.</span><span class="n">scrape_info</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">scrape_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+			<span class="k">return</span> <span class="n">res</span>
+		<span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">RequestException</span><span class="p">:</span>
+			<span class="k">return</span>
+
+	<span class="k">def</span> <span class="nf">run_web_crawler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s"> Name of the current executing process: "</span><span class="p">,</span>
+					<span class="n">multiprocessing</span><span class="p">.</span><span class="n">current_process</span><span class="p">().</span><span class="n">name</span><span class="p">,</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+				<span class="n">target_url</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">crawl_queue</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">target_url</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">scraped_pages</span><span class="p">:</span>
+					<span class="k">print</span><span class="p">(</span><span class="s">"Scraping URL: {}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target_url</span><span class="p">))</span>
+					<span class="bp">self</span><span class="p">.</span><span class="n">current_scraping_url</span> <span class="o">=</span> <span class="s">"{}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target_url</span><span class="p">)</span>
+					<span class="bp">self</span><span class="p">.</span><span class="n">scraped_pages</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">target_url</span><span class="p">)</span>
+					<span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">pool</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">scrape_page</span><span class="p">,</span> <span class="n">target_url</span><span class="p">)</span>
+					<span class="n">job</span><span class="p">.</span><span class="n">add_done_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">post_scrape_callback</span><span class="p">)</span>
+
+			<span class="k">except</span> <span class="n">Empty</span><span class="p">:</span>
+				<span class="k">return</span>
+			<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+				<span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+				<span class="k">continue</span>
+
+	<span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s"> Seed URL is: '</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">seed_url</span><span class="p">,</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">'Scraped pages are: '</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">scraped_pages</span><span class="p">,</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+	<span class="n">cc</span> <span class="o">=</span> <span class="n">MultiThreadedCrawler</span><span class="p">(</span><span class="s">"https://www.leetcode.ca"</span><span class="p">)</span>
+	<span class="n">cc</span><span class="p">.</span><span class="n">run_web_crawler</span><span class="p">()</span>
+	<span class="n">cc</span><span class="p">.</span><span class="n">info</span><span class="p">()</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1242.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

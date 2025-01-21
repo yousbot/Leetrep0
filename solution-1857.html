@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1857.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1857.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1857 - Largest Color Value in a Directed Graph</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1857. Largest Color Value in a Directed Graph Description There is a directed graph of n colored nodes and m edges. The nodes are numbered from 0 to n - 1. You are given a string colors where colors[i] is a lowercase English letter representing...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1857.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1857.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1857.html" rel="stylesheet"/>
+   <link href="solution-1857.html" rel="stylesheet"/>
+   <link href="solution-1857.html" rel="stylesheet"/>
+   <link href="solution-1857.html" rel="stylesheet"/>
+   <link href="solution-1857.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1857 - Largest Color Value in a Directed Graph" property="og:title"/>
+   <meta content="Leetcode 1857. Largest Color Value in a Directed Graph Description There is a directed graph of n colored nodes and m edges. The nodes are numbered from 0 to n - 1. You are given a string colors where colors[i] is a lowercase English letter representing the color of the ith node in this graph (0-indexed). You are also given a 2D array edges where edges[j] = [aj, bj] indicates that there is a directed edge from node aj to node bj. A valid path in the graph is a sequence of nodes x1 -&amp;gt; x2 -&amp;gt; x3 -&amp;gt; ... -&amp;gt; xk such that there is a directed edge from xi to xi+1 for every 1 &amp;lt;= i &amp;lt; k. The color value of the path is the number of nodes that are colored the most frequently occurring color along that path. Return the largest color value of any valid path in the given graph, or -1 if the graph contains a cycle. &amp;nbsp; Example 1: Input: colors = &amp;quot;abaca&amp;quot;, edges = [[0,1],[0,2],[2,3],[3,4]] Output: 3 Explanation: The path 0 -&amp;gt; 2 -&amp;gt; 3 -&amp;gt; 4 contains 3 nodes that are colored &amp;quot;a&amp;quot; (red in the above image). Example 2: Input: colors = &amp;quot;a&amp;quot;, edges = [[0,0]] Output: -1 Explanation: There is a cycle from 0 to 0. &amp;nbsp; Constraints: n == colors.length m == edges.length 1 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= m &amp;lt;= 105 colors consists of lowercase English letters. 0 &amp;lt;= aj, bj&amp;nbsp;&amp;lt; n Solutions Java C++ Python Go class Solution { public int largestPathValue(String colors, int[][] edges) { int n = colors.length(); List&amp;lt;Integer&amp;gt;[] g = new List[n]; Arrays.setAll(g, k -&amp;gt; new ArrayList&amp;lt;&amp;gt;()); int[] indeg = new int[n]; for (int[] e : edges) { int a = e[0], b = e[1]; g[a].add(b); ++indeg[b]; } Deque&amp;lt;Integer&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); int[][] dp = new int[n][26]; for (int i = 0; i &amp;lt; n; ++i) { if (indeg[i] == 0) { q.offer(i); int c = colors.charAt(i) - 'a'; ++dp[i][c]; } } int cnt = 0; int ans = 1; while (!q.isEmpty()) { int i = q.pollFirst(); ++cnt; for (int j : g[i]) { if (--indeg[j] == 0) { q.offer(j); } int c = colors.charAt(j) - 'a'; for (int k = 0; k &amp;lt; 26; ++k) { dp[j][k] = Math.max(dp[j][k], dp[i][k] + (c == k ? 1 : 0)); ans = Math.max(ans, dp[j][k]); } } } return cnt == n ? ans : -1; } } class Solution { public: int largestPathValue(string colors, vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; edges) { int n = colors.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; g(n); vector&amp;lt;int&amp;gt; indeg(n); for (auto&amp;amp; e : edges) { int a = e[0], b = e[1]; g[a].push_back(b); ++indeg[b]; } queue&amp;lt;int&amp;gt; q; vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; dp(n, vector&amp;lt;int&amp;gt;(26)); for (int i = 0; i &amp;lt; n; ++i) { if (indeg[i] == 0) { q.push(i); int c = colors[i] - 'a'; dp[i][c]++; } } int cnt = 0; int ans = 1; while (!q.empty()) { int i = q.front(); q.pop(); ++cnt; for (int j : g[i]) { if (--indeg[j] == 0)..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2020-12-30T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2020-12-30-1857-Largest-Color-Value-in-a-Directed-Graph/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1857.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1857 - Largest Color Value in a Directed Graph" property="twitter:title"/>
+   <meta content="Leetcode 1857. Largest Color Value in a Directed Graph Description There is a directed graph of n colored nodes and m edges. The nodes are numbered from 0 to n - 1. You are given a string colors where colors[i] is a lowercase English letter representing the color of the ith node in this graph (0-indexed). You are also given a 2D array edges where edges[j] = [aj, bj] indicates that there is a directed edge from node aj to node bj. A valid path in the graph is a sequence of nodes x1 -&amp;gt; x2 -&amp;gt; x3 -&amp;gt; ... -&amp;gt; xk such that there is a directed edge from xi to xi+1 for every 1 &amp;lt;= i &amp;lt; k. The color value of the path is the number of nodes that are colored the most frequently occurring color along that path. Return the largest color value of any valid path in the given graph, or -1 if the graph contains a cycle. &amp;nbsp; Example 1: Input: colors = &amp;quot;abaca&amp;quot;, edges = [[0,1],[0,2],[2,3],[3,4]] Output: 3 Explanation: The path 0 -&amp;gt; 2 -&amp;gt; 3 -&amp;gt; 4 contains 3 nodes that are colored &amp;quot;a&amp;quot; (red in the above image). Example 2: Input: colors = &amp;quot;a&amp;quot;, edges = [[0,0]] Output: -1 Explanation: There is a cycle from 0 to 0. &amp;nbsp; Constraints: n == colors.length m == edges.length 1 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= m &amp;lt;= 105 colors consists of lowercase English letters. 0 &amp;lt;= aj, bj&amp;nbsp;&amp;lt; n Solutions Java C++ Python Go class Solution { public int largestPathValue(String colors, int[][] edges) { int n = colors.length(); List&amp;lt;Integer&amp;gt;[] g = new List[n]; Arrays.setAll(g, k -&amp;gt; new ArrayList&amp;lt;&amp;gt;()); int[] indeg = new int[n]; for (int[] e : edges) { int a = e[0], b = e[1]; g[a].add(b); ++indeg[b]; } Deque&amp;lt;Integer&amp;gt; q = new ArrayDeque&amp;lt;&amp;gt;(); int[][] dp = new int[n][26]; for (int i = 0; i &amp;lt; n; ++i) { if (indeg[i] == 0) { q.offer(i); int c = colors.charAt(i) - 'a'; ++dp[i][c]; } } int cnt = 0; int ans = 1; while (!q.isEmpty()) { int i = q.pollFirst(); ++cnt; for (int j : g[i]) { if (--indeg[j] == 0) { q.offer(j); } int c = colors.charAt(j) - 'a'; for (int k = 0; k &amp;lt; 26; ++k) { dp[j][k] = Math.max(dp[j][k], dp[i][k] + (c == k ? 1 : 0)); ans = Math.max(ans, dp[j][k]); } } } return cnt == n ? ans : -1; } } class Solution { public: int largestPathValue(string colors, vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; edges) { int n = colors.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; g(n); vector&amp;lt;int&amp;gt; indeg(n); for (auto&amp;amp; e : edges) { int a = e[0], b = e[1]; g[a].push_back(b); ++indeg[b]; } queue&amp;lt;int&amp;gt; q; vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; dp(n, vector&amp;lt;int&amp;gt;(26)); for (int i = 0; i &amp;lt; n; ++i) { if (indeg[i] == 0) { q.push(i); int c = colors[i] - 'a'; dp[i][c]++; } } int cnt = 0; int ans = 1; while (!q.empty()) { int i = q.front(); q.pop(); ++cnt; for (int j : g[i]) { if (--indeg[j] == 0)..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1857 - Largest Color Value in a Directed Graph | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1857 - Largest Color Value in a Directed Graph" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1857.html" rel="canonical">
+          <meta content="https://leetcode.ca/2020-12-30-1857-Largest-Color-Value-in-a-Directed-Graph/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2020-12-30T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1857 - Largest Color Value in a Directed Graph","dateModified":"2020-12-30T00:00:00-08:00","datePublished":"2020-12-30T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2020-12-30-1857-Largest-Color-Value-in-a-Directed-Graph/"},"url":"https://leetcode.ca/2020-12-30-1857-Largest-Color-Value-in-a-Directed-Graph/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1857-largest-color-value-in-a-directed-graph">
+       <a href="solution-1857.html">
+        1857. Largest Color Value in a Directed Graph
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       There is a
+       <strong>
+        directed graph
+       </strong>
+       of
+       <code>
+        n
+       </code>
+       colored nodes and
+       <code>
+        m
+       </code>
+       edges. The nodes are numbered from
+       <code>
+        0
+       </code>
+       to
+       <code>
+        n - 1
+       </code>
+       .
+      </p>
+      <p>
+       You are given a string
+       <code>
+        colors
+       </code>
+       where
+       <code>
+        colors[i]
+       </code>
+       is a lowercase English letter representing the
+       <strong>
+        color
+       </strong>
+       of the
+       <code>
+        i
+        <sup>
+         th
+        </sup>
+       </code>
+       node in this graph (
+       <strong>
+        0-indexed
+       </strong>
+       ). You are also given a 2D array
+       <code>
+        edges
+       </code>
+       where
+       <code>
+        edges[j] = [a
+        <sub>
+         j
+        </sub>
+        , b
+        <sub>
+         j
+        </sub>
+        ]
+       </code>
+       indicates that there is a
+       <strong>
+        directed edge
+       </strong>
+       from node
+       <code>
+        a
+        <sub>
+         j
+        </sub>
+       </code>
+       to node
+       <code>
+        b
+        <sub>
+         j
+        </sub>
+       </code>
+       .
+      </p>
+      <p>
+       A valid
+       <strong>
+        path
+       </strong>
+       in the graph is a sequence of nodes
+       <code>
+        x
+        <sub>
+         1
+        </sub>
+        -&gt; x
+        <sub>
+         2
+        </sub>
+        -&gt; x
+        <sub>
+         3
+        </sub>
+        -&gt; ... -&gt; x
+        <sub>
+         k
+        </sub>
+       </code>
+       such that there is a directed edge from
+       <code>
+        x
+        <sub>
+         i
+        </sub>
+       </code>
+       to
+       <code>
+        x
+        <sub>
+         i+1
+        </sub>
+       </code>
+       for every
+       <code>
+        1 &lt;= i &lt; k
+       </code>
+       . The
+       <strong>
+        color value
+       </strong>
+       of the path is the number of nodes that are colored the
+       <strong>
+        most frequently
+       </strong>
+       occurring color along that path.
+      </p>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         largest color value
+        </strong>
+        of any valid path in the given graph, or
+       </em>
+       <code>
+        -1
+       </code>
+       <em>
+        if the graph contains a cycle
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1800-1899/1857.Largest%20Color%20Value%20in%20a%20Directed%20Graph/images/leet1.png" style="width: 400px; height: 182px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> colors = "abaca", edges = [[0,1],[0,2],[2,3],[3,4]]
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> The path 0 -&gt; 2 -&gt; 3 -&gt; 4 contains 3 nodes that are colored <code>"a" (red in the above image)</code>.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1800-1899/1857.Largest%20Color%20Value%20in%20a%20Directed%20Graph/images/leet2.png" style="width: 85px; height: 85px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> colors = "a", edges = [[0,0]]
+<strong>Output:</strong> -1
+<strong>Explanation:</strong> There is a cycle from 0 to 0.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         n == colors.length
+        </code>
+       </li>
+       <li>
+        <code>
+         m == edges.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= m &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         colors
+        </code>
+        consists of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         0 &lt;= a
+         <sub>
+          j
+         </sub>
+         , b
+         <sub>
+          j
+         </sub>
+         &lt; n
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#bdfd8bd9-ce38-427c-9138-197f3336a3d8'}">
+       <li class="uk-active">
+        <a href="solution-1857.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1857.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1857.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1857.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="bdfd8bd9-ce38-427c-9138-197f3336a3d8">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">largestPathValue</span><span class="o">(</span><span class="nc">String</span> <span class="n">colors</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">setAll</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">indeg</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">b</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">a</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+            <span class="o">++</span><span class="n">indeg</span><span class="o">[</span><span class="n">b</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="mi">26</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">indeg</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+                <span class="o">++</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">c</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">();</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">:</span> <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(--</span><span class="n">indeg</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">],</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">k</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">));</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">dp</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">k</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">n</span> <span class="o">?</span> <span class="n">ans</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">largestPathValue</span><span class="p">(</span><span class="n">string</span> <span class="n">colors</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">colors</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">indeg</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+            <span class="o">++</span><span class="n">indeg</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">26</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">indeg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">c</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">:</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">indeg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">k</span><span class="p">));</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">n</span> <span class="o">?</span> <span class="n">ans</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">largestPathValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+        <span class="n">indeg</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="n">indeg</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">26</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indeg</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+            <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">indeg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">indeg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">):</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">k</span><span class="p">))</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="k">else</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">largestPathValue</span><span class="p">(</span><span class="n">colors</span> <span class="kt">string</span><span class="p">,</span> <span class="n">edges</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="n">indeg</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+		<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">b</span><span class="p">)</span>
+		<span class="n">indeg</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="n">q</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span> <span class="p">{</span>
+		<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">26</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">indeg</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+			<span class="n">c</span> <span class="o">:=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span>
+			<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">c</span><span class="p">]</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">i</span> <span class="o">:=</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+		<span class="n">cnt</span><span class="o">++</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">indeg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">--</span>
+			<span class="k">if</span> <span class="n">indeg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="n">c</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="m">26</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+				<span class="n">t</span> <span class="o">:=</span> <span class="m">0</span>
+				<span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">k</span> <span class="p">{</span>
+					<span class="n">t</span> <span class="o">=</span> <span class="m">1</span>
+				<span class="p">}</span>
+				<span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">t</span><span class="p">)</span>
+				<span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">])</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">n</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">ans</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1857.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

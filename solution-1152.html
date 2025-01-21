@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1152.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1152.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1152 - Analyze User Website Visit Pattern</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1152. Analyze User Website Visit Pattern Description You are given two string arrays username and website and an integer array timestamp. All the given arrays are of the same length and the tuple [username[i], website[i], timestamp[i]] indicates that the user username[i] visited the website website[i]...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1152.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1152.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1152.html" rel="stylesheet"/>
+   <link href="solution-1152.html" rel="stylesheet"/>
+   <link href="solution-1152.html" rel="stylesheet"/>
+   <link href="solution-1152.html" rel="stylesheet"/>
+   <link href="solution-1152.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1152 - Analyze User Website Visit Pattern" property="og:title"/>
+   <meta content="Leetcode 1152. Analyze User Website Visit Pattern Description You are given two string arrays username and website and an integer array timestamp. All the given arrays are of the same length and the tuple [username[i], website[i], timestamp[i]] indicates that the user username[i] visited the website website[i] at time timestamp[i]. A pattern is a list of three websites (not necessarily distinct). For example, [&amp;quot;home&amp;quot;, &amp;quot;away&amp;quot;, &amp;quot;love&amp;quot;], [&amp;quot;leetcode&amp;quot;, &amp;quot;love&amp;quot;, &amp;quot;leetcode&amp;quot;], and [&amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;] are all patterns. The score of a pattern is the number of users that visited all the websites in the pattern in the same order they appeared in the pattern. For example, if the pattern is [&amp;quot;home&amp;quot;, &amp;quot;away&amp;quot;, &amp;quot;love&amp;quot;], the score is the number of users x such that x visited &amp;quot;home&amp;quot; then visited &amp;quot;away&amp;quot; and visited &amp;quot;love&amp;quot; after that. Similarly, if the pattern is [&amp;quot;leetcode&amp;quot;, &amp;quot;love&amp;quot;, &amp;quot;leetcode&amp;quot;], the score is the number of users x such that x visited &amp;quot;leetcode&amp;quot; then visited &amp;quot;love&amp;quot; and visited &amp;quot;leetcode&amp;quot; one more time after that. Also, if the pattern is [&amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;], the score is the number of users x such that x visited &amp;quot;luffy&amp;quot; three different times at different timestamps. Return the pattern with the largest score. If there is more than one pattern with the same largest score, return the lexicographically smallest such pattern. &amp;nbsp; Example 1: Input: username = [&amp;quot;joe&amp;quot;,&amp;quot;joe&amp;quot;,&amp;quot;joe&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;mary&amp;quot;,&amp;quot;mary&amp;quot;,&amp;quot;mary&amp;quot;], timestamp = [1,2,3,4,5,6,7,8,9,10], website = [&amp;quot;home&amp;quot;,&amp;quot;about&amp;quot;,&amp;quot;career&amp;quot;,&amp;quot;home&amp;quot;,&amp;quot;cart&amp;quot;,&amp;quot;maps&amp;quot;,&amp;quot;home&amp;quot;,&amp;quot;home&amp;quot;,&amp;quot;about&amp;quot;,&amp;quot;career&amp;quot;] Output: [&amp;quot;home&amp;quot;,&amp;quot;about&amp;quot;,&amp;quot;career&amp;quot;] Explanation: The tuples in this example are: [&amp;quot;joe&amp;quot;,&amp;quot;home&amp;quot;,1],[&amp;quot;joe&amp;quot;,&amp;quot;about&amp;quot;,2],[&amp;quot;joe&amp;quot;,&amp;quot;career&amp;quot;,3],[&amp;quot;james&amp;quot;,&amp;quot;home&amp;quot;,4],[&amp;quot;james&amp;quot;,&amp;quot;cart&amp;quot;,5],[&amp;quot;james&amp;quot;,&amp;quot;maps&amp;quot;,6],[&amp;quot;james&amp;quot;,&amp;quot;home&amp;quot;,7],[&amp;quot;mary&amp;quot;,&amp;quot;home&amp;quot;,8],[&amp;quot;mary&amp;quot;,&amp;quot;about&amp;quot;,9], and [&amp;quot;mary&amp;quot;,&amp;quot;career&amp;quot;,10]. The pattern (&amp;quot;home&amp;quot;, &amp;quot;about&amp;quot;, &amp;quot;career&amp;quot;) has score 2 (joe and mary). The pattern (&amp;quot;home&amp;quot;, &amp;quot;cart&amp;quot;, &amp;quot;maps&amp;quot;) has score 1 (james). The pattern (&amp;quot;home&amp;quot;, &amp;quot;cart&amp;quot;, &amp;quot;home&amp;quot;) has score 1 (james). The pattern (&amp;quot;home&amp;quot;, &amp;quot;maps&amp;quot;, &amp;quot;home&amp;quot;) has score 1 (james). The pattern (&amp;quot;cart&amp;quot;, &amp;quot;maps&amp;quot;, &amp;quot;home&amp;quot;) has score 1 (james). The pattern (&amp;quot;home&amp;quot;, &amp;quot;home&amp;quot;, &amp;quot;home&amp;quot;) has score 0 (no user visited home 3 times). Example 2: Input: username = [&amp;quot;ua&amp;quot;,&amp;quot;ua&amp;quot;,&amp;quot;ua&amp;quot;,&amp;quot;ub&amp;quot;,&amp;quot;ub&amp;quot;,&amp;quot;ub&amp;quot;], timestamp = [1,2,3,4,5,6], website = [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;] Output: [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;] &amp;nbsp; Constraints: 3 &amp;lt;= username.length &amp;lt;= 50 1 &amp;lt;= username[i].length &amp;lt;= 10 timestamp.length == username.length 1 &amp;lt;= timestamp[i] &amp;lt;= 109 website.length == username.length 1 &amp;lt;= website[i].length &amp;lt;= 10 username[i] and website[i] consist of lowercase English letters. It is guaranteed that there is at least one user who visited at least three websites. All the tuples [username[i], timestamp[i], website[i]] are unique. Solutions Solution 1: Hash Table + Sorting First, we use a hash table $d$ to record the websites each user visits. Then we traverse $d$. For each user, we enumerate all the triplets they visited, count the occurrence of distinct triplets, and finally traverse all triplets, returning the one with the highest occurrence and the smallest lexicographic order. The time complexity is $O(n^3)$, and the space complexity is $O(n^3)$. Here, $n$ is the length of username. Java C++ Python Go class Solution { public List&amp;lt;String&amp;gt; mostVisitedPattern(String[] username, int[] timestamp, String[] website) { Map&amp;lt;String, List&amp;lt;Node&amp;gt;&amp;gt; d = new HashMap&amp;lt;&amp;gt;(); int n = username.length; for (int i = 0; i &amp;lt; n; ++i) { String user = username[i]; int ts = timestamp[i];..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-01-25T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-01-25-1152-Analyze-User-Website-Visit-Pattern/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1152.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1152 - Analyze User Website Visit Pattern" property="twitter:title"/>
+   <meta content="Leetcode 1152. Analyze User Website Visit Pattern Description You are given two string arrays username and website and an integer array timestamp. All the given arrays are of the same length and the tuple [username[i], website[i], timestamp[i]] indicates that the user username[i] visited the website website[i] at time timestamp[i]. A pattern is a list of three websites (not necessarily distinct). For example, [&amp;quot;home&amp;quot;, &amp;quot;away&amp;quot;, &amp;quot;love&amp;quot;], [&amp;quot;leetcode&amp;quot;, &amp;quot;love&amp;quot;, &amp;quot;leetcode&amp;quot;], and [&amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;] are all patterns. The score of a pattern is the number of users that visited all the websites in the pattern in the same order they appeared in the pattern. For example, if the pattern is [&amp;quot;home&amp;quot;, &amp;quot;away&amp;quot;, &amp;quot;love&amp;quot;], the score is the number of users x such that x visited &amp;quot;home&amp;quot; then visited &amp;quot;away&amp;quot; and visited &amp;quot;love&amp;quot; after that. Similarly, if the pattern is [&amp;quot;leetcode&amp;quot;, &amp;quot;love&amp;quot;, &amp;quot;leetcode&amp;quot;], the score is the number of users x such that x visited &amp;quot;leetcode&amp;quot; then visited &amp;quot;love&amp;quot; and visited &amp;quot;leetcode&amp;quot; one more time after that. Also, if the pattern is [&amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;, &amp;quot;luffy&amp;quot;], the score is the number of users x such that x visited &amp;quot;luffy&amp;quot; three different times at different timestamps. Return the pattern with the largest score. If there is more than one pattern with the same largest score, return the lexicographically smallest such pattern. &amp;nbsp; Example 1: Input: username = [&amp;quot;joe&amp;quot;,&amp;quot;joe&amp;quot;,&amp;quot;joe&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;james&amp;quot;,&amp;quot;mary&amp;quot;,&amp;quot;mary&amp;quot;,&amp;quot;mary&amp;quot;], timestamp = [1,2,3,4,5,6,7,8,9,10], website = [&amp;quot;home&amp;quot;,&amp;quot;about&amp;quot;,&amp;quot;career&amp;quot;,&amp;quot;home&amp;quot;,&amp;quot;cart&amp;quot;,&amp;quot;maps&amp;quot;,&amp;quot;home&amp;quot;,&amp;quot;home&amp;quot;,&amp;quot;about&amp;quot;,&amp;quot;career&amp;quot;] Output: [&amp;quot;home&amp;quot;,&amp;quot;about&amp;quot;,&amp;quot;career&amp;quot;] Explanation: The tuples in this example are: [&amp;quot;joe&amp;quot;,&amp;quot;home&amp;quot;,1],[&amp;quot;joe&amp;quot;,&amp;quot;about&amp;quot;,2],[&amp;quot;joe&amp;quot;,&amp;quot;career&amp;quot;,3],[&amp;quot;james&amp;quot;,&amp;quot;home&amp;quot;,4],[&amp;quot;james&amp;quot;,&amp;quot;cart&amp;quot;,5],[&amp;quot;james&amp;quot;,&amp;quot;maps&amp;quot;,6],[&amp;quot;james&amp;quot;,&amp;quot;home&amp;quot;,7],[&amp;quot;mary&amp;quot;,&amp;quot;home&amp;quot;,8],[&amp;quot;mary&amp;quot;,&amp;quot;about&amp;quot;,9], and [&amp;quot;mary&amp;quot;,&amp;quot;career&amp;quot;,10]. The pattern (&amp;quot;home&amp;quot;, &amp;quot;about&amp;quot;, &amp;quot;career&amp;quot;) has score 2 (joe and mary). The pattern (&amp;quot;home&amp;quot;, &amp;quot;cart&amp;quot;, &amp;quot;maps&amp;quot;) has score 1 (james). The pattern (&amp;quot;home&amp;quot;, &amp;quot;cart&amp;quot;, &amp;quot;home&amp;quot;) has score 1 (james). The pattern (&amp;quot;home&amp;quot;, &amp;quot;maps&amp;quot;, &amp;quot;home&amp;quot;) has score 1 (james). The pattern (&amp;quot;cart&amp;quot;, &amp;quot;maps&amp;quot;, &amp;quot;home&amp;quot;) has score 1 (james). The pattern (&amp;quot;home&amp;quot;, &amp;quot;home&amp;quot;, &amp;quot;home&amp;quot;) has score 0 (no user visited home 3 times). Example 2: Input: username = [&amp;quot;ua&amp;quot;,&amp;quot;ua&amp;quot;,&amp;quot;ua&amp;quot;,&amp;quot;ub&amp;quot;,&amp;quot;ub&amp;quot;,&amp;quot;ub&amp;quot;], timestamp = [1,2,3,4,5,6], website = [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;] Output: [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;a&amp;quot;] &amp;nbsp; Constraints: 3 &amp;lt;= username.length &amp;lt;= 50 1 &amp;lt;= username[i].length &amp;lt;= 10 timestamp.length == username.length 1 &amp;lt;= timestamp[i] &amp;lt;= 109 website.length == username.length 1 &amp;lt;= website[i].length &amp;lt;= 10 username[i] and website[i] consist of lowercase English letters. It is guaranteed that there is at least one user who visited at least three websites. All the tuples [username[i], timestamp[i], website[i]] are unique. Solutions Solution 1: Hash Table + Sorting First, we use a hash table $d$ to record the websites each user visits. Then we traverse $d$. For each user, we enumerate all the triplets they visited, count the occurrence of distinct triplets, and finally traverse all triplets, returning the one with the highest occurrence and the smallest lexicographic order. The time complexity is $O(n^3)$, and the space complexity is $O(n^3)$. Here, $n$ is the length of username. Java C++ Python Go class Solution { public List&amp;lt;String&amp;gt; mostVisitedPattern(String[] username, int[] timestamp, String[] website) { Map&amp;lt;String, List&amp;lt;Node&amp;gt;&amp;gt; d = new HashMap&amp;lt;&amp;gt;(); int n = username.length; for (int i = 0; i &amp;lt; n; ++i) { String user = username[i]; int ts = timestamp[i];..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1152 - Analyze User Website Visit Pattern | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1152 - Analyze User Website Visit Pattern" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1152.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-01-25-1152-Analyze-User-Website-Visit-Pattern/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-01-25T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1152 - Analyze User Website Visit Pattern","dateModified":"2019-01-25T00:00:00-08:00","datePublished":"2019-01-25T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-01-25-1152-Analyze-User-Website-Visit-Pattern/"},"url":"https://leetcode.ca/2019-01-25-1152-Analyze-User-Website-Visit-Pattern/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1152-analyze-user-website-visit-pattern">
+       <a href="solution-1152.html">
+        1152. Analyze User Website Visit Pattern
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given two string arrays
+       <code>
+        username
+       </code>
+       and
+       <code>
+        website
+       </code>
+       and an integer array
+       <code>
+        timestamp
+       </code>
+       . All the given arrays are of the same length and the tuple
+       <code>
+        [username[i], website[i], timestamp[i]]
+       </code>
+       indicates that the user
+       <code>
+        username[i]
+       </code>
+       visited the website
+       <code>
+        website[i]
+       </code>
+       at time
+       <code>
+        timestamp[i]
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        pattern
+       </strong>
+       is a list of three websites (not necessarily distinct).
+      </p>
+      <ul>
+       <li>
+        For example,
+        <code>
+         ["home", "away", "love"]
+        </code>
+        ,
+        <code>
+         ["leetcode", "love", "leetcode"]
+        </code>
+        , and
+        <code>
+         ["luffy", "luffy", "luffy"]
+        </code>
+        are all patterns.
+       </li>
+      </ul>
+      <p>
+       The
+       <strong>
+        score
+       </strong>
+       of a
+       <strong>
+        pattern
+       </strong>
+       is the number of users that visited all the websites in the pattern in the same order they appeared in the pattern.
+      </p>
+      <ul>
+       <li>
+        For example, if the pattern is
+        <code>
+         ["home", "away", "love"]
+        </code>
+        , the score is the number of users
+        <code>
+         x
+        </code>
+        such that
+        <code>
+         x
+        </code>
+        visited
+        <code>
+         "home"
+        </code>
+        then visited
+        <code>
+         "away"
+        </code>
+        and visited
+        <code>
+         "love"
+        </code>
+        after that.
+       </li>
+       <li>
+        Similarly, if the pattern is
+        <code>
+         ["leetcode", "love", "leetcode"]
+        </code>
+        , the score is the number of users
+        <code>
+         x
+        </code>
+        such that
+        <code>
+         x
+        </code>
+        visited
+        <code>
+         "leetcode"
+        </code>
+        then visited
+        <code>
+         "love"
+        </code>
+        and visited
+        <code>
+         "leetcode"
+        </code>
+        <strong>
+         one more time
+        </strong>
+        after that.
+       </li>
+       <li>
+        Also, if the pattern is
+        <code>
+         ["luffy", "luffy", "luffy"]
+        </code>
+        , the score is the number of users
+        <code>
+         x
+        </code>
+        such that
+        <code>
+         x
+        </code>
+        visited
+        <code>
+         "luffy"
+        </code>
+        three different times at different timestamps.
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         pattern
+        </strong>
+        with the largest
+        <strong>
+         score
+        </strong>
+       </em>
+       . If there is more than one pattern with the same largest score, return the lexicographically smallest such pattern.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> username = ["joe","joe","joe","james","james","james","james","mary","mary","mary"], timestamp = [1,2,3,4,5,6,7,8,9,10], website = ["home","about","career","home","cart","maps","home","home","about","career"]
+<strong>Output:</strong> ["home","about","career"]
+<strong>Explanation:</strong> The tuples in this example are:
+["joe","home",1],["joe","about",2],["joe","career",3],["james","home",4],["james","cart",5],["james","maps",6],["james","home",7],["mary","home",8],["mary","about",9], and ["mary","career",10].
+The pattern ("home", "about", "career") has score 2 (joe and mary).
+The pattern ("home", "cart", "maps") has score 1 (james).
+The pattern ("home", "cart", "home") has score 1 (james).
+The pattern ("home", "maps", "home") has score 1 (james).
+The pattern ("cart", "maps", "home") has score 1 (james).
+The pattern ("home", "home", "home") has score 0 (no user visited home 3 times).
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> username = ["ua","ua","ua","ub","ub","ub"], timestamp = [1,2,3,4,5,6], website = ["a","b","a","a","b","c"]
+<strong>Output:</strong> ["a","b","a"]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         3 &lt;= username.length &lt;= 50
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= username[i].length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         timestamp.length == username.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= timestamp[i] &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         website.length == username.length
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= website[i].length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         username[i]
+        </code>
+        and
+        <code>
+         website[i]
+        </code>
+        consist of lowercase English letters.
+       </li>
+       <li>
+        It is guaranteed that there is at least one user who visited at least three websites.
+       </li>
+       <li>
+        All the tuples
+        <code>
+         [username[i], timestamp[i], website[i]]
+        </code>
+        are
+        <strong>
+         unique
+        </strong>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Hash Table + Sorting
+       </strong>
+      </p>
+      <p>
+       First, we use a hash table $d$ to record the websites each user visits. Then we traverse $d$. For each user, we enumerate all the triplets they visited, count the occurrence of distinct triplets, and finally traverse all triplets, returning the one with the highest occurrence and the smallest lexicographic order.
+      </p>
+      <p>
+       The time complexity is $O(n^3)$, and the space complexity is $O(n^3)$. Here, $n$ is the length of
+       <code class="language-plaintext highlighter-rouge">
+        username
+       </code>
+       .
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#26d1300c-fdc5-4bb7-aa1c-90ff57eec09c'}">
+       <li class="uk-active">
+        <a href="solution-1152.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1152.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1152.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1152.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="26d1300c-fdc5-4bb7-aa1c-90ff57eec09c">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">mostVisitedPattern</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">username</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">timestamp</span><span class="o">,</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">website</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Node</span><span class="o">&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">username</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">user</span> <span class="o">=</span> <span class="n">username</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">timestamp</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="nc">String</span> <span class="n">site</span> <span class="o">=</span> <span class="n">website</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">d</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">ts</span><span class="o">,</span> <span class="n">site</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">sites</span> <span class="o">:</span> <span class="n">d</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">sites</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">sites</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">.</span><span class="na">ts</span> <span class="o">-</span> <span class="n">b</span><span class="o">.</span><span class="na">ts</span><span class="o">);</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">2</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">s</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">sites</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">site</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">sites</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">).</span><span class="na">site</span> <span class="o">+</span> <span class="s">","</span>
+                                <span class="o">+</span> <span class="n">sites</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">k</span><span class="o">).</span><span class="na">site</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">t</span> <span class="o">:</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">String</span> <span class="n">t</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">cnt</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mx</span> <span class="o">&lt;</span> <span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">||</span> <span class="o">(</span><span class="n">mx</span> <span class="o">==</span> <span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">e</span><span class="o">.</span><span class="na">getKey</span><span class="o">().</span><span class="na">compareTo</span><span class="o">(</span><span class="n">t</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">mx</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">user</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">ts</span><span class="o">;</span>
+    <span class="nc">String</span> <span class="n">site</span><span class="o">;</span>
+
+    <span class="nc">Node</span><span class="o">(</span><span class="nc">String</span> <span class="n">user</span><span class="o">,</span> <span class="kt">int</span> <span class="n">ts</span><span class="o">,</span> <span class="nc">String</span> <span class="n">site</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">user</span> <span class="o">=</span> <span class="n">user</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">ts</span> <span class="o">=</span> <span class="n">ts</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">site</span> <span class="o">=</span> <span class="n">site</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">mostVisitedPattern</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">username</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">website</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;&gt;&gt;</span> <span class="n">d</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">username</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">user</span> <span class="o">=</span> <span class="n">username</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="kt">int</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="k">auto</span> <span class="n">site</span> <span class="o">=</span> <span class="n">website</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">user</span><span class="p">].</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">site</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">sites</span><span class="p">]</span> <span class="o">:</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">sites</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">sort</span><span class="p">(</span><span class="n">sites</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">sites</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">second</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">sites</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">second</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">sites</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">second</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">t</span> <span class="o">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cnt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">t</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">:</span> <span class="n">cnt</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">mx</span> <span class="o">&lt;</span> <span class="n">v</span> <span class="o">||</span> <span class="p">(</span><span class="n">mx</span> <span class="o">==</span> <span class="n">v</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">p</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">mx</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">split</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="sc">','</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">split</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
+        <span class="n">stringstream</span> <span class="n">ss</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="n">string</span> <span class="n">t</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getline</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">mostVisitedPattern</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">timestamp</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">website</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">user</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">site</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">zip</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">website</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">user</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">sites</span> <span class="ow">in</span> <span class="n">d</span><span class="p">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+                            <span class="n">s</span><span class="p">.</span><span class="n">add</span><span class="p">((</span><span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sites</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">sites</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                <span class="n">cnt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">mostVisitedPattern</span><span class="p">(</span><span class="n">username</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="n">timestamp</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">website</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="n">d</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="n">pair</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">user</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">username</span> <span class="p">{</span>
+		<span class="n">ts</span> <span class="o">:=</span> <span class="n">timestamp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">site</span> <span class="o">:=</span> <span class="n">website</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">d</span><span class="p">[</span><span class="n">user</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">user</span><span class="p">],</span> <span class="n">pair</span><span class="p">{</span><span class="n">ts</span><span class="p">,</span> <span class="n">site</span><span class="p">})</span>
+	<span class="p">}</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sites</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">d</span> <span class="p">{</span>
+		<span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span>
+		<span class="n">s</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+		<span class="k">if</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="m">2</span> <span class="p">{</span>
+			<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ts</span> <span class="o">&lt;</span> <span class="n">sites</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">ts</span> <span class="p">})</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">-</span><span class="m">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+				<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+					<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="n">j</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+						<span class="n">s</span><span class="p">[</span><span class="n">sites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">site</span><span class="o">+</span><span class="s">","</span><span class="o">+</span><span class="n">sites</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">site</span><span class="o">+</span><span class="s">","</span><span class="o">+</span><span class="n">sites</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">site</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">t</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+			<span class="n">cnt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">mx</span><span class="p">,</span> <span class="n">t</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="s">""</span>
+	<span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">cnt</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">mx</span> <span class="o">&lt;</span> <span class="n">v</span> <span class="o">||</span> <span class="p">(</span><span class="n">mx</span> <span class="o">==</span> <span class="n">v</span> <span class="o">&amp;&amp;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">mx</span> <span class="o">=</span> <span class="n">v</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="n">p</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">strings</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s">","</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">pair</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">ts</span>   <span class="kt">int</span>
+	<span class="n">site</span> <span class="kt">string</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1152.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3156.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3156.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3156 - Employee Task Duration and Concurrent Tasks</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3156. Employee Task Duration and Concurrent Tasks ð Description Table: Tasks +-+ \| Column Name \| Type \| +-+ \| task_id \| int \| \| employee_id \| int \| \| start_time \| datetime \| \| end_time \| datetime \| +-+ (task_id, employee_id) is the primary...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3156.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3156.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3156.html" rel="stylesheet"/>
+   <link href="solution-3156.html" rel="stylesheet"/>
+   <link href="solution-3156.html" rel="stylesheet"/>
+   <link href="solution-3156.html" rel="stylesheet"/>
+   <link href="solution-3156.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3156 - Employee Task Duration and Concurrent Tasks" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+
+
+3156. Employee Task Duration and Concurrent Tasks ð
+
+Description
+
+
+
+Table: Tasks
+
+
++-+
+\| Column Name   \| Type     \|
++-+
+\| task_id       \| int      \|
+\| employee_id   \| int      \|
+\| start_time    \| datetime \|
+\| end_time      \| datetime \|
++-+
+(task_id, employee_id) is the primary key for this table.
+Each row in this table contains the task identifier, the employee identifier, and the start and end times of each task.
+
+
+Write a solution to find the total duration of tasks for each employee and the maximum number of concurrent tasks an employee handled at any point in time. The total duration should be rounded down to the nearest number of full hours.
+
+Return the result table ordered by&amp;nbsp;employee_id ascending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example:
+
+
+Input:
+
+Tasks table:
+
+
++++-++
+\| 1       \| 1001        \| 2023-05-01 08:00:00 \| 2023-05-01 09:00:00 \|
+\| 2       \| 1001        \| 2023-05-01 08:30:00 \| 2023-05-01 10:30:00 \|
+\| 3       \| 1001        \| 2023-05-01 11:00:00 \| 2023-05-01 12:00:00 \|
+\| 7       \| 1001        \| 2023-05-01 13:00:00 \| 2023-05-01 15:30:00 \|
+\| 4       \| 1002        \| 2023-05-01 09:00:00 \| 2023-05-01 10:00:00 \|
+\| 5       \| 1002        \| 2023-05-01 09:30:00 \| 2023-05-01 11:30:00 \|
+\| 6       \| 1003        \| 2023-05-01 14:00:00 \| 2023-05-01 16:00:00 \|
+++-+
+\| employee_id \| total_task_hours \| max_concurrent_tasks \|
++-++-+
+
+
+Explanation:
+
+
+	For employee ID 1001:
+	
+		Task 1 and Task 2 overlap from 08:30 to 09:00 (30 minutes).
+		Task 7 has a duration of 150 minutes (2 hours and 30 minutes).
+		Total task time: 60 (Task 1) + 120 (Task 2) + 60 (Task 3) + 150 (Task 7) - 30 (overlap) = 360 minutes = 6 hours.
+		Maximum concurrent tasks: 2 (during the overlap period).
+	
+	
+	For employee ID 1002:
+	
+		Task 4 and Task 5 overlap from 09:30 to 10:00 (30 minutes).
+		Total task time: 60 (Task 4) + 120 (Task 5) - 30 (overlap) = 150 minutes = 2 hours and 30 minutes.
+		Total task hours (rounded down): 2 hours.
+		Maximum concurrent tasks: 2 (during the overlap period).
+	
+	
+	For employee ID 1003:
+	
+		No overlapping tasks.
+		Total task time: 120 minutes = 2 hours.
+		Maximum concurrent tasks: 1.
+	
+	
+
+
+Note: Output table is ordered by employee_id in ascending order.
+
+
+
+
+Solutions
+
+
+
+Solution 1
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT DISTINCT employee_id, start_time AS st
+        FROM Tasks
+        UNION DISTINCT
+        SELECT DISTINCT employee_id, end_time AS st
+        FROM Tasks
+    ),
+    P AS (
+        SELECT
+            *,
+            LEAD(st) OVER (
+                PARTITION BY employee_id
+                ORDER BY st
+            ) AS ed
+        FROM T
+    ),
+    S AS (
+        SELECT
+            P.*,
+            COUNT(1) AS concurrent_count
+        FROM
+            P
+            INNER JOIN Tasks USING (employee_id)
+        WHERE P.st &amp;gt;= Tasks.start_time AND P.ed &amp;lt;= Tasks.end_time
+        GROUP BY 1, 2, 3
+    )
+SELECT
+    employee_id,
+    FLOOR(SUM(TIME_TO_SEC(TIMEDIFF(ed, st)) / 3600)) AS total_task_hours,
+    MAX(concurrent_count) AS max_concurrent_tasks
+FROM S
+GROUP BY 1
+ORDER BY 1;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-06-04T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-06-04-3156-Employee-Task-Duration-and-Concurrent-Tasks/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3156.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3156 - Employee Task Duration and Concurrent Tasks" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+
+
+3156. Employee Task Duration and Concurrent Tasks ð
+
+Description
+
+
+
+Table: Tasks
+
+
++-+
+\| Column Name   \| Type     \|
++-+
+\| task_id       \| int      \|
+\| employee_id   \| int      \|
+\| start_time    \| datetime \|
+\| end_time      \| datetime \|
++-+
+(task_id, employee_id) is the primary key for this table.
+Each row in this table contains the task identifier, the employee identifier, and the start and end times of each task.
+
+
+Write a solution to find the total duration of tasks for each employee and the maximum number of concurrent tasks an employee handled at any point in time. The total duration should be rounded down to the nearest number of full hours.
+
+Return the result table ordered by&amp;nbsp;employee_id ascending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example:
+
+
+Input:
+
+Tasks table:
+
+
++++-++
+\| 1       \| 1001        \| 2023-05-01 08:00:00 \| 2023-05-01 09:00:00 \|
+\| 2       \| 1001        \| 2023-05-01 08:30:00 \| 2023-05-01 10:30:00 \|
+\| 3       \| 1001        \| 2023-05-01 11:00:00 \| 2023-05-01 12:00:00 \|
+\| 7       \| 1001        \| 2023-05-01 13:00:00 \| 2023-05-01 15:30:00 \|
+\| 4       \| 1002        \| 2023-05-01 09:00:00 \| 2023-05-01 10:00:00 \|
+\| 5       \| 1002        \| 2023-05-01 09:30:00 \| 2023-05-01 11:30:00 \|
+\| 6       \| 1003        \| 2023-05-01 14:00:00 \| 2023-05-01 16:00:00 \|
+++-+
+\| employee_id \| total_task_hours \| max_concurrent_tasks \|
++-++-+
+
+
+Explanation:
+
+
+	For employee ID 1001:
+	
+		Task 1 and Task 2 overlap from 08:30 to 09:00 (30 minutes).
+		Task 7 has a duration of 150 minutes (2 hours and 30 minutes).
+		Total task time: 60 (Task 1) + 120 (Task 2) + 60 (Task 3) + 150 (Task 7) - 30 (overlap) = 360 minutes = 6 hours.
+		Maximum concurrent tasks: 2 (during the overlap period).
+	
+	
+	For employee ID 1002:
+	
+		Task 4 and Task 5 overlap from 09:30 to 10:00 (30 minutes).
+		Total task time: 60 (Task 4) + 120 (Task 5) - 30 (overlap) = 150 minutes = 2 hours and 30 minutes.
+		Total task hours (rounded down): 2 hours.
+		Maximum concurrent tasks: 2 (during the overlap period).
+	
+	
+	For employee ID 1003:
+	
+		No overlapping tasks.
+		Total task time: 120 minutes = 2 hours.
+		Maximum concurrent tasks: 1.
+	
+	
+
+
+Note: Output table is ordered by employee_id in ascending order.
+
+
+
+
+Solutions
+
+
+
+Solution 1
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT DISTINCT employee_id, start_time AS st
+        FROM Tasks
+        UNION DISTINCT
+        SELECT DISTINCT employee_id, end_time AS st
+        FROM Tasks
+    ),
+    P AS (
+        SELECT
+            *,
+            LEAD(st) OVER (
+                PARTITION BY employee_id
+                ORDER BY st
+            ) AS ed
+        FROM T
+    ),
+    S AS (
+        SELECT
+            P.*,
+            COUNT(1) AS concurrent_count
+        FROM
+            P
+            INNER JOIN Tasks USING (employee_id)
+        WHERE P.st &amp;gt;= Tasks.start_time AND P.ed &amp;lt;= Tasks.end_time
+        GROUP BY 1, 2, 3
+    )
+SELECT
+    employee_id,
+    FLOOR(SUM(TIME_TO_SEC(TIMEDIFF(ed, st)) / 3600)) AS total_task_hours,
+    MAX(concurrent_count) AS max_concurrent_tasks
+FROM S
+GROUP BY 1
+ORDER BY 1;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3156 - Employee Task Duration and Concurrent Tasks | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3156 - Employee Task Duration and Concurrent Tasks" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3156.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-06-04-3156-Employee-Task-Duration-and-Concurrent-Tasks/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-06-04T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3156 - Employee Task Duration and Concurrent Tasks","dateModified":"2024-06-04T00:00:00-07:00","datePublished":"2024-06-04T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-06-04-3156-Employee-Task-Duration-and-Concurrent-Tasks/"},"url":"https://leetcode.ca/2024-06-04-3156-Employee-Task-Duration-and-Concurrent-Tasks/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3156-employee-task-duration-and-concurrent-tasks-">
+       <a href="solution-3156.html">
+        3156. Employee Task Duration and Concurrent Tasks ð
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       Table:
+       <code>
+        Tasks
+       </code>
+      </p>
+      <pre>
++-+
+\| Column Name   \| Type     \|
++-+
+\| task_id       \| int      \|
+\| employee_id   \| int      \|
+\| start_time    \| datetime \|
+\| end_time      \| datetime \|
++-+
+(task_id, employee_id) is the primary key for this table.
+Each row in this table contains the task identifier, the employee identifier, and the start and end times of each task.
+</pre>
+      <p>
+       Write a solution to find the
+       <strong>
+        total duration
+       </strong>
+       of tasks for
+       <strong>
+        each
+       </strong>
+       employee and the
+       <strong>
+        maximum number of concurrent tasks
+       </strong>
+       an employee handled at
+       <strong>
+        any point in time
+       </strong>
+       . The total duration should be
+       <strong>
+        rounded down
+       </strong>
+       to the nearest number of
+       <strong>
+        full hours
+       </strong>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the result table ordered by
+       </em>
+       <code>
+        employee_id
+       </code>
+       <strong>
+        <em>
+         ascending
+        </em>
+       </strong>
+       <em>
+        order
+       </em>
+       .
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+       </p>
+       <p>
+        Tasks table:
+       </p>
+       <pre class="example-io">
++++-++
+\| 1       \| 1001        \| 2023-05-01 08:00:00 \| 2023-05-01 09:00:00 \|
+\| 2       \| 1001        \| 2023-05-01 08:30:00 \| 2023-05-01 10:30:00 \|
+\| 3       \| 1001        \| 2023-05-01 11:00:00 \| 2023-05-01 12:00:00 \|
+\| 7       \| 1001        \| 2023-05-01 13:00:00 \| 2023-05-01 15:30:00 \|
+\| 4       \| 1002        \| 2023-05-01 09:00:00 \| 2023-05-01 10:00:00 \|
+\| 5       \| 1002        \| 2023-05-01 09:30:00 \| 2023-05-01 11:30:00 \|
+\| 6       \| 1003        \| 2023-05-01 14:00:00 \| 2023-05-01 16:00:00 \|
+++-+
+\| employee_id \| total_task_hours \| max_concurrent_tasks \|
++-++-+
+</pre>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <ul>
+        <li>
+         For employee ID 1001:
+         <ul>
+          <li>
+           Task 1 and Task 2 overlap from 08:30 to 09:00 (30 minutes).
+          </li>
+          <li>
+           Task 7 has a duration of 150 minutes (2 hours and 30 minutes).
+          </li>
+          <li>
+           Total task time: 60 (Task 1) + 120 (Task 2) + 60 (Task 3) + 150 (Task 7) - 30 (overlap) = 360 minutes = 6 hours.
+          </li>
+          <li>
+           Maximum concurrent tasks: 2 (during the overlap period).
+          </li>
+         </ul>
+        </li>
+        <li>
+         For employee ID 1002:
+         <ul>
+          <li>
+           Task 4 and Task 5 overlap from 09:30 to 10:00 (30 minutes).
+          </li>
+          <li>
+           Total task time: 60 (Task 4) + 120 (Task 5) - 30 (overlap) = 150 minutes = 2 hours and 30 minutes.
+          </li>
+          <li>
+           Total task hours (rounded down): 2 hours.
+          </li>
+          <li>
+           Maximum concurrent tasks: 2 (during the overlap period).
+          </li>
+         </ul>
+        </li>
+        <li>
+         For employee ID 1003:
+         <ul>
+          <li>
+           No overlapping tasks.
+          </li>
+          <li>
+           Total task time: 120 minutes = 2 hours.
+          </li>
+          <li>
+           Maximum concurrent tasks: 1.
+          </li>
+         </ul>
+        </li>
+       </ul>
+       <p>
+        <b>
+         Note:
+        </b>
+        Output table is ordered by employee_id in ascending order.
+       </p>
+      </div>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1">
+       Solution 1
+      </h3>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#d5482b58-7386-4b21-8c89-62fcce4e19be'}">
+       <li class="uk-active">
+        <a href="solution-3156.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="d5482b58-7386-4b21-8c89-62fcce4e19be">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">WITH</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="n">employee_id</span><span class="p">,</span> <span class="n">start_time</span> <span class="k">AS</span> <span class="n">st</span>
+        <span class="k">FROM</span> <span class="n">Tasks</span>
+        <span class="k">UNION</span> <span class="k">DISTINCT</span>
+        <span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="n">employee_id</span><span class="p">,</span> <span class="n">end_time</span> <span class="k">AS</span> <span class="n">st</span>
+        <span class="k">FROM</span> <span class="n">Tasks</span>
+    <span class="p">),</span>
+    <span class="n">P</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">LEAD</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="n">OVER</span> <span class="p">(</span>
+                <span class="k">PARTITION</span> <span class="k">BY</span> <span class="n">employee_id</span>
+                <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">st</span>
+            <span class="p">)</span> <span class="k">AS</span> <span class="n">ed</span>
+        <span class="k">FROM</span> <span class="n">T</span>
+    <span class="p">),</span>
+    <span class="n">S</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">P</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+            <span class="k">COUNT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">concurrent_count</span>
+        <span class="k">FROM</span>
+            <span class="n">P</span>
+            <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">Tasks</span> <span class="k">USING</span> <span class="p">(</span><span class="n">employee_id</span><span class="p">)</span>
+        <span class="k">WHERE</span> <span class="n">P</span><span class="p">.</span><span class="n">st</span> <span class="o">&gt;=</span> <span class="n">Tasks</span><span class="p">.</span><span class="n">start_time</span> <span class="k">AND</span> <span class="n">P</span><span class="p">.</span><span class="n">ed</span> <span class="o">&lt;=</span> <span class="n">Tasks</span><span class="p">.</span><span class="n">end_time</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span>
+    <span class="n">employee_id</span><span class="p">,</span>
+    <span class="n">FLOOR</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">TIME_TO_SEC</span><span class="p">(</span><span class="n">TIMEDIFF</span><span class="p">(</span><span class="n">ed</span><span class="p">,</span> <span class="n">st</span><span class="p">))</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">))</span> <span class="k">AS</span> <span class="n">total_task_hours</span><span class="p">,</span>
+    <span class="k">MAX</span><span class="p">(</span><span class="n">concurrent_count</span><span class="p">)</span> <span class="k">AS</span> <span class="n">max_concurrent_tasks</span>
+<span class="k">FROM</span> <span class="n">S</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3156.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

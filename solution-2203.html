@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2203.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2203.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2203 - Minimum Weighted Subgraph With the Required Paths</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2203. Minimum Weighted Subgraph With the Required Paths Description You are given an integer n denoting the number of nodes of a weighted directed graph. The nodes are numbered from 0 to n - 1. You are also given a 2D integer array edges where...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2203.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2203.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2203.html" rel="stylesheet"/>
+   <link href="solution-2203.html" rel="stylesheet"/>
+   <link href="solution-2203.html" rel="stylesheet"/>
+   <link href="solution-2203.html" rel="stylesheet"/>
+   <link href="solution-2203.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2203 - Minimum Weighted Subgraph With the Required Paths" property="og:title"/>
+   <meta content="Leetcode 2203. Minimum Weighted Subgraph With the Required Paths Description You are given an integer n denoting the number of nodes of a weighted directed graph. The nodes are numbered from 0 to n - 1. You are also given a 2D integer array edges where edges[i] = [fromi, toi, weighti] denotes that there exists a directed edge from fromi to toi with weight weighti. Lastly, you are given three distinct integers src1, src2, and dest denoting three distinct nodes of the graph. Return the minimum weight of a subgraph of the graph such that it is possible to reach dest from both src1 and src2 via a set of edges of this subgraph. In case such a subgraph does not exist, return -1. A subgraph is a graph whose vertices and edges are subsets of the original graph. The weight of a subgraph is the sum of weights of its constituent edges. &amp;nbsp; Example 1: Input: n = 6, edges = [[0,2,2],[0,5,6],[1,0,3],[1,4,5],[2,1,1],[2,3,3],[2,3,4],[3,4,2],[4,5,1]], src1 = 0, src2 = 1, dest = 5 Output: 9 Explanation: The above figure represents the input graph. The blue edges represent one of the subgraphs that yield the optimal answer. Note that the subgraph [[1,0,3],[0,5,6]] also yields the optimal answer. It is not possible to get a subgraph with less weight satisfying all the constraints. Example 2: Input: n = 3, edges = [[0,1,1],[2,1,1]], src1 = 0, src2 = 1, dest = 2 Output: -1 Explanation: The above figure represents the input graph. It can be seen that there does not exist any path from node 1 to node 2, hence there are no subgraphs satisfying all the constraints. &amp;nbsp; Constraints: 3 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= edges.length &amp;lt;= 105 edges[i].length == 3 0 &amp;lt;= fromi, toi, src1, src2, dest &amp;lt;= n - 1 fromi != toi src1, src2, and dest are pairwise distinct. 1 &amp;lt;= weight[i] &amp;lt;= 105 Solutions Java Python class Solution { private static final Long INF = Long.MAX_VALUE; public long minimumWeight(int n, int[][] edges, int src1, int src2, int dest) { List&amp;lt;Pair&amp;lt;Integer, Long&amp;gt;&amp;gt;[] g = new List[n]; List&amp;lt;Pair&amp;lt;Integer, Long&amp;gt;&amp;gt;[] rg = new List[n]; for (int i = 0; i &amp;lt; n; ++i) { g[i] = new ArrayList&amp;lt;&amp;gt;(); rg[i] = new ArrayList&amp;lt;&amp;gt;(); } for (int[] e : edges) { int f = e[0], t = e[1]; long w = e[2]; g[f].add(new Pair&amp;lt;&amp;gt;(t, w)); rg[t].add(new Pair&amp;lt;&amp;gt;(f, w)); } long[] d1 = dijkstra(g, src1); long[] d2 = dijkstra(g, src2); long[] d3 = dijkstra(rg, dest); long ans = -1; for (int i = 0; i &amp;lt; n; ++i) { if (d1[i] == INF || d2[i] == INF || d3[i] == INF) { continue; } long t = d1[i] + d2[i] + d3[i]; if (ans == -1 || ans &amp;gt; t) { ans = t; } } return ans; } private long[] dijkstra(List&amp;lt;Pair&amp;lt;Integer, Long&amp;gt;&amp;gt;[] g, int u) { int n = g.length; long[] dist = new long[n]; Arrays.fill(dist, INF); dist[u] = 0; PriorityQueue&amp;lt;Pair&amp;lt;Long, Integer&amp;gt;&amp;gt; q = new PriorityQueue&amp;lt;&amp;gt;(Comparator.comparingLong(Pair::getKey)); q.offer(new Pair&amp;lt;&amp;gt;(0L, u));..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-12-11T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-12-11-2203-Minimum-Weighted-Subgraph-With-the-Required-Paths/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2203.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2203 - Minimum Weighted Subgraph With the Required Paths" property="twitter:title"/>
+   <meta content="Leetcode 2203. Minimum Weighted Subgraph With the Required Paths Description You are given an integer n denoting the number of nodes of a weighted directed graph. The nodes are numbered from 0 to n - 1. You are also given a 2D integer array edges where edges[i] = [fromi, toi, weighti] denotes that there exists a directed edge from fromi to toi with weight weighti. Lastly, you are given three distinct integers src1, src2, and dest denoting three distinct nodes of the graph. Return the minimum weight of a subgraph of the graph such that it is possible to reach dest from both src1 and src2 via a set of edges of this subgraph. In case such a subgraph does not exist, return -1. A subgraph is a graph whose vertices and edges are subsets of the original graph. The weight of a subgraph is the sum of weights of its constituent edges. &amp;nbsp; Example 1: Input: n = 6, edges = [[0,2,2],[0,5,6],[1,0,3],[1,4,5],[2,1,1],[2,3,3],[2,3,4],[3,4,2],[4,5,1]], src1 = 0, src2 = 1, dest = 5 Output: 9 Explanation: The above figure represents the input graph. The blue edges represent one of the subgraphs that yield the optimal answer. Note that the subgraph [[1,0,3],[0,5,6]] also yields the optimal answer. It is not possible to get a subgraph with less weight satisfying all the constraints. Example 2: Input: n = 3, edges = [[0,1,1],[2,1,1]], src1 = 0, src2 = 1, dest = 2 Output: -1 Explanation: The above figure represents the input graph. It can be seen that there does not exist any path from node 1 to node 2, hence there are no subgraphs satisfying all the constraints. &amp;nbsp; Constraints: 3 &amp;lt;= n &amp;lt;= 105 0 &amp;lt;= edges.length &amp;lt;= 105 edges[i].length == 3 0 &amp;lt;= fromi, toi, src1, src2, dest &amp;lt;= n - 1 fromi != toi src1, src2, and dest are pairwise distinct. 1 &amp;lt;= weight[i] &amp;lt;= 105 Solutions Java Python class Solution { private static final Long INF = Long.MAX_VALUE; public long minimumWeight(int n, int[][] edges, int src1, int src2, int dest) { List&amp;lt;Pair&amp;lt;Integer, Long&amp;gt;&amp;gt;[] g = new List[n]; List&amp;lt;Pair&amp;lt;Integer, Long&amp;gt;&amp;gt;[] rg = new List[n]; for (int i = 0; i &amp;lt; n; ++i) { g[i] = new ArrayList&amp;lt;&amp;gt;(); rg[i] = new ArrayList&amp;lt;&amp;gt;(); } for (int[] e : edges) { int f = e[0], t = e[1]; long w = e[2]; g[f].add(new Pair&amp;lt;&amp;gt;(t, w)); rg[t].add(new Pair&amp;lt;&amp;gt;(f, w)); } long[] d1 = dijkstra(g, src1); long[] d2 = dijkstra(g, src2); long[] d3 = dijkstra(rg, dest); long ans = -1; for (int i = 0; i &amp;lt; n; ++i) { if (d1[i] == INF || d2[i] == INF || d3[i] == INF) { continue; } long t = d1[i] + d2[i] + d3[i]; if (ans == -1 || ans &amp;gt; t) { ans = t; } } return ans; } private long[] dijkstra(List&amp;lt;Pair&amp;lt;Integer, Long&amp;gt;&amp;gt;[] g, int u) { int n = g.length; long[] dist = new long[n]; Arrays.fill(dist, INF); dist[u] = 0; PriorityQueue&amp;lt;Pair&amp;lt;Long, Integer&amp;gt;&amp;gt; q = new PriorityQueue&amp;lt;&amp;gt;(Comparator.comparingLong(Pair::getKey)); q.offer(new Pair&amp;lt;&amp;gt;(0L, u));..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2203 - Minimum Weighted Subgraph With the Required Paths | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2203 - Minimum Weighted Subgraph With the Required Paths" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2203.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-12-11-2203-Minimum-Weighted-Subgraph-With-the-Required-Paths/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-12-11T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2203 - Minimum Weighted Subgraph With the Required Paths","dateModified":"2021-12-11T00:00:00-08:00","datePublished":"2021-12-11T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-12-11-2203-Minimum-Weighted-Subgraph-With-the-Required-Paths/"},"url":"https://leetcode.ca/2021-12-11-2203-Minimum-Weighted-Subgraph-With-the-Required-Paths/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2203-minimum-weighted-subgraph-with-the-required-paths">
+       <a href="solution-2203.html">
+        2203. Minimum Weighted Subgraph With the Required Paths
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given an integer
+       <code>
+        n
+       </code>
+       denoting the number of nodes of a
+       <strong>
+        weighted directed
+       </strong>
+       graph. The nodes are numbered from
+       <code>
+        0
+       </code>
+       to
+       <code>
+        n - 1
+       </code>
+       .
+      </p>
+      <p>
+       You are also given a 2D integer array
+       <code>
+        edges
+       </code>
+       where
+       <code>
+        edges[i] = [from
+        <sub>
+         i
+        </sub>
+        , to
+        <sub>
+         i
+        </sub>
+        , weight
+        <sub>
+         i
+        </sub>
+        ]
+       </code>
+       denotes that there exists a
+       <strong>
+        directed
+       </strong>
+       edge from
+       <code>
+        from
+        <sub>
+         i
+        </sub>
+       </code>
+       to
+       <code>
+        to
+        <sub>
+         i
+        </sub>
+       </code>
+       with weight
+       <code>
+        weight
+        <sub>
+         i
+        </sub>
+       </code>
+       .
+      </p>
+      <p>
+       Lastly, you are given three
+       <strong>
+        distinct
+       </strong>
+       integers
+       <code>
+        src1
+       </code>
+       ,
+       <code>
+        src2
+       </code>
+       , and
+       <code>
+        dest
+       </code>
+       denoting three distinct nodes of the graph.
+      </p>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         minimum weight
+        </strong>
+        of a subgraph of the graph such that it is
+        <strong>
+         possible
+        </strong>
+        to reach
+       </em>
+       <code>
+        dest
+       </code>
+       <em>
+        from both
+       </em>
+       <code>
+        src1
+       </code>
+       <em>
+        and
+       </em>
+       <code>
+        src2
+       </code>
+       <em>
+        via a set of edges of this subgraph
+       </em>
+       . In case such a subgraph does not exist, return
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <p>
+       A
+       <strong>
+        subgraph
+       </strong>
+       is a graph whose vertices and edges are subsets of the original graph. The
+       <strong>
+        weight
+       </strong>
+       of a subgraph is the sum of weights of its constituent edges.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2200-2299/2203.Minimum%20Weighted%20Subgraph%20With%20the%20Required%20Paths/images/example1drawio.png" style="width: 263px; height: 250px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 6, edges = [[0,2,2],[0,5,6],[1,0,3],[1,4,5],[2,1,1],[2,3,3],[2,3,4],[3,4,2],[4,5,1]], src1 = 0, src2 = 1, dest = 5
+<strong>Output:</strong> 9
+<strong>Explanation:</strong>
+The above figure represents the input graph.
+The blue edges represent one of the subgraphs that yield the optimal answer.
+Note that the subgraph [[1,0,3],[0,5,6]] also yields the optimal answer. It is not possible to get a subgraph with less weight satisfying all the constraints.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <p>
+       <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2200-2299/2203.Minimum%20Weighted%20Subgraph%20With%20the%20Required%20Paths/images/example2-1drawio.png" style="width: 350px; height: 51px;"/>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 3, edges = [[0,1,1],[2,1,1]], src1 = 0, src2 = 1, dest = 2
+<strong>Output:</strong> -1
+<strong>Explanation:</strong>
+The above figure represents the input graph.
+It can be seen that there does not exist any path from node 1 to node 2, hence there are no subgraphs satisfying all the constraints.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         3 &lt;= n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= edges.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         edges[i].length == 3
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= from
+         <sub>
+          i
+         </sub>
+         , to
+         <sub>
+          i
+         </sub>
+         , src1, src2, dest &lt;= n - 1
+        </code>
+       </li>
+       <li>
+        <code>
+         from
+         <sub>
+          i
+         </sub>
+         != to
+         <sub>
+          i
+         </sub>
+        </code>
+       </li>
+       <li>
+        <code>
+         src1
+        </code>
+        ,
+        <code>
+         src2
+        </code>
+        , and
+        <code>
+         dest
+        </code>
+        are pairwise distinct.
+       </li>
+       <li>
+        <code>
+         1 &lt;= weight[i] &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#256c9eff-7527-42e1-a037-63ef555c41a6'}">
+       <li class="uk-active">
+        <a href="solution-2203.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2203.html">
+         Python
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="256c9eff-7527-42e1-a037-63ef555c41a6">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Long</span> <span class="no">INF</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">minimumWeight</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">,</span> <span class="kt">int</span> <span class="n">src1</span><span class="o">,</span> <span class="kt">int</span> <span class="n">src2</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dest</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;&gt;[]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;&gt;[]</span> <span class="n">rg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="n">rg</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">t</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="kt">long</span> <span class="n">w</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">f</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">t</span><span class="o">,</span> <span class="n">w</span><span class="o">));</span>
+            <span class="n">rg</span><span class="o">[</span><span class="n">t</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">f</span><span class="o">,</span> <span class="n">w</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">src1</span><span class="o">);</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">src2</span><span class="o">);</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">d3</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="o">(</span><span class="n">rg</span><span class="o">,</span> <span class="n">dest</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">d1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="no">INF</span> <span class="o">||</span> <span class="n">d2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="no">INF</span> <span class="o">||</span> <span class="n">d3</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="no">INF</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="n">d1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">d2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">d3</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">ans</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">ans</span> <span class="o">&gt;</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">long</span><span class="o">[]</span> <span class="nf">dijkstra</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;&gt;[]</span> <span class="n">g</span><span class="o">,</span> <span class="kt">int</span> <span class="n">u</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">dist</span><span class="o">,</span> <span class="no">INF</span><span class="o">);</span>
+        <span class="n">dist</span><span class="o">[</span><span class="n">u</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">q</span>
+            <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;(</span><span class="nc">Comparator</span><span class="o">.</span><span class="na">comparingLong</span><span class="o">(</span><span class="nl">Pair:</span><span class="o">:</span><span class="n">getKey</span><span class="o">));</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="mi">0L</span><span class="o">,</span> <span class="n">u</span><span class="o">));</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="kt">long</span> <span class="n">d</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">u</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">Pair</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">g</span><span class="o">[</span><span class="n">u</span><span class="o">])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+                <span class="kt">long</span> <span class="n">w</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">dist</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">u</span><span class="o">]</span> <span class="o">+</span> <span class="n">w</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">u</span><span class="o">]</span> <span class="o">+</span> <span class="n">w</span><span class="o">;</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">dist</span><span class="o">[</span><span class="n">v</span><span class="o">],</span> <span class="n">v</span><span class="o">));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dist</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minimumWeight</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">src1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">src2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">dijkstra</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="p">[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">u</span><span class="p">)]</span>
+            <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+                <span class="n">d</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span><span class="p">:</span>
+                        <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span>
+                        <span class="n">heappush</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">v</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">dist</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="n">rg</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">f</span><span class="p">].</span><span class="n">append</span><span class="p">((</span><span class="n">t</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+            <span class="n">rg</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">append</span><span class="p">((</span><span class="n">f</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">src1</span><span class="p">)</span>
+        <span class="n">d2</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">src2</span><span class="p">)</span>
+        <span class="n">d3</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="p">(</span><span class="n">rg</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">))</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">ans</span> <span class="o">&gt;=</span> <span class="n">inf</span> <span class="k">else</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2203.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

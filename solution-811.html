@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-811.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-811.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>811 - Subdomain Visit Count</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 811. Subdomain Visit Count Description A website domain &amp;quot;discuss.leetcode.com&amp;quot; consists of various subdomains. At the top level, we have &amp;quot;com&amp;quot;, at the next level, we have &amp;quot;leetcode.com&amp;quot;&amp;nbsp;and at the lowest level, &amp;quot;discuss.leetcode.com&amp;quot;. When we visit a domain like &amp;quot;discuss.leetcode.com&amp;quot;, we will also visit the parent...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-811.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-811.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-811.html" rel="stylesheet"/>
+   <link href="solution-811.html" rel="stylesheet"/>
+   <link href="solution-811.html" rel="stylesheet"/>
+   <link href="solution-811.html" rel="stylesheet"/>
+   <link href="solution-811.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="811 - Subdomain Visit Count" property="og:title"/>
+   <meta content="Leetcode 811. Subdomain Visit Count Description A website domain &amp;quot;discuss.leetcode.com&amp;quot; consists of various subdomains. At the top level, we have &amp;quot;com&amp;quot;, at the next level, we have &amp;quot;leetcode.com&amp;quot;&amp;nbsp;and at the lowest level, &amp;quot;discuss.leetcode.com&amp;quot;. When we visit a domain like &amp;quot;discuss.leetcode.com&amp;quot;, we will also visit the parent domains &amp;quot;leetcode.com&amp;quot; and &amp;quot;com&amp;quot; implicitly. A count-paired domain is a domain that has one of the two formats &amp;quot;rep d1.d2.d3&amp;quot; or &amp;quot;rep d1.d2&amp;quot; where rep is the number of visits to the domain and d1.d2.d3 is the domain itself. For example, &amp;quot;9001 discuss.leetcode.com&amp;quot; is a count-paired domain that indicates that discuss.leetcode.com was visited 9001 times. Given an array of count-paired domains cpdomains, return an array of the count-paired domains of each subdomain in the input. You may return the answer in any order. &amp;nbsp; Example 1: Input: cpdomains = [&amp;quot;9001 discuss.leetcode.com&amp;quot;] Output: [&amp;quot;9001 leetcode.com&amp;quot;,&amp;quot;9001 discuss.leetcode.com&amp;quot;,&amp;quot;9001 com&amp;quot;] Explanation: We only have one website domain: &amp;quot;discuss.leetcode.com&amp;quot;. As discussed above, the subdomain &amp;quot;leetcode.com&amp;quot; and &amp;quot;com&amp;quot; will also be visited. So they will all be visited 9001 times. Example 2: Input: cpdomains = [&amp;quot;900 google.mail.com&amp;quot;, &amp;quot;50 yahoo.com&amp;quot;, &amp;quot;1 intel.mail.com&amp;quot;, &amp;quot;5 wiki.org&amp;quot;] Output: [&amp;quot;901 mail.com&amp;quot;,&amp;quot;50 yahoo.com&amp;quot;,&amp;quot;900 google.mail.com&amp;quot;,&amp;quot;5 wiki.org&amp;quot;,&amp;quot;5 org&amp;quot;,&amp;quot;1 intel.mail.com&amp;quot;,&amp;quot;951 com&amp;quot;] Explanation: We will visit &amp;quot;google.mail.com&amp;quot; 900 times, &amp;quot;yahoo.com&amp;quot; 50 times, &amp;quot;intel.mail.com&amp;quot; once and &amp;quot;wiki.org&amp;quot; 5 times. For the subdomains, we will visit &amp;quot;mail.com&amp;quot; 900 + 1 = 901 times, &amp;quot;com&amp;quot; 900 + 50 + 1 = 951 times, and &amp;quot;org&amp;quot; 5 times. &amp;nbsp; Constraints: 1 &amp;lt;= cpdomain.length &amp;lt;= 100 1 &amp;lt;= cpdomain[i].length &amp;lt;= 100 cpdomain[i] follows either the &amp;quot;repi d1i.d2i.d3i&amp;quot; format or the &amp;quot;repi d1i.d2i&amp;quot; format. repi is an integer in the range [1, 104]. d1i, d2i, and d3i consist of lowercase English letters. Solutions Use a map to store each subdomain and the number of times the subdomain is visited. For each count-paired domains in cpdomains, split the count and the domain, and add the count to each subdomainâs count. Finally, loop over the map to get each subdomainâs number of visits. Java C++ Python Go class Solution { public List&amp;lt;String&amp;gt; subdomainVisits(String[] cpdomains) { Map&amp;lt;String, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;(); for (String s : cpdomains) { int i = s.indexOf(&quot; &quot;); int v = Integer.parseInt(s.substring(0, i)); for (; i &amp;lt; s.length(); ++i) { if (s.charAt(i) == ' ' || s.charAt(i) == '.') { String t = s.substring(i + 1); cnt.put(t, cnt.getOrDefault(t, 0) + v); } } } List&amp;lt;String&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (var e : cnt.entrySet()) { ans.add(e.getValue() + &quot; &quot; + e.getKey()); } return ans; } } class Solution { public: vector&amp;lt;string&amp;gt; subdomainVisits(vector&amp;lt;string&amp;gt;&amp;amp; cpdomains) { unordered_map&amp;lt;string, int&amp;gt; cnt; for (auto&amp;amp; s : cpdomains) { int i = s.find(' '); int v = stoi(s.substr(0, i)); for (; i &amp;lt; s.size(); ++i) { if (s[i] == ' ' || s[i] == '.') { cnt[s.substr(i + 1)] += v; } } } vector&amp;lt;string&amp;gt; ans; for (auto&amp;amp; [s, v] : cnt) { ans.push_back(to_string(v) + &quot; &quot; + s); } return ans; } }; from collections import Counter class Solution: def subdomainVisits(self, cpdomains: List[str]) -&amp;gt; List[str]:..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2018-02-18T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2018-02-18-811-Subdomain-Visit-Count/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-811.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="811 - Subdomain Visit Count" property="twitter:title"/>
+   <meta content="Leetcode 811. Subdomain Visit Count Description A website domain &amp;quot;discuss.leetcode.com&amp;quot; consists of various subdomains. At the top level, we have &amp;quot;com&amp;quot;, at the next level, we have &amp;quot;leetcode.com&amp;quot;&amp;nbsp;and at the lowest level, &amp;quot;discuss.leetcode.com&amp;quot;. When we visit a domain like &amp;quot;discuss.leetcode.com&amp;quot;, we will also visit the parent domains &amp;quot;leetcode.com&amp;quot; and &amp;quot;com&amp;quot; implicitly. A count-paired domain is a domain that has one of the two formats &amp;quot;rep d1.d2.d3&amp;quot; or &amp;quot;rep d1.d2&amp;quot; where rep is the number of visits to the domain and d1.d2.d3 is the domain itself. For example, &amp;quot;9001 discuss.leetcode.com&amp;quot; is a count-paired domain that indicates that discuss.leetcode.com was visited 9001 times. Given an array of count-paired domains cpdomains, return an array of the count-paired domains of each subdomain in the input. You may return the answer in any order. &amp;nbsp; Example 1: Input: cpdomains = [&amp;quot;9001 discuss.leetcode.com&amp;quot;] Output: [&amp;quot;9001 leetcode.com&amp;quot;,&amp;quot;9001 discuss.leetcode.com&amp;quot;,&amp;quot;9001 com&amp;quot;] Explanation: We only have one website domain: &amp;quot;discuss.leetcode.com&amp;quot;. As discussed above, the subdomain &amp;quot;leetcode.com&amp;quot; and &amp;quot;com&amp;quot; will also be visited. So they will all be visited 9001 times. Example 2: Input: cpdomains = [&amp;quot;900 google.mail.com&amp;quot;, &amp;quot;50 yahoo.com&amp;quot;, &amp;quot;1 intel.mail.com&amp;quot;, &amp;quot;5 wiki.org&amp;quot;] Output: [&amp;quot;901 mail.com&amp;quot;,&amp;quot;50 yahoo.com&amp;quot;,&amp;quot;900 google.mail.com&amp;quot;,&amp;quot;5 wiki.org&amp;quot;,&amp;quot;5 org&amp;quot;,&amp;quot;1 intel.mail.com&amp;quot;,&amp;quot;951 com&amp;quot;] Explanation: We will visit &amp;quot;google.mail.com&amp;quot; 900 times, &amp;quot;yahoo.com&amp;quot; 50 times, &amp;quot;intel.mail.com&amp;quot; once and &amp;quot;wiki.org&amp;quot; 5 times. For the subdomains, we will visit &amp;quot;mail.com&amp;quot; 900 + 1 = 901 times, &amp;quot;com&amp;quot; 900 + 50 + 1 = 951 times, and &amp;quot;org&amp;quot; 5 times. &amp;nbsp; Constraints: 1 &amp;lt;= cpdomain.length &amp;lt;= 100 1 &amp;lt;= cpdomain[i].length &amp;lt;= 100 cpdomain[i] follows either the &amp;quot;repi d1i.d2i.d3i&amp;quot; format or the &amp;quot;repi d1i.d2i&amp;quot; format. repi is an integer in the range [1, 104]. d1i, d2i, and d3i consist of lowercase English letters. Solutions Use a map to store each subdomain and the number of times the subdomain is visited. For each count-paired domains in cpdomains, split the count and the domain, and add the count to each subdomainâs count. Finally, loop over the map to get each subdomainâs number of visits. Java C++ Python Go class Solution { public List&amp;lt;String&amp;gt; subdomainVisits(String[] cpdomains) { Map&amp;lt;String, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;(); for (String s : cpdomains) { int i = s.indexOf(&quot; &quot;); int v = Integer.parseInt(s.substring(0, i)); for (; i &amp;lt; s.length(); ++i) { if (s.charAt(i) == ' ' || s.charAt(i) == '.') { String t = s.substring(i + 1); cnt.put(t, cnt.getOrDefault(t, 0) + v); } } } List&amp;lt;String&amp;gt; ans = new ArrayList&amp;lt;&amp;gt;(); for (var e : cnt.entrySet()) { ans.add(e.getValue() + &quot; &quot; + e.getKey()); } return ans; } } class Solution { public: vector&amp;lt;string&amp;gt; subdomainVisits(vector&amp;lt;string&amp;gt;&amp;amp; cpdomains) { unordered_map&amp;lt;string, int&amp;gt; cnt; for (auto&amp;amp; s : cpdomains) { int i = s.find(' '); int v = stoi(s.substr(0, i)); for (; i &amp;lt; s.size(); ++i) { if (s[i] == ' ' || s[i] == '.') { cnt[s.substr(i + 1)] += v; } } } vector&amp;lt;string&amp;gt; ans; for (auto&amp;amp; [s, v] : cnt) { ans.push_back(to_string(v) + &quot; &quot; + s); } return ans; } }; from collections import Counter class Solution: def subdomainVisits(self, cpdomains: List[str]) -&amp;gt; List[str]:..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    811 - Subdomain Visit Count | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="811 - Subdomain Visit Count" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-811.html" rel="canonical">
+          <meta content="https://leetcode.ca/2018-02-18-811-Subdomain-Visit-Count/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2018-02-18T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"811 - Subdomain Visit Count","dateModified":"2018-02-18T00:00:00-08:00","datePublished":"2018-02-18T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2018-02-18-811-Subdomain-Visit-Count/"},"url":"https://leetcode.ca/2018-02-18-811-Subdomain-Visit-Count/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="811-subdomain-visit-count">
+       <a href="solution-811.html">
+        811. Subdomain Visit Count
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       A website domain
+       <code>
+        "discuss.leetcode.com"
+       </code>
+       consists of various subdomains. At the top level, we have
+       <code>
+        "com"
+       </code>
+       , at the next level, we have
+       <code>
+        "leetcode.com"
+       </code>
+       and at the lowest level,
+       <code>
+        "discuss.leetcode.com"
+       </code>
+       . When we visit a domain like
+       <code>
+        "discuss.leetcode.com"
+       </code>
+       , we will also visit the parent domains
+       <code>
+        "leetcode.com"
+       </code>
+       and
+       <code>
+        "com"
+       </code>
+       implicitly.
+      </p>
+      <p>
+       A
+       <strong>
+        count-paired domain
+       </strong>
+       is a domain that has one of the two formats
+       <code>
+        "rep d1.d2.d3"
+       </code>
+       or
+       <code>
+        "rep d1.d2"
+       </code>
+       where
+       <code>
+        rep
+       </code>
+       is the number of visits to the domain and
+       <code>
+        d1.d2.d3
+       </code>
+       is the domain itself.
+      </p>
+      <ul>
+       <li>
+        For example,
+        <code>
+         "9001 discuss.leetcode.com"
+        </code>
+        is a
+        <strong>
+         count-paired domain
+        </strong>
+        that indicates that
+        <code>
+         discuss.leetcode.com
+        </code>
+        was visited
+        <code>
+         9001
+        </code>
+        times.
+       </li>
+      </ul>
+      <p>
+       Given an array of
+       <strong>
+        count-paired domains
+       </strong>
+       <code>
+        cpdomains
+       </code>
+       , return
+       <em>
+        an array of the
+        <strong>
+         count-paired domains
+        </strong>
+        of each subdomain in the input
+       </em>
+       . You may return the answer in
+       <strong>
+        any order
+       </strong>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> cpdomains = ["9001 discuss.leetcode.com"]
+<strong>Output:</strong> ["9001 leetcode.com","9001 discuss.leetcode.com","9001 com"]
+<strong>Explanation:</strong> We only have one website domain: "discuss.leetcode.com".
+As discussed above, the subdomain "leetcode.com" and "com" will also be visited. So they will all be visited 9001 times.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> cpdomains = ["900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"]
+<strong>Output:</strong> ["901 mail.com","50 yahoo.com","900 google.mail.com","5 wiki.org","5 org","1 intel.mail.com","951 com"]
+<strong>Explanation:</strong> We will visit "google.mail.com" 900 times, "yahoo.com" 50 times, "intel.mail.com" once and "wiki.org" 5 times.
+For the subdomains, we will visit "mail.com" 900 + 1 = 901 times, "com" 900 + 50 + 1 = 951 times, and "org" 5 times.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= cpdomain.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= cpdomain[i].length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         cpdomain[i]
+        </code>
+        follows either the
+        <code>
+         "rep
+         <sub>
+          i
+         </sub>
+         d1
+         <sub>
+          i
+         </sub>
+         .d2
+         <sub>
+          i
+         </sub>
+         .d3
+         <sub>
+          i
+         </sub>
+         "
+        </code>
+        format or the
+        <code>
+         "rep
+         <sub>
+          i
+         </sub>
+         d1
+         <sub>
+          i
+         </sub>
+         .d2
+         <sub>
+          i
+         </sub>
+         "
+        </code>
+        format.
+       </li>
+       <li>
+        <code>
+         rep
+         <sub>
+          i
+         </sub>
+        </code>
+        is an integer in the range
+        <code>
+         [1, 10
+         <sup>
+          4
+         </sup>
+         ]
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         d1
+         <sub>
+          i
+         </sub>
+        </code>
+        ,
+        <code>
+         d2
+         <sub>
+          i
+         </sub>
+        </code>
+        , and
+        <code>
+         d3
+         <sub>
+          i
+         </sub>
+        </code>
+        consist of lowercase English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       Use a map to store each subdomain and the number of times the subdomain is visited. For each count-paired domains in
+       <code class="language-plaintext highlighter-rouge">
+        cpdomains
+       </code>
+       , split the count and the domain, and add the count to each subdomainâs count. Finally, loop over the map to get each subdomainâs number of visits.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#378d8bae-fbdb-4c33-a827-e3a9460d9209'}">
+       <li class="uk-active">
+        <a href="solution-811.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-811.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-811.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-811.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="378d8bae-fbdb-4c33-a827-e3a9460d9209">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">subdomainVisits</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">cpdomains</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">cpdomains</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="s">" "</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">i</span><span class="o">));</span>
+            <span class="k">for</span> <span class="o">(;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">||</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'.'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nc">String</span> <span class="n">t</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+                    <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">e</span> <span class="o">:</span> <span class="n">cnt</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">subdomainVisits</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">cpdomains</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">s</span> <span class="o">:</span> <span class="n">cpdomains</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">' '</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">stoi</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">));</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">v</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">:</span> <span class="n">cnt</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">to_string</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">s</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">subdomainVisits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpdomains</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cpdomains</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span> <span class="n">s</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="s">' '</span><span class="p">)])</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="s">' .'</span><span class="p">:</span> <span class="c1"># space ' ' is for the full domain, and '.' for subdomain
+</span>                    <span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]]</span> <span class="o">+=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s"> </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s">'</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cnt</span><span class="p">.</span><span class="n">items</span><span class="p">()]</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">subdomainVisits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpdomains</span><span class="p">):</span>
+        <span class="s">"""
+        :type cpdomains: List[str]
+        :rtype: List[str]
+        """</span>
+        <span class="n">domain_counts</span> <span class="o">=</span> <span class="n">collections</span><span class="p">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cpdomain</span> <span class="ow">in</span> <span class="n">cpdomains</span><span class="p">:</span>
+            <span class="n">times</span><span class="p">,</span> <span class="n">domains</span> <span class="o">=</span> <span class="n">cpdomain</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+            <span class="n">domain_counts</span><span class="p">[</span><span class="n">domains</span><span class="p">]</span> <span class="o">+=</span> <span class="n">times</span>
+            <span class="k">while</span> <span class="s">'.'</span> <span class="ow">in</span> <span class="n">domains</span><span class="p">:</span>
+                <span class="n">domains</span> <span class="o">=</span> <span class="n">domains</span><span class="p">[</span><span class="n">domains</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="s">'.'</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+                <span class="n">domain_counts</span><span class="p">[</span><span class="n">domains</span><span class="p">]</span> <span class="o">+=</span> <span class="n">times</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="s">' '</span> <span class="o">+</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">domain_counts</span><span class="p">.</span><span class="n">items</span><span class="p">()]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">subdomainVisits</span><span class="p">(</span><span class="n">cpdomains</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">cpdomains</span> <span class="p">{</span>
+		<span class="n">i</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">IndexByte</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="sc">' '</span><span class="p">)</span>
+		<span class="n">v</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Atoi</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="o">:</span><span class="n">i</span><span class="p">])</span>
+		<span class="k">for</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span> <span class="p">{</span>
+				<span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="o">:</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">v</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">cnt</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">s</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-811.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

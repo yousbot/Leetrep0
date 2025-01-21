@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2276.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2276.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2276 - Count Integers in Intervals</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2276. Count Integers in Intervals Description Given an empty set of intervals, implement a data structure that can: Add an interval to the set of intervals. Count the number of integers that are present in at least one interval. Implement the CountIntervals class: CountIntervals() Initializes...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2276.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2276.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2276.html" rel="stylesheet"/>
+   <link href="solution-2276.html" rel="stylesheet"/>
+   <link href="solution-2276.html" rel="stylesheet"/>
+   <link href="solution-2276.html" rel="stylesheet"/>
+   <link href="solution-2276.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2276 - Count Integers in Intervals" property="og:title"/>
+   <meta content="Leetcode 2276. Count Integers in Intervals Description Given an empty set of intervals, implement a data structure that can: Add an interval to the set of intervals. Count the number of integers that are present in at least one interval. Implement the CountIntervals class: CountIntervals() Initializes the object with an empty set of intervals. void add(int left, int right) Adds the interval [left, right] to the set of intervals. int count() Returns the number of integers that are present in at least one interval. Note that an interval [left, right] denotes all the integers x where left &amp;lt;= x &amp;lt;= right. &amp;nbsp; Example 1: Input [&amp;quot;CountIntervals&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;count&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;count&amp;quot;] [[], [2, 3], [7, 10], [], [5, 8], []] Output [null, null, null, 6, null, 8] Explanation CountIntervals countIntervals = new CountIntervals(); // initialize the object with an empty set of intervals. countIntervals.add(2, 3); // add [2, 3] to the set of intervals. countIntervals.add(7, 10); // add [7, 10] to the set of intervals. countIntervals.count(); // return 6 // the integers 2 and 3 are present in the interval [2, 3]. // the integers 7, 8, 9, and 10 are present in the interval [7, 10]. countIntervals.add(5, 8); // add [5, 8] to the set of intervals. countIntervals.count(); // return 8 // the integers 2 and 3 are present in the interval [2, 3]. // the integers 5 and 6 are present in the interval [5, 8]. // the integers 7 and 8 are present in the intervals [5, 8] and [7, 10]. // the integers 9 and 10 are present in the interval [7, 10]. &amp;nbsp; Constraints: 1 &amp;lt;= left &amp;lt;= right &amp;lt;= 109 At most 105 calls in total will be made to add and count. At least one call will be made to count. Solutions Java C++ Python Go TypeScript class Node { Node left; Node right; int l; int r; int mid; int v; int add; public Node(int l, int r) { this.l = l; this.r = r; this.mid = (l + r) &amp;gt;&amp;gt; 1; } } class SegmentTree { private Node root = new Node(1, (int) 1e9 + 1); public SegmentTree() { } public void modify(int l, int r, int v) { modify(l, r, v, root); } public void modify(int l, int r, int v, Node node) { if (l &amp;gt; r) { return; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { node.v = node.r - node.l + 1; node.add = v; return; } pushdown(node); if (l &amp;lt;= node.mid) { modify(l, r, v, node.left); } if (r &amp;gt; node.mid) { modify(l, r, v, node.right); } pushup(node); } public int query(int l, int r) { return query(l, r, root); } public int query(int l, int r, Node node) { if (l &amp;gt; r) { return 0; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { return node.v; } pushdown(node); int v = 0; if (l &amp;lt;= node.mid) { v += query(l, r, node.left); } if (r &amp;gt; node.mid)..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2022-02-22T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2022-02-22-2276-Count-Integers-in-Intervals/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2276.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2276 - Count Integers in Intervals" property="twitter:title"/>
+   <meta content="Leetcode 2276. Count Integers in Intervals Description Given an empty set of intervals, implement a data structure that can: Add an interval to the set of intervals. Count the number of integers that are present in at least one interval. Implement the CountIntervals class: CountIntervals() Initializes the object with an empty set of intervals. void add(int left, int right) Adds the interval [left, right] to the set of intervals. int count() Returns the number of integers that are present in at least one interval. Note that an interval [left, right] denotes all the integers x where left &amp;lt;= x &amp;lt;= right. &amp;nbsp; Example 1: Input [&amp;quot;CountIntervals&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;count&amp;quot;, &amp;quot;add&amp;quot;, &amp;quot;count&amp;quot;] [[], [2, 3], [7, 10], [], [5, 8], []] Output [null, null, null, 6, null, 8] Explanation CountIntervals countIntervals = new CountIntervals(); // initialize the object with an empty set of intervals. countIntervals.add(2, 3); // add [2, 3] to the set of intervals. countIntervals.add(7, 10); // add [7, 10] to the set of intervals. countIntervals.count(); // return 6 // the integers 2 and 3 are present in the interval [2, 3]. // the integers 7, 8, 9, and 10 are present in the interval [7, 10]. countIntervals.add(5, 8); // add [5, 8] to the set of intervals. countIntervals.count(); // return 8 // the integers 2 and 3 are present in the interval [2, 3]. // the integers 5 and 6 are present in the interval [5, 8]. // the integers 7 and 8 are present in the intervals [5, 8] and [7, 10]. // the integers 9 and 10 are present in the interval [7, 10]. &amp;nbsp; Constraints: 1 &amp;lt;= left &amp;lt;= right &amp;lt;= 109 At most 105 calls in total will be made to add and count. At least one call will be made to count. Solutions Java C++ Python Go TypeScript class Node { Node left; Node right; int l; int r; int mid; int v; int add; public Node(int l, int r) { this.l = l; this.r = r; this.mid = (l + r) &amp;gt;&amp;gt; 1; } } class SegmentTree { private Node root = new Node(1, (int) 1e9 + 1); public SegmentTree() { } public void modify(int l, int r, int v) { modify(l, r, v, root); } public void modify(int l, int r, int v, Node node) { if (l &amp;gt; r) { return; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { node.v = node.r - node.l + 1; node.add = v; return; } pushdown(node); if (l &amp;lt;= node.mid) { modify(l, r, v, node.left); } if (r &amp;gt; node.mid) { modify(l, r, v, node.right); } pushup(node); } public int query(int l, int r) { return query(l, r, root); } public int query(int l, int r, Node node) { if (l &amp;gt; r) { return 0; } if (node.l &amp;gt;= l &amp;amp;&amp;amp; node.r &amp;lt;= r) { return node.v; } pushdown(node); int v = 0; if (l &amp;lt;= node.mid) { v += query(l, r, node.left); } if (r &amp;gt; node.mid)..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2276 - Count Integers in Intervals | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2276 - Count Integers in Intervals" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2276.html" rel="canonical">
+          <meta content="https://leetcode.ca/2022-02-22-2276-Count-Integers-in-Intervals/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2022-02-22T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2276 - Count Integers in Intervals","dateModified":"2022-02-22T00:00:00-08:00","datePublished":"2022-02-22T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2022-02-22-2276-Count-Integers-in-Intervals/"},"url":"https://leetcode.ca/2022-02-22-2276-Count-Integers-in-Intervals/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2276-count-integers-in-intervals">
+       <a href="solution-2276.html">
+        2276. Count Integers in Intervals
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an
+       <strong>
+        empty
+       </strong>
+       set of intervals, implement a data structure that can:
+      </p>
+      <ul>
+       <li>
+        <strong>
+         Add
+        </strong>
+        an interval to the set of intervals.
+       </li>
+       <li>
+        <strong>
+         Count
+        </strong>
+        the number of integers that are present in
+        <strong>
+         at least one
+        </strong>
+        interval.
+       </li>
+      </ul>
+      <p>
+       Implement the
+       <code>
+        CountIntervals
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         CountIntervals()
+        </code>
+        Initializes the object with an empty set of intervals.
+       </li>
+       <li>
+        <code>
+         void add(int left, int right)
+        </code>
+        Adds the interval
+        <code>
+         [left, right]
+        </code>
+        to the set of intervals.
+       </li>
+       <li>
+        <code>
+         int count()
+        </code>
+        Returns the number of integers that are present in
+        <strong>
+         at least one
+        </strong>
+        interval.
+       </li>
+      </ul>
+      <p>
+       <strong>
+        Note
+       </strong>
+       that an interval
+       <code>
+        [left, right]
+       </code>
+       denotes all the integers
+       <code>
+        x
+       </code>
+       where
+       <code>
+        left &lt;= x &lt;= right
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["CountIntervals", "add", "add", "count", "add", "count"]
+[[], [2, 3], [7, 10], [], [5, 8], []]
+<strong>Output</strong>
+[null, null, null, 6, null, 8]
+
+<strong>Explanation</strong>
+CountIntervals countIntervals = new CountIntervals(); // initialize the object with an empty set of intervals. 
+countIntervals.add(2, 3);  // add [2, 3] to the set of intervals.
+countIntervals.add(7, 10); // add [7, 10] to the set of intervals.
+countIntervals.count();    // return 6
+                           // the integers 2 and 3 are present in the interval [2, 3].
+                           // the integers 7, 8, 9, and 10 are present in the interval [7, 10].
+countIntervals.add(5, 8);  // add [5, 8] to the set of intervals.
+countIntervals.count();    // return 8
+                           // the integers 2 and 3 are present in the interval [2, 3].
+                           // the integers 5 and 6 are present in the interval [5, 8].
+                           // the integers 7 and 8 are present in the intervals [5, 8] and [7, 10].
+                           // the integers 9 and 10 are present in the interval [7, 10].
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= left &lt;= right &lt;= 10
+         <sup>
+          9
+         </sup>
+        </code>
+       </li>
+       <li>
+        At most
+        <code>
+         10
+         <sup>
+          5
+         </sup>
+        </code>
+        calls
+        <strong>
+         in total
+        </strong>
+        will be made to
+        <code>
+         add
+        </code>
+        and
+        <code>
+         count
+        </code>
+        .
+       </li>
+       <li>
+        At least
+        <strong>
+         one
+        </strong>
+        call will be made to
+        <code>
+         count
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#2b2d7abd-8c53-4434-a331-69bc3f6c9d5e'}">
+       <li class="uk-active">
+        <a href="solution-2276.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2276.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2276.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2276.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2276.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="2b2d7abd-8c53-4434-a331-69bc3f6c9d5e">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+    <span class="nc">Node</span> <span class="n">left</span><span class="o">;</span>
+    <span class="nc">Node</span> <span class="n">right</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">l</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">r</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">mid</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">v</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">add</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Node</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">l</span> <span class="o">=</span> <span class="n">l</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">SegmentTree</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nf">SegmentTree</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">modify</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">modify</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">v</span><span class="o">,</span> <span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">modify</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">v</span><span class="o">,</span> <span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">v</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">r</span> <span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="na">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">add</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">pushdown</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">modify</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">v</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">modify</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">v</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">pushup</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">query</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">v</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">pushdown</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">v</span> <span class="o">+=</span> <span class="n">query</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">v</span> <span class="o">+=</span> <span class="n">query</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pushup</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">v</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">v</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">.</span><span class="na">v</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pushdown</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">l</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">mid</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">r</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">add</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+            <span class="n">left</span><span class="o">.</span><span class="na">add</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">add</span><span class="o">;</span>
+            <span class="n">right</span><span class="o">.</span><span class="na">add</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">add</span><span class="o">;</span>
+            <span class="n">left</span><span class="o">.</span><span class="na">v</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="na">r</span> <span class="o">-</span> <span class="n">left</span><span class="o">.</span><span class="na">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">right</span><span class="o">.</span><span class="na">v</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="na">r</span> <span class="o">-</span> <span class="n">right</span><span class="o">.</span><span class="na">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">add</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">CountIntervals</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">SegmentTree</span> <span class="n">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SegmentTree</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="nf">CountIntervals</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">tree</span><span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">count</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your CountIntervals object will be instantiated and called as such:
+ * CountIntervals obj = new CountIntervals();
+ * obj.add(left,right);
+ * int param_2 = obj.count();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Node</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">l</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">r</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">mid</span><span class="p">((</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">v</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">left</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">right</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">)</span> <span class="p">{}</span>
+
+    <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">add</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">right</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">SegmentTree</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">SegmentTree</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">root</span><span class="p">(</span><span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000000001</span><span class="p">))</span> <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">modify</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">-</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">pushup</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">v</span> <span class="o">+=</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">v</span> <span class="o">+=</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">root</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">pushup</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">+</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">pushdown</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="n">left</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">;</span>
+            <span class="n">right</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">;</span>
+            <span class="n">left</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">-</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">right</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">-</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">add</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">CountIntervals</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">CountIntervals</span><span class="p">()</span> <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">count</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">tree</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000000000</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">SegmentTree</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your CountIntervals object will be instantiated and called as such:
+ * CountIntervals* obj = new CountIntervals();
+ * obj-&gt;add(left,right);
+ * int param_2 = obj-&gt;count();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tot</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">tag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="n">a</span> <span class="ow">and</span> <span class="n">r</span> <span class="o">==</span> <span class="n">b</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">tot</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">.</span><span class="n">right</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">mid</span> <span class="o">&gt;=</span> <span class="n">l</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">mid</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span> <span class="n">a</span><span class="p">,</span> <span class="n">mid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">),</span> <span class="n">r</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tot</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">tot</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">tot</span>
+
+
+<span class="k">class</span> <span class="nc">CountIntervals</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tree</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000000010</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">tree</span><span class="p">.</span><span class="n">tot</span>
+
+
+<span class="c1"># Your CountIntervals object will be instantiated and called as such:
+# obj = CountIntervals()
+# obj.add(left,right)
+# param_2 = obj.count()
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">Node</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">left</span>  <span class="o">*</span><span class="n">Node</span>
+	<span class="n">right</span> <span class="o">*</span><span class="n">Node</span>
+	<span class="n">l</span>     <span class="kt">int</span>
+	<span class="n">r</span>     <span class="kt">int</span>
+	<span class="n">mid</span>   <span class="kt">int</span>
+	<span class="n">v</span>     <span class="kt">int</span>
+	<span class="n">add</span>   <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">SegmentTree</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">root</span> <span class="o">*</span><span class="n">Node</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newNode</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">Node</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">Node</span><span class="p">{</span>
+		<span class="n">left</span><span class="o">:</span>  <span class="no">nil</span><span class="p">,</span>
+		<span class="n">right</span><span class="o">:</span> <span class="no">nil</span><span class="p">,</span>
+		<span class="n">l</span><span class="o">:</span>     <span class="n">l</span><span class="p">,</span>
+		<span class="n">r</span><span class="o">:</span>     <span class="n">r</span><span class="p">,</span>
+		<span class="n">mid</span><span class="o">:</span>   <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="m">2</span><span class="p">,</span>
+		<span class="n">v</span><span class="o">:</span>     <span class="m">0</span><span class="p">,</span>
+		<span class="n">add</span><span class="o">:</span>   <span class="m">0</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newSegmentTree</span><span class="p">()</span> <span class="o">*</span><span class="n">SegmentTree</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">SegmentTree</span><span class="p">{</span>
+		<span class="n">root</span><span class="o">:</span> <span class="n">newNode</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">1000000001</span><span class="p">),</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">st</span> <span class="o">*</span><span class="n">SegmentTree</span><span class="p">)</span> <span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="kt">int</span><span class="p">,</span> <span class="n">node</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">node</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">root</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">r</span> <span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="n">l</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">add</span> <span class="o">=</span> <span class="n">v</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="n">st</span><span class="o">.</span><span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">st</span><span class="o">.</span><span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">st</span><span class="o">.</span><span class="n">modify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">st</span><span class="o">.</span><span class="n">pushup</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">st</span> <span class="o">*</span><span class="n">SegmentTree</span><span class="p">)</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="kt">int</span><span class="p">,</span> <span class="n">node</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">node</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">root</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="m">0</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">v</span>
+	<span class="p">}</span>
+	<span class="n">st</span><span class="o">.</span><span class="n">pushdown</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+	<span class="n">v</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">if</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">node</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">v</span> <span class="o">+=</span> <span class="n">st</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">mid</span> <span class="p">{</span>
+		<span class="n">v</span> <span class="o">+=</span> <span class="n">st</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">v</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">st</span> <span class="o">*</span><span class="n">SegmentTree</span><span class="p">)</span> <span class="n">pushup</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">node</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">v</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">st</span> <span class="o">*</span><span class="n">SegmentTree</span><span class="p">)</span> <span class="n">pushdown</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">newNode</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">mid</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">newNode</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">mid</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">add</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">left</span> <span class="o">:=</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span>
+		<span class="n">right</span> <span class="o">:=</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span>
+		<span class="n">left</span><span class="o">.</span><span class="n">add</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">add</span>
+		<span class="n">right</span><span class="o">.</span><span class="n">add</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">add</span>
+		<span class="n">left</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">r</span> <span class="o">-</span> <span class="n">left</span><span class="o">.</span><span class="n">l</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="n">right</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">r</span> <span class="o">-</span> <span class="n">right</span><span class="o">.</span><span class="n">l</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">add</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">CountIntervals</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">tree</span> <span class="o">*</span><span class="n">SegmentTree</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">CountIntervals</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">CountIntervals</span><span class="p">{</span>
+		<span class="n">tree</span><span class="o">:</span> <span class="n">newSegmentTree</span><span class="p">(),</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">ci</span> <span class="o">*</span><span class="n">CountIntervals</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">ci</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">modify</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="no">nil</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">ci</span> <span class="o">*</span><span class="n">CountIntervals</span><span class="p">)</span> <span class="n">Count</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">ci</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">1000000000</span><span class="p">,</span> <span class="no">nil</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your CountIntervals object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.Add(left,right);
+ * param_2 := obj.Count();
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nx">CountIntervals</span> <span class="p">{</span>
+    <span class="nl">left</span><span class="p">:</span> <span class="kc">null</span> <span class="o">|</span> <span class="nx">CountIntervals</span><span class="p">;</span>
+    <span class="nl">right</span><span class="p">:</span> <span class="kc">null</span> <span class="o">|</span> <span class="nx">CountIntervals</span><span class="p">;</span>
+    <span class="nl">start</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">end</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="nl">sum</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">start</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">end</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">9</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">start</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">=</span> <span class="nx">end</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">add</span><span class="p">(</span><span class="nx">left</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">right</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sum</span> <span class="o">==</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">left</span> <span class="o">&lt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">&amp;&amp;</span> <span class="nx">right</span> <span class="o">&gt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">sum</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">let</span> <span class="nx">mid</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CountIntervals</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="nx">mid</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CountIntervals</span><span class="p">(</span><span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">end</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">left</span> <span class="o">&lt;=</span> <span class="nx">mid</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">left</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">right</span> <span class="o">&gt;</span> <span class="nx">mid</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">right</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">sum</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">left</span><span class="p">.</span><span class="nx">sum</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">right</span><span class="p">.</span><span class="nx">sum</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">count</span><span class="p">():</span> <span class="kr">number</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">sum</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Your CountIntervals object will be instantiated and called as such:
+ * var obj = new CountIntervals()
+ * obj.add(left,right)
+ * var param_2 = obj.count()
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2276.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

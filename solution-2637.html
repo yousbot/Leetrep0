@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2637.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2637.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2637 - Promise Time Limit</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2637. Promise Time Limit Description Given an&amp;nbsp;asynchronous function&amp;nbsp;fn&amp;nbsp;and a time t&amp;nbsp;in milliseconds, return&amp;nbsp;a new&amp;nbsp;time limited&amp;nbsp;version of the input function. fn takes arguments provided to the&amp;nbsp;time limited&amp;nbsp;function. The time limited function should follow these rules: If the fn completes within the time limit of t milliseconds,...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2637.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2637.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2637.html" rel="stylesheet"/>
+   <link href="solution-2637.html" rel="stylesheet"/>
+   <link href="solution-2637.html" rel="stylesheet"/>
+   <link href="solution-2637.html" rel="stylesheet"/>
+   <link href="solution-2637.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2637 - Promise Time Limit" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+2637. Promise Time Limit
+
+Description
+
+Given an&amp;nbsp;asynchronous function&amp;nbsp;fn&amp;nbsp;and a time t&amp;nbsp;in milliseconds, return&amp;nbsp;a new&amp;nbsp;time limited&amp;nbsp;version of the input function. fn takes arguments provided to the&amp;nbsp;time limited&amp;nbsp;function.
+
+The time limited function should follow these rules:
+
+
+	If the fn completes within the time limit of t milliseconds, the time limited function should&amp;nbsp;resolve with the result.
+	If the execution of the fn exceeds the time limit, the time limited function should reject with the string &amp;quot;Time Limit Exceeded&amp;quot;.
+
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+fn = async (n) =&amp;gt; { 
+&amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 100)); 
+&amp;nbsp; return n * n; 
+}
+inputs = [5]
+t = 50
+Output: {&amp;quot;rejected&amp;quot;:&amp;quot;Time Limit Exceeded&amp;quot;,&amp;quot;time&amp;quot;:50}
+Explanation:
+const limited = timeLimit(fn, t)
+const start = performance.now()
+let result;
+try {
+&amp;nbsp; &amp;nbsp;const res = await limited(...inputs)
+&amp;nbsp; &amp;nbsp;result = {&amp;quot;resolved&amp;quot;: res, &amp;quot;time&amp;quot;: Math.floor(performance.now() - start)};
+} catch (err) {
+&amp;nbsp;  result = {&amp;quot;rejected&amp;quot;: err, &amp;quot;time&amp;quot;: Math.floor(performance.now() - start)};
+}
+console.log(result) // Output
+
+The provided function is set to resolve after 100ms. However, the time limit is set to 50ms. It rejects at t=50ms because the time limit was reached.
+
+
+Example 2:
+
+
+Input: 
+fn = async (n) =&amp;gt; { 
+&amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 100)); 
+&amp;nbsp; return n * n; 
+}
+inputs = [5]
+t = 150
+Output: {&amp;quot;resolved&amp;quot;:25,&amp;quot;time&amp;quot;:100}
+Explanation:
+The function resolved 5 * 5 = 25 at t=100ms. The time limit is never reached.
+
+
+Example 3:
+
+
+Input: 
+fn = async (a, b) =&amp;gt; { 
+&amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 120)); 
+&amp;nbsp; return a + b; 
+}
+inputs = [5,10]
+t = 150
+Output: {&amp;quot;resolved&amp;quot;:15,&amp;quot;time&amp;quot;:120}
+Explanation:
+ââââThe function resolved 5 + 10 = 15 at t=120ms. The time limit is never reached.
+
+
+Example 4:
+
+
+Input: 
+fn = async () =&amp;gt; { 
+&amp;nbsp; throw &amp;quot;Error&amp;quot;;
+}
+inputs = []
+t = 1000
+Output: {&amp;quot;rejected&amp;quot;:&amp;quot;Error&amp;quot;,&amp;quot;time&amp;quot;:0}
+Explanation:
+The function immediately throws an error.
+
+&amp;nbsp;
+Constraints:
+
+
+	0 &amp;lt;= inputs.length &amp;lt;= 10
+	0 &amp;lt;= t &amp;lt;= 1000
+	fn returns a promise
+
+
+Solutions
+
+
+
+	TypeScript
+
+
+
+
+
+	
+type Fn = (...params: any[]) =&amp;gt; Promise&amp;lt;any&amp;gt;;
+
+function timeLimit(fn: Fn, t: number): Fn {
+    return async function (...args) {
+        return Promise.race([
+            fn(...args),
+            new Promise((_, reject) =&amp;gt; setTimeout(() =&amp;gt; reject('Time Limit Exceeded'), t)),
+        ]);
+    };
+}
+
+/**
+ * const limited = timeLimit((t) =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, t)), 100);
+ * limited(150).catch(console.log) // &quot;Time Limit Exceeded&quot; at t=100ms
+ */
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-02-18T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-02-18-2637-Promise-Time-Limit/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2637.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2637 - Promise Time Limit" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+2637. Promise Time Limit
+
+Description
+
+Given an&amp;nbsp;asynchronous function&amp;nbsp;fn&amp;nbsp;and a time t&amp;nbsp;in milliseconds, return&amp;nbsp;a new&amp;nbsp;time limited&amp;nbsp;version of the input function. fn takes arguments provided to the&amp;nbsp;time limited&amp;nbsp;function.
+
+The time limited function should follow these rules:
+
+
+	If the fn completes within the time limit of t milliseconds, the time limited function should&amp;nbsp;resolve with the result.
+	If the execution of the fn exceeds the time limit, the time limited function should reject with the string &amp;quot;Time Limit Exceeded&amp;quot;.
+
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+fn = async (n) =&amp;gt; { 
+&amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 100)); 
+&amp;nbsp; return n * n; 
+}
+inputs = [5]
+t = 50
+Output: {&amp;quot;rejected&amp;quot;:&amp;quot;Time Limit Exceeded&amp;quot;,&amp;quot;time&amp;quot;:50}
+Explanation:
+const limited = timeLimit(fn, t)
+const start = performance.now()
+let result;
+try {
+&amp;nbsp; &amp;nbsp;const res = await limited(...inputs)
+&amp;nbsp; &amp;nbsp;result = {&amp;quot;resolved&amp;quot;: res, &amp;quot;time&amp;quot;: Math.floor(performance.now() - start)};
+} catch (err) {
+&amp;nbsp;  result = {&amp;quot;rejected&amp;quot;: err, &amp;quot;time&amp;quot;: Math.floor(performance.now() - start)};
+}
+console.log(result) // Output
+
+The provided function is set to resolve after 100ms. However, the time limit is set to 50ms. It rejects at t=50ms because the time limit was reached.
+
+
+Example 2:
+
+
+Input: 
+fn = async (n) =&amp;gt; { 
+&amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 100)); 
+&amp;nbsp; return n * n; 
+}
+inputs = [5]
+t = 150
+Output: {&amp;quot;resolved&amp;quot;:25,&amp;quot;time&amp;quot;:100}
+Explanation:
+The function resolved 5 * 5 = 25 at t=100ms. The time limit is never reached.
+
+
+Example 3:
+
+
+Input: 
+fn = async (a, b) =&amp;gt; { 
+&amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 120)); 
+&amp;nbsp; return a + b; 
+}
+inputs = [5,10]
+t = 150
+Output: {&amp;quot;resolved&amp;quot;:15,&amp;quot;time&amp;quot;:120}
+Explanation:
+ââââThe function resolved 5 + 10 = 15 at t=120ms. The time limit is never reached.
+
+
+Example 4:
+
+
+Input: 
+fn = async () =&amp;gt; { 
+&amp;nbsp; throw &amp;quot;Error&amp;quot;;
+}
+inputs = []
+t = 1000
+Output: {&amp;quot;rejected&amp;quot;:&amp;quot;Error&amp;quot;,&amp;quot;time&amp;quot;:0}
+Explanation:
+The function immediately throws an error.
+
+&amp;nbsp;
+Constraints:
+
+
+	0 &amp;lt;= inputs.length &amp;lt;= 10
+	0 &amp;lt;= t &amp;lt;= 1000
+	fn returns a promise
+
+
+Solutions
+
+
+
+	TypeScript
+
+
+
+
+
+	
+type Fn = (...params: any[]) =&amp;gt; Promise&amp;lt;any&amp;gt;;
+
+function timeLimit(fn: Fn, t: number): Fn {
+    return async function (...args) {
+        return Promise.race([
+            fn(...args),
+            new Promise((_, reject) =&amp;gt; setTimeout(() =&amp;gt; reject('Time Limit Exceeded'), t)),
+        ]);
+    };
+}
+
+/**
+ * const limited = timeLimit((t) =&amp;gt; new Promise(res =&amp;gt; setTimeout(res, t)), 100);
+ * limited(150).catch(console.log) // &quot;Time Limit Exceeded&quot; at t=100ms
+ */
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2637 - Promise Time Limit | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2637 - Promise Time Limit" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2637.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-02-18-2637-Promise-Time-Limit/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-02-18T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2637 - Promise Time Limit","dateModified":"2023-02-18T00:00:00-08:00","datePublished":"2023-02-18T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-02-18-2637-Promise-Time-Limit/"},"url":"https://leetcode.ca/2023-02-18-2637-Promise-Time-Limit/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2637-promise-time-limit">
+       <a href="solution-2637.html">
+        2637. Promise Time Limit
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an asynchronous function
+       <code>
+        fn
+       </code>
+       and a time
+       <code>
+        t
+       </code>
+       in milliseconds, return a new
+       <strong>
+        time limited
+       </strong>
+       version of the input function.
+       <code>
+        fn
+       </code>
+       takes arguments provided to the
+       <strong>
+        time limited
+       </strong>
+       function.
+      </p>
+      <p>
+       The
+       <strong>
+        time limited
+       </strong>
+       function should follow these rules:
+      </p>
+      <ul>
+       <li>
+        If the
+        <code>
+         fn
+        </code>
+        completes within the time limit of
+        <code>
+         t
+        </code>
+        milliseconds, the
+        <strong>
+         time limited
+        </strong>
+        function should resolve with the result.
+       </li>
+       <li>
+        If the execution of the
+        <code>
+         fn
+        </code>
+        exceeds the time limit, the
+        <strong>
+         time limited
+        </strong>
+        function should reject with the string
+        <code>
+         "Time Limit Exceeded"
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+fn = async (n) =&gt; { 
+  await new Promise(res =&gt; setTimeout(res, 100)); 
+  return n * n; 
+}
+inputs = [5]
+t = 50
+<strong>Output:</strong> {"rejected":"Time Limit Exceeded","time":50}
+<strong>Explanation:</strong>
+const limited = timeLimit(fn, t)
+const start = performance.now()
+let result;
+try {
+   const res = await limited(...inputs)
+   result = {"resolved": res, "time": Math.floor(performance.now() - start)};
+} catch (err) {
+   result = {"rejected": err, "time": Math.floor(performance.now() - start)};
+}
+console.log(result) // Output
+
+The provided function is set to resolve after 100ms. However, the time limit is set to 50ms. It rejects at t=50ms because the time limit was reached.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+fn = async (n) =&gt; { 
+  await new Promise(res =&gt; setTimeout(res, 100)); 
+  return n * n; 
+}
+inputs = [5]
+t = 150
+<strong>Output:</strong> {"resolved":25,"time":100}
+<strong>Explanation:</strong>
+The function resolved 5 * 5 = 25 at t=100ms. The time limit is never reached.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+fn = async (a, b) =&gt; { 
+  await new Promise(res =&gt; setTimeout(res, 120)); 
+  return a + b; 
+}
+inputs = [5,10]
+t = 150
+<strong>Output:</strong> {"resolved":15,"time":120}
+<strong>Explanation:</strong>
+ââââThe function resolved 5 + 10 = 15 at t=120ms. The time limit is never reached.
+</pre>
+      <p>
+       <strong class="example">
+        Example 4:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+fn = async () =&gt; { 
+  throw "Error";
+}
+inputs = []
+t = 1000
+<strong>Output:</strong> {"rejected":"Error","time":0}
+<strong>Explanation:</strong>
+The function immediately throws an error.</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= inputs.length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= t &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         fn
+        </code>
+        returns a promise
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#435e340f-c264-437e-959a-4382ea6a37df'}">
+       <li class="uk-active">
+        <a href="solution-2637.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="435e340f-c264-437e-959a-4382ea6a37df">
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">type</span> <span class="nx">Fn</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">params</span><span class="p">:</span> <span class="kr">any</span><span class="p">[])</span> <span class="o">=&gt;</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="kr">any</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">timeLimit</span><span class="p">(</span><span class="nx">fn</span><span class="p">:</span> <span class="nx">Fn</span><span class="p">,</span> <span class="nx">t</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">Fn</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">async</span> <span class="kd">function</span> <span class="p">(...</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">race</span><span class="p">([</span>
+            <span class="nx">fn</span><span class="p">(...</span><span class="nx">args</span><span class="p">),</span>
+            <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">reject</span><span class="p">(</span><span class="dl">'</span><span class="s1">Time Limit Exceeded</span><span class="dl">'</span><span class="p">),</span> <span class="nx">t</span><span class="p">)),</span>
+        <span class="p">]);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * const limited = timeLimit((t) =&gt; new Promise(res =&gt; setTimeout(res, t)), 100);
+ * limited(150).catch(console.log) // "Time Limit Exceeded" at t=100ms
+ */</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2637.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

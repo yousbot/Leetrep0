@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2756.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2756.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2756 - Query Batching</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2756. Query Batching Description Batching multiple small queries into a single large query can be a useful optimization. Write a class&amp;nbsp;QueryBatcher&amp;nbsp;that implements this functionality. The constructor should accept two parameters: An asynchronous function&amp;nbsp;queryMultiple&amp;nbsp;which accepts an array of&amp;nbsp;string keys input. It will resolve with an array...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2756.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2756.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2756.html" rel="stylesheet"/>
+   <link href="solution-2756.html" rel="stylesheet"/>
+   <link href="solution-2756.html" rel="stylesheet"/>
+   <link href="solution-2756.html" rel="stylesheet"/>
+   <link href="solution-2756.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2756 - Query Batching" property="og:title"/>
+   <meta content="Leetcode 2756. Query Batching Description Batching multiple small queries into a single large query can be a useful optimization. Write a class&amp;nbsp;QueryBatcher&amp;nbsp;that implements this functionality. The constructor should accept two parameters: An asynchronous function&amp;nbsp;queryMultiple&amp;nbsp;which accepts an array of&amp;nbsp;string keys input. It will resolve with an array of values that is the same length as the input array. Each index corresponds to the value associated with&amp;nbsp;input[i].&amp;nbsp;You can assume the promise will never reject. A throttle time in milliseconds&amp;nbsp;t. The class has a single method. async getValue(key). Accepts a single string key and resolves with a single string value. The keys passed to this function should eventually get passed to the&amp;nbsp;queryMultiple&amp;nbsp;function.&amp;nbsp;queryMultiple&amp;nbsp;should never be called consecutively within&amp;nbsp;t&amp;nbsp;milliseconds. The first time&amp;nbsp;getValue&amp;nbsp;is called,&amp;nbsp;queryMultiple&amp;nbsp;should immediately be called with that single key. If after&amp;nbsp;t&amp;nbsp;milliseconds,&amp;nbsp;getValue&amp;nbsp;had been called again, all the passed keys should be passed to&amp;nbsp;queryMultiple&amp;nbsp;and ultimately returned. You can assume every key passed to this method is unique. The following diagram illustrates how the throttling algorithm works. Each rectangle represents 100ms. The throttle time is 400ms. &amp;nbsp; Example 1: Input: queryMultiple = async function(keys) { &amp;nbsp; return keys.map(key =&amp;gt; key + &amp;#39;!&amp;#39;); } t = 100 calls = [ &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;a&amp;quot;, &amp;quot;time&amp;quot;: 10}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;b&amp;quot;, &amp;quot;time&amp;quot;: 20}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;c&amp;quot;, &amp;quot;time&amp;quot;: 30} ] Output: [ &amp;nbsp;{&amp;quot;resolved&amp;quot;: &amp;quot;a!&amp;quot;, &amp;quot;time&amp;quot;: 10}, &amp;nbsp;{&amp;quot;resolved&amp;quot;: &amp;quot;b!&amp;quot;, &amp;quot;time&amp;quot;: 110}, &amp;nbsp;{&amp;quot;resolved&amp;quot;: &amp;quot;c!&amp;quot;, &amp;quot;time&amp;quot;: 110} ] Explanation: const batcher = new QueryBatcher(queryMultiple, 100); setTimeout(() =&amp;gt; batcher.getValue(&amp;#39;a&amp;#39;), 10); // &amp;quot;a!&amp;quot; at t=10ms setTimeout(() =&amp;gt; batcher.getValue(&amp;#39;b&amp;#39;), 20); // &amp;quot;b!&amp;quot; at t=110ms setTimeout(() =&amp;gt; batcher.getValue(&amp;#39;c&amp;#39;), 30); // &amp;quot;c!&amp;quot; at t=110ms queryMultiple simply adds an &amp;quot;!&amp;quot; to the key At t=10ms, getValue(&amp;#39;a&amp;#39;) is called, queryMultiple([&amp;#39;a&amp;#39;]) is immediately called and the result is immediately returned. At t=20ms, getValue(&amp;#39;b&amp;#39;) is called but the query is queued At t=30ms, getValue(&amp;#39;c&amp;#39;) is called but the query is queued. At t=110ms, queryMultiple([&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;]) is called and the results are immediately returned. Example 2: Input: queryMultiple = async function(keys) { &amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 100)); &amp;nbsp; return keys.map(key =&amp;gt; key + &amp;#39;!&amp;#39;); } t = 100 calls = [ &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;a&amp;quot;, &amp;quot;time&amp;quot;: 10}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;b&amp;quot;, &amp;quot;time&amp;quot;: 20}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;c&amp;quot;, &amp;quot;time&amp;quot;: 30} ] Output: [ &amp;nbsp; {&amp;quot;resolved&amp;quot;: &amp;quot;a!&amp;quot;, &amp;quot;time&amp;quot;: 110}, &amp;nbsp; {&amp;quot;resolved&amp;quot;: &amp;quot;b!&amp;quot;, &amp;quot;time&amp;quot;: 210}, &amp;nbsp; {&amp;quot;resolved&amp;quot;: &amp;quot;c!&amp;quot;, &amp;quot;time&amp;quot;: 210} ] Explanation: This example is the same as example 1 except there is a 100ms delay in queryMultiple. The results are the same except the promises resolve 100ms later. Example 3: Input: queryMultiple = async function(keys) { &amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, keys.length * 100)); &amp;nbsp; return keys.map(key =&amp;gt; key + &amp;#39;!&amp;#39;); } t = 100 calls = [ &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;a&amp;quot;, &amp;quot;time&amp;quot;: 10}, {&amp;quot;key&amp;quot;: &amp;quot;b&amp;quot;, &amp;quot;time&amp;quot;: 20}, &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;c&amp;quot;, &amp;quot;time&amp;quot;: 30}, {&amp;quot;key&amp;quot;: &amp;quot;d&amp;quot;, &amp;quot;time&amp;quot;: 40}, &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;e&amp;quot;, &amp;quot;time&amp;quot;: 250} &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;f&amp;quot;, &amp;quot;time&amp;quot;: 300} ] Output: [ &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;a!&amp;quot;,&amp;quot;time&amp;quot;:110}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;e!&amp;quot;,&amp;quot;time&amp;quot;:350}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;b!&amp;quot;,&amp;quot;time&amp;quot;:410}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;c!&amp;quot;,&amp;quot;time&amp;quot;:410}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;d!&amp;quot;,&amp;quot;time&amp;quot;:410}, {&amp;quot;resolved&amp;quot;:&amp;quot;f!&amp;quot;,&amp;quot;time&amp;quot;:450} ] Explanation: queryMultiple([&amp;#39;a&amp;#39;]) is called at t=10ms, it is resolved at t=110ms queryMultiple([&amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;, &amp;#39;d&amp;#39;]) is called at t=110ms, it is resolved at 410ms queryMultiple([&amp;#39;e&amp;#39;]) is called at t=250ms,..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2023-06-17T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2023-06-17-2756-Query-Batching/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2756.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2756 - Query Batching" property="twitter:title"/>
+   <meta content="Leetcode 2756. Query Batching Description Batching multiple small queries into a single large query can be a useful optimization. Write a class&amp;nbsp;QueryBatcher&amp;nbsp;that implements this functionality. The constructor should accept two parameters: An asynchronous function&amp;nbsp;queryMultiple&amp;nbsp;which accepts an array of&amp;nbsp;string keys input. It will resolve with an array of values that is the same length as the input array. Each index corresponds to the value associated with&amp;nbsp;input[i].&amp;nbsp;You can assume the promise will never reject. A throttle time in milliseconds&amp;nbsp;t. The class has a single method. async getValue(key). Accepts a single string key and resolves with a single string value. The keys passed to this function should eventually get passed to the&amp;nbsp;queryMultiple&amp;nbsp;function.&amp;nbsp;queryMultiple&amp;nbsp;should never be called consecutively within&amp;nbsp;t&amp;nbsp;milliseconds. The first time&amp;nbsp;getValue&amp;nbsp;is called,&amp;nbsp;queryMultiple&amp;nbsp;should immediately be called with that single key. If after&amp;nbsp;t&amp;nbsp;milliseconds,&amp;nbsp;getValue&amp;nbsp;had been called again, all the passed keys should be passed to&amp;nbsp;queryMultiple&amp;nbsp;and ultimately returned. You can assume every key passed to this method is unique. The following diagram illustrates how the throttling algorithm works. Each rectangle represents 100ms. The throttle time is 400ms. &amp;nbsp; Example 1: Input: queryMultiple = async function(keys) { &amp;nbsp; return keys.map(key =&amp;gt; key + &amp;#39;!&amp;#39;); } t = 100 calls = [ &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;a&amp;quot;, &amp;quot;time&amp;quot;: 10}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;b&amp;quot;, &amp;quot;time&amp;quot;: 20}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;c&amp;quot;, &amp;quot;time&amp;quot;: 30} ] Output: [ &amp;nbsp;{&amp;quot;resolved&amp;quot;: &amp;quot;a!&amp;quot;, &amp;quot;time&amp;quot;: 10}, &amp;nbsp;{&amp;quot;resolved&amp;quot;: &amp;quot;b!&amp;quot;, &amp;quot;time&amp;quot;: 110}, &amp;nbsp;{&amp;quot;resolved&amp;quot;: &amp;quot;c!&amp;quot;, &amp;quot;time&amp;quot;: 110} ] Explanation: const batcher = new QueryBatcher(queryMultiple, 100); setTimeout(() =&amp;gt; batcher.getValue(&amp;#39;a&amp;#39;), 10); // &amp;quot;a!&amp;quot; at t=10ms setTimeout(() =&amp;gt; batcher.getValue(&amp;#39;b&amp;#39;), 20); // &amp;quot;b!&amp;quot; at t=110ms setTimeout(() =&amp;gt; batcher.getValue(&amp;#39;c&amp;#39;), 30); // &amp;quot;c!&amp;quot; at t=110ms queryMultiple simply adds an &amp;quot;!&amp;quot; to the key At t=10ms, getValue(&amp;#39;a&amp;#39;) is called, queryMultiple([&amp;#39;a&amp;#39;]) is immediately called and the result is immediately returned. At t=20ms, getValue(&amp;#39;b&amp;#39;) is called but the query is queued At t=30ms, getValue(&amp;#39;c&amp;#39;) is called but the query is queued. At t=110ms, queryMultiple([&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;]) is called and the results are immediately returned. Example 2: Input: queryMultiple = async function(keys) { &amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, 100)); &amp;nbsp; return keys.map(key =&amp;gt; key + &amp;#39;!&amp;#39;); } t = 100 calls = [ &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;a&amp;quot;, &amp;quot;time&amp;quot;: 10}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;b&amp;quot;, &amp;quot;time&amp;quot;: 20}, &amp;nbsp;{&amp;quot;key&amp;quot;: &amp;quot;c&amp;quot;, &amp;quot;time&amp;quot;: 30} ] Output: [ &amp;nbsp; {&amp;quot;resolved&amp;quot;: &amp;quot;a!&amp;quot;, &amp;quot;time&amp;quot;: 110}, &amp;nbsp; {&amp;quot;resolved&amp;quot;: &amp;quot;b!&amp;quot;, &amp;quot;time&amp;quot;: 210}, &amp;nbsp; {&amp;quot;resolved&amp;quot;: &amp;quot;c!&amp;quot;, &amp;quot;time&amp;quot;: 210} ] Explanation: This example is the same as example 1 except there is a 100ms delay in queryMultiple. The results are the same except the promises resolve 100ms later. Example 3: Input: queryMultiple = async function(keys) { &amp;nbsp; await new Promise(res =&amp;gt; setTimeout(res, keys.length * 100)); &amp;nbsp; return keys.map(key =&amp;gt; key + &amp;#39;!&amp;#39;); } t = 100 calls = [ &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;a&amp;quot;, &amp;quot;time&amp;quot;: 10}, {&amp;quot;key&amp;quot;: &amp;quot;b&amp;quot;, &amp;quot;time&amp;quot;: 20}, &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;c&amp;quot;, &amp;quot;time&amp;quot;: 30}, {&amp;quot;key&amp;quot;: &amp;quot;d&amp;quot;, &amp;quot;time&amp;quot;: 40}, &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;e&amp;quot;, &amp;quot;time&amp;quot;: 250} &amp;nbsp; {&amp;quot;key&amp;quot;: &amp;quot;f&amp;quot;, &amp;quot;time&amp;quot;: 300} ] Output: [ &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;a!&amp;quot;,&amp;quot;time&amp;quot;:110}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;e!&amp;quot;,&amp;quot;time&amp;quot;:350}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;b!&amp;quot;,&amp;quot;time&amp;quot;:410}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;c!&amp;quot;,&amp;quot;time&amp;quot;:410}, &amp;nbsp; {&amp;quot;resolved&amp;quot;:&amp;quot;d!&amp;quot;,&amp;quot;time&amp;quot;:410}, {&amp;quot;resolved&amp;quot;:&amp;quot;f!&amp;quot;,&amp;quot;time&amp;quot;:450} ] Explanation: queryMultiple([&amp;#39;a&amp;#39;]) is called at t=10ms, it is resolved at t=110ms queryMultiple([&amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;, &amp;#39;d&amp;#39;]) is called at t=110ms, it is resolved at 410ms queryMultiple([&amp;#39;e&amp;#39;]) is called at t=250ms,..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2756 - Query Batching | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2756 - Query Batching" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2756.html" rel="canonical">
+          <meta content="https://leetcode.ca/2023-06-17-2756-Query-Batching/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2023-06-17T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2756 - Query Batching","dateModified":"2023-06-17T00:00:00-07:00","datePublished":"2023-06-17T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2023-06-17-2756-Query-Batching/"},"url":"https://leetcode.ca/2023-06-17-2756-Query-Batching/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2756-query-batching">
+       <a href="solution-2756.html">
+        2756. Query Batching
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Batching multiple small queries into a single large query can be a useful optimization. Write a class
+       <code>
+        QueryBatcher
+       </code>
+       that implements this functionality.
+      </p>
+      <p>
+       The constructor should accept two parameters:
+      </p>
+      <ul>
+       <li>
+        An asynchronous function
+        <code>
+         queryMultiple
+        </code>
+        which accepts an array of string keys
+        <code>
+         input
+        </code>
+        . It will resolve with an array of values that is the same length as the input array. Each index corresponds to the value associated with
+        <code>
+         input[i]
+        </code>
+        . You can assume the promise will never reject.
+       </li>
+       <li>
+        A throttle time in milliseconds
+        <code>
+         t
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       The class has a single method.
+      </p>
+      <ul>
+       <li>
+        <code>
+         async getValue(key)
+        </code>
+        . Accepts a single string key and resolves with a single string value. The keys passed to this function should eventually get passed to the
+        <code>
+         queryMultiple
+        </code>
+        function.
+        <code>
+         queryMultiple
+        </code>
+        should never be called consecutively within
+        <code>
+         t
+        </code>
+        milliseconds. The first time
+        <code>
+         getValue
+        </code>
+        is called,
+        <code>
+         queryMultiple
+        </code>
+        should immediately be called with that single key. If after
+        <code>
+         t
+        </code>
+        milliseconds,
+        <code>
+         getValue
+        </code>
+        had been called again, all the passed keys should be passed to
+        <code>
+         queryMultiple
+        </code>
+        and ultimately returned. You can assume every key passed to this method is unique.
+       </li>
+      </ul>
+      <p>
+       The following diagram illustrates how the throttling algorithm works. Each rectangle represents 100ms. The throttle time is 400ms.
+      </p>
+      <p>
+       <img alt="Throttle info" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2700-2799/2756.Query%20Batching/images/throttle.png" style="width: 622px; height: 200px;"/>
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+queryMultiple = async function(keys) { 
+  return keys.map(key =&gt; key + '!');
+}
+t = 100 
+calls = [
+ {"key": "a", "time": 10}, 
+ {"key": "b", "time": 20}, 
+ {"key": "c", "time": 30}
+]
+<strong>Output:</strong> [
+ {"resolved": "a!", "time": 10},
+ {"resolved": "b!", "time": 110},
+ {"resolved": "c!", "time": 110}
+]
+<strong>Explanation:</strong>
+const batcher = new QueryBatcher(queryMultiple, 100);
+setTimeout(() =&gt; batcher.getValue('a'), 10); // "a!" at t=10ms
+setTimeout(() =&gt; batcher.getValue('b'), 20); // "b!" at t=110ms
+setTimeout(() =&gt; batcher.getValue('c'), 30); // "c!" at t=110ms
+
+queryMultiple simply adds an "!" to the key
+At t=10ms, getValue('a') is called, queryMultiple(['a']) is immediately called and the result is immediately returned.
+At t=20ms, getValue('b') is called but the query is queued
+At t=30ms, getValue('c') is called but the query is queued.
+At t=110ms, queryMultiple(['a', 'b']) is called and the results are immediately returned.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+queryMultiple = async function(keys) {
+  await new Promise(res =&gt; setTimeout(res, 100));
+  return keys.map(key =&gt; key + '!');
+}
+t = 100
+calls = [
+ {"key": "a", "time": 10},
+ {"key": "b", "time": 20},
+ {"key": "c", "time": 30}
+]
+<strong>Output:</strong> [
+  {"resolved": "a!", "time": 110},
+  {"resolved": "b!", "time": 210},
+  {"resolved": "c!", "time": 210}
+]
+<strong>Explanation:</strong>
+This example is the same as example 1 except there is a 100ms delay in queryMultiple. The results are the same except the promises resolve 100ms later.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+queryMultiple = async function(keys) { 
+  await new Promise(res =&gt; setTimeout(res, keys.length * 100)); 
+  return keys.map(key =&gt; key + '!');
+}
+t = 100
+calls = [
+  {"key": "a", "time": 10}, 
+  {"key": "b", "time": 20}, 
+  {"key": "c", "time": 30}, 
+  {"key": "d", "time": 40}, 
+  {"key": "e", "time": 250}
+  {"key": "f", "time": 300}
+]
+<strong>Output:</strong> [
+  {"resolved":"a!","time":110},
+  {"resolved":"e!","time":350},
+  {"resolved":"b!","time":410},
+  {"resolved":"c!","time":410},
+  {"resolved":"d!","time":410},
+  {"resolved":"f!","time":450}
+]
+<strong>Explanation:
+</strong>queryMultiple(['a']) is called at t=10ms, it is resolved at t=110ms
+queryMultiple(['b', 'c', 'd']) is called at t=110ms, it is resolved at 410ms
+queryMultiple(['e']) is called at t=250ms, it is resolved at 350ms
+queryMultiple(['f']) is called at t=350ms, it is resolved at 450ms
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         0 &lt;= t &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         0 &lt;= calls.length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= key.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        All keys are unique
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2756.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

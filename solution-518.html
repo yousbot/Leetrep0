@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-518.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-518.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>518 - Coin Change 2</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/518.html 518. Coin Change 2 (Medium) You are given coins of different denominations and a total amount of money. Write a function to compute the number of combinations that make up that amount. You may assume that you have infinite number of...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-518.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-518.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-518.html" rel="stylesheet"/>
+   <link href="solution-518.html" rel="stylesheet"/>
+   <link href="solution-518.html" rel="stylesheet"/>
+   <link href="solution-518.html" rel="stylesheet"/>
+   <link href="solution-518.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="518 - Coin Change 2" property="og:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/518.html 518. Coin Change 2 (Medium) You are given coins of different denominations and a total amount of money. Write a function to compute the number of combinations that make up that amount. You may assume that you have infinite number of each kind of coin. &amp;nbsp; Example 1: Input: amount = 5, coins = [1, 2, 5] Output: 4 Explanation: there are four ways to make up the amount: 5=5 5=2+2+1 5=2+1+1+1 5=1+1+1+1+1 Example 2: Input: amount = 3, coins = [2] Output: 0 Explanation: the amount of 3 cannot be made up just with coins of 2. Example 3: Input: amount = 10, coins = [10] Output: 1 &amp;nbsp; Note: You can assume that 0 &amp;lt;= amount &amp;lt;= 5000 1 &amp;lt;= coin &amp;lt;= 5000 the number of coins is less than 500 the answer is guaranteed to fit into signed 32-bit integer Solution 1. DFS + Memo // OJ: https://leetcode.com/problems/coin-change-2/ // Time: O(A * C^2) // Space: O(AC) class Solution { private: unordered_map&amp;lt;int, int&amp;gt; memo; int change(int amount, vector&amp;lt;int&amp;gt;&amp;amp; coins, int start) { if (!amount) return 1; if (start &amp;gt;= coins.size()) return 0; int key = amount * 1000 + start; if (memo.find(key) != memo.end()) return memo[key]; int ans = 0; for (int i = start; i &amp;lt; coins.size(); ++i) { if (amount &amp;gt;= coins[i]) ans += change(amount - coins[i], coins, i); } return memo[key] = ans; } public: int change(int amount, vector&amp;lt;int&amp;gt;&amp;amp; coins) { return change(amount, coins, 0); } }; Solution 2. DP (Unbounded knapsack problem), Naive version This is a typical unbounded knapsack problem where you can pick item unlimited times (unbounded). Let dp[i+1][T] be the ways to form T value using A[0] â¦ A[i]. dp[i+1][T] = dp[i][T] + dp[i][T-A[i]] + dp[i][T-2*A[i]] ... dp[i][0] = 1 We can directly apply this formula. This is the naive solution, and in the next solution we find way to optimize it. // OJ: https://leetcode.com/problems/coin-change-2/ // Time: O(N^2 * T) // Space: O(NT) class Solution { public: int change(int T, vector&amp;lt;int&amp;gt;&amp;amp; A) { int N = A.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; dp(N + 1, vector&amp;lt;int&amp;gt;(T + 1)); for (int i = 0; i &amp;lt;= N; ++i) dp[i][0] = 1; for (int i = 0; i &amp;lt; N; ++i) { for (int t = 1; t &amp;lt;= T; ++t) { for (int k = 0; t - k * A[i] &amp;gt;= 0; ++k) { dp[i + 1][t] += dp[i][t - k * A[i]]; } } } return dp[N][T]; } }; Solution 3. DP (Unbounded knapsack problem) Let dp[i+1][T] be the ways to form T value using A[0] â¦ A[i]. dp[i+1][T] = dp[i][T] + dp[i][T-A[i]] + dp[i][T-2*A[i]] ... dp[i+1][T-A[i]] = dp[i][T-A[i]] + dp[i][T-2*A[i]] ... // so dp[i+1][T] = dp[i+1][T-A[i]] + dp[i][T] dp[i][0] = 1 // OJ: https://leetcode.com/problems/coin-change-2/ // Time: O(NT) // Space: O(NT) class Solution { public: int change(int T, vector&amp;lt;int&amp;gt;&amp;amp; A) { int N = A.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; dp(N + 1, vector&amp;lt;int&amp;gt;(T + 1)); for (int i = 0; i &amp;lt;= N; ++i) dp[i][0] = 1; for..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-05-01T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-05-01-518-Coin-Change-2/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-518.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="518 - Coin Change 2" property="twitter:title"/>
+   <meta content="Leetcode Formatted question description: https://leetcode.ca/all/518.html 518. Coin Change 2 (Medium) You are given coins of different denominations and a total amount of money. Write a function to compute the number of combinations that make up that amount. You may assume that you have infinite number of each kind of coin. &amp;nbsp; Example 1: Input: amount = 5, coins = [1, 2, 5] Output: 4 Explanation: there are four ways to make up the amount: 5=5 5=2+2+1 5=2+1+1+1 5=1+1+1+1+1 Example 2: Input: amount = 3, coins = [2] Output: 0 Explanation: the amount of 3 cannot be made up just with coins of 2. Example 3: Input: amount = 10, coins = [10] Output: 1 &amp;nbsp; Note: You can assume that 0 &amp;lt;= amount &amp;lt;= 5000 1 &amp;lt;= coin &amp;lt;= 5000 the number of coins is less than 500 the answer is guaranteed to fit into signed 32-bit integer Solution 1. DFS + Memo // OJ: https://leetcode.com/problems/coin-change-2/ // Time: O(A * C^2) // Space: O(AC) class Solution { private: unordered_map&amp;lt;int, int&amp;gt; memo; int change(int amount, vector&amp;lt;int&amp;gt;&amp;amp; coins, int start) { if (!amount) return 1; if (start &amp;gt;= coins.size()) return 0; int key = amount * 1000 + start; if (memo.find(key) != memo.end()) return memo[key]; int ans = 0; for (int i = start; i &amp;lt; coins.size(); ++i) { if (amount &amp;gt;= coins[i]) ans += change(amount - coins[i], coins, i); } return memo[key] = ans; } public: int change(int amount, vector&amp;lt;int&amp;gt;&amp;amp; coins) { return change(amount, coins, 0); } }; Solution 2. DP (Unbounded knapsack problem), Naive version This is a typical unbounded knapsack problem where you can pick item unlimited times (unbounded). Let dp[i+1][T] be the ways to form T value using A[0] â¦ A[i]. dp[i+1][T] = dp[i][T] + dp[i][T-A[i]] + dp[i][T-2*A[i]] ... dp[i][0] = 1 We can directly apply this formula. This is the naive solution, and in the next solution we find way to optimize it. // OJ: https://leetcode.com/problems/coin-change-2/ // Time: O(N^2 * T) // Space: O(NT) class Solution { public: int change(int T, vector&amp;lt;int&amp;gt;&amp;amp; A) { int N = A.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; dp(N + 1, vector&amp;lt;int&amp;gt;(T + 1)); for (int i = 0; i &amp;lt;= N; ++i) dp[i][0] = 1; for (int i = 0; i &amp;lt; N; ++i) { for (int t = 1; t &amp;lt;= T; ++t) { for (int k = 0; t - k * A[i] &amp;gt;= 0; ++k) { dp[i + 1][t] += dp[i][t - k * A[i]]; } } } return dp[N][T]; } }; Solution 3. DP (Unbounded knapsack problem) Let dp[i+1][T] be the ways to form T value using A[0] â¦ A[i]. dp[i+1][T] = dp[i][T] + dp[i][T-A[i]] + dp[i][T-2*A[i]] ... dp[i+1][T-A[i]] = dp[i][T-A[i]] + dp[i][T-2*A[i]] ... // so dp[i+1][T] = dp[i+1][T-A[i]] + dp[i][T] dp[i][0] = 1 // OJ: https://leetcode.com/problems/coin-change-2/ // Time: O(NT) // Space: O(NT) class Solution { public: int change(int T, vector&amp;lt;int&amp;gt;&amp;amp; A) { int N = A.size(); vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; dp(N + 1, vector&amp;lt;int&amp;gt;(T + 1)); for (int i = 0; i &amp;lt;= N; ++i) dp[i][0] = 1; for..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    518 - Coin Change 2 | Leetcode
+   </title>
+   <meta content="Jekyll v3.9.4" name="generator">
+    <meta content="518 - Coin Change 2" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-518.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-05-01-518-Coin-Change-2/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-05-01T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"headline":"518 - Coin Change 2","dateModified":"2017-05-01T22:21:01-07:00","datePublished":"2017-05-01T22:21:01-07:00","description":"Leetcode","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-05-01-518-Coin-Change-2/"},"url":"https://leetcode.ca/2017-05-01-518-Coin-Change-2/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCDRuzBvLGzyVvgPyohrahrA" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-518.html">
+        https://leetcode.ca/all/518.html
+       </a>
+      </p>
+      <h1 id="518-coin-change-2-medium">
+       <a href="solution-518.html">
+        518. Coin Change 2 (Medium)
+       </a>
+      </h1>
+      <p>
+       You are given coins of different denominations and a total amount of money. Write a function to compute the number of combinations that make up that amount. You may assume that you have infinite number of each kind of coin.
+      </p>
+      <ul>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <b>
+        Example 1:
+       </b>
+      </p>
+      <pre><b>Input:</b> amount = 5, coins = [1, 2, 5]
+<b>Output:</b> 4
+<b>Explanation:</b> there are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+</pre>
+      <p>
+       <b>
+        Example 2:
+       </b>
+      </p>
+      <pre><b>Input:</b> amount = 3, coins = [2]
+<b>Output:</b> 0
+<b>Explanation:</b> the amount of 3 cannot be made up just with coins of 2.
+</pre>
+      <p>
+       <b>
+        Example 3:
+       </b>
+      </p>
+      <pre><b>Input:</b> amount = 10, coins = [10] 
+<b>Output:</b> 1
+</pre>
+      <p>
+      </p>
+      <p>
+       <b>
+        Note:
+       </b>
+      </p>
+      <p>
+       You can assume that
+      </p>
+      <ul>
+       <li>
+        0 &lt;= amount &lt;= 5000
+       </li>
+       <li>
+        1 &lt;= coin &lt;= 5000
+       </li>
+       <li>
+        the number of coins is less than 500
+       </li>
+       <li>
+        the answer is guaranteed to fit into signed 32-bit integer
+       </li>
+      </ul>
+      <h2 id="solution-1-dfs--memo">
+       Solution 1. DFS + Memo
+      </h2>
+      <div class="language-cpp highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/coin-change-2/</span>
+<span class="c1">// Time: O(A * C^2)</span>
+<span class="c1">// Space: O(AC)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">memo</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">amount</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">coins</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">amount</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="n">coins</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">key</span> <span class="o">=</span> <span class="n">amount</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">+</span> <span class="n">start</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">memo</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">!=</span> <span class="n">memo</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="k">return</span> <span class="n">memo</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">coins</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">amount</span> <span class="o">&gt;=</span> <span class="n">coins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">ans</span> <span class="o">+=</span> <span class="n">change</span><span class="p">(</span><span class="n">amount</span> <span class="o">-</span> <span class="n">coins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">coins</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">memo</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">amount</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">coins</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">change</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">coins</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+       </div>
+      </div>
+      <h2 id="solution-2-dp-unbounded-knapsack-problem-naive-version">
+       Solution 2. DP (Unbounded knapsack problem), Naive version
+      </h2>
+      <p>
+       This is a typical unbounded knapsack problem where you can pick item unlimited times (unbounded).
+      </p>
+      <p>
+       Let
+       <code class="language-plaintext highlighter-rouge">
+        dp[i+1][T]
+       </code>
+       be the ways to form
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       value using
+       <code class="language-plaintext highlighter-rouge">
+        A[0]
+       </code>
+       â¦
+       <code class="language-plaintext highlighter-rouge">
+        A[i]
+       </code>
+       .
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>dp[i+1][T]      = dp[i][T] + dp[i][T-A[i]] + dp[i][T-2*A[i]] ...
+
+dp[i][0] = 1
+</code></pre>
+       </div>
+      </div>
+      <p>
+       We can directly apply this formula.
+      </p>
+      <p>
+       This is the naive solution, and in the next solution we find way to optimize it.
+      </p>
+      <div class="language-cpp highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/coin-change-2/</span>
+<span class="c1">// Time: O(N^2 * T)</span>
+<span class="c1">// Space: O(NT)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">T</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">T</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">t</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">T</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+       </div>
+      </div>
+      <h2 id="solution-3-dp-unbounded-knapsack-problem">
+       Solution 3. DP (Unbounded knapsack problem)
+      </h2>
+      <p>
+       Let
+       <code class="language-plaintext highlighter-rouge">
+        dp[i+1][T]
+       </code>
+       be the ways to form
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       value using
+       <code class="language-plaintext highlighter-rouge">
+        A[0]
+       </code>
+       â¦
+       <code class="language-plaintext highlighter-rouge">
+        A[i]
+       </code>
+       .
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>dp[i+1][T]      = dp[i][T] + dp[i][T-A[i]] + dp[i][T-2*A[i]] ...
+
+dp[i+1][T-A[i]] =            dp[i][T-A[i]] + dp[i][T-2*A[i]] ...
+
+// so
+dp[i+1][T] = dp[i+1][T-A[i]] + dp[i][T]
+
+dp[i][0] = 1
+</code></pre>
+       </div>
+      </div>
+      <div class="language-cpp highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/coin-change-2/</span>
+<span class="c1">// Time: O(NT)</span>
+<span class="c1">// Space: O(NT)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">T</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">T</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">t</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">t</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">T</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+       </div>
+      </div>
+      <h2 id="solution-4-dp-unbounded-knapsack-problem-with-space-optimization">
+       Solution 4. DP (Unbounded knapsack problem) with Space Optimization
+      </h2>
+      <p>
+       Since
+       <code class="language-plaintext highlighter-rouge">
+        dp[i+1][T]
+       </code>
+       only depends on
+       <code class="language-plaintext highlighter-rouge">
+        dp[i+1][T-A[i]]
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        dp[i][T]
+       </code>
+       , we can reduce the
+       <code class="language-plaintext highlighter-rouge">
+        dp
+       </code>
+       array from
+       <code class="language-plaintext highlighter-rouge">
+        N * T
+       </code>
+       to
+       <code class="language-plaintext highlighter-rouge">
+        1 * T
+       </code>
+       .
+      </p>
+      <div class="language-cpp highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/coin-change-2/</span>
+<span class="c1">// Time: O(NT)</span>
+<span class="c1">// Space: O(T)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">T</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">T</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">dp</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">T</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+       </div>
+      </div>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#3a935e2f-5a3a-46eb-8f93-e1b88af5a32f'}">
+       <li class="uk-active">
+        <a href="solution-518.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-518.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-518.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-518.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-518.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="3a935e2f-5a3a-46eb-8f93-e1b88af5a32f">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">change</span><span class="o">(</span><span class="kt">int</span> <span class="n">amount</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">coins</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">coin</span> <span class="o">:</span> <span class="n">coins</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">coin</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">amount</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+                <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">coin</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">amount</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="err">############</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">change</span><span class="o">(</span><span class="kt">int</span> <span class="n">amount</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">coins</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">coin</span> <span class="o">:</span> <span class="n">coins</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">coin</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">amount</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">dp</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">coin</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">amount</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/coin-change-2/</span>
+<span class="c1">// Time: O(A * C^2)</span>
+<span class="c1">// Space: O(AC)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">memo</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">amount</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">coins</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">amount</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="n">coins</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">key</span> <span class="o">=</span> <span class="n">amount</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">+</span> <span class="n">start</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">memo</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">!=</span> <span class="n">memo</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="k">return</span> <span class="n">memo</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">coins</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">amount</span> <span class="o">&gt;=</span> <span class="n">coins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">ans</span> <span class="o">+=</span> <span class="n">change</span><span class="p">(</span><span class="n">amount</span> <span class="o">-</span> <span class="n">coins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">coins</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">memo</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">amount</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">coins</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">change</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">coins</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">coins</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">coin</span> <span class="ow">in</span> <span class="n">coins</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">coin</span><span class="p">,</span> <span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">coin</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">coins</span><span class="p">):</span>
+        <span class="s">"""
+        :type amount: int
+        :type coins: List[int]
+        :rtype: int
+        """</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">coin</span> <span class="ow">in</span> <span class="n">coins</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">coin</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">:</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">coin</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">amount</span><span class="p">]</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">change</span><span class="p">(</span><span class="n">amount</span> <span class="kt">int</span><span class="p">,</span> <span class="n">coins</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">amount</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">dp</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">coin</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">coins</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">coin</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">amount</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="n">coin</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">amount</span><span class="p">]</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">change</span><span class="p">(</span><span class="nx">amount</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">coins</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nx">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">coin</span> <span class="k">of</span> <span class="nx">coins</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">coin</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">amount</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">dp</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">dp</span><span class="p">[</span><span class="nx">i</span> <span class="o">-</span> <span class="nx">coin</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">dp</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-518.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

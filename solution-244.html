@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-244.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-244.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>244 - Shortest Word Distance II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 244. Shortest Word Distance II Description Design a data structure that will be initialized with a string array, and then it should answer queries of the shortest distance between two different strings from the array. Implement the WordDistance class: WordDistance(String[] wordsDict) initializes the object with...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-244.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-244.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-244.html" rel="stylesheet"/>
+   <link href="solution-244.html" rel="stylesheet"/>
+   <link href="solution-244.html" rel="stylesheet"/>
+   <link href="solution-244.html" rel="stylesheet"/>
+   <link href="solution-244.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="244 - Shortest Word Distance II" property="og:title"/>
+   <meta content='Leetcode 244. Shortest Word Distance II Description Design a data structure that will be initialized with a string array, and then it should answer queries of the shortest distance between two different strings from the array. Implement the WordDistance class: WordDistance(String[] wordsDict) initializes the object with the strings array wordsDict. int shortest(String word1, String word2) returns the shortest distance between word1 and word2 in the array wordsDict. &amp;nbsp; Example 1: Input [&amp;quot;WordDistance&amp;quot;, &amp;quot;shortest&amp;quot;, &amp;quot;shortest&amp;quot;] [[[&amp;quot;practice&amp;quot;, &amp;quot;makes&amp;quot;, &amp;quot;perfect&amp;quot;, &amp;quot;coding&amp;quot;, &amp;quot;makes&amp;quot;]], [&amp;quot;coding&amp;quot;, &amp;quot;practice&amp;quot;], [&amp;quot;makes&amp;quot;, &amp;quot;coding&amp;quot;]] Output [null, 3, 1] Explanation WordDistance wordDistance = new WordDistance([&amp;quot;practice&amp;quot;, &amp;quot;makes&amp;quot;, &amp;quot;perfect&amp;quot;, &amp;quot;coding&amp;quot;, &amp;quot;makes&amp;quot;]); wordDistance.shortest(&amp;quot;coding&amp;quot;, &amp;quot;practice&amp;quot;); // return 3 wordDistance.shortest(&amp;quot;makes&amp;quot;, &amp;quot;coding&amp;quot;); // return 1 &amp;nbsp; Constraints: 1 &amp;lt;= wordsDict.length &amp;lt;= 3 * 104 1 &amp;lt;= wordsDict[i].length &amp;lt;= 10 wordsDict[i] consists of lowercase English letters. word1 and word2 are in wordsDict. word1 != word2 At most 5000 calls will be made to shortest. Solutions Constructor: __init__ A dictionary self.d is initialized using defaultdict(list) from the collections module. This allows for appending indices to lists for each word without needing to check if the key exists. The constructor iterates over wordsDict, enumerating each word w along with its index i. Each wordâs index is appended to its corresponding list in self.d. This setup facilitates quick access to all positions where each word appears in the list, crucial for efficiently calculating the distance between any two words later on. Method: shortest Given two words, word1 and word2, the method retrieves their respective index lists (a and b) from self.d. It initializes ans with inf (infinity) to ensure that any actual distance found will be smaller than this initial value. Two pointers, i and j, are initialized to iterate over the index lists a and b, respectively. The method enters a loop that continues until either i or j has traversed its entire list. Inside the loop: The absolute difference between the current indices a[i] and b[j] is calculated and used to update ans if itâs smaller than the current value of ans. This step finds the minimum distance between the current pair of indices. The pointer (i or j) corresponding to the smaller index is incremented. If a[i] is less than or equal to b[j], i is incremented; otherwise, j is incremented. This approach ensures that the loop efficiently finds the minimum distance by always moving the pointer that points to the smaller index, thereby reducing the difference in the next iteration. Once the loop completes, ans holds the minimum distance found between any pair of indices from a and b. Example Consider wordsDict = ["practice", "makes", "perfect", "coding", "makes"], and we want to find the shortest distance between "coding" and "makes": self.d["coding"] = [3], and self.d["makes"] = [1, 4]. The shortest distance calculation checks the differences abs(3 - 1) = 2 and abs(3 - 4) = 1. The minimum distance is 1, so ans = 1. This class provides an efficient way to find the shortest distance between two words in a list, optimizing for...' property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-07-31T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-07-31-244-Shortest-Word-Distance-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-244.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="244 - Shortest Word Distance II" property="twitter:title"/>
+   <meta content='Leetcode 244. Shortest Word Distance II Description Design a data structure that will be initialized with a string array, and then it should answer queries of the shortest distance between two different strings from the array. Implement the WordDistance class: WordDistance(String[] wordsDict) initializes the object with the strings array wordsDict. int shortest(String word1, String word2) returns the shortest distance between word1 and word2 in the array wordsDict. &amp;nbsp; Example 1: Input [&amp;quot;WordDistance&amp;quot;, &amp;quot;shortest&amp;quot;, &amp;quot;shortest&amp;quot;] [[[&amp;quot;practice&amp;quot;, &amp;quot;makes&amp;quot;, &amp;quot;perfect&amp;quot;, &amp;quot;coding&amp;quot;, &amp;quot;makes&amp;quot;]], [&amp;quot;coding&amp;quot;, &amp;quot;practice&amp;quot;], [&amp;quot;makes&amp;quot;, &amp;quot;coding&amp;quot;]] Output [null, 3, 1] Explanation WordDistance wordDistance = new WordDistance([&amp;quot;practice&amp;quot;, &amp;quot;makes&amp;quot;, &amp;quot;perfect&amp;quot;, &amp;quot;coding&amp;quot;, &amp;quot;makes&amp;quot;]); wordDistance.shortest(&amp;quot;coding&amp;quot;, &amp;quot;practice&amp;quot;); // return 3 wordDistance.shortest(&amp;quot;makes&amp;quot;, &amp;quot;coding&amp;quot;); // return 1 &amp;nbsp; Constraints: 1 &amp;lt;= wordsDict.length &amp;lt;= 3 * 104 1 &amp;lt;= wordsDict[i].length &amp;lt;= 10 wordsDict[i] consists of lowercase English letters. word1 and word2 are in wordsDict. word1 != word2 At most 5000 calls will be made to shortest. Solutions Constructor: __init__ A dictionary self.d is initialized using defaultdict(list) from the collections module. This allows for appending indices to lists for each word without needing to check if the key exists. The constructor iterates over wordsDict, enumerating each word w along with its index i. Each wordâs index is appended to its corresponding list in self.d. This setup facilitates quick access to all positions where each word appears in the list, crucial for efficiently calculating the distance between any two words later on. Method: shortest Given two words, word1 and word2, the method retrieves their respective index lists (a and b) from self.d. It initializes ans with inf (infinity) to ensure that any actual distance found will be smaller than this initial value. Two pointers, i and j, are initialized to iterate over the index lists a and b, respectively. The method enters a loop that continues until either i or j has traversed its entire list. Inside the loop: The absolute difference between the current indices a[i] and b[j] is calculated and used to update ans if itâs smaller than the current value of ans. This step finds the minimum distance between the current pair of indices. The pointer (i or j) corresponding to the smaller index is incremented. If a[i] is less than or equal to b[j], i is incremented; otherwise, j is incremented. This approach ensures that the loop efficiently finds the minimum distance by always moving the pointer that points to the smaller index, thereby reducing the difference in the next iteration. Once the loop completes, ans holds the minimum distance found between any pair of indices from a and b. Example Consider wordsDict = ["practice", "makes", "perfect", "coding", "makes"], and we want to find the shortest distance between "coding" and "makes": self.d["coding"] = [3], and self.d["makes"] = [1, 4]. The shortest distance calculation checks the differences abs(3 - 1) = 2 and abs(3 - 4) = 1. The minimum distance is 1, so ans = 1. This class provides an efficient way to find the shortest distance between two words in a list, optimizing for...' property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    244 - Shortest Word Distance II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="244 - Shortest Word Distance II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-244.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-07-31-244-Shortest-Word-Distance-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-07-31T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"244 - Shortest Word Distance II","dateModified":"2016-07-31T00:00:00-07:00","datePublished":"2016-07-31T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-07-31-244-Shortest-Word-Distance-II/"},"url":"https://leetcode.ca/2016-07-31-244-Shortest-Word-Distance-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="244-shortest-word-distance-ii">
+       <a href="solution-244.html">
+        244. Shortest Word Distance II
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Design a data structure that will be initialized with a string array, and then it should answer queries of the shortest distance between two different strings from the array.
+      </p>
+      <p>
+       Implement the
+       <code>
+        WordDistance
+       </code>
+       class:
+      </p>
+      <ul>
+       <li>
+        <code>
+         WordDistance(String[] wordsDict)
+        </code>
+        initializes the object with the strings array
+        <code>
+         wordsDict
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         int shortest(String word1, String word2)
+        </code>
+        returns the shortest distance between
+        <code>
+         word1
+        </code>
+        and
+        <code>
+         word2
+        </code>
+        in the array
+        <code>
+         wordsDict
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input</strong>
+["WordDistance", "shortest", "shortest"]
+[[["practice", "makes", "perfect", "coding", "makes"]], ["coding", "practice"], ["makes", "coding"]]
+<strong>Output</strong>
+[null, 3, 1]
+
+<strong>Explanation</strong>
+WordDistance wordDistance = new WordDistance(["practice", "makes", "perfect", "coding", "makes"]);
+wordDistance.shortest("coding", "practice"); // return 3
+wordDistance.shortest("makes", "coding");    // return 1
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= wordsDict.length &lt;= 3 * 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= wordsDict[i].length &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         wordsDict[i]
+        </code>
+        consists of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         word1
+        </code>
+        and
+        <code>
+         word2
+        </code>
+        are in
+        <code>
+         wordsDict
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         word1 != word2
+        </code>
+       </li>
+       <li>
+        At most
+        <code>
+         5000
+        </code>
+        calls will be made to
+        <code>
+         shortest
+        </code>
+        .
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <h3 id="constructor-__init__">
+       Constructor:
+       <code class="language-plaintext highlighter-rouge">
+        __init__
+       </code>
+      </h3>
+      <ul>
+       <li>
+        A dictionary
+        <code class="language-plaintext highlighter-rouge">
+         self.d
+        </code>
+        is initialized using
+        <code class="language-plaintext highlighter-rouge">
+         defaultdict(list)
+        </code>
+        from the
+        <code class="language-plaintext highlighter-rouge">
+         collections
+        </code>
+        module. This allows for appending indices to lists for each word without needing to check if the key exists.
+       </li>
+       <li>
+        The constructor iterates over
+        <code class="language-plaintext highlighter-rouge">
+         wordsDict
+        </code>
+        , enumerating each word
+        <code class="language-plaintext highlighter-rouge">
+         w
+        </code>
+        along with its index
+        <code class="language-plaintext highlighter-rouge">
+         i
+        </code>
+        . Each wordâs index is appended to its corresponding list in
+        <code class="language-plaintext highlighter-rouge">
+         self.d
+        </code>
+        . This setup facilitates quick access to all positions where each word appears in the list, crucial for efficiently calculating the distance between any two words later on.
+       </li>
+      </ul>
+      <h3 id="method-shortest">
+       Method:
+       <code class="language-plaintext highlighter-rouge">
+        shortest
+       </code>
+      </h3>
+      <ul>
+       <li>
+        Given two words,
+        <code class="language-plaintext highlighter-rouge">
+         word1
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         word2
+        </code>
+        , the method retrieves their respective index lists (
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         b
+        </code>
+        ) from
+        <code class="language-plaintext highlighter-rouge">
+         self.d
+        </code>
+        .
+       </li>
+       <li>
+        It initializes
+        <code class="language-plaintext highlighter-rouge">
+         ans
+        </code>
+        with
+        <code class="language-plaintext highlighter-rouge">
+         inf
+        </code>
+        (infinity) to ensure that any actual distance found will be smaller than this initial value.
+       </li>
+       <li>
+        Two pointers,
+        <code class="language-plaintext highlighter-rouge">
+         i
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         j
+        </code>
+        , are initialized to iterate over the index lists
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         b
+        </code>
+        , respectively.
+       </li>
+       <li>
+        The method enters a loop that continues until either
+        <code class="language-plaintext highlighter-rouge">
+         i
+        </code>
+        or
+        <code class="language-plaintext highlighter-rouge">
+         j
+        </code>
+        has traversed its entire list. Inside the loop:
+        <ul>
+         <li>
+          The absolute difference between the current indices
+          <code class="language-plaintext highlighter-rouge">
+           a[i]
+          </code>
+          and
+          <code class="language-plaintext highlighter-rouge">
+           b[j]
+          </code>
+          is calculated and used to update
+          <code class="language-plaintext highlighter-rouge">
+           ans
+          </code>
+          if itâs smaller than the current value of
+          <code class="language-plaintext highlighter-rouge">
+           ans
+          </code>
+          . This step finds the minimum distance between the current pair of indices.
+         </li>
+         <li>
+          The pointer (
+          <code class="language-plaintext highlighter-rouge">
+           i
+          </code>
+          or
+          <code class="language-plaintext highlighter-rouge">
+           j
+          </code>
+          ) corresponding to the smaller index is incremented. If
+          <code class="language-plaintext highlighter-rouge">
+           a[i]
+          </code>
+          is less than or equal to
+          <code class="language-plaintext highlighter-rouge">
+           b[j]
+          </code>
+          ,
+          <code class="language-plaintext highlighter-rouge">
+           i
+          </code>
+          is incremented; otherwise,
+          <code class="language-plaintext highlighter-rouge">
+           j
+          </code>
+          is incremented. This approach ensures that the loop efficiently finds the minimum distance by always moving the pointer that points to the smaller index, thereby reducing the difference in the next iteration.
+         </li>
+        </ul>
+       </li>
+       <li>
+        Once the loop completes,
+        <code class="language-plaintext highlighter-rouge">
+         ans
+        </code>
+        holds the minimum distance found between any pair of indices from
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         b
+        </code>
+        .
+       </li>
+      </ul>
+      <h3 id="example">
+       Example
+      </h3>
+      <p>
+       Consider
+       <code class="language-plaintext highlighter-rouge">
+        wordsDict = ["practice", "makes", "perfect", "coding", "makes"]
+       </code>
+       , and we want to find the shortest distance between
+       <code class="language-plaintext highlighter-rouge">
+        "coding"
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        "makes"
+       </code>
+       :
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         self.d["coding"] = [3]
+        </code>
+        , and
+        <code class="language-plaintext highlighter-rouge">
+         self.d["makes"] = [1, 4]
+        </code>
+        .
+       </li>
+       <li>
+        The shortest distance calculation checks the differences
+        <code class="language-plaintext highlighter-rouge">
+         abs(3 - 1) = 2
+        </code>
+        and
+        <code class="language-plaintext highlighter-rouge">
+         abs(3 - 4) = 1
+        </code>
+        .
+       </li>
+       <li>
+        The minimum distance is
+        <code class="language-plaintext highlighter-rouge">
+         1
+        </code>
+        , so
+        <code class="language-plaintext highlighter-rouge">
+         ans = 1
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       This class provides an efficient way to find the shortest distance between two words in a list, optimizing for cases where multiple queries are made against the same list by preprocessing the list into a more accessible form.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#37d13c1a-9fd6-4e51-8973-6fbc2ab8b941'}">
+       <li class="uk-active">
+        <a href="solution-244.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-244.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-244.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-244.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="37d13c1a-9fd6-4e51-8973-6fbc2ab8b941">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">WordDistance</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nf">WordDistance</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">wordsDict</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">wordsDict</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">d</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">wordsDict</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">shortest</span><span class="o">(</span><span class="nc">String</span> <span class="n">word1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">word2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">word1</span><span class="o">),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">word2</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mh">0x3f3f3f3f</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="n">b</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">)));</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">))</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">j</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Your WordDistance object will be instantiated and called as such:
+ * WordDistance obj = new WordDistance(wordsDict);
+ * int param_1 = obj.shortest(word1,word2);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">WordDistance</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">WordDistance</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">wordsDict</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">wordsDict</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">wordsDict</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">shortest</span><span class="p">(</span><span class="n">string</span> <span class="n">word1</span><span class="p">,</span> <span class="n">string</span> <span class="n">word2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">word1</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">word2</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+ * Your WordDistance object will be instantiated and called as such:
+ * WordDistance* obj = new WordDistance(wordsDict);
+ * int param_1 = obj-&gt;shortest(word1,word2);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">WordDistance</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wordsDict</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wordsDict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">w</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">shortest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">word2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">word1</span><span class="p">],</span> <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">word2</span><span class="p">]</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">inf</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+
+<span class="c1"># Your WordDistance object will be instantiated and called as such:
+# obj = WordDistance(wordsDict)
+# param_1 = obj.shortest(word1,word2)
+</span>
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">WordDistance</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">):</span>
+    <span class="s">"""
+    initialize your data structure here.
+    :type words: List[str]
+    """</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)):</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+  <span class="k">def</span> <span class="nf">shortest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word1</span><span class="p">,</span> <span class="n">word2</span><span class="p">):</span>
+    <span class="s">"""
+    Adds a word into the data structure.
+    :type word1: str
+    :type word2: str
+    :rtype: int
+    """</span>
+    <span class="n">l1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">word1</span><span class="p">]</span>
+    <span class="n">l2</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">d</span><span class="p">[</span><span class="n">word2</span><span class="p">]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"inf"</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">l2</span><span class="p">):</span>
+      <span class="n">ans</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">l1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">l2</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+      <span class="k">if</span> <span class="n">l1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">l2</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ans</span>
+
+<span class="c1"># Your WordDistance object will be instantiated and called as such:
+# wordDistance = WordDistance(words)
+# wordDistance.shortest("word1", "word2")
+# wordDistance.shortest("anotherWord1", "anotherWord2")
+</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">type</span> <span class="n">WordDistance</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">d</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">wordsDict</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="n">WordDistance</span> <span class="p">{</span>
+	<span class="n">d</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">wordsDict</span> <span class="p">{</span>
+		<span class="n">d</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">WordDistance</span><span class="p">{</span><span class="n">d</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">WordDistance</span><span class="p">)</span> <span class="n">Shortest</span><span class="p">(</span><span class="n">word1</span> <span class="kt">string</span><span class="p">,</span> <span class="n">word2</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">word1</span><span class="p">],</span> <span class="n">this</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">word2</span><span class="p">]</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="m">0x3f3f3f3f</span>
+	<span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+		<span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">j</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="n">x</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">x</span>
+<span class="p">}</span>
+
+<span class="c">/**
+ * Your WordDistance object will be instantiated and called as such:
+ * obj := Constructor(wordsDict);
+ * param_1 := obj.Shortest(word1,word2);
+ */</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-244.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

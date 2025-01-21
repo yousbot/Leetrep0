@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1680.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1680.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1680 - Concatenation of Consecutive Binary Numbers</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1680. Concatenation of Consecutive Binary Numbers Description Given an integer n, return the decimal value of the binary string formed by concatenating the binary representations of 1 to n in order, modulo 109 + 7. &amp;nbsp; Example 1: Input: n = 1 Output: 1 Explanation:...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1680.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1680.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1680.html" rel="stylesheet"/>
+   <link href="solution-1680.html" rel="stylesheet"/>
+   <link href="solution-1680.html" rel="stylesheet"/>
+   <link href="solution-1680.html" rel="stylesheet"/>
+   <link href="solution-1680.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1680 - Concatenation of Consecutive Binary Numbers" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+1680. Concatenation of Consecutive Binary Numbers
+
+Description
+
+Given an integer n, return the decimal value of the binary string formed by concatenating the binary representations of 1 to n in order, modulo 109 + 7.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: n = 1
+Output: 1
+Explanation: &amp;quot;1&amp;quot; in binary corresponds to the decimal value 1. 
+
+
+Example 2:
+
+
+Input: n = 3
+Output: 27
+Explanation: In binary, 1, 2, and 3 corresponds to &amp;quot;1&amp;quot;, &amp;quot;10&amp;quot;, and &amp;quot;11&amp;quot;.
+After concatenating them, we have &amp;quot;11011&amp;quot;, which corresponds to the decimal value 27.
+
+
+Example 3:
+
+
+Input: n = 12
+Output: 505379714
+Explanation: The concatenation results in &amp;quot;1101110010111011110001001101010111100&amp;quot;.
+The decimal value of that is 118505380540.
+After modulo 109 + 7, the result is 505379714.
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= n &amp;lt;= 105
+
+
+Solutions
+
+Solution 1: Bit Manipulation
+
+By observing the pattern of number concatenation, we can find that when concatenating to the $i$-th number, the result $ans$ formed by concatenating the previous $i-1$ numbers is actually shifted to the left by a certain number of bits, and then $i$ is added. The number of bits shifted, $shift$, is the number of binary digits in $i$. Since $i$ is continuously incremented by $1$, the number of bits shifted either remains the same as the last shift or increases by one. When $i$ is a power of $2$, that is, when there is only one bit in the binary number of $i$ that is $1$, the number of bits shifted increases by $1$ compared to the last time.
+
+The time complexity is $O(n)$, where $n$ is the given integer. The space complexity is $O(1)$.
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public int concatenatedBinary(int n) {
+        final int mod = (int) 1e9 + 7;
+        long ans = 0;
+        for (int i = 1; i &amp;lt;= n; ++i) {
+            ans = (ans &amp;lt;&amp;lt; (32 - Integer.numberOfLeadingZeros(i)) | i) % mod;
+        }
+        return (int) ans;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    int concatenatedBinary(int n) {
+        const int mod = 1e9 + 7;
+        long ans = 0;
+        for (int i = 1; i &amp;lt;= n; ++i) {
+            ans = (ans &amp;lt;&amp;lt; (32 - __builtin_clz(i)) | i) % mod;
+        }
+        return ans;
+    }
+};
+
+
+
+	
+class Solution:
+    def concatenatedBinary(self, n: int) -&amp;gt; int:
+        mod = 10**9 + 7
+        ans = 0
+        for i in range(1, n + 1):
+            ans = (ans &amp;lt;&amp;lt; i.bit_length() | i) % mod
+        return ans
+
+
+
+
+	
+func concatenatedBinary(n int) (ans int) {
+	const mod = 1e9 + 7
+	for i := 1; i &amp;lt;= n; i++ {
+		ans = (ans&amp;lt;&amp;lt;bits.Len(uint(i)) | i) % mod
+	}
+	return
+}
+
+
+
+	
+function concatenatedBinary(n: number): number {
+    const mod = BigInt(10 ** 9 + 7);
+    let ans = 0n;
+    let shift = 0n;
+    for (let i = 1n; i &amp;lt;= n; ++i) {
+        if ((i &amp;amp; (i - 1n)) == 0n) {
+            ++shift;
+        }
+        ans = ((ans &amp;lt;&amp;lt; shift) | i) % mod;
+    }
+    return Number(ans);
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2020-07-06T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2020-07-06-1680-Concatenation-of-Consecutive-Binary-Numbers/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1680.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1680 - Concatenation of Consecutive Binary Numbers" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+1680. Concatenation of Consecutive Binary Numbers
+
+Description
+
+Given an integer n, return the decimal value of the binary string formed by concatenating the binary representations of 1 to n in order, modulo 109 + 7.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: n = 1
+Output: 1
+Explanation: &amp;quot;1&amp;quot; in binary corresponds to the decimal value 1. 
+
+
+Example 2:
+
+
+Input: n = 3
+Output: 27
+Explanation: In binary, 1, 2, and 3 corresponds to &amp;quot;1&amp;quot;, &amp;quot;10&amp;quot;, and &amp;quot;11&amp;quot;.
+After concatenating them, we have &amp;quot;11011&amp;quot;, which corresponds to the decimal value 27.
+
+
+Example 3:
+
+
+Input: n = 12
+Output: 505379714
+Explanation: The concatenation results in &amp;quot;1101110010111011110001001101010111100&amp;quot;.
+The decimal value of that is 118505380540.
+After modulo 109 + 7, the result is 505379714.
+
+
+&amp;nbsp;
+Constraints:
+
+
+	1 &amp;lt;= n &amp;lt;= 105
+
+
+Solutions
+
+Solution 1: Bit Manipulation
+
+By observing the pattern of number concatenation, we can find that when concatenating to the $i$-th number, the result $ans$ formed by concatenating the previous $i-1$ numbers is actually shifted to the left by a certain number of bits, and then $i$ is added. The number of bits shifted, $shift$, is the number of binary digits in $i$. Since $i$ is continuously incremented by $1$, the number of bits shifted either remains the same as the last shift or increases by one. When $i$ is a power of $2$, that is, when there is only one bit in the binary number of $i$ that is $1$, the number of bits shifted increases by $1$ compared to the last time.
+
+The time complexity is $O(n)$, where $n$ is the given integer. The space complexity is $O(1)$.
+
+
+
+	Java
+
+	C++
+
+	Python
+
+	Go
+
+	TypeScript
+
+
+
+
+
+	
+class Solution {
+    public int concatenatedBinary(int n) {
+        final int mod = (int) 1e9 + 7;
+        long ans = 0;
+        for (int i = 1; i &amp;lt;= n; ++i) {
+            ans = (ans &amp;lt;&amp;lt; (32 - Integer.numberOfLeadingZeros(i)) | i) % mod;
+        }
+        return (int) ans;
+    }
+}
+
+
+
+	
+class Solution {
+public:
+    int concatenatedBinary(int n) {
+        const int mod = 1e9 + 7;
+        long ans = 0;
+        for (int i = 1; i &amp;lt;= n; ++i) {
+            ans = (ans &amp;lt;&amp;lt; (32 - __builtin_clz(i)) | i) % mod;
+        }
+        return ans;
+    }
+};
+
+
+
+	
+class Solution:
+    def concatenatedBinary(self, n: int) -&amp;gt; int:
+        mod = 10**9 + 7
+        ans = 0
+        for i in range(1, n + 1):
+            ans = (ans &amp;lt;&amp;lt; i.bit_length() | i) % mod
+        return ans
+
+
+
+
+	
+func concatenatedBinary(n int) (ans int) {
+	const mod = 1e9 + 7
+	for i := 1; i &amp;lt;= n; i++ {
+		ans = (ans&amp;lt;&amp;lt;bits.Len(uint(i)) | i) % mod
+	}
+	return
+}
+
+
+
+	
+function concatenatedBinary(n: number): number {
+    const mod = BigInt(10 ** 9 + 7);
+    let ans = 0n;
+    let shift = 0n;
+    for (let i = 1n; i &amp;lt;= n; ++i) {
+        if ((i &amp;amp; (i - 1n)) == 0n) {
+            ++shift;
+        }
+        ans = ((ans &amp;lt;&amp;lt; shift) | i) % mod;
+    }
+    return Number(ans);
+}
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1680 - Concatenation of Consecutive Binary Numbers | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1680 - Concatenation of Consecutive Binary Numbers" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1680.html" rel="canonical">
+          <meta content="https://leetcode.ca/2020-07-06-1680-Concatenation-of-Consecutive-Binary-Numbers/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2020-07-06T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1680 - Concatenation of Consecutive Binary Numbers","dateModified":"2020-07-06T00:00:00-07:00","datePublished":"2020-07-06T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2020-07-06-1680-Concatenation-of-Consecutive-Binary-Numbers/"},"url":"https://leetcode.ca/2020-07-06-1680-Concatenation-of-Consecutive-Binary-Numbers/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1680-concatenation-of-consecutive-binary-numbers">
+       <a href="solution-1680.html">
+        1680. Concatenation of Consecutive Binary Numbers
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an integer
+       <code>
+        n
+       </code>
+       , return
+       <em>
+        the
+        <strong>
+         decimal value
+        </strong>
+        of the binary string formed by concatenating the binary representations of
+       </em>
+       <code>
+        1
+       </code>
+       <em>
+        to
+       </em>
+       <code>
+        n
+       </code>
+       <em>
+        in order,
+        <strong>
+         modulo
+        </strong>
+       </em>
+       <code>
+        10
+        <sup>
+         9
+        </sup>
+        + 7
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 1
+<strong>Output:</strong> 1
+<strong>Explanation: </strong>"1" in binary corresponds to the decimal value 1. 
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 3
+<strong>Output:</strong> 27
+<strong>Explanation: </strong>In binary, 1, 2, and 3 corresponds to "1", "10", and "11".
+After concatenating them, we have "11011", which corresponds to the decimal value 27.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 12
+<strong>Output:</strong> 505379714
+<strong>Explanation</strong>: The concatenation results in "1101110010111011110001001101010111100".
+The decimal value of that is 118505380540.
+After modulo 10<sup>9</sup> + 7, the result is 505379714.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= n &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Bit Manipulation
+       </strong>
+      </p>
+      <p>
+       By observing the pattern of number concatenation, we can find that when concatenating to the $i$-th number, the result $ans$ formed by concatenating the previous $i-1$ numbers is actually shifted to the left by a certain number of bits, and then $i$ is added. The number of bits shifted, $shift$, is the number of binary digits in $i$. Since $i$ is continuously incremented by $1$, the number of bits shifted either remains the same as the last shift or increases by one. When $i$ is a power of $2$, that is, when there is only one bit in the binary number of $i$ that is $1$, the number of bits shifted increases by $1$ compared to the last time.
+      </p>
+      <p>
+       The time complexity is $O(n)$, where $n$ is the given integer. The space complexity is $O(1)$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#0d0219f9-2463-46a6-b486-1c70ad2bb805'}">
+       <li class="uk-active">
+        <a href="solution-1680.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1680.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1680.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1680.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1680.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="0d0219f9-2463-46a6-b486-1c70ad2bb805">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">concatenatedBinary</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="o">;</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="o">(</span><span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="o">(</span><span class="mi">32</span> <span class="o">-</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">numberOfLeadingZeros</span><span class="o">(</span><span class="n">i</span><span class="o">))</span> <span class="o">|</span> <span class="n">i</span><span class="o">)</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">concatenatedBinary</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mf">1e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">32</span> <span class="o">-</span> <span class="n">__builtin_clz</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">|</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">concatenatedBinary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">|</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">concatenatedBinary</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="n">mod</span> <span class="o">=</span> <span class="m">1e9</span> <span class="o">+</span> <span class="m">7</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span><span class="o">&lt;&lt;</span><span class="n">bits</span><span class="o">.</span><span class="n">Len</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">|</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">concatenatedBinary</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">mod</span> <span class="o">=</span> <span class="nx">BigInt</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="nx">n</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">shift</span> <span class="o">=</span> <span class="mi">0</span><span class="nx">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="nx">n</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="nx">i</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="nx">n</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="nx">shift</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">ans</span> <span class="o">=</span> <span class="p">((</span><span class="nx">ans</span> <span class="o">&lt;&lt;</span> <span class="nx">shift</span><span class="p">)</span> <span class="o">|</span> <span class="nx">i</span><span class="p">)</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">ans</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1680.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

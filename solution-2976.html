@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2976.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2976.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2976 - Minimum Cost to Convert String I</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2976. Minimum Cost to Convert String I Description You are given two 0-indexed strings source and target, both of length n and consisting of lowercase English letters. You are also given two 0-indexed character arrays original and changed, and an integer array cost, where cost[i]...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2976.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2976.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2976.html" rel="stylesheet"/>
+   <link href="solution-2976.html" rel="stylesheet"/>
+   <link href="solution-2976.html" rel="stylesheet"/>
+   <link href="solution-2976.html" rel="stylesheet"/>
+   <link href="solution-2976.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2976 - Minimum Cost to Convert String I" property="og:title"/>
+   <meta content="Leetcode 2976. Minimum Cost to Convert String I Description You are given two 0-indexed strings source and target, both of length n and consisting of lowercase English letters. You are also given two 0-indexed character arrays original and changed, and an integer array cost, where cost[i] represents the cost of changing the character original[i] to the character changed[i]. You start with the string source. In one operation, you can pick a character x from the string and change it to the character y at a cost of z if there exists any index j such that cost[j] == z, original[j] == x, and changed[j] == y. Return the minimum cost to convert the string source to the string target using any number of operations. If it is impossible to convert source to target, return -1. Note that there may exist indices i, j such that original[j] == original[i] and changed[j] == changed[i]. &amp;nbsp; Example 1: Input: source = &amp;quot;abcd&amp;quot;, target = &amp;quot;acbe&amp;quot;, original = [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;e&amp;quot;,&amp;quot;d&amp;quot;], changed = [&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;e&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;e&amp;quot;], cost = [2,5,5,1,2,20] Output: 28 Explanation: To convert the string &amp;quot;abcd&amp;quot; to string &amp;quot;acbe&amp;quot;: - Change value at index 1 from &amp;#39;b&amp;#39; to &amp;#39;c&amp;#39; at a cost of 5. - Change value at index 2 from &amp;#39;c&amp;#39; to &amp;#39;e&amp;#39; at a cost of 1. - Change value at index 2 from &amp;#39;e&amp;#39; to &amp;#39;b&amp;#39; at a cost of 2. - Change value at index 3 from &amp;#39;d&amp;#39; to &amp;#39;e&amp;#39; at a cost of 20. The total cost incurred is 5 + 1 + 2 + 20 = 28. It can be shown that this is the minimum possible cost. Example 2: Input: source = &amp;quot;aaaa&amp;quot;, target = &amp;quot;bbbb&amp;quot;, original = [&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;], changed = [&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;], cost = [1,2] Output: 12 Explanation: To change the character &amp;#39;a&amp;#39; to &amp;#39;b&amp;#39; change the character &amp;#39;a&amp;#39; to &amp;#39;c&amp;#39; at a cost of 1, followed by changing the character &amp;#39;c&amp;#39; to &amp;#39;b&amp;#39; at a cost of 2, for a total cost of 1 + 2 = 3. To change all occurrences of &amp;#39;a&amp;#39; to &amp;#39;b&amp;#39;, a total cost of 3 * 4 = 12 is incurred. Example 3: Input: source = &amp;quot;abcd&amp;quot;, target = &amp;quot;abce&amp;quot;, original = [&amp;quot;a&amp;quot;], changed = [&amp;quot;e&amp;quot;], cost = [10000] Output: -1 Explanation: It is impossible to convert source to target because the value at index 3 cannot be changed from &amp;#39;d&amp;#39; to &amp;#39;e&amp;#39;. &amp;nbsp; Constraints: 1 &amp;lt;= source.length == target.length &amp;lt;= 105 source, target consist of lowercase English letters. 1 &amp;lt;= cost.length == original.length == changed.length &amp;lt;= 2000 original[i], changed[i] are lowercase English letters. 1 &amp;lt;= cost[i] &amp;lt;= 106 original[i] != changed[i] Solutions Solution 1: Floyd Algorithm According to the problem description, we can consider each letter as a node, and the conversion cost between each pair of letters as a directed edge. We first initialize a $26 \times 26$ two-dimensional array $g$, where $g[i][j]$ represents the minimum cost of converting letter $i$ to letter $j$. Initially, $g[i][j] = \infty$, and if $i = j$, then $g[i][j] = 0$...." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-01-07T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-01-07-2976-Minimum-Cost-to-Convert-String-I/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2976.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2976 - Minimum Cost to Convert String I" property="twitter:title"/>
+   <meta content="Leetcode 2976. Minimum Cost to Convert String I Description You are given two 0-indexed strings source and target, both of length n and consisting of lowercase English letters. You are also given two 0-indexed character arrays original and changed, and an integer array cost, where cost[i] represents the cost of changing the character original[i] to the character changed[i]. You start with the string source. In one operation, you can pick a character x from the string and change it to the character y at a cost of z if there exists any index j such that cost[j] == z, original[j] == x, and changed[j] == y. Return the minimum cost to convert the string source to the string target using any number of operations. If it is impossible to convert source to target, return -1. Note that there may exist indices i, j such that original[j] == original[i] and changed[j] == changed[i]. &amp;nbsp; Example 1: Input: source = &amp;quot;abcd&amp;quot;, target = &amp;quot;acbe&amp;quot;, original = [&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;e&amp;quot;,&amp;quot;d&amp;quot;], changed = [&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;e&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;e&amp;quot;], cost = [2,5,5,1,2,20] Output: 28 Explanation: To convert the string &amp;quot;abcd&amp;quot; to string &amp;quot;acbe&amp;quot;: - Change value at index 1 from &amp;#39;b&amp;#39; to &amp;#39;c&amp;#39; at a cost of 5. - Change value at index 2 from &amp;#39;c&amp;#39; to &amp;#39;e&amp;#39; at a cost of 1. - Change value at index 2 from &amp;#39;e&amp;#39; to &amp;#39;b&amp;#39; at a cost of 2. - Change value at index 3 from &amp;#39;d&amp;#39; to &amp;#39;e&amp;#39; at a cost of 20. The total cost incurred is 5 + 1 + 2 + 20 = 28. It can be shown that this is the minimum possible cost. Example 2: Input: source = &amp;quot;aaaa&amp;quot;, target = &amp;quot;bbbb&amp;quot;, original = [&amp;quot;a&amp;quot;,&amp;quot;c&amp;quot;], changed = [&amp;quot;c&amp;quot;,&amp;quot;b&amp;quot;], cost = [1,2] Output: 12 Explanation: To change the character &amp;#39;a&amp;#39; to &amp;#39;b&amp;#39; change the character &amp;#39;a&amp;#39; to &amp;#39;c&amp;#39; at a cost of 1, followed by changing the character &amp;#39;c&amp;#39; to &amp;#39;b&amp;#39; at a cost of 2, for a total cost of 1 + 2 = 3. To change all occurrences of &amp;#39;a&amp;#39; to &amp;#39;b&amp;#39;, a total cost of 3 * 4 = 12 is incurred. Example 3: Input: source = &amp;quot;abcd&amp;quot;, target = &amp;quot;abce&amp;quot;, original = [&amp;quot;a&amp;quot;], changed = [&amp;quot;e&amp;quot;], cost = [10000] Output: -1 Explanation: It is impossible to convert source to target because the value at index 3 cannot be changed from &amp;#39;d&amp;#39; to &amp;#39;e&amp;#39;. &amp;nbsp; Constraints: 1 &amp;lt;= source.length == target.length &amp;lt;= 105 source, target consist of lowercase English letters. 1 &amp;lt;= cost.length == original.length == changed.length &amp;lt;= 2000 original[i], changed[i] are lowercase English letters. 1 &amp;lt;= cost[i] &amp;lt;= 106 original[i] != changed[i] Solutions Solution 1: Floyd Algorithm According to the problem description, we can consider each letter as a node, and the conversion cost between each pair of letters as a directed edge. We first initialize a $26 \times 26$ two-dimensional array $g$, where $g[i][j]$ represents the minimum cost of converting letter $i$ to letter $j$. Initially, $g[i][j] = \infty$, and if $i = j$, then $g[i][j] = 0$...." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2976 - Minimum Cost to Convert String I | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2976 - Minimum Cost to Convert String I" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2976.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-01-07-2976-Minimum-Cost-to-Convert-String-I/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-01-07T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2976 - Minimum Cost to Convert String I","dateModified":"2024-01-07T00:00:00-08:00","datePublished":"2024-01-07T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-01-07-2976-Minimum-Cost-to-Convert-String-I/"},"url":"https://leetcode.ca/2024-01-07-2976-Minimum-Cost-to-Convert-String-I/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2976-minimum-cost-to-convert-string-i">
+       <a href="solution-2976.html">
+        2976. Minimum Cost to Convert String I
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given two
+       <strong>
+        0-indexed
+       </strong>
+       strings
+       <code>
+        source
+       </code>
+       and
+       <code>
+        target
+       </code>
+       , both of length
+       <code>
+        n
+       </code>
+       and consisting of
+       <strong>
+        lowercase
+       </strong>
+       English letters. You are also given two
+       <strong>
+        0-indexed
+       </strong>
+       character arrays
+       <code>
+        original
+       </code>
+       and
+       <code>
+        changed
+       </code>
+       , and an integer array
+       <code>
+        cost
+       </code>
+       , where
+       <code>
+        cost[i]
+       </code>
+       represents the cost of changing the character
+       <code>
+        original[i]
+       </code>
+       to the character
+       <code>
+        changed[i]
+       </code>
+       .
+      </p>
+      <p>
+       You start with the string
+       <code>
+        source
+       </code>
+       . In one operation, you can pick a character
+       <code>
+        x
+       </code>
+       from the string and change it to the character
+       <code>
+        y
+       </code>
+       at a cost of
+       <code>
+        z
+       </code>
+       <strong>
+        if
+       </strong>
+       there exists
+       <strong>
+        any
+       </strong>
+       index
+       <code>
+        j
+       </code>
+       such that
+       <code>
+        cost[j] == z
+       </code>
+       ,
+       <code>
+        original[j] == x
+       </code>
+       , and
+       <code>
+        changed[j] == y
+       </code>
+       .
+      </p>
+      <p>
+       Return
+       <em>
+        the
+        <strong>
+         minimum
+        </strong>
+        cost to convert the string
+       </em>
+       <code>
+        source
+       </code>
+       <em>
+        to the string
+       </em>
+       <code>
+        target
+       </code>
+       <em>
+        using
+        <strong>
+         any
+        </strong>
+        number of operations. If it is impossible to convert
+       </em>
+       <code>
+        source
+       </code>
+       <em>
+        to
+       </em>
+       <code>
+        target
+       </code>
+       ,
+       <em>
+        return
+       </em>
+       <code>
+        -1
+       </code>
+       .
+      </p>
+      <p>
+       <strong>
+        Note
+       </strong>
+       that there may exist indices
+       <code>
+        i
+       </code>
+       ,
+       <code>
+        j
+       </code>
+       such that
+       <code>
+        original[j] == original[i]
+       </code>
+       and
+       <code>
+        changed[j] == changed[i]
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> source = "abcd", target = "acbe", original = ["a","b","c","c","e","d"], changed = ["b","c","b","e","b","e"], cost = [2,5,5,1,2,20]
+<strong>Output:</strong> 28
+<strong>Explanation:</strong> To convert the string "abcd" to string "acbe":
+- Change value at index 1 from 'b' to 'c' at a cost of 5.
+- Change value at index 2 from 'c' to 'e' at a cost of 1.
+- Change value at index 2 from 'e' to 'b' at a cost of 2.
+- Change value at index 3 from 'd' to 'e' at a cost of 20.
+The total cost incurred is 5 + 1 + 2 + 20 = 28.
+It can be shown that this is the minimum possible cost.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> source = "aaaa", target = "bbbb", original = ["a","c"], changed = ["c","b"], cost = [1,2]
+<strong>Output:</strong> 12
+<strong>Explanation:</strong> To change the character 'a' to 'b' change the character 'a' to 'c' at a cost of 1, followed by changing the character 'c' to 'b' at a cost of 2, for a total cost of 1 + 2 = 3. To change all occurrences of 'a' to 'b', a total cost of 3 * 4 = 12 is incurred.
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> source = "abcd", target = "abce", original = ["a"], changed = ["e"], cost = [10000]
+<strong>Output:</strong> -1
+<strong>Explanation:</strong> It is impossible to convert source to target because the value at index 3 cannot be changed from 'd' to 'e'.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= source.length == target.length &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         source
+        </code>
+        ,
+        <code>
+         target
+        </code>
+        consist of lowercase English letters.
+       </li>
+       <li>
+        <code>
+         1 &lt;= cost.length == original.length == changed.length &lt;= 2000
+        </code>
+       </li>
+       <li>
+        <code>
+         original[i]
+        </code>
+        ,
+        <code>
+         changed[i]
+        </code>
+        are lowercase English letters.
+       </li>
+       <li>
+        <code>
+         1 &lt;= cost[i] &lt;= 10
+         <sup>
+          6
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         original[i] != changed[i]
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Floyd Algorithm
+       </strong>
+      </p>
+      <p>
+       According to the problem description, we can consider each letter as a node, and the conversion cost between each pair of letters as a directed edge. We first initialize a $26 \times 26$ two-dimensional array $g$, where $g[i][j]$ represents the minimum cost of converting letter $i$ to letter $j$. Initially, $g[i][j] = \infty$, and if $i = j$, then $g[i][j] = 0$.
+      </p>
+      <p>
+       Next, we traverse the arrays $original$, $changed$, and $cost$. For each index $i$, we update the cost $cost[i]$ of converting $original[i]$ to $changed[i]$ to $g[original[i]][changed[i]]$, taking the minimum value.
+      </p>
+      <p>
+       Then, we use the Floyd algorithm to calculate the minimum cost between any two nodes in $g$. Finally, we traverse the strings $source$ and $target$. If $source[i] \neq target[i]$ and $g[source[i]][target[i]] \geq \infty$, it means that the conversion cannot be completed, so we return $-1$. Otherwise, we add $g[source[i]][target[i]]$ to the answer.
+      </p>
+      <p>
+       After the traversal ends, we return the answer.
+      </p>
+      <p>
+       The time complexity is $O(m + n + |\Sigma|^3)$, and the space complexity is $O(|\Sigma|^2)$. Where $m$ and $n$ are the lengths of the arrays $original$ and $source$ respectively; and $|\Sigma|$ is the size of the alphabet, that is, $|\Sigma| = 26$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#04364919-5254-415b-9d69-bfd18b1d19e0'}">
+       <li class="uk-active">
+        <a href="solution-2976.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2976.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2976.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2976.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-2976.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-2976.html">
+         Javascript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="04364919-5254-415b-9d69-bfd18b1d19e0">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">minimumCost</span><span class="o">(</span>
+        <span class="nc">String</span> <span class="n">source</span><span class="o">,</span> <span class="nc">String</span> <span class="n">target</span><span class="o">,</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">original</span><span class="o">,</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">changed</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">cost</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">29</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">26</span><span class="o">][</span><span class="mi">26</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">inf</span><span class="o">);</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">original</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">original</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">changed</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">z</span> <span class="o">=</span> <span class="n">cost</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">],</span> <span class="n">z</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">],</span> <span class="n">g</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">+</span> <span class="n">g</span><span class="o">[</span><span class="n">k</span><span class="o">][</span><span class="n">j</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">inf</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">g</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">minimumCost</span><span class="p">(</span><span class="n">string</span> <span class="n">source</span><span class="p">,</span> <span class="n">string</span> <span class="n">target</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span> <span class="n">original</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span> <span class="n">changed</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">cost</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">29</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">g</span><span class="p">[</span><span class="mi">26</span><span class="p">][</span><span class="mi">26</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fill</span><span class="p">(</span><span class="n">begin</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">end</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">inf</span><span class="p">);</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">original</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">original</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">changed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">z</span> <span class="o">=</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="n">z</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">inf</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">minimumCost</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">original</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">changed</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">cost</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">[[</span><span class="n">inf</span><span class="p">]</span> <span class="o">*</span> <span class="mi">26</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">):</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">changed</span><span class="p">,</span> <span class="n">cost</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">):</span>
+                    <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="n">b</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">inf</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">minimumCost</span><span class="p">(</span><span class="n">source</span> <span class="kt">string</span><span class="p">,</span> <span class="n">target</span> <span class="kt">string</span><span class="p">,</span> <span class="n">original</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="n">changed</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="n">cost</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int64</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="n">inf</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">29</span>
+	<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="m">26</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">26</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span> <span class="p">{</span>
+				<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">x</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">original</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+		<span class="n">y</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">changed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+		<span class="n">z</span> <span class="o">:=</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="n">z</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="m">26</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">26</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="m">26</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+				<span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">x</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+		<span class="n">y</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">y</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">inf</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+			<span class="p">}</span>
+			<span class="n">ans</span> <span class="o">+=</span> <span class="kt">int64</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">minimumCost</span><span class="p">(</span>
+    <span class="nx">source</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+    <span class="nx">target</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+    <span class="nx">original</span><span class="p">:</span> <span class="kr">string</span><span class="p">[],</span>
+    <span class="nx">changed</span><span class="p">:</span> <span class="kr">string</span><span class="p">[],</span>
+    <span class="nx">cost</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span>
+<span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">g</span><span class="p">:</span> <span class="kr">number</span><span class="p">[][]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="mi">26</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">26</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">Infinity</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">original</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">original</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">y</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">changed</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">z</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">cost</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">],</span> <span class="nx">z</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">],</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">k</span><span class="p">]</span> <span class="o">+</span> <span class="nx">g</span><span class="p">[</span><span class="nx">k</span><span class="p">][</span><span class="nx">j</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">ans</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">source</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">source</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">y</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="nx">target</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">!==</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="kc">Infinity</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">ans</span> <span class="o">+=</span> <span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * @param {string} source
+ * @param {string} target
+ * @param {character[]} original
+ * @param {character[]} changed
+ * @param {number[]} cost
+ * @return {number}
+ */</span>
+<span class="kd">var</span> <span class="nx">minimumCost</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">source</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">original</span><span class="p">,</span> <span class="nx">changed</span><span class="p">,</span> <span class="nx">cost</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">[</span><span class="nx">n</span><span class="p">,</span> <span class="nx">m</span><span class="p">,</span> <span class="nx">MAX</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">source</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">original</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nb">Number</span><span class="p">.</span><span class="nx">POSITIVE_INFINITY</span><span class="p">];</span>
+    <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="mi">26</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">26</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="nx">MAX</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">getIndex</span> <span class="o">=</span> <span class="nx">ch</span> <span class="o">=&gt;</span> <span class="nx">ch</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">getIndex</span><span class="p">(</span><span class="nx">original</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">getIndex</span><span class="p">(</span><span class="nx">changed</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="kd">const</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">cost</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">],</span> <span class="nx">z</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">MAX</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">k</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">MAX</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">],</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">k</span><span class="p">]</span> <span class="o">+</span> <span class="nx">g</span><span class="p">[</span><span class="nx">k</span><span class="p">][</span><span class="nx">j</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">getIndex</span><span class="p">(</span><span class="nx">source</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">getIndex</span><span class="p">(</span><span class="nx">target</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">===</span> <span class="nx">y</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">===</span> <span class="nx">MAX</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="nx">ans</span> <span class="o">+=</span> <span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2976.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

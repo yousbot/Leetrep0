@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1220.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1220.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1220 - Count Vowels Permutation</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 1220. Count Vowels Permutation Description Given an integer n, your task is to count how many strings of length n can be formed under the following rules: Each character is a lower case vowel&amp;nbsp;(&amp;#39;a&amp;#39;, &amp;#39;e&amp;#39;, &amp;#39;i&amp;#39;, &amp;#39;o&amp;#39;, &amp;#39;u&amp;#39;) Each vowel&amp;nbsp;&amp;#39;a&amp;#39; may only be followed by...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1220.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1220.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1220.html" rel="stylesheet"/>
+   <link href="solution-1220.html" rel="stylesheet"/>
+   <link href="solution-1220.html" rel="stylesheet"/>
+   <link href="solution-1220.html" rel="stylesheet"/>
+   <link href="solution-1220.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1220 - Count Vowels Permutation" property="og:title"/>
+   <meta content="Leetcode 1220. Count Vowels Permutation Description Given an integer n, your task is to count how many strings of length n can be formed under the following rules: Each character is a lower case vowel&amp;nbsp;(&amp;#39;a&amp;#39;, &amp;#39;e&amp;#39;, &amp;#39;i&amp;#39;, &amp;#39;o&amp;#39;, &amp;#39;u&amp;#39;) Each vowel&amp;nbsp;&amp;#39;a&amp;#39; may only be followed by an &amp;#39;e&amp;#39;. Each vowel&amp;nbsp;&amp;#39;e&amp;#39; may only be followed by an &amp;#39;a&amp;#39;&amp;nbsp;or an &amp;#39;i&amp;#39;. Each vowel&amp;nbsp;&amp;#39;i&amp;#39; may not be followed by another &amp;#39;i&amp;#39;. Each vowel&amp;nbsp;&amp;#39;o&amp;#39; may only be followed by an &amp;#39;i&amp;#39; or a&amp;nbsp;&amp;#39;u&amp;#39;. Each vowel&amp;nbsp;&amp;#39;u&amp;#39; may only be followed by an &amp;#39;a&amp;#39;. Since the answer&amp;nbsp;may be too large,&amp;nbsp;return it modulo&amp;nbsp;10^9 + 7. &amp;nbsp; Example 1: Input: n = 1 Output: 5 Explanation: All possible strings are: &amp;quot;a&amp;quot;, &amp;quot;e&amp;quot;, &amp;quot;i&amp;quot; , &amp;quot;o&amp;quot; and &amp;quot;u&amp;quot;. Example 2: Input: n = 2 Output: 10 Explanation: All possible strings are: &amp;quot;ae&amp;quot;, &amp;quot;ea&amp;quot;, &amp;quot;ei&amp;quot;, &amp;quot;ia&amp;quot;, &amp;quot;ie&amp;quot;, &amp;quot;io&amp;quot;, &amp;quot;iu&amp;quot;, &amp;quot;oi&amp;quot;, &amp;quot;ou&amp;quot; and &amp;quot;ua&amp;quot;. Example 3:&amp;nbsp; Input: n = 5 Output: 68 &amp;nbsp; Constraints: 1 &amp;lt;= n &amp;lt;= 2 * 10^4 Solutions Solution 1: Dynamic Programming Based on the problem description, we can list the possible subsequent vowels for each vowel: a [e] e [a|i] i [a|e|o|u] o [i|u] u [a] From this, we can deduce the possible preceding vowels for each vowel: [e|i|u] a [a|i] e [e|o] i [i] o [i|o] u We define $f[i]$ as the number of strings of the current length ending with the $i$-th vowel. If the length is $1$, then $f[i]=1$. When the length is greater than $1$, we define $g[i]$ as the number of strings of the current length ending with the $i$-th vowel. Then $g[i]$ can be derived from $f$, that is: \[g[i]= \begin{cases} f[1]+f[2]+f[4] &amp;amp; i=0 \\ f[0]+f[2] &amp;amp; i=1 \\ f[1]+f[3] &amp;amp; i=2 \\ f[2] &amp;amp; i=3 \\ f[2]+f[3] &amp;amp; i=4 \end{cases}\] The final answer is $\sum_{i=0}^{4}f[i]$. Note that the answer may be very large, so we need to take the modulus of $10^9+7$. The time complexity is $O(n)$, and the space complexity is $O(C)$. Here, $n$ is the length of the string, and $C$ is the number of vowels. In this problem, $C=5$. Solution 2: Matrix Exponentiation to Accelerate Recursion The time complexity is $O(C^3 \times \log n)$, and the space complexity is $O(C^2)$. Here, $C$ is the number of vowels. In this problem, $C=5$. Java C++ Python Go TypeScript Javascript class Solution { public int countVowelPermutation(int n) { long[] f = new long[5]; Arrays.fill(f, 1); final int mod = (int) 1e9 + 7; for (int i = 1; i &amp;lt; n; ++i) { long[] g = new long[5]; g[0] = (f[1] + f[2] + f[4]) % mod; g[1] = (f[0] + f[2]) % mod; g[2] = (f[1] + f[3]) % mod; g[3] = f[2]; g[4] = (f[2] + f[3]) % mod; f = g; } long ans = 0; for (long x : f) { ans = (ans + x) % mod; } return (int) ans; } } class Solution { public: int countVowelPermutation(int n) { using ll = long long; vector&amp;lt;ll&amp;gt; f(5, 1); const..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2019-04-03T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2019-04-03-1220-Count-Vowels-Permutation/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1220.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1220 - Count Vowels Permutation" property="twitter:title"/>
+   <meta content="Leetcode 1220. Count Vowels Permutation Description Given an integer n, your task is to count how many strings of length n can be formed under the following rules: Each character is a lower case vowel&amp;nbsp;(&amp;#39;a&amp;#39;, &amp;#39;e&amp;#39;, &amp;#39;i&amp;#39;, &amp;#39;o&amp;#39;, &amp;#39;u&amp;#39;) Each vowel&amp;nbsp;&amp;#39;a&amp;#39; may only be followed by an &amp;#39;e&amp;#39;. Each vowel&amp;nbsp;&amp;#39;e&amp;#39; may only be followed by an &amp;#39;a&amp;#39;&amp;nbsp;or an &amp;#39;i&amp;#39;. Each vowel&amp;nbsp;&amp;#39;i&amp;#39; may not be followed by another &amp;#39;i&amp;#39;. Each vowel&amp;nbsp;&amp;#39;o&amp;#39; may only be followed by an &amp;#39;i&amp;#39; or a&amp;nbsp;&amp;#39;u&amp;#39;. Each vowel&amp;nbsp;&amp;#39;u&amp;#39; may only be followed by an &amp;#39;a&amp;#39;. Since the answer&amp;nbsp;may be too large,&amp;nbsp;return it modulo&amp;nbsp;10^9 + 7. &amp;nbsp; Example 1: Input: n = 1 Output: 5 Explanation: All possible strings are: &amp;quot;a&amp;quot;, &amp;quot;e&amp;quot;, &amp;quot;i&amp;quot; , &amp;quot;o&amp;quot; and &amp;quot;u&amp;quot;. Example 2: Input: n = 2 Output: 10 Explanation: All possible strings are: &amp;quot;ae&amp;quot;, &amp;quot;ea&amp;quot;, &amp;quot;ei&amp;quot;, &amp;quot;ia&amp;quot;, &amp;quot;ie&amp;quot;, &amp;quot;io&amp;quot;, &amp;quot;iu&amp;quot;, &amp;quot;oi&amp;quot;, &amp;quot;ou&amp;quot; and &amp;quot;ua&amp;quot;. Example 3:&amp;nbsp; Input: n = 5 Output: 68 &amp;nbsp; Constraints: 1 &amp;lt;= n &amp;lt;= 2 * 10^4 Solutions Solution 1: Dynamic Programming Based on the problem description, we can list the possible subsequent vowels for each vowel: a [e] e [a|i] i [a|e|o|u] o [i|u] u [a] From this, we can deduce the possible preceding vowels for each vowel: [e|i|u] a [a|i] e [e|o] i [i] o [i|o] u We define $f[i]$ as the number of strings of the current length ending with the $i$-th vowel. If the length is $1$, then $f[i]=1$. When the length is greater than $1$, we define $g[i]$ as the number of strings of the current length ending with the $i$-th vowel. Then $g[i]$ can be derived from $f$, that is: \[g[i]= \begin{cases} f[1]+f[2]+f[4] &amp;amp; i=0 \\ f[0]+f[2] &amp;amp; i=1 \\ f[1]+f[3] &amp;amp; i=2 \\ f[2] &amp;amp; i=3 \\ f[2]+f[3] &amp;amp; i=4 \end{cases}\] The final answer is $\sum_{i=0}^{4}f[i]$. Note that the answer may be very large, so we need to take the modulus of $10^9+7$. The time complexity is $O(n)$, and the space complexity is $O(C)$. Here, $n$ is the length of the string, and $C$ is the number of vowels. In this problem, $C=5$. Solution 2: Matrix Exponentiation to Accelerate Recursion The time complexity is $O(C^3 \times \log n)$, and the space complexity is $O(C^2)$. Here, $C$ is the number of vowels. In this problem, $C=5$. Java C++ Python Go TypeScript Javascript class Solution { public int countVowelPermutation(int n) { long[] f = new long[5]; Arrays.fill(f, 1); final int mod = (int) 1e9 + 7; for (int i = 1; i &amp;lt; n; ++i) { long[] g = new long[5]; g[0] = (f[1] + f[2] + f[4]) % mod; g[1] = (f[0] + f[2]) % mod; g[2] = (f[1] + f[3]) % mod; g[3] = f[2]; g[4] = (f[2] + f[3]) % mod; f = g; } long ans = 0; for (long x : f) { ans = (ans + x) % mod; } return (int) ans; } } class Solution { public: int countVowelPermutation(int n) { using ll = long long; vector&amp;lt;ll&amp;gt; f(5, 1); const..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1220 - Count Vowels Permutation | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="1220 - Count Vowels Permutation" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1220.html" rel="canonical">
+          <meta content="https://leetcode.ca/2019-04-03-1220-Count-Vowels-Permutation/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2019-04-03T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"1220 - Count Vowels Permutation","dateModified":"2019-04-03T00:00:00-07:00","datePublished":"2019-04-03T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2019-04-03-1220-Count-Vowels-Permutation/"},"url":"https://leetcode.ca/2019-04-03-1220-Count-Vowels-Permutation/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="1220-count-vowels-permutation">
+       <a href="solution-1220.html">
+        1220. Count Vowels Permutation
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given an integer
+       <code>
+        n
+       </code>
+       , your task is to count how many strings of length
+       <code>
+        n
+       </code>
+       can be formed under the following rules:
+      </p>
+      <ul>
+       <li>
+        Each character is a lower case vowel (
+        <code>
+         'a'
+        </code>
+        ,
+        <code>
+         'e'
+        </code>
+        ,
+        <code>
+         'i'
+        </code>
+        ,
+        <code>
+         'o'
+        </code>
+        ,
+        <code>
+         'u'
+        </code>
+        )
+       </li>
+       <li>
+        Each vowel
+        <code>
+         'a'
+        </code>
+        may only be followed by an
+        <code>
+         'e'
+        </code>
+        .
+       </li>
+       <li>
+        Each vowel
+        <code>
+         'e'
+        </code>
+        may only be followed by an
+        <code>
+         'a'
+        </code>
+        or an
+        <code>
+         'i'
+        </code>
+        .
+       </li>
+       <li>
+        Each vowel
+        <code>
+         'i'
+        </code>
+        <strong>
+         may not
+        </strong>
+        be followed by another
+        <code>
+         'i'
+        </code>
+        .
+       </li>
+       <li>
+        Each vowel
+        <code>
+         'o'
+        </code>
+        may only be followed by an
+        <code>
+         'i'
+        </code>
+        or a
+        <code>
+         'u'
+        </code>
+        .
+       </li>
+       <li>
+        Each vowel
+        <code>
+         'u'
+        </code>
+        may only be followed by an
+        <code>
+         'a'
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Since the answer may be too large, return it modulo
+       <code>
+        10^9 + 7
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 1
+<strong>Output:</strong> 5
+<strong>Explanation:</strong> All possible strings are: "a", "e", "i" , "o" and "u".
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 2
+<strong>Output:</strong> 10
+<strong>Explanation:</strong> All possible strings are: "ae", "ea", "ei", "ia", "ie", "io", "iu", "oi", "ou" and "ua".
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> n = 5
+<strong>Output:</strong> 68</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= n &lt;= 2 * 10^4
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Dynamic Programming
+       </strong>
+      </p>
+      <p>
+       Based on the problem description, we can list the possible subsequent vowels for each vowel:
+      </p>
+      <div class="language-bash highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>a <span class="o">[</span>e]
+e <span class="o">[</span>a|i]
+i <span class="o">[</span>a|e|o|u]
+o <span class="o">[</span>i|u]
+u <span class="o">[</span>a]
+</code></pre>
+       </div>
+      </div>
+      <p>
+       From this, we can deduce the possible preceding vowels for each vowel:
+      </p>
+      <div class="language-bash highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="o">[</span>e|i|u]	a
+<span class="o">[</span>a|i]	e
+<span class="o">[</span>e|o]	i
+<span class="o">[</span>i]	o
+<span class="o">[</span>i|o]	u
+</code></pre>
+       </div>
+      </div>
+      <p>
+       We define $f[i]$ as the number of strings of the current length ending with the $i$-th vowel. If the length is $1$, then $f[i]=1$.
+      </p>
+      <p>
+       When the length is greater than $1$, we define $g[i]$ as the number of strings of the current length ending with the $i$-th vowel. Then $g[i]$ can be derived from $f$, that is:
+      </p>
+      \[g[i]=
+\begin{cases}
+f[1]+f[2]+f[4] &amp; i=0 \\
+f[0]+f[2] &amp; i=1 \\
+f[1]+f[3] &amp; i=2 \\
+f[2] &amp; i=3 \\
+f[2]+f[3] &amp; i=4
+\end{cases}\]
+      <p>
+       The final answer is $\sum_{i=0}^{4}f[i]$. Note that the answer may be very large, so we need to take the modulus of $10^9+7$.
+      </p>
+      <p>
+       The time complexity is $O(n)$, and the space complexity is $O(C)$. Here, $n$ is the length of the string, and $C$ is the number of vowels. In this problem, $C=5$.
+      </p>
+      <p>
+       <strong>
+        Solution 2: Matrix Exponentiation to Accelerate Recursion
+       </strong>
+      </p>
+      <p>
+       The time complexity is $O(C^3 \times \log n)$, and the space complexity is $O(C^2)$. Here, $C$ is the number of vowels. In this problem, $C=5$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#cff7fda2-ea5b-4191-8d83-ed33e36fdf6d'}">
+       <li class="uk-active">
+        <a href="solution-1220.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-1220.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-1220.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-1220.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-1220.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-1220.html">
+         Javascript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="cff7fda2-ea5b-4191-8d83-ed33e36fdf6d">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">countVowelPermutation</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="mi">5</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="mi">1</span><span class="n">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">long</span><span class="o">[]</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="mi">5</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">f</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">+</span> <span class="n">f</span><span class="o">[</span><span class="mi">4</span><span class="o">])</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+            <span class="n">g</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="n">f</span><span class="o">[</span><span class="mi">2</span><span class="o">])</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+            <span class="n">g</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">f</span><span class="o">[</span><span class="mi">3</span><span class="o">])</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+            <span class="n">g</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+            <span class="n">g</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">+</span> <span class="n">f</span><span class="o">[</span><span class="mi">3</span><span class="o">])</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">g</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">x</span> <span class="o">:</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="o">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">x</span><span class="o">)</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">countVowelPermutation</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="n">ll</span> <span class="o">=</span> <span class="kt">long</span> <span class="kt">long</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">f</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mf">1e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">g</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">move</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">f</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0LL</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">countVowelPermutation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">countVowelPermutation</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="n">mod</span> <span class="kt">int</span> <span class="o">=</span> <span class="m">1e9</span> <span class="o">+</span> <span class="m">7</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span> <span class="p">{</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">g</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+		<span class="n">g</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="m">4</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="n">g</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="m">2</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="n">g</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="m">3</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="n">g</span><span class="p">[</span><span class="m">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="n">g</span><span class="p">[</span><span class="m">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="m">3</span><span class="p">])</span> <span class="o">%</span> <span class="n">mod</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">g</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">countVowelPermutation</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">mod</span> <span class="o">=</span> <span class="mi">1</span><span class="nx">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">g</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="p">...</span><span class="nx">g</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">)</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * @param {number} n
+ * @return {number}
+ */</span>
+<span class="kd">var</span> <span class="nx">countVowelPermutation</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">mod</span> <span class="o">=</span> <span class="mi">1</span><span class="nx">e9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+        <span class="nx">g</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nx">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">;</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="p">...</span><span class="nx">g</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">)</span> <span class="o">%</span> <span class="nx">mod</span><span class="p">);</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1220.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

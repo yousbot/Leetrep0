@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-1709.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-1709.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>1709 - Biggest Window Between Visits</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Formatted question description: https://leetcode.ca/all/1709.html 1709. Biggest Window Between Visits Level Medium Description Table: UserVisits +-------------+------+ | Column Name | Type | +-------------+------+ | user_id | int | | visit_date | date | +-------------+------+ This table does not have a primary key. This table contains logs...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-1709.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-1709.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-1709.html" rel="stylesheet"/>
+   <link href="solution-1709.html" rel="stylesheet"/>
+   <link href="solution-1709.html" rel="stylesheet"/>
+   <link href="solution-1709.html" rel="stylesheet"/>
+   <link href="solution-1709.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="1709 - Biggest Window Between Visits" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+Formatted question description: https://leetcode.ca/all/1709.html
+
+1709. Biggest Window Between Visits
+Level
+Medium
+
+Description
+Table: UserVisits
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| user_id     | int  |
+| visit_date  | date |
++-------------+------+
+This table does not have a primary key.
+This table contains logs of the dates that users vistied a certain retailer.
+
+
+Assume todayâs date is '2021-1-1'.
+
+Write an SQL query that will, for each user_id, find out the largest window of days between each visit and the one right after it (or today if you are considering the last visit).
+
+Return the result table ordered by user_id.
+
+The query result format is in the following example:
+
+UserVisits table:
++---------+------------+
+| user_id | visit_date |
++---------+------------+
+| 1       | 2020-11-28 |
+| 1       | 2020-10-20 |
+| 1       | 2020-12-3  |
+| 2       | 2020-10-5  |
+| 2       | 2020-12-9  |
+| 3       | 2020-11-11 |
++---------+------------+
+Result table:
++---------+---------------+
+| user_id | biggest_window|
++---------+---------------+
+| 1       | 39            |
+| 2       | 65            |
+| 3       | 51            |
++---------+---------------+
+For the first user, the windows in question are between dates:
+    - 2020-10-20 and 2020-11-28 with a total of 39 days. 
+    - 2020-11-28 and 2020-12-3 with a total of 5 days. 
+    - 2020-12-3 and 2021-1-1 with a total of 29 days.
+Making the biggest window the one with 39 days.
+For the second user, the windows in question are between dates:
+    - 2020-10-5 and 2020-12-9 with a total of 65 days.
+    - 2020-12-9 and 2021-1-1 with a total of 23 days.
+Making the biggest window the one with 65 days.
+For the third user, the only window in question is between dates 2020-11-11 and 2021-1-1 with a total of 51 days.
+
+
+Solution
+For each user, select the maximum differene between two adjacent visitsâ dates. Let v1 and v2 be two entries of UserVisits such that v1.user_id = v2.user_id and v1.visit_date &amp;lt; v2.visit_date. For each v1, find the v2 with the smallest visit_date and calculate the maximum date difference. Finally, group the result by user_id.
+# Write your MySQL query statement below
+select user_id, max(diff) as biggest_window from (
+    select v1.user_id, datediff(ifnull(min(v2.visit_date), '2021-1-1'), v1.visit_date) as diff
+    from UserVisits v1
+    left join UserVisits v2
+    on v1.user_id = v2.user_id and v1.visit_date &amp;lt; v2.visit_date
+    group by v1.user_id, v1.visit_date
+) as temp
+    group by user_id
+    order by user_id;
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2021-02-12T14:47:01-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2021-02-12-1709-Biggest-Window-Between-Visits/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-1709.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="1709 - Biggest Window Between Visits" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+Formatted question description: https://leetcode.ca/all/1709.html
+
+1709. Biggest Window Between Visits
+Level
+Medium
+
+Description
+Table: UserVisits
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| user_id     | int  |
+| visit_date  | date |
++-------------+------+
+This table does not have a primary key.
+This table contains logs of the dates that users vistied a certain retailer.
+
+
+Assume todayâs date is '2021-1-1'.
+
+Write an SQL query that will, for each user_id, find out the largest window of days between each visit and the one right after it (or today if you are considering the last visit).
+
+Return the result table ordered by user_id.
+
+The query result format is in the following example:
+
+UserVisits table:
++---------+------------+
+| user_id | visit_date |
++---------+------------+
+| 1       | 2020-11-28 |
+| 1       | 2020-10-20 |
+| 1       | 2020-12-3  |
+| 2       | 2020-10-5  |
+| 2       | 2020-12-9  |
+| 3       | 2020-11-11 |
++---------+------------+
+Result table:
++---------+---------------+
+| user_id | biggest_window|
++---------+---------------+
+| 1       | 39            |
+| 2       | 65            |
+| 3       | 51            |
++---------+---------------+
+For the first user, the windows in question are between dates:
+    - 2020-10-20 and 2020-11-28 with a total of 39 days. 
+    - 2020-11-28 and 2020-12-3 with a total of 5 days. 
+    - 2020-12-3 and 2021-1-1 with a total of 29 days.
+Making the biggest window the one with 39 days.
+For the second user, the windows in question are between dates:
+    - 2020-10-5 and 2020-12-9 with a total of 65 days.
+    - 2020-12-9 and 2021-1-1 with a total of 23 days.
+Making the biggest window the one with 65 days.
+For the third user, the only window in question is between dates 2020-11-11 and 2021-1-1 with a total of 51 days.
+
+
+Solution
+For each user, select the maximum differene between two adjacent visitsâ dates. Let v1 and v2 be two entries of UserVisits such that v1.user_id = v2.user_id and v1.visit_date &amp;lt; v2.visit_date. For each v1, find the v2 with the smallest visit_date and calculate the maximum date difference. Finally, group the result by user_id.
+# Write your MySQL query statement below
+select user_id, max(diff) as biggest_window from (
+    select v1.user_id, datediff(ifnull(min(v2.visit_date), '2021-1-1'), v1.visit_date) as diff
+    from UserVisits v1
+    left join UserVisits v2
+    on v1.user_id = v2.user_id and v1.visit_date &amp;lt; v2.visit_date
+    group by v1.user_id, v1.visit_date
+) as temp
+    group by user_id
+    order by user_id;
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    1709 - Biggest Window Between Visits | Leetcode
+   </title>
+   <meta content="Jekyll v3.9.4" name="generator">
+    <meta content="1709 - Biggest Window Between Visits" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-1709.html" rel="canonical">
+          <meta content="https://leetcode.ca/2021-02-12-1709-Biggest-Window-Between-Visits/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2021-02-12T14:47:01-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"headline":"1709 - Biggest Window Between Visits","dateModified":"2021-02-12T14:47:01-08:00","datePublished":"2021-02-12T14:47:01-08:00","description":"Leetcode","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2021-02-12-1709-Biggest-Window-Between-Visits/"},"url":"https://leetcode.ca/2021-02-12-1709-Biggest-Window-Between-Visits/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCDRuzBvLGzyVvgPyohrahrA" data-count="hidden" data-layout="full">
+      </div>
+      <p>
+       Formatted question description:
+       <a href="solution-1709.html">
+        https://leetcode.ca/all/1709.html
+       </a>
+      </p>
+      <h1 id="1709-biggest-window-between-visits">
+       1709. Biggest Window Between Visits
+      </h1>
+      <h2 id="level">
+       Level
+      </h2>
+      <p>
+       Medium
+      </p>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code class="language-plaintext highlighter-rouge">
+        UserVisits
+       </code>
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>+-------------+------+
+| Column Name | Type |
++-------------+------+
+| user_id     | int  |
+| visit_date  | date |
++-------------+------+
+This table does not have a primary key.
+This table contains logs of the dates that users vistied a certain retailer.
+</code></pre>
+       </div>
+      </div>
+      <p>
+       Assume todayâs date is
+       <code class="language-plaintext highlighter-rouge">
+        '2021-1-1'
+       </code>
+       .
+      </p>
+      <p>
+       Write an SQL query that will, for each
+       <code class="language-plaintext highlighter-rouge">
+        user_id
+       </code>
+       , find out the largest
+       <code class="language-plaintext highlighter-rouge">
+        window
+       </code>
+       of days between each visit and the one right after it (or today if you are considering the last visit).
+      </p>
+      <p>
+       Return the result table ordered by
+       <code class="language-plaintext highlighter-rouge">
+        user_id
+       </code>
+       .
+      </p>
+      <p>
+       The query result format is in the following example:
+      </p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>UserVisits table:
++---------+------------+
+| user_id | visit_date |
++---------+------------+
+| 1       | 2020-11-28 |
+| 1       | 2020-10-20 |
+| 1       | 2020-12-3  |
+| 2       | 2020-10-5  |
+| 2       | 2020-12-9  |
+| 3       | 2020-11-11 |
++---------+------------+
+Result table:
++---------+---------------+
+| user_id | biggest_window|
++---------+---------------+
+| 1       | 39            |
+| 2       | 65            |
+| 3       | 51            |
++---------+---------------+
+For the first user, the windows in question are between dates:
+    - 2020-10-20 and 2020-11-28 with a total of 39 days. 
+    - 2020-11-28 and 2020-12-3 with a total of 5 days. 
+    - 2020-12-3 and 2021-1-1 with a total of 29 days.
+Making the biggest window the one with 39 days.
+For the second user, the windows in question are between dates:
+    - 2020-10-5 and 2020-12-9 with a total of 65 days.
+    - 2020-12-9 and 2021-1-1 with a total of 23 days.
+Making the biggest window the one with 65 days.
+For the third user, the only window in question is between dates 2020-11-11 and 2021-1-1 with a total of 51 days.
+</code></pre>
+       </div>
+      </div>
+      <h2 id="solution">
+       Solution
+      </h2>
+      <p>
+       For each user, select the maximum differene between two adjacent visitsâ dates. Let
+       <code class="language-plaintext highlighter-rouge">
+        v1
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        v2
+       </code>
+       be two entries of
+       <code class="language-plaintext highlighter-rouge">
+        UserVisits
+       </code>
+       such that
+       <code class="language-plaintext highlighter-rouge">
+        v1.user_id = v2.user_id
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        v1.visit_date &lt; v2.visit_date
+       </code>
+       . For each
+       <code class="language-plaintext highlighter-rouge">
+        v1
+       </code>
+       , find the
+       <code class="language-plaintext highlighter-rouge">
+        v2
+       </code>
+       with the smallest
+       <code class="language-plaintext highlighter-rouge">
+        visit_date
+       </code>
+       and calculate the maximum date difference. Finally, group the result by
+       <code class="language-plaintext highlighter-rouge">
+        user_id
+       </code>
+       .
+      </p>
+      <div class="language-sql highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">select</span> <span class="n">user_id</span><span class="p">,</span> <span class="k">max</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="k">as</span> <span class="n">biggest_window</span> <span class="k">from</span> <span class="p">(</span>
+    <span class="k">select</span> <span class="n">v1</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">datediff</span><span class="p">(</span><span class="n">ifnull</span><span class="p">(</span><span class="k">min</span><span class="p">(</span><span class="n">v2</span><span class="p">.</span><span class="n">visit_date</span><span class="p">),</span> <span class="s1">'2021-1-1'</span><span class="p">),</span> <span class="n">v1</span><span class="p">.</span><span class="n">visit_date</span><span class="p">)</span> <span class="k">as</span> <span class="n">diff</span>
+    <span class="k">from</span> <span class="n">UserVisits</span> <span class="n">v1</span>
+    <span class="k">left</span> <span class="k">join</span> <span class="n">UserVisits</span> <span class="n">v2</span>
+    <span class="k">on</span> <span class="n">v1</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">v2</span><span class="p">.</span><span class="n">user_id</span> <span class="k">and</span> <span class="n">v1</span><span class="p">.</span><span class="n">visit_date</span> <span class="o">&lt;</span> <span class="n">v2</span><span class="p">.</span><span class="n">visit_date</span>
+    <span class="k">group</span> <span class="k">by</span> <span class="n">v1</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">v1</span><span class="p">.</span><span class="n">visit_date</span>
+<span class="p">)</span> <span class="k">as</span> <span class="k">temp</span>
+    <span class="k">group</span> <span class="k">by</span> <span class="n">user_id</span>
+    <span class="k">order</span> <span class="k">by</span> <span class="n">user_id</span><span class="p">;</span>
+</code></pre>
+       </div>
+      </div>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-1709.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

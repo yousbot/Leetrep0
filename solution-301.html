@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-301.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-301.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>301 - Remove Invalid Parentheses</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode Question Formatted question description: https://leetcode.ca/all/301.html Given a string s that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid. Return a list of unique strings that are valid with the minimum number of removals. You may return...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-301.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-301.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-301.html" rel="stylesheet"/>
+   <link href="solution-301.html" rel="stylesheet"/>
+   <link href="solution-301.html" rel="stylesheet"/>
+   <link href="solution-301.html" rel="stylesheet"/>
+   <link href="solution-301.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="301 - Remove Invalid Parentheses" property="og:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/301.html Given a string s that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid. Return a list of unique strings that are valid with the minimum number of removals. You may return the answer in any order. &amp;nbsp; Example 1: Input: s = &amp;quot;()())()&amp;quot; Output: [&amp;quot;(())()&amp;quot;,&amp;quot;()()()&amp;quot;] Example 2: Input: s = &amp;quot;(a)())()&amp;quot; Output: [&amp;quot;(a())()&amp;quot;,&amp;quot;(a)()()&amp;quot;] Example 3: Input: s = &amp;quot;)(&amp;quot; Output: [&amp;quot;&amp;quot;] &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 25 s consists of lowercase English letters and parentheses &amp;#39;(&amp;#39; and &amp;#39;)&amp;#39;. There will be at most 20 parentheses in s. Algorithm Use BFS to solve, put the given string into the queue, and then take it out to check whether it is legal If legal, return directly If it is illegal, traverse it, and remove the bracket characters to generate a new string for the characters in the left and right brackets encountered If this string has not been encountered before, put it in the queue and use HashSet to record whether a string has appeared. Perform the same operation on each element in the queue, and return to the empty set if no valid string is found until the queue is empty. Code Java C++ Python Go import java.util.ArrayList; import java.util.HashSet; import java.util.List; import java.util.Set; public class Remove_Invalid_Parentheses { // reference: https://leetcode.com/problems/remove-invalid-parentheses/solution/ class Solution_dfs { private Set&amp;lt;String&amp;gt; validExpressions = new HashSet&amp;lt;String&amp;gt;(); private int minimumRemoved; private void reset() { this.validExpressions.clear(); this.minimumRemoved = Integer.MAX_VALUE; } private void dfs( String s, int index, int leftCount, int rightCount, StringBuilder expression, int removedCount) { // If we have reached the end of string. if (index == s.length()) { // If the current expression is valid. if (leftCount == rightCount) { // If the current count of removed parentheses is &amp;lt;= the current minimum count if (removedCount &amp;lt;= this.minimumRemoved) { // Convert StringBuilder to a String. This is an expensive operation. // So we only perform this when needed. String possibleAnswer = expression.toString(); // If the current count beats the overall minimum we have till now if (removedCount &amp;lt; this.minimumRemoved) { this.validExpressions.clear(); this.minimumRemoved = removedCount; } this.validExpressions.add(possibleAnswer); } } } else { char currentCharacter = s.charAt(index); int length = expression.length(); // If the current character is neither an opening bracket nor a closing one, // simply recurse further by adding it to the expression StringBuilder if (currentCharacter != '(' &amp;amp;&amp;amp; currentCharacter != ')') { expression.append(currentCharacter); this.dfs(s, index + 1, leftCount, rightCount, expression, removedCount); expression.deleteCharAt(length); } else { // Recursion where we delete the current character at 'index' and move forward to 'index+1' this.dfs(s, index + 1, leftCount, rightCount, expression, removedCount + 1); expression.append(currentCharacter); // If it's an opening parenthesis, consider it and recurse if (currentCharacter == '(') { this.dfs(s, index + 1, leftCount + 1, rightCount, expression, removedCount); } else if (rightCount &amp;lt; leftCount) { // For a closing parenthesis, only recurse if right &amp;lt; left this.dfs(s, index + 1, leftCount, rightCount + 1, expression, removedCount); } //..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-09-26T22:21:01-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-09-26-301-Remove-Invalid-Parentheses/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-301.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="301 - Remove Invalid Parentheses" property="twitter:title"/>
+   <meta content="Leetcode Question Formatted question description: https://leetcode.ca/all/301.html Given a string s that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid. Return a list of unique strings that are valid with the minimum number of removals. You may return the answer in any order. &amp;nbsp; Example 1: Input: s = &amp;quot;()())()&amp;quot; Output: [&amp;quot;(())()&amp;quot;,&amp;quot;()()()&amp;quot;] Example 2: Input: s = &amp;quot;(a)())()&amp;quot; Output: [&amp;quot;(a())()&amp;quot;,&amp;quot;(a)()()&amp;quot;] Example 3: Input: s = &amp;quot;)(&amp;quot; Output: [&amp;quot;&amp;quot;] &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 25 s consists of lowercase English letters and parentheses &amp;#39;(&amp;#39; and &amp;#39;)&amp;#39;. There will be at most 20 parentheses in s. Algorithm Use BFS to solve, put the given string into the queue, and then take it out to check whether it is legal If legal, return directly If it is illegal, traverse it, and remove the bracket characters to generate a new string for the characters in the left and right brackets encountered If this string has not been encountered before, put it in the queue and use HashSet to record whether a string has appeared. Perform the same operation on each element in the queue, and return to the empty set if no valid string is found until the queue is empty. Code Java C++ Python Go import java.util.ArrayList; import java.util.HashSet; import java.util.List; import java.util.Set; public class Remove_Invalid_Parentheses { // reference: https://leetcode.com/problems/remove-invalid-parentheses/solution/ class Solution_dfs { private Set&amp;lt;String&amp;gt; validExpressions = new HashSet&amp;lt;String&amp;gt;(); private int minimumRemoved; private void reset() { this.validExpressions.clear(); this.minimumRemoved = Integer.MAX_VALUE; } private void dfs( String s, int index, int leftCount, int rightCount, StringBuilder expression, int removedCount) { // If we have reached the end of string. if (index == s.length()) { // If the current expression is valid. if (leftCount == rightCount) { // If the current count of removed parentheses is &amp;lt;= the current minimum count if (removedCount &amp;lt;= this.minimumRemoved) { // Convert StringBuilder to a String. This is an expensive operation. // So we only perform this when needed. String possibleAnswer = expression.toString(); // If the current count beats the overall minimum we have till now if (removedCount &amp;lt; this.minimumRemoved) { this.validExpressions.clear(); this.minimumRemoved = removedCount; } this.validExpressions.add(possibleAnswer); } } } else { char currentCharacter = s.charAt(index); int length = expression.length(); // If the current character is neither an opening bracket nor a closing one, // simply recurse further by adding it to the expression StringBuilder if (currentCharacter != '(' &amp;amp;&amp;amp; currentCharacter != ')') { expression.append(currentCharacter); this.dfs(s, index + 1, leftCount, rightCount, expression, removedCount); expression.deleteCharAt(length); } else { // Recursion where we delete the current character at 'index' and move forward to 'index+1' this.dfs(s, index + 1, leftCount, rightCount, expression, removedCount + 1); expression.append(currentCharacter); // If it's an opening parenthesis, consider it and recurse if (currentCharacter == '(') { this.dfs(s, index + 1, leftCount + 1, rightCount, expression, removedCount); } else if (rightCount &amp;lt; leftCount) { // For a closing parenthesis, only recurse if right &amp;lt; left this.dfs(s, index + 1, leftCount, rightCount + 1, expression, removedCount); } //..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    301 - Remove Invalid Parentheses | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="301 - Remove Invalid Parentheses" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-301.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-09-26-301-Remove-Invalid-Parentheses/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-09-26T22:21:01-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"301 - Remove Invalid Parentheses","dateModified":"2016-09-26T22:21:01-07:00","datePublished":"2016-09-26T22:21:01-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-09-26-301-Remove-Invalid-Parentheses/"},"url":"https://leetcode.ca/2016-09-26-301-Remove-Invalid-Parentheses/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="question">
+       Question
+      </h1>
+      <p>
+       Formatted question description:
+       <a href="solution-301.html">
+        https://leetcode.ca/all/301.html
+       </a>
+      </p>
+      <p>
+       Given a string
+       <code>
+        s
+       </code>
+       that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid.
+      </p>
+      <p>
+       Return
+       <em>
+        a list of
+        <strong>
+         unique strings
+        </strong>
+        that are valid with the minimum number of removals
+       </em>
+       . You may return the answer in
+       <strong>
+        any order
+       </strong>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "()())()"
+<strong>Output:</strong> ["(())()","()()()"]
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "(a)())()"
+<strong>Output:</strong> ["(a())()","(a)()()"]
+</pre>
+      <p>
+       <strong class="example">
+        Example 3:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = ")("
+<strong>Output:</strong> [""]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 25
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consists of lowercase English letters and parentheses
+        <code>
+         '('
+        </code>
+        and
+        <code>
+         ')'
+        </code>
+        .
+       </li>
+       <li>
+        There will be at most
+        <code>
+         20
+        </code>
+        parentheses in
+        <code>
+         s
+        </code>
+        .
+       </li>
+      </ul>
+      <h1 id="algorithm">
+       Algorithm
+      </h1>
+      <p>
+       Use BFS to solve, put the given string into the queue, and then take it out to check whether it is legal
+      </p>
+      <ul>
+       <li>
+        If legal, return directly
+       </li>
+       <li>
+        If it is illegal, traverse it, and remove the bracket characters to generate a new string for the characters in the left and right brackets encountered
+        <ul>
+         <li>
+          If this string has not been encountered before, put it in the queue and use HashSet to record whether a string has appeared.
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+       Perform the same operation on each element in the queue, and return to the empty set if no valid string is found until the queue is empty.
+      </p>
+      <h1 id="code">
+       Code
+      </h1>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#cc0a629a-b6eb-4d17-a0b0-986f3d3ec663'}">
+       <li class="uk-active">
+        <a href="solution-301.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-301.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-301.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-301.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="cc0a629a-b6eb-4d17-a0b0-986f3d3ec663">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Remove_Invalid_Parentheses</span> <span class="o">{</span>
+
+    <span class="c1">// reference: https://leetcode.com/problems/remove-invalid-parentheses/solution/</span>
+    <span class="kd">class</span> <span class="nc">Solution_dfs</span> <span class="o">{</span>
+
+        <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">validExpressions</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">minimumRemoved</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">reset</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">validExpressions</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">minimumRemoved</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span>
+            <span class="nc">String</span> <span class="n">s</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">index</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">leftCount</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">rightCount</span><span class="o">,</span>
+            <span class="nc">StringBuilder</span> <span class="n">expression</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">removedCount</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c1">// If we have reached the end of string.</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">{</span>
+
+                <span class="c1">// If the current expression is valid.</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">leftCount</span> <span class="o">==</span> <span class="n">rightCount</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="c1">// If the current count of removed parentheses is &lt;= the current minimum count</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">removedCount</span> <span class="o">&lt;=</span> <span class="k">this</span><span class="o">.</span><span class="na">minimumRemoved</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="c1">// Convert StringBuilder to a String. This is an expensive operation.</span>
+                        <span class="c1">// So we only perform this when needed.</span>
+                        <span class="nc">String</span> <span class="n">possibleAnswer</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+
+                        <span class="c1">// If the current count beats the overall minimum we have till now</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">removedCount</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="na">minimumRemoved</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">this</span><span class="o">.</span><span class="na">validExpressions</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+                            <span class="k">this</span><span class="o">.</span><span class="na">minimumRemoved</span> <span class="o">=</span> <span class="n">removedCount</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="k">this</span><span class="o">.</span><span class="na">validExpressions</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">possibleAnswer</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                <span class="kt">char</span> <span class="n">currentCharacter</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">index</span><span class="o">);</span>
+                <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+
+                <span class="c1">// If the current character is neither an opening bracket nor a closing one,</span>
+                <span class="c1">// simply recurse further by adding it to the expression StringBuilder</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">currentCharacter</span> <span class="o">!=</span> <span class="sc">'('</span> <span class="o">&amp;&amp;</span> <span class="n">currentCharacter</span> <span class="o">!=</span> <span class="sc">')'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">currentCharacter</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="na">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">leftCount</span><span class="o">,</span> <span class="n">rightCount</span><span class="o">,</span> <span class="n">expression</span><span class="o">,</span> <span class="n">removedCount</span><span class="o">);</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">length</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                    <span class="c1">// Recursion where we delete the current character at 'index' and move forward to 'index+1'</span>
+                    <span class="k">this</span><span class="o">.</span><span class="na">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">leftCount</span><span class="o">,</span> <span class="n">rightCount</span><span class="o">,</span> <span class="n">expression</span><span class="o">,</span> <span class="n">removedCount</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">currentCharacter</span><span class="o">);</span>
+
+                    <span class="c1">// If it's an opening parenthesis, consider it and recurse</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">currentCharacter</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="na">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">leftCount</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">rightCount</span><span class="o">,</span> <span class="n">expression</span><span class="o">,</span> <span class="n">removedCount</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">rightCount</span> <span class="o">&lt;</span> <span class="n">leftCount</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c1">// For a closing parenthesis, only recurse if right &lt; left</span>
+                        <span class="k">this</span><span class="o">.</span><span class="na">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">leftCount</span><span class="o">,</span> <span class="n">rightCount</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">expression</span><span class="o">,</span> <span class="n">removedCount</span><span class="o">);</span>
+                    <span class="o">}</span>
+
+                    <span class="c1">// Undoing the append operation for other recursions.</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">length</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">removeInvalidParentheses</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="na">reset</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">(),</span> <span class="mi">0</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">ArrayList</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">validExpressions</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution_bfs</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">removeInvalidParentheses</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+            <span class="c1">// sanity check</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+            <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+
+            <span class="c1">// initialize</span>
+            <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+            <span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+
+            <span class="kt">boolean</span> <span class="n">found</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+            <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">isValid</span><span class="o">(</span><span class="n">s</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="c1">// found an answer, add to the result</span>
+                    <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">found</span><span class="o">)</span> <span class="k">continue</span><span class="o">;</span> <span class="c1">// continue to check all in queue, but no more new adding to queue</span>
+
+                <span class="c1">// generate all possible states</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="c1">// we only try to remove left or right parent</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">!=</span> <span class="sc">'('</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">!=</span> <span class="sc">')'</span><span class="o">)</span> <span class="k">continue</span><span class="o">;</span>
+
+                    <span class="nc">String</span> <span class="n">t</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span> <span class="c1">// skip char at index=i</span>
+
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">visited</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">t</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="c1">// for each state, if it's not visited, add it to the queue</span>
+                        <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+                        <span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c1">// helper function checks if string s contains valid parantheses</span>
+        <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span> <span class="n">count</span><span class="o">++;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span><span class="o">)</span> <span class="n">count</span><span class="o">--;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="err">############</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">s</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">removeInvalidParentheses</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span> <span class="o">{</span>
+                <span class="o">++</span><span class="n">l</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="o">--</span><span class="n">l</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="o">++</span><span class="n">r</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">ans</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">lcnt</span><span class="o">,</span> <span class="kt">int</span> <span class="n">rcnt</span><span class="o">,</span> <span class="nc">String</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="o">||</span> <span class="n">lcnt</span> <span class="o">&lt;</span> <span class="n">rcnt</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span> <span class="o">&amp;&amp;</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">lcnt</span><span class="o">,</span> <span class="n">rcnt</span><span class="o">,</span> <span class="n">t</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span> <span class="o">&amp;&amp;</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">lcnt</span><span class="o">,</span> <span class="n">rcnt</span><span class="o">,</span> <span class="n">t</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">lcnt</span> <span class="o">+</span> <span class="n">x</span><span class="o">,</span> <span class="n">rcnt</span> <span class="o">+</span> <span class="n">y</span><span class="o">,</span> <span class="n">t</span> <span class="o">+</span> <span class="n">c</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1">// OJ: https://leetcode.com/problems/remove-invalid-parentheses/</span>
+<span class="c1">// Time: O(2^N)</span>
+<span class="c1">// Space: O(N)</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">removeInvalidParentheses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">right</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'('</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">')'</span> <span class="o">?</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">')'</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">N</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">ans</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'('</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// we can remove this '('</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">')'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">left</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// we can remove this ')'</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="o">--</span><span class="n">left</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span> 
+            <span class="n">tmp</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="p">);</span>
+            <span class="n">tmp</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="p">};</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">begin</span><span class="p">(</span><span class="n">ans</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">ans</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-python highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="c1"># python3
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="s">'''
+        -   `i` è¡¨ç¤ºå½åå¤çå°å­ç¬¦ä¸² $s$ çç¬¬ $i$ ä¸ªå­ç¬¦ï¼
+        -   `l` å `r` åå«è¡¨ç¤ºå©ä½å¾å é¤çå·¦ãå³æ¬å·çæ°éï¼
+        -   `t` è¡¨ç¤ºå½åå¾å°çå­ç¬¦ä¸²ï¼
+        -   `lcnt` å `rcnt` åå«è¡¨ç¤ºå½åå¾å°çå­ç¬¦ä¸²ä¸­å·¦ãå³æ¬å·çæ°éã
+    '''</span>
+    <span class="k">def</span> <span class="nf">removeInvalidParentheses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lcnt</span><span class="p">,</span> <span class="n">rcnt</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">lcnt</span> <span class="o">&lt;</span> <span class="n">rcnt</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'('</span> <span class="ow">and</span> <span class="n">l</span><span class="p">:</span>
+                <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lcnt</span><span class="p">,</span> <span class="n">rcnt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+            <span class="c1"># note here is elif, not another if, because, to get min-deletion valid string, always delete from extra '(' first
+</span>            <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">')'</span> <span class="ow">and</span> <span class="n">r</span><span class="p">:</span> 
+                <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lcnt</span><span class="p">,</span> <span class="n">rcnt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+            <span class="c1"># s[i] is a char, or not delete any '(' or ')' so wait for future recursions to do it
+</span>            <span class="n">dfs</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lcnt</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'('</span><span class="p">),</span> <span class="n">rcnt</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">')'</span><span class="p">),</span> <span class="n">t</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">l</span> <span class="o">=</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span> <span class="c1"># count how many ( or ) to be removed to get valid one
+</span>            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">'('</span><span class="p">:</span>
+                <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s">')'</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">l</span><span class="p">:</span>
+                    <span class="n">l</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span> <span class="c1"># minimum removal, is archieved by strictly applying counted l/r
+</span>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+
+<span class="c1"># bfs version
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">removeInvalidParentheses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">isvalid</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">ctr</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">'('</span><span class="p">:</span>
+                    <span class="n">ctr</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s">')'</span><span class="p">:</span>
+                    <span class="n">ctr</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">ctr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="n">ctr</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="s">'''
+        &gt;&gt;&gt; a = {1,2,3,1,2,3}
+        &gt;&gt;&gt; a
+        {1, 2, 3}
+        &gt;&gt;&gt; list(a)
+        [1, 2, 3]
+        '''</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">}</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="n">isvalid</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">valid</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">valid</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">level</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))}</span>
+
+<span class="c1"># bfs version, python3
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">removeInvalidParentheses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">isvalid</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">ctr</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">'('</span><span class="p">:</span>
+                    <span class="n">ctr</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s">')'</span><span class="p">:</span>
+                    <span class="n">ctr</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">ctr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="n">ctr</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">}</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="n">isvalid</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+            <span class="n">converted</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">converted</span><span class="p">:</span> <span class="c1"># in python3, valid from filter() will always be not-None, so need to convert to list
+</span>                <span class="k">return</span> <span class="n">converted</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">level</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))}</span>
+
+<span class="c1"># official-solution: Backtracking. https://leetcode.com/problems/remove-invalid-parentheses/editorial/
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">valid_expressions</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">min_removed</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">valid_expressions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">min_removed</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"inf"</span><span class="p">)</span>
+
+    <span class="s">"""
+        string: The original string we are recursing on.
+        index: current index in the original string.
+        left: number of left parentheses till now.
+        right: number of right parentheses till now.
+        ans: the resulting expression in this particular recursion.
+        ignored: number of parentheses ignored in this particular recursion.
+    """</span>
+    <span class="k">def</span> <span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">left_count</span><span class="p">,</span> <span class="n">right_count</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rem_count</span><span class="p">):</span>
+        <span class="c1"># If we have reached the end of string.
+</span>        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+
+            <span class="c1"># If the current expression is valid. The only scenario where it can be
+</span>            <span class="c1"># invalid here is if left &gt; right. The other way around we handled early on in the recursion.
+</span>            <span class="k">if</span> <span class="n">left_count</span> <span class="o">==</span> <span class="n">right_count</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">rem_count</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="p">.</span><span class="n">min_removed</span><span class="p">:</span>
+                    <span class="c1"># This is the resulting expression.
+</span>                    <span class="c1"># Strings are immutable in Python so we move around a list in the recursion
+</span>                    <span class="c1"># and eventually join to get the final string.
+</span>                    <span class="n">possible_ans</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+
+                    <span class="c1"># If the current count of brackets removed &lt; current minimum, ignore
+</span>                    <span class="c1"># previous answers and update the current minimum count.
+</span>                    <span class="k">if</span> <span class="n">rem_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">min_removed</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="p">.</span><span class="n">valid_expressions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="p">.</span><span class="n">min_removed</span> <span class="o">=</span> <span class="n">rem_count</span>
+
+                    <span class="bp">self</span><span class="p">.</span><span class="n">valid_expressions</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">possible_ans</span><span class="p">)</span>    
+        <span class="k">else</span><span class="p">:</span>        
+
+            <span class="n">current_char</span> <span class="o">=</span> <span class="n">string</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+            <span class="c1"># If the current character is not a parenthesis, just recurse one step ahead.
+</span>            <span class="k">if</span> <span class="n">current_char</span> <span class="o">!=</span> <span class="s">'('</span> <span class="ow">and</span>  <span class="n">current_char</span> <span class="o">!=</span> <span class="s">')'</span><span class="p">:</span>
+                <span class="n">expr</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_char</span><span class="p">)</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">remaining</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left_count</span><span class="p">,</span> <span class="n">right_count</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rem_count</span><span class="p">)</span>
+                <span class="n">expr</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Else, one recursion is with ignoring the current character.
+</span>                <span class="c1"># So, we increment the ignored counter and leave the left and right untouched.
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">remaining</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left_count</span><span class="p">,</span> <span class="n">right_count</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rem_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">expr</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_char</span><span class="p">)</span>
+
+                <span class="c1"># If the current parenthesis is an opening bracket, we consider it
+</span>                <span class="c1"># and increment left and  move forward
+</span>                <span class="k">if</span> <span class="n">string</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s">'('</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">remaining</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right_count</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rem_count</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">right_count</span> <span class="o">&lt;</span> <span class="n">left_count</span><span class="p">:</span>
+                    <span class="c1"># If the current parenthesis is a closing bracket, we consider it only if we
+</span>                    <span class="c1"># have more number of opening brackets and increment right and move forward.
+</span>                    <span class="bp">self</span><span class="p">.</span><span class="n">remaining</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left_count</span><span class="p">,</span> <span class="n">right_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rem_count</span><span class="p">)</span>
+
+                <span class="n">expr</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">removeInvalidParentheses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="s">"""
+        :type s: str
+        :rtype: List[str]
+        """</span>
+
+        <span class="c1"># Reset the class level variables that we use for every test case.
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="c1"># Recursive call
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">remaining</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">valid_expressions</span><span class="p">)</span>
+
+
+<span class="c1"># official-solution: Limited Backtracking. https://leetcode.com/problems/remove-invalid-parentheses/editorial/
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">removeInvalidParentheses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="s">"""
+        :type s: str
+        :rtype: List[str]
+        """</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># First, we find out the number of misplaced left and right parentheses.
+</span>        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+
+            <span class="c1"># Simply record the left one.
+</span>            <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s">'('</span><span class="p">:</span>
+                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">char</span> <span class="o">==</span> <span class="s">')'</span><span class="p">:</span>
+                <span class="c1"># If we don't have a matching left, then this is a misplaced right, record it.
+</span>                <span class="n">right</span> <span class="o">=</span> <span class="n">right</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">left</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">right</span>
+
+                <span class="c1"># Decrement count of left parentheses because we have found a right
+</span>                <span class="c1"># which CAN be a matching one for a left.
+</span>                <span class="n">left</span> <span class="o">=</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">left</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">left</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">def</span> <span class="nf">recurse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">left_count</span><span class="p">,</span> <span class="n">right_count</span><span class="p">,</span> <span class="n">left_rem</span><span class="p">,</span> <span class="n">right_rem</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
+            <span class="c1"># If we reached the end of the string, just check if the resulting expression is
+</span>            <span class="c1"># valid or not and also if we have removed the total number of left and right
+</span>            <span class="c1"># parentheses that we should have removed.
+</span>            <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">left_rem</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">right_rem</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">ans</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="c1"># The discard case. Note that here we have our pruning condition.
+</span>                <span class="c1"># We don't recurse if the remaining count for that parenthesis is == 0.
+</span>                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s">'('</span> <span class="ow">and</span> <span class="n">left_rem</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s">')'</span> <span class="ow">and</span> <span class="n">right_rem</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">recurse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">left_count</span><span class="p">,</span>
+                            <span class="n">right_count</span><span class="p">,</span>
+                            <span class="n">left_rem</span> <span class="o">-</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s">'('</span><span class="p">),</span>
+                            <span class="n">right_rem</span> <span class="o">-</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s">')'</span><span class="p">),</span> <span class="n">expr</span><span class="p">)</span>
+
+                <span class="n">expr</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>    
+
+                <span class="c1"># Simply recurse one step further if the current character is not a parenthesis.
+</span>                <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'('</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="s">')'</span><span class="p">:</span>
+                    <span class="n">recurse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">left_count</span><span class="p">,</span>
+                            <span class="n">right_count</span><span class="p">,</span>
+                            <span class="n">left_rem</span><span class="p">,</span>
+                            <span class="n">right_rem</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s">'('</span><span class="p">:</span>
+                    <span class="c1"># Consider an opening bracket.
+</span>                    <span class="n">recurse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">left_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">right_count</span><span class="p">,</span>
+                            <span class="n">left_rem</span><span class="p">,</span>
+                            <span class="n">right_rem</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s">')'</span> <span class="ow">and</span> <span class="n">left_count</span> <span class="o">&gt;</span> <span class="n">right_count</span><span class="p">:</span>
+                    <span class="c1"># Consider a closing bracket.
+</span>                    <span class="n">recurse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">left_count</span><span class="p">,</span>
+                            <span class="n">right_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">left_rem</span><span class="p">,</span>
+                            <span class="n">right_rem</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
+
+                <span class="c1"># Pop for backtracking.
+</span>                <span class="n">expr</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>                 
+
+        <span class="c1"># Now, the left and right variables tell us the number of misplaced left and
+</span>        <span class="c1"># right parentheses and that greatly helps pruning the recursion.
+</span>        <span class="n">recurse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="p">[])</span>     
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="c1">############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">removeInvalidParentheses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="s">"""
+    :type s: str
+    :rtype: List[str]
+    """</span>
+
+    <span class="k">def</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+      <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">"("</span><span class="p">:</span>
+          <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"("</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s">")"</span><span class="p">:</span>
+          <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">")"</span><span class="p">)</span>
+          <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">"()"</span><span class="p">:</span>
+            <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+      <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+        <span class="k">return</span>
+
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="n">length</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">isValid</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+          <span class="k">return</span>
+
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"("</span> <span class="ow">or</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">")"</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="n">length</span><span class="p">:</span>
+          <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">res</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+          <span class="n">cache</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:])</span>
+
+    <span class="n">prepLeft</span> <span class="o">=</span> <span class="s">""</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+      <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"("</span><span class="p">:</span>
+        <span class="n">prepLeft</span> <span class="o">+=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
+        <span class="k">break</span>
+      <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="s">")"</span><span class="p">:</span>
+        <span class="n">prepLeft</span> <span class="o">+=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">prepRight</span> <span class="o">=</span> <span class="s">""</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">prepLeft</span><span class="p">))):</span>
+      <span class="k">if</span> <span class="n">prepLeft</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">")"</span><span class="p">:</span>
+        <span class="n">prepRight</span> <span class="o">+=</span> <span class="n">prepLeft</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">break</span>
+      <span class="k">elif</span> <span class="n">prepLeft</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"("</span><span class="p">:</span>
+        <span class="n">prepRight</span> <span class="o">+=</span> <span class="n">prepLeft</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">prepRight</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="n">isValid</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cache</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">removeInvalidParentheses</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="n">vis</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+	<span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span> <span class="p">{</span>
+			<span class="n">l</span><span class="o">++</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">l</span><span class="o">--</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">r</span><span class="o">++</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lcnt</span><span class="p">,</span> <span class="n">rcnt</span> <span class="kt">int</span><span class="p">,</span> <span class="n">t</span> <span class="kt">string</span><span class="p">)</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lcnt</span><span class="p">,</span> <span class="n">rcnt</span> <span class="kt">int</span><span class="p">,</span> <span class="n">t</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">r</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">vis</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+			<span class="p">}</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">n</span><span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">l</span><span class="o">+</span><span class="n">r</span> <span class="o">||</span> <span class="n">lcnt</span> <span class="o">&lt;</span> <span class="n">rcnt</span> <span class="p">{</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'('</span> <span class="o">&amp;&amp;</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">l</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lcnt</span><span class="p">,</span> <span class="n">rcnt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">')'</span> <span class="o">&amp;&amp;</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">lcnt</span><span class="p">,</span> <span class="n">rcnt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+		<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'('</span> <span class="p">{</span>
+			<span class="n">x</span> <span class="o">=</span> <span class="m">1</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">')'</span> <span class="p">{</span>
+			<span class="n">y</span> <span class="o">=</span> <span class="m">1</span>
+		<span class="p">}</span>
+		<span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lcnt</span><span class="o">+</span><span class="n">x</span><span class="p">,</span> <span class="n">rcnt</span><span class="o">+</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="o">+</span><span class="kt">string</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+	<span class="p">}</span>
+	<span class="n">dfs</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vis</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">vis</span> <span class="p">{</span>
+		<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-301.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

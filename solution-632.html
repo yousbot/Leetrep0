@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-632.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-632.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>632 - Smallest Range Covering Elements from K Lists</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 632. Smallest Range Covering Elements from K Lists Description You have k lists of sorted integers in non-decreasing&amp;nbsp;order. Find the smallest range that includes at least one number from each of the k lists. We define the range [a, b] is smaller than range [c,...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-632.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-632.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-632.html" rel="stylesheet"/>
+   <link href="solution-632.html" rel="stylesheet"/>
+   <link href="solution-632.html" rel="stylesheet"/>
+   <link href="solution-632.html" rel="stylesheet"/>
+   <link href="solution-632.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="632 - Smallest Range Covering Elements from K Lists" property="og:title"/>
+   <meta content="Leetcode 632. Smallest Range Covering Elements from K Lists Description You have k lists of sorted integers in non-decreasing&amp;nbsp;order. Find the smallest range that includes at least one number from each of the k lists. We define the range [a, b] is smaller than range [c, d] if b - a &amp;lt; d - c or a &amp;lt; c if b - a == d - c. &amp;nbsp; Example 1: Input: nums = [[4,10,15,24,26],[0,9,12,20],[5,18,22,30]] Output: [20,24] Explanation: List 1: [4, 10, 15, 24,26], 24 is in range [20,24]. List 2: [0, 9, 12, 20], 20 is in range [20,24]. List 3: [5, 18, 22, 30], 22 is in range [20,24]. Example 2: Input: nums = [[1,2,3],[1,2,3],[1,2,3]] Output: [1,1] &amp;nbsp; Constraints: nums.length == k 1 &amp;lt;= k &amp;lt;= 3500 1 &amp;lt;= nums[i].length &amp;lt;= 50 -105 &amp;lt;= nums[i][j] &amp;lt;= 105 nums[i]&amp;nbsp;is sorted in non-decreasing order. Solutions Java C++ Python Go RenderScript class Solution { public int[] smallestRange(List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; nums) { int n = 0; for (var v : nums) { n += v.size(); } int[][] t = new int[n][2]; int k = nums.size(); for (int i = 0, j = 0; i &amp;lt; k; ++i) { for (int x : nums.get(i)) { t[j++] = new int[] {x, i}; } } Arrays.sort(t, (a, b) -&amp;gt; a[0] - b[0]); int j = 0; Map&amp;lt;Integer, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;(); int[] ans = new int[] {-1000000, 1000000}; for (int[] e : t) { int b = e[0]; int v = e[1]; cnt.put(v, cnt.getOrDefault(v, 0) + 1); while (cnt.size() == k) { int a = t[j][0]; int w = t[j][1]; int x = b - a - (ans[1] - ans[0]); if (x &amp;lt; 0 || (x == 0 &amp;amp;&amp;amp; a &amp;lt; ans[0])) { ans[0] = a; ans[1] = b; } cnt.put(w, cnt.get(w) - 1); if (cnt.get(w) == 0) { cnt.remove(w); } ++j; } } return ans; } } class Solution { public: vector&amp;lt;int&amp;gt; smallestRange(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; nums) { int n = 0; for (auto&amp;amp; v : nums) n += v.size(); vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; t(n); int k = nums.size(); for (int i = 0, j = 0; i &amp;lt; k; ++i) { for (int v : nums[i]) { t[j++] = {v, i}; } } sort(t.begin(), t.end()); int j = 0; unordered_map&amp;lt;int, int&amp;gt; cnt; vector&amp;lt;int&amp;gt; ans = {-1000000, 1000000}; for (int i = 0; i &amp;lt; n; ++i) { int b = t[i].first; int v = t[i].second; ++cnt[v]; while (cnt.size() == k) { int a = t[j].first; int w = t[j].second; int x = b - a - (ans[1] - ans[0]); if (x &amp;lt; 0 || (x == 0 &amp;amp;&amp;amp; a &amp;lt; ans[0])) { ans[0] = a; ans[1] = b; } if (--cnt[w] == 0) { cnt.erase(w); } ++j; } } return ans; } }; class Solution: def smallestRange(self, nums: List[List[int]]) -&amp;gt; List[int]: t = [(x, i) for i, v in enumerate(nums) for x in v] t.sort() cnt = Counter() ans = [-inf, inf] j = 0 for b, v in t: cnt[v] += 1 while len(cnt) ==..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2017-08-23T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2017-08-23-632-Smallest-Range-Covering-Elements-from-K-Lists/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-632.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="632 - Smallest Range Covering Elements from K Lists" property="twitter:title"/>
+   <meta content="Leetcode 632. Smallest Range Covering Elements from K Lists Description You have k lists of sorted integers in non-decreasing&amp;nbsp;order. Find the smallest range that includes at least one number from each of the k lists. We define the range [a, b] is smaller than range [c, d] if b - a &amp;lt; d - c or a &amp;lt; c if b - a == d - c. &amp;nbsp; Example 1: Input: nums = [[4,10,15,24,26],[0,9,12,20],[5,18,22,30]] Output: [20,24] Explanation: List 1: [4, 10, 15, 24,26], 24 is in range [20,24]. List 2: [0, 9, 12, 20], 20 is in range [20,24]. List 3: [5, 18, 22, 30], 22 is in range [20,24]. Example 2: Input: nums = [[1,2,3],[1,2,3],[1,2,3]] Output: [1,1] &amp;nbsp; Constraints: nums.length == k 1 &amp;lt;= k &amp;lt;= 3500 1 &amp;lt;= nums[i].length &amp;lt;= 50 -105 &amp;lt;= nums[i][j] &amp;lt;= 105 nums[i]&amp;nbsp;is sorted in non-decreasing order. Solutions Java C++ Python Go RenderScript class Solution { public int[] smallestRange(List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; nums) { int n = 0; for (var v : nums) { n += v.size(); } int[][] t = new int[n][2]; int k = nums.size(); for (int i = 0, j = 0; i &amp;lt; k; ++i) { for (int x : nums.get(i)) { t[j++] = new int[] {x, i}; } } Arrays.sort(t, (a, b) -&amp;gt; a[0] - b[0]); int j = 0; Map&amp;lt;Integer, Integer&amp;gt; cnt = new HashMap&amp;lt;&amp;gt;(); int[] ans = new int[] {-1000000, 1000000}; for (int[] e : t) { int b = e[0]; int v = e[1]; cnt.put(v, cnt.getOrDefault(v, 0) + 1); while (cnt.size() == k) { int a = t[j][0]; int w = t[j][1]; int x = b - a - (ans[1] - ans[0]); if (x &amp;lt; 0 || (x == 0 &amp;amp;&amp;amp; a &amp;lt; ans[0])) { ans[0] = a; ans[1] = b; } cnt.put(w, cnt.get(w) - 1); if (cnt.get(w) == 0) { cnt.remove(w); } ++j; } } return ans; } } class Solution { public: vector&amp;lt;int&amp;gt; smallestRange(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; nums) { int n = 0; for (auto&amp;amp; v : nums) n += v.size(); vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; t(n); int k = nums.size(); for (int i = 0, j = 0; i &amp;lt; k; ++i) { for (int v : nums[i]) { t[j++] = {v, i}; } } sort(t.begin(), t.end()); int j = 0; unordered_map&amp;lt;int, int&amp;gt; cnt; vector&amp;lt;int&amp;gt; ans = {-1000000, 1000000}; for (int i = 0; i &amp;lt; n; ++i) { int b = t[i].first; int v = t[i].second; ++cnt[v]; while (cnt.size() == k) { int a = t[j].first; int w = t[j].second; int x = b - a - (ans[1] - ans[0]); if (x &amp;lt; 0 || (x == 0 &amp;amp;&amp;amp; a &amp;lt; ans[0])) { ans[0] = a; ans[1] = b; } if (--cnt[w] == 0) { cnt.erase(w); } ++j; } } return ans; } }; class Solution: def smallestRange(self, nums: List[List[int]]) -&amp;gt; List[int]: t = [(x, i) for i, v in enumerate(nums) for x in v] t.sort() cnt = Counter() ans = [-inf, inf] j = 0 for b, v in t: cnt[v] += 1 while len(cnt) ==..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    632 - Smallest Range Covering Elements from K Lists | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="632 - Smallest Range Covering Elements from K Lists" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-632.html" rel="canonical">
+          <meta content="https://leetcode.ca/2017-08-23-632-Smallest-Range-Covering-Elements-from-K-Lists/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2017-08-23T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"632 - Smallest Range Covering Elements from K Lists","dateModified":"2017-08-23T00:00:00-07:00","datePublished":"2017-08-23T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2017-08-23-632-Smallest-Range-Covering-Elements-from-K-Lists/"},"url":"https://leetcode.ca/2017-08-23-632-Smallest-Range-Covering-Elements-from-K-Lists/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="632-smallest-range-covering-elements-from-k-lists">
+       <a href="solution-632.html">
+        632. Smallest Range Covering Elements from K Lists
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You have
+       <code>
+        k
+       </code>
+       lists of sorted integers in
+       <strong>
+        non-decreasing order
+       </strong>
+       . Find the
+       <b>
+        smallest
+       </b>
+       range that includes at least one number from each of the
+       <code>
+        k
+       </code>
+       lists.
+      </p>
+      <p>
+       We define the range
+       <code>
+        [a, b]
+       </code>
+       is smaller than range
+       <code>
+        [c, d]
+       </code>
+       if
+       <code>
+        b - a &lt; d - c
+       </code>
+       <strong>
+        or
+       </strong>
+       <code>
+        a &lt; c
+       </code>
+       if
+       <code>
+        b - a == d - c
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [[4,10,15,24,26],[0,9,12,20],[5,18,22,30]]
+<strong>Output:</strong> [20,24]
+<strong>Explanation: </strong>
+List 1: [4, 10, 15, 24,26], 24 is in range [20,24].
+List 2: [0, 9, 12, 20], 20 is in range [20,24].
+List 3: [5, 18, 22, 30], 22 is in range [20,24].
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> nums = [[1,2,3],[1,2,3],[1,2,3]]
+<strong>Output:</strong> [1,1]
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         nums.length == k
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= k &lt;= 3500
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= nums[i].length &lt;= 50
+        </code>
+       </li>
+       <li>
+        <code>
+         -10
+         <sup>
+          5
+         </sup>
+         &lt;= nums[i][j] &lt;= 10
+         <sup>
+          5
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         nums[i]
+        </code>
+        is sorted in
+        <strong>
+         non-decreasing
+        </strong>
+        order.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#e80c2704-f081-459b-8112-9a80bb8bc239'}">
+       <li class="uk-active">
+        <a href="solution-632.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-632.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-632.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-632.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-632.html">
+         RenderScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="e80c2704-f081-459b-8112-9a80bb8bc239">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">smallestRange</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">nums</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">t</span><span class="o">[</span><span class="n">j</span><span class="o">++]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">x</span><span class="o">,</span> <span class="n">i</span><span class="o">};</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cnt</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{-</span><span class="mi">1000000</span><span class="o">,</span> <span class="mi">1000000</span><span class="o">};</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">e</span> <span class="o">:</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">cnt</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="mi">0</span><span class="o">];</span>
+                <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">t</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="mi">1</span><span class="o">];</span>
+                <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">-</span> <span class="o">(</span><span class="n">ans</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">ans</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="o">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="o">[</span><span class="mi">0</span><span class="o">]))</span> <span class="o">{</span>
+                    <span class="n">ans</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+                    <span class="n">ans</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">cnt</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">w</span><span class="o">,</span> <span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">w</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">w</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">cnt</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">w</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="o">++</span><span class="n">j</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">smallestRange</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums</span><span class="p">)</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">};</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">t</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1000000</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="p">[</span><span class="n">v</span><span class="p">];</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+                    <span class="n">ans</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">cnt</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cnt</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="o">++</span><span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">smallestRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
+        <span class="n">t</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">inf</span><span class="p">,</span> <span class="n">inf</span><span class="p">]</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+            <span class="n">cnt</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">cnt</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">cnt</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">smallestRange</span><span class="p">(</span><span class="n">nums</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">t</span> <span class="o">:=</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">x</span> <span class="p">{</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">})</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="p">})</span>
+	<span class="n">ans</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1000000</span><span class="p">,</span> <span class="m">1000000</span><span class="p">}</span>
+	<span class="n">j</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">cnt</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">t</span> <span class="p">{</span>
+		<span class="n">b</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="n">x</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">cnt</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">++</span>
+		<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">a</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">x</span> <span class="o">:=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ans</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+			<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="m">0</span><span class="p">])</span> <span class="p">{</span>
+				<span class="n">ans</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">ans</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
+			<span class="p">}</span>
+			<span class="n">cnt</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">--</span>
+			<span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="nb">delete</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="n">j</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">smallest_range</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">t</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">in</span> <span class="n">nums</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.enumerate</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="o">&amp;</span><span class="n">v</span> <span class="k">in</span> <span class="n">x</span> <span class="p">{</span>
+                <span class="n">t</span><span class="nf">.push</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">t</span><span class="nf">.sort_unstable</span><span class="p">();</span>
+        <span class="k">let</span> <span class="p">(</span><span class="k">mut</span> <span class="n">ans</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="nd">vec!</span><span class="p">[</span><span class="o">-</span><span class="mi">1000000</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">],</span> <span class="n">nums</span><span class="nf">.len</span><span class="p">());</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">cnt</span> <span class="o">=</span> <span class="nn">std</span><span class="p">::</span><span class="nn">collections</span><span class="p">::</span><span class="nn">HashMap</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">in</span> <span class="n">t</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="o">*</span><span class="n">v</span><span class="p">);</span>
+            <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">cnt</span><span class="nf">.get_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">*</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">cnt</span><span class="nf">.insert</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">while</span> <span class="n">cnt</span><span class="nf">.len</span><span class="p">()</span> <span class="o">==</span> <span class="n">n</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">||</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">];</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">cnt</span><span class="nf">.get_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="o">*</span><span class="n">x</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="o">&amp;</span><span class="n">w</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+                    <span class="n">cnt</span><span class="nf">.remove</span><span class="p">(</span><span class="o">&amp;</span><span class="n">w</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ans</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-632.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

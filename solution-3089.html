@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3089.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3089.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3089 - Find Bursty Behavior</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3089. Find Bursty Behavior Description Table: Posts +-------------+---------+ \| Column Name \| Type \| +-------------+---------+ \| post_id \| int \| \| user_id \| int \| \| post_date \| date \| +-------------+---------+ post_id is the primary key (column with unique values) for this table. Each row...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3089.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3089.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3089.html" rel="stylesheet"/>
+   <link href="solution-3089.html" rel="stylesheet"/>
+   <link href="solution-3089.html" rel="stylesheet"/>
+   <link href="solution-3089.html" rel="stylesheet"/>
+   <link href="solution-3089.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3089 - Find Bursty Behavior" property="og:title"/>
+   <meta content="Leetcode 3089. Find Bursty Behavior Description Table: Posts +-------------+---------+ \| Column Name \| Type \| +-------------+---------+ \| post_id \| int \| \| user_id \| int \| \| post_date \| date \| +-------------+---------+ post_id is the primary key (column with unique values) for this table. Each row of this table contains post_id, user_id, and post_date. Write a solution to find users who demonstrate bursty behavior in their posting patterns during February 2024. Bursty behavior is defined as any period of 7 consecutive days where a user&amp;#39;s posting frequency is at least twice to their average weekly posting frequency for February 2024. Note: Only include the dates from February 1 to February 28 in your analysis, which means you should count February as having exactly 4 weeks. Return the result table orderd by user_id in ascending order. The result format is in the following example. &amp;nbsp; Example: Input: Posts table: +---------+---------+------------+ \| post_id \| user_id \| post_date \| +---------+---------+------------+ \| 1 \| 1 \| 2024-02-27 \| \| 2 \| 5 \| 2024-02-06 \| \| 3 \| 3 \| 2024-02-25 \| \| 4 \| 3 \| 2024-02-14 \| \| 5 \| 3 \| 2024-02-06 \| \| 6 \| 2 \| 2024-02-25 \| +---------+---------+------------+ Output: +---------+----------------+------------------+ \| user_id \| max_7day_posts \| avg_weekly_posts \| +---------+----------------+------------------+ \| 1 \| 1 \| 0.2500 \| \| 2 \| 1 \| 0.2500 \| \| 5 \| 1 \| 0.2500 \| +---------+----------------+------------------+ Explanation: User 1: Made only 1 post in February, resulting in an average of 0.25 posts per week and a max of 1 post in any 7-day period. User 2: Also made just 1 post, with the same average and max 7-day posting frequency as User 1. User 5: Like Users 1 and 2, User 5 made only 1 post throughout February, leading to the same average and max 7-day posting metrics. User 3: Although User 3 made more posts than the others (3 posts), they did not reach twice the average weekly posts in their consecutive 7-day window, so they are not listed in the output. Note: Output table is ordered by user_id in ascending order. Solutions Solution 1: Self-Join + Group Count We can use self-join to connect the Posts table with itself. The connection condition is p1.user_id = p2.user_id and p2.post_date is between p1.post_date and 6 days after p1.post_date. Then we group the connection results by p1.user_id and p1.post_id to count the number of posts for each user within 7 days of each day. We save this result in table P. Next, we count the average number of posts per week for each user in February 2024 and save it in table T. Note that we need to find records where post_date is between 2024-02-01 and 2024-02-28, group the records by user_id, then count the number of posts for each user, and finally divide by 4 to get the average number of posts per week. We save this result in table T. Finally, we connect tables P and T with the..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-04-09T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-04-09-3089-Find-Bursty-Behavior/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3089.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3089 - Find Bursty Behavior" property="twitter:title"/>
+   <meta content="Leetcode 3089. Find Bursty Behavior Description Table: Posts +-------------+---------+ \| Column Name \| Type \| +-------------+---------+ \| post_id \| int \| \| user_id \| int \| \| post_date \| date \| +-------------+---------+ post_id is the primary key (column with unique values) for this table. Each row of this table contains post_id, user_id, and post_date. Write a solution to find users who demonstrate bursty behavior in their posting patterns during February 2024. Bursty behavior is defined as any period of 7 consecutive days where a user&amp;#39;s posting frequency is at least twice to their average weekly posting frequency for February 2024. Note: Only include the dates from February 1 to February 28 in your analysis, which means you should count February as having exactly 4 weeks. Return the result table orderd by user_id in ascending order. The result format is in the following example. &amp;nbsp; Example: Input: Posts table: +---------+---------+------------+ \| post_id \| user_id \| post_date \| +---------+---------+------------+ \| 1 \| 1 \| 2024-02-27 \| \| 2 \| 5 \| 2024-02-06 \| \| 3 \| 3 \| 2024-02-25 \| \| 4 \| 3 \| 2024-02-14 \| \| 5 \| 3 \| 2024-02-06 \| \| 6 \| 2 \| 2024-02-25 \| +---------+---------+------------+ Output: +---------+----------------+------------------+ \| user_id \| max_7day_posts \| avg_weekly_posts \| +---------+----------------+------------------+ \| 1 \| 1 \| 0.2500 \| \| 2 \| 1 \| 0.2500 \| \| 5 \| 1 \| 0.2500 \| +---------+----------------+------------------+ Explanation: User 1: Made only 1 post in February, resulting in an average of 0.25 posts per week and a max of 1 post in any 7-day period. User 2: Also made just 1 post, with the same average and max 7-day posting frequency as User 1. User 5: Like Users 1 and 2, User 5 made only 1 post throughout February, leading to the same average and max 7-day posting metrics. User 3: Although User 3 made more posts than the others (3 posts), they did not reach twice the average weekly posts in their consecutive 7-day window, so they are not listed in the output. Note: Output table is ordered by user_id in ascending order. Solutions Solution 1: Self-Join + Group Count We can use self-join to connect the Posts table with itself. The connection condition is p1.user_id = p2.user_id and p2.post_date is between p1.post_date and 6 days after p1.post_date. Then we group the connection results by p1.user_id and p1.post_id to count the number of posts for each user within 7 days of each day. We save this result in table P. Next, we count the average number of posts per week for each user in February 2024 and save it in table T. Note that we need to find records where post_date is between 2024-02-01 and 2024-02-28, group the records by user_id, then count the number of posts for each user, and finally divide by 4 to get the average number of posts per week. We save this result in table T. Finally, we connect tables P and T with the..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3089 - Find Bursty Behavior | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3089 - Find Bursty Behavior" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3089.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-04-09-3089-Find-Bursty-Behavior/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-04-09T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3089 - Find Bursty Behavior","dateModified":"2024-04-09T00:00:00-07:00","datePublished":"2024-04-09T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-04-09-3089-Find-Bursty-Behavior/"},"url":"https://leetcode.ca/2024-04-09-3089-Find-Bursty-Behavior/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="3089-find-bursty-behavior">
+       <a href="solution-3089.html">
+        3089. Find Bursty Behavior
+       </a>
+      </h1>
+      <!-- tags:Database -->
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        Posts
+       </code>
+      </p>
+      <pre>
++-------------+---------+
+\| Column Name \| Type    \|
++-------------+---------+
+\| post_id     \| int     \|
+\| user_id     \| int     \|
+\| post_date   \| date    \|
++-------------+---------+
+post_id is the primary key (column with unique values) for this table.
+Each row of this table contains post_id, user_id, and post_date.
+</pre>
+      <p>
+       Write a solution to find users who demonstrate
+       <strong>
+        bursty behavior
+       </strong>
+       in their posting patterns during February
+       <code>
+        2024
+       </code>
+       .
+       <strong>
+        Bursty behavior
+       </strong>
+       is defined as
+       <strong>
+        any
+       </strong>
+       period of
+       <strong>
+        7
+       </strong>
+       <strong>
+        consecutive
+       </strong>
+       days where a user's posting frequency is
+       <strong>
+        at least twice
+       </strong>
+       to their
+       <strong>
+        average
+       </strong>
+       weekly posting frequency for February
+       <code>
+        2024
+       </code>
+       .
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       Only include the dates from February
+       <code>
+        1
+       </code>
+       to February
+       <code>
+        28
+       </code>
+       in your analysis, which means you should count February as having exactly
+       <code>
+        4
+       </code>
+       weeks.
+      </p>
+      <p>
+       Return
+       <em>
+        the result table orderd by
+       </em>
+       <code>
+        user_id
+       </code>
+       <em>
+        in
+       </em>
+       <strong>
+        ascending
+       </strong>
+       <em>
+        order.
+       </em>
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+       </p>
+       <p>
+        Posts table:
+       </p>
+       <pre class="example-io">
++---------+---------+------------+
+\| post_id \| user_id \| post_date  \|
++---------+---------+------------+
+\| 1       \| 1       \| 2024-02-27 \|
+\| 2       \| 5       \| 2024-02-06 \|
+\| 3       \| 3       \| 2024-02-25 \|
+\| 4       \| 3       \| 2024-02-14 \|
+\| 5       \| 3       \| 2024-02-06 \|
+\| 6       \| 2       \| 2024-02-25 \|
++---------+---------+------------+
+</pre>
+       <p>
+        <strong>
+         Output:
+        </strong>
+       </p>
+       <pre class="example-io">
++---------+----------------+------------------+
+\| user_id \| max_7day_posts \| avg_weekly_posts \|
++---------+----------------+------------------+
+\| 1       \| 1              \| 0.2500           \|
+\| 2       \| 1              \| 0.2500           \|
+\| 5       \| 1              \| 0.2500           \|
++---------+----------------+------------------+
+</pre>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <ul>
+        <li>
+         <strong>
+          User 1:
+         </strong>
+         Made only 1 post in February, resulting in an average of 0.25 posts per week and a max of 1 post in any 7-day period.
+        </li>
+        <li>
+         <strong>
+          User 2:
+         </strong>
+         Also made just 1 post, with the same average and max 7-day posting frequency as User 1.
+        </li>
+        <li>
+         <strong>
+          User 5:
+         </strong>
+         Like Users 1 and 2, User 5 made only 1 post throughout February, leading to the same average and max 7-day posting metrics.
+        </li>
+        <li>
+         <strong>
+          User 3:
+         </strong>
+         Although User 3 made more posts than the others (3 posts), they did not reach twice the average weekly posts in their consecutive 7-day window, so they are not listed in the output.
+        </li>
+       </ul>
+       <p>
+        <b>
+         Note:
+        </b>
+        Output table is ordered by user_id in ascending order.
+       </p>
+      </div>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <h3 id="solution-1-self-join--group-count">
+       Solution 1: Self-Join + Group Count
+      </h3>
+      <p>
+       We can use self-join to connect the
+       <code class="language-plaintext highlighter-rouge">
+        Posts
+       </code>
+       table with itself. The connection condition is
+       <code class="language-plaintext highlighter-rouge">
+        p1.user_id = p2.user_id
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        p2.post_date
+       </code>
+       is between
+       <code class="language-plaintext highlighter-rouge">
+        p1.post_date
+       </code>
+       and 6 days after
+       <code class="language-plaintext highlighter-rouge">
+        p1.post_date
+       </code>
+       . Then we group the connection results by
+       <code class="language-plaintext highlighter-rouge">
+        p1.user_id
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        p1.post_id
+       </code>
+       to count the number of posts for each user within 7 days of each day. We save this result in table
+       <code class="language-plaintext highlighter-rouge">
+        P
+       </code>
+       .
+      </p>
+      <p>
+       Next, we count the average number of posts per week for each user in February 2024 and save it in table
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       . Note that we need to find records where
+       <code class="language-plaintext highlighter-rouge">
+        post_date
+       </code>
+       is between
+       <code class="language-plaintext highlighter-rouge">
+        2024-02-01
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        2024-02-28
+       </code>
+       , group the records by
+       <code class="language-plaintext highlighter-rouge">
+        user_id
+       </code>
+       , then count the number of posts for each user, and finally divide by
+       <code class="language-plaintext highlighter-rouge">
+        4
+       </code>
+       to get the average number of posts per week. We save this result in table
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       .
+      </p>
+      <p>
+       Finally, we connect tables
+       <code class="language-plaintext highlighter-rouge">
+        P
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       with the condition
+       <code class="language-plaintext highlighter-rouge">
+        P.user_id = T.user_id
+       </code>
+       , then group by
+       <code class="language-plaintext highlighter-rouge">
+        user_id
+       </code>
+       to count the maximum number of posts within 7 days for each user. We then filter out records that meet the condition
+       <code class="language-plaintext highlighter-rouge">
+        max_7day_posts &gt;= avg_weekly_posts * 2
+       </code>
+       to get the result. Note that we need to sort in ascending order by
+       <code class="language-plaintext highlighter-rouge">
+        user_id
+       </code>
+       .
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#376e6045-0de7-4ae5-a0cb-41e13ce99b0e'}">
+       <li class="uk-active">
+        <a href="solution-3089.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3089.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="376e6045-0de7-4ae5-a0cb-41e13ce99b0e">
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+
+<span class="k">def</span> <span class="nf">find_bursty_behavior</span><span class="p">(</span><span class="n">posts</span><span class="p">:</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="c1"># Subquery P
+</span>    <span class="n">p1</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">merge</span><span class="p">(</span><span class="n">posts</span><span class="p">,</span> <span class="n">posts</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s">"user_id"</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s">"_1"</span><span class="p">,</span> <span class="s">"_2"</span><span class="p">))</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span>
+        <span class="n">p1</span><span class="p">[</span><span class="s">"post_date_2"</span><span class="p">].</span><span class="n">between</span><span class="p">(</span>
+            <span class="n">p1</span><span class="p">[</span><span class="s">"post_date_1"</span><span class="p">],</span> <span class="n">p1</span><span class="p">[</span><span class="s">"post_date_1"</span><span class="p">]</span> <span class="o">+</span> <span class="n">pd</span><span class="p">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="p">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">"user_id"</span><span class="p">,</span> <span class="s">"post_id_1"</span><span class="p">]).</span><span class="n">size</span><span class="p">().</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"cnt"</span><span class="p">)</span>
+
+    <span class="c1"># Subquery T
+</span>    <span class="n">t</span> <span class="o">=</span> <span class="n">posts</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">posts</span><span class="p">[</span><span class="s">"post_date"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="s">"2024-02-01"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">posts</span><span class="p">[</span><span class="s">"post_date"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="s">"2024-02-28"</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">"user_id"</span><span class="p">).</span><span class="n">size</span><span class="p">().</span><span class="n">div</span><span class="p">(</span><span class="mi">4</span><span class="p">).</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"avg_weekly_posts"</span><span class="p">)</span>
+
+    <span class="c1"># Joining P and T
+</span>    <span class="n">merged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">merge</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s">"user_id"</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"inner"</span><span class="p">)</span>
+
+    <span class="c1"># Filtering
+</span>    <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">merged_df</span><span class="p">[</span><span class="n">merged_df</span><span class="p">[</span><span class="s">"cnt"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">merged_df</span><span class="p">[</span><span class="s">"avg_weekly_posts"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="c1"># Aggregating
+</span>    <span class="n">result_df</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">filtered_df</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">"user_id"</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">agg</span><span class="p">({</span><span class="s">"cnt"</span><span class="p">:</span> <span class="s">"max"</span><span class="p">,</span> <span class="s">"avg_weekly_posts"</span><span class="p">:</span> <span class="s">"first"</span><span class="p">})</span>
+        <span class="p">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">result_df</span><span class="p">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">"user_id"</span><span class="p">,</span> <span class="s">"max_7day_posts"</span><span class="p">,</span> <span class="s">"avg_weekly_posts"</span><span class="p">]</span>
+
+    <span class="c1"># Sorting
+</span>    <span class="n">result_df</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">"user_id"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result_df</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">WITH</span>
+    <span class="n">P</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="n">p1</span><span class="p">.</span><span class="n">user_id</span> <span class="k">AS</span> <span class="n">user_id</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">cnt</span>
+        <span class="k">FROM</span>
+            <span class="n">Posts</span> <span class="k">AS</span> <span class="n">p1</span>
+            <span class="k">JOIN</span> <span class="n">Posts</span> <span class="k">AS</span> <span class="n">p2</span>
+                <span class="k">ON</span> <span class="n">p1</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">p2</span><span class="p">.</span><span class="n">user_id</span>
+                <span class="k">AND</span> <span class="n">p2</span><span class="p">.</span><span class="n">post_date</span> <span class="k">BETWEEN</span> <span class="n">p1</span><span class="p">.</span><span class="n">post_date</span> <span class="k">AND</span> <span class="n">DATE_ADD</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">post_date</span><span class="p">,</span> <span class="n">INTERVAL</span> <span class="mi">6</span> <span class="k">DAY</span><span class="p">)</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">p1</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">p1</span><span class="p">.</span><span class="n">post_id</span>
+    <span class="p">),</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="n">user_id</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span> <span class="k">AS</span> <span class="n">avg_weekly_posts</span>
+        <span class="k">FROM</span> <span class="n">Posts</span>
+        <span class="k">WHERE</span> <span class="n">post_date</span> <span class="k">BETWEEN</span> <span class="s1">'2024-02-01'</span> <span class="k">AND</span> <span class="s1">'2024-02-28'</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">user_id</span><span class="p">,</span> <span class="k">MAX</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span> <span class="k">AS</span> <span class="n">max_7day_posts</span><span class="p">,</span> <span class="n">avg_weekly_posts</span>
+<span class="k">FROM</span>
+    <span class="n">P</span>
+    <span class="k">JOIN</span> <span class="n">T</span> <span class="k">USING</span> <span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+<span class="k">HAVING</span> <span class="n">max_7day_posts</span> <span class="o">&gt;=</span> <span class="n">avg_weekly_posts</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3089.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

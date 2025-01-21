@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-371.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-371.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>371 - Sum of Two Integers</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 371. Sum of Two Integers Description Given two integers a and b, return the sum of the two integers without using the operators + and -. &amp;nbsp; Example 1: Input: a = 1, b = 2 Output: 3 Example 2: Input: a = 2, b...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-371.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-371.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-371.html" rel="stylesheet"/>
+   <link href="solution-371.html" rel="stylesheet"/>
+   <link href="solution-371.html" rel="stylesheet"/>
+   <link href="solution-371.html" rel="stylesheet"/>
+   <link href="solution-371.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="371 - Sum of Two Integers" property="og:title"/>
+   <meta content="Leetcode 371. Sum of Two Integers Description Given two integers a and b, return the sum of the two integers without using the operators + and -. &amp;nbsp; Example 1: Input: a = 1, b = 2 Output: 3 Example 2: Input: a = 2, b = 3 Output: 5 &amp;nbsp; Constraints: -1000 &amp;lt;= a, b &amp;lt;= 1000 Solutions Bit Manipulation, when doing addition operation, after each bit is added, there may be a Carry generated, and then the next bit calculation needs to be added to the calculation together, then can the two parts be separated, letâs look at an example 759+ 674 If you do not consider the carry, you can get 323 If you only consider the carry, you can get 1110 Put the above two numbers holiday 323+1110=1433 is the final result Then further analysis, if you get the first and second cases above, looking at it in binary, Do not consider the addition of carry, 0+0=0, 0+1=1, 1+0=1, 1+1=0, this is the operation rule of XOR, If you only consider the addition of carry 0+0=0, 0+1=0, 1+0=0, 1+1=1, this is actually the operation of and, In the third step, when the two are added, the algorithm is called recursively, and the termination condition is that when the carry is 0, the result of the first step is directly returned. Components of ~(a ^ mask): ~(a ^ mask) is part of a technique to handle the addition of two integers a and b without using the + or - operators, with an emphasis on correctly handling negative numbers in a 32-bit environment. mask = 0xFFFFFFFF: This is a 32-bit mask with all bits set to 1. In binary, mask is 11111111 11111111 11111111 11111111. When used with the &amp;amp; operator, it ensures that any integer is trimmed to its lowest 32 bits. This is crucial for simulating 32-bit integer overflow behavior in environments (like Python) where integers have arbitrary precision and wonât naturally overflow. a ^ mask: This operation performs a bitwise XOR between a and mask. For positive numbers, this operation does not change the sign of the result. However, for negative numbers represented in twoâs complement (which is the standard way to represent negative numbers in binary), XORing with mask effectively inverts all bits of a, turning it into its twoâs complement minus one (you can think of it as a step before obtaining the twoâs complement representation of a positive number). ~: This bitwise NOT operation inverts all bits in the result of a ^ mask. The combination of XOR with mask and then applying ~ effectively computes the twoâs complement of a, turning it back into a positive number if a was negative. This is because, in twoâs complement, negative numbers are represented by inverting all bits of their absolute value and then adding 1. Why use ~(a ^ mask)? The expression ~(a ^ mask) is used to convert the final sum a from a twoâs complement negative..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2016-12-05T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2016-12-05-371-Sum-of-Two-Integers/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-371.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="371 - Sum of Two Integers" property="twitter:title"/>
+   <meta content="Leetcode 371. Sum of Two Integers Description Given two integers a and b, return the sum of the two integers without using the operators + and -. &amp;nbsp; Example 1: Input: a = 1, b = 2 Output: 3 Example 2: Input: a = 2, b = 3 Output: 5 &amp;nbsp; Constraints: -1000 &amp;lt;= a, b &amp;lt;= 1000 Solutions Bit Manipulation, when doing addition operation, after each bit is added, there may be a Carry generated, and then the next bit calculation needs to be added to the calculation together, then can the two parts be separated, letâs look at an example 759+ 674 If you do not consider the carry, you can get 323 If you only consider the carry, you can get 1110 Put the above two numbers holiday 323+1110=1433 is the final result Then further analysis, if you get the first and second cases above, looking at it in binary, Do not consider the addition of carry, 0+0=0, 0+1=1, 1+0=1, 1+1=0, this is the operation rule of XOR, If you only consider the addition of carry 0+0=0, 0+1=0, 1+0=0, 1+1=1, this is actually the operation of and, In the third step, when the two are added, the algorithm is called recursively, and the termination condition is that when the carry is 0, the result of the first step is directly returned. Components of ~(a ^ mask): ~(a ^ mask) is part of a technique to handle the addition of two integers a and b without using the + or - operators, with an emphasis on correctly handling negative numbers in a 32-bit environment. mask = 0xFFFFFFFF: This is a 32-bit mask with all bits set to 1. In binary, mask is 11111111 11111111 11111111 11111111. When used with the &amp;amp; operator, it ensures that any integer is trimmed to its lowest 32 bits. This is crucial for simulating 32-bit integer overflow behavior in environments (like Python) where integers have arbitrary precision and wonât naturally overflow. a ^ mask: This operation performs a bitwise XOR between a and mask. For positive numbers, this operation does not change the sign of the result. However, for negative numbers represented in twoâs complement (which is the standard way to represent negative numbers in binary), XORing with mask effectively inverts all bits of a, turning it into its twoâs complement minus one (you can think of it as a step before obtaining the twoâs complement representation of a positive number). ~: This bitwise NOT operation inverts all bits in the result of a ^ mask. The combination of XOR with mask and then applying ~ effectively computes the twoâs complement of a, turning it back into a positive number if a was negative. This is because, in twoâs complement, negative numbers are represented by inverting all bits of their absolute value and then adding 1. Why use ~(a ^ mask)? The expression ~(a ^ mask) is used to convert the final sum a from a twoâs complement negative..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    371 - Sum of Two Integers | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="371 - Sum of Two Integers" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-371.html" rel="canonical">
+          <meta content="https://leetcode.ca/2016-12-05-371-Sum-of-Two-Integers/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2016-12-05T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"371 - Sum of Two Integers","dateModified":"2016-12-05T00:00:00-08:00","datePublished":"2016-12-05T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2016-12-05-371-Sum-of-Two-Integers/"},"url":"https://leetcode.ca/2016-12-05-371-Sum-of-Two-Integers/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="371-sum-of-two-integers">
+       <a href="solution-371.html">
+        371. Sum of Two Integers
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given two integers
+       <code>
+        a
+       </code>
+       and
+       <code>
+        b
+       </code>
+       , return
+       <em>
+        the sum of the two integers without using the operators
+       </em>
+       <code>
+        +
+       </code>
+       <em>
+        and
+       </em>
+       <code>
+        -
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre><strong>Input:</strong> a = 1, b = 2
+<strong>Output:</strong> 3
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre><strong>Input:</strong> a = 2, b = 3
+<strong>Output:</strong> 5
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         -1000 &lt;= a, b &lt;= 1000
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <code class="language-plaintext highlighter-rouge">
+        Bit Manipulation
+       </code>
+       , when doing addition operation, after each bit is added, there may be a Carry generated, and then the next bit calculation needs to be added to the calculation together, then can the two parts be separated, letâs look at an example
+       <code class="language-plaintext highlighter-rouge">
+        759+ 674
+       </code>
+      </p>
+      <ol>
+       <li>
+        If you
+        <code class="language-plaintext highlighter-rouge">
+         do not consider
+        </code>
+        the carry, you can get
+        <code class="language-plaintext highlighter-rouge">
+         323
+        </code>
+       </li>
+       <li>
+        If you
+        <code class="language-plaintext highlighter-rouge">
+         only consider
+        </code>
+        the carry, you can get
+        <code class="language-plaintext highlighter-rouge">
+         1110
+        </code>
+       </li>
+       <li>
+        Put the above two numbers holiday
+        <code class="language-plaintext highlighter-rouge">
+         323+1110=1433
+        </code>
+        is the final result
+       </li>
+      </ol>
+      <p>
+       Then further analysis, if you get the first and second cases above, looking at it in binary,
+      </p>
+      <ul>
+       <li>
+        Do not consider the addition of carry,
+        <code class="language-plaintext highlighter-rouge">
+         0+0=0
+        </code>
+        ,
+        <code class="language-plaintext highlighter-rouge">
+         0+1=1
+        </code>
+        ,
+        <code class="language-plaintext highlighter-rouge">
+         1+0=1
+        </code>
+        ,
+        <code class="language-plaintext highlighter-rouge">
+         1+1=0
+        </code>
+        , this is the operation rule of
+        <code class="language-plaintext highlighter-rouge">
+         XOR
+        </code>
+        ,
+       </li>
+       <li>
+        If you only consider the addition of carry
+        <code class="language-plaintext highlighter-rouge">
+         0+0=0
+        </code>
+        ,
+        <code class="language-plaintext highlighter-rouge">
+         0+1=0
+        </code>
+        ,
+        <code class="language-plaintext highlighter-rouge">
+         1+0=0
+        </code>
+        ,
+        <code class="language-plaintext highlighter-rouge">
+         1+1=1
+        </code>
+        , this is actually the operation of
+        <code class="language-plaintext highlighter-rouge">
+         and
+        </code>
+        ,
+       </li>
+       <li>
+        In the third step, when the two are added, the algorithm is called recursively, and the termination condition is that when the carry is 0, the result of the first step is directly returned.
+       </li>
+      </ul>
+      <h3 id="components-of-a--mask">
+       Components of
+       <code class="language-plaintext highlighter-rouge">
+        ~(a ^ mask)
+       </code>
+       :
+      </h3>
+      <p>
+       <code class="language-plaintext highlighter-rouge">
+        ~(a ^ mask)
+       </code>
+       is part of a technique to handle the addition of two integers
+       <code class="language-plaintext highlighter-rouge">
+        a
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        b
+       </code>
+       without using the
+       <code class="language-plaintext highlighter-rouge">
+        +
+       </code>
+       or
+       <code class="language-plaintext highlighter-rouge">
+        -
+       </code>
+       operators, with an emphasis on correctly handling negative numbers in a 32-bit environment.
+      </p>
+      <ul>
+       <li>
+        <p>
+         <code class="language-plaintext highlighter-rouge">
+          mask = 0xFFFFFFFF
+         </code>
+         : This is a 32-bit mask with all bits set to
+         <code class="language-plaintext highlighter-rouge">
+          1
+         </code>
+         . In binary,
+         <code class="language-plaintext highlighter-rouge">
+          mask
+         </code>
+         is
+         <code class="language-plaintext highlighter-rouge">
+          11111111 11111111 11111111 11111111
+         </code>
+         . When used with the
+         <code class="language-plaintext highlighter-rouge">
+          &amp;
+         </code>
+         operator, it ensures that any integer is trimmed to its lowest 32 bits. This is crucial for simulating 32-bit integer overflow behavior in environments (like Python) where integers have arbitrary precision and wonât naturally overflow.
+        </p>
+       </li>
+       <li>
+        <p>
+         <code class="language-plaintext highlighter-rouge">
+          a ^ mask
+         </code>
+         : This operation performs a bitwise XOR between
+         <code class="language-plaintext highlighter-rouge">
+          a
+         </code>
+         and
+         <code class="language-plaintext highlighter-rouge">
+          mask
+         </code>
+         . For positive numbers, this operation does not change the sign of the result. However, for negative numbers represented in twoâs complement (which is the standard way to represent negative numbers in binary), XORing with
+         <code class="language-plaintext highlighter-rouge">
+          mask
+         </code>
+         effectively inverts all bits of
+         <code class="language-plaintext highlighter-rouge">
+          a
+         </code>
+         , turning it into its twoâs complement minus one (you can think of it as a step before obtaining the twoâs complement representation of a positive number).
+        </p>
+       </li>
+       <li>
+        <p>
+         <code class="language-plaintext highlighter-rouge">
+          ~
+         </code>
+         : This bitwise NOT operation inverts all bits in the result of
+         <code class="language-plaintext highlighter-rouge">
+          a ^ mask
+         </code>
+         . The combination of XOR with
+         <code class="language-plaintext highlighter-rouge">
+          mask
+         </code>
+         and then applying
+         <code class="language-plaintext highlighter-rouge">
+          ~
+         </code>
+         effectively computes the twoâs complement of
+         <code class="language-plaintext highlighter-rouge">
+          a
+         </code>
+         , turning it back into a positive number if
+         <code class="language-plaintext highlighter-rouge">
+          a
+         </code>
+         was negative. This is because, in twoâs complement, negative numbers are represented by inverting all bits of their absolute value and then adding
+         <code class="language-plaintext highlighter-rouge">
+          1
+         </code>
+         .
+        </p>
+       </li>
+      </ul>
+      <h3 id="why-use-a--mask">
+       Why use
+       <code class="language-plaintext highlighter-rouge">
+        ~(a ^ mask)
+       </code>
+       ?
+      </h3>
+      <p>
+       The expression
+       <code class="language-plaintext highlighter-rouge">
+        ~(a ^ mask)
+       </code>
+       is used to convert the final sum
+       <code class="language-plaintext highlighter-rouge">
+        a
+       </code>
+       from a twoâs complement negative number back to its normal negative representation if
+       <code class="language-plaintext highlighter-rouge">
+        a
+       </code>
+       originally was a negative number that exceeded the 32-bit signed integer range.
+      </p>
+      <ul>
+       <li>
+        If
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        is a positive number within the range of a 32-bit signed integer,
+        <code class="language-plaintext highlighter-rouge">
+         a &lt; kMax
+        </code>
+        evaluates to
+        <code class="language-plaintext highlighter-rouge">
+         True
+        </code>
+        , and the method simply returns
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        .
+       </li>
+       <li>
+        If
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        exceeds the 32-bit signed integer range (meaning itâs a negative number in twoâs complement representation due to overflow),
+        <code class="language-plaintext highlighter-rouge">
+         a &lt; kMax
+        </code>
+        evaluates to
+        <code class="language-plaintext highlighter-rouge">
+         False
+        </code>
+        , and
+        <code class="language-plaintext highlighter-rouge">
+         ~(a ^ mask)
+        </code>
+        is used to convert
+        <code class="language-plaintext highlighter-rouge">
+         a
+        </code>
+        back to a standard negative integer that Python can understand.
+       </li>
+      </ul>
+      <p>
+       This technique allows the method to correctly return both positive and negative sums within a 32-bit environment, mimicking the behavior of 32-bit signed integer addition, including handling overflow correctly.
+      </p>
+      <p>
+       Letâs walk through the provided code with the input
+       <code class="language-plaintext highlighter-rouge">
+        a = 2
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        b = 3
+       </code>
+       to understand how it calculates the sum without using the
+       <code class="language-plaintext highlighter-rouge">
+        +
+       </code>
+       or
+       <code class="language-plaintext highlighter-rouge">
+        -
+       </code>
+       operators.
+      </p>
+      <h3 id="example-input-walkthrough">
+       Example input walkthrough
+      </h3>
+      <p>
+       Input: a = 1, b = 2
+Output: 3
+      </p>
+      <h5 id="initial-setup">
+       Initial Setup
+      </h5>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         a = 2
+        </code>
+        (in binary:
+        <code class="language-plaintext highlighter-rouge">
+         10
+        </code>
+        )
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         b = 3
+        </code>
+        (in binary:
+        <code class="language-plaintext highlighter-rouge">
+         11
+        </code>
+        )
+       </li>
+      </ul>
+      <p>
+       The binary representation is used because the algorithm performs bit manipulation operations.
+      </p>
+      <h5 id="masks">
+       Masks
+      </h5>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         mask = 0xFFFFFFFF
+        </code>
+        is used to handle negative numbers correctly by limiting the integer size to 32 bits.
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         kMax = 0x80000000
+        </code>
+        is the value used to check if the resulting number is negative. It represents the highest bit in a 32-bit integer, which determines the sign of the number in twoâs complement notation.
+       </li>
+      </ul>
+      <h5 id="loop-iteration-1">
+       Loop Iteration 1
+      </h5>
+      <p>
+       Calculate
+       <code class="language-plaintext highlighter-rouge">
+        a &amp; b
+       </code>
+       to find the carry, and
+       <code class="language-plaintext highlighter-rouge">
+        a ^ b
+       </code>
+       to add without carrying.
+      </p>
+      <ul>
+       <li>
+        Carry:
+        <code class="language-plaintext highlighter-rouge">
+         (a &amp; b) &lt;&lt; 1 = (2 &amp; 3) &lt;&lt; 1 = (10 &amp; 11) &lt;&lt; 1 = 10 &lt;&lt; 1 = 100
+        </code>
+        (in binary), which is
+        <code class="language-plaintext highlighter-rouge">
+         4
+        </code>
+        in decimal.
+       </li>
+       <li>
+        Addition without carry:
+        <code class="language-plaintext highlighter-rouge">
+         a ^ b = 2 ^ 3 = 10 ^ 11 = 01
+        </code>
+        (in binary), which is
+        <code class="language-plaintext highlighter-rouge">
+         1
+        </code>
+        in decimal.
+       </li>
+      </ul>
+      <p>
+       Apply the mask to both to ensure they fit into 32 bits (has no effect in this case because the numbers are small).
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         a = 4 &amp; mask = 4
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         b = 1 &amp; mask = 1
+        </code>
+       </li>
+      </ul>
+      <h5 id="loop-iteration-2">
+       Loop Iteration 2
+      </h5>
+      <p>
+       Repeat the calculations with the new values of
+       <code class="language-plaintext highlighter-rouge">
+        a
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        b
+       </code>
+       .
+      </p>
+      <ul>
+       <li>
+        Carry:
+        <code class="language-plaintext highlighter-rouge">
+         (a &amp; b) &lt;&lt; 1 = (4 &amp; 1) &lt;&lt; 1 = (100 &amp; 001) &lt;&lt; 1 = 000 &lt;&lt; 1 = 000
+        </code>
+        (in binary), which is
+        <code class="language-plaintext highlighter-rouge">
+         0
+        </code>
+        in decimal.
+       </li>
+       <li>
+        Addition without carry:
+        <code class="language-plaintext highlighter-rouge">
+         a ^ b = 4 ^ 1 = 100 ^ 001 = 101
+        </code>
+        (in binary), which is
+        <code class="language-plaintext highlighter-rouge">
+         5
+        </code>
+        in decimal.
+       </li>
+      </ul>
+      <p>
+       Apply the mask again (still no effect).
+      </p>
+      <ul>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         a = 0 &amp; mask = 0
+        </code>
+       </li>
+       <li>
+        <code class="language-plaintext highlighter-rouge">
+         b = 5 &amp; mask = 5
+        </code>
+       </li>
+      </ul>
+      <h5 id="final-check">
+       Final check
+      </h5>
+      <p>
+       The loop ends when
+       <code class="language-plaintext highlighter-rouge">
+        a
+       </code>
+       becomes
+       <code class="language-plaintext highlighter-rouge">
+        0
+       </code>
+       , indicating thereâs no carry left to add. The sum is stored in
+       <code class="language-plaintext highlighter-rouge">
+        b
+       </code>
+       , which is now
+       <code class="language-plaintext highlighter-rouge">
+        5
+       </code>
+       .
+      </p>
+      <p>
+       Since
+       <code class="language-plaintext highlighter-rouge">
+        b &lt; kMax
+       </code>
+       , the condition
+       <code class="language-plaintext highlighter-rouge">
+        b if b &lt; kMax else ~(b ^ mask)
+       </code>
+       simply returns
+       <code class="language-plaintext highlighter-rouge">
+        b
+       </code>
+       , which is the sum
+       <code class="language-plaintext highlighter-rouge">
+        5
+       </code>
+       .
+      </p>
+      <p>
+       Thus, the output for the input
+       <code class="language-plaintext highlighter-rouge">
+        a = 2
+       </code>
+       ,
+       <code class="language-plaintext highlighter-rouge">
+        b = 3
+       </code>
+       is
+       <code class="language-plaintext highlighter-rouge">
+        5
+       </code>
+       , as expected.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#351be960-75c7-4b8f-8f8d-524e69da7865'}">
+       <li class="uk-active">
+        <a href="solution-371.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-371.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-371.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-371.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="351be960-75c7-4b8f-8f8d-524e69da7865">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sum_of_Two_Integers</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">Sum_of_Two_Integers</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Sum_of_Two_Integers</span><span class="o">();</span>
+<span class="c1">//        System.out.println(out.getSum(1, 2)); // no carry</span>
+
+        <span class="c1">// 2+2</span>
+        <span class="c1">// recurion-1: sum=0, carry= (10)å·¦ç§»1ä½ =(100)=4</span>
+        <span class="c1">// recursion-2: a=0,b=4</span>
+        <span class="c1">// recursion-3: b=0</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">out</span><span class="o">.</span><span class="na">getSum</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">));</span> <span class="c1">// with carry</span>
+    <span class="o">}</span>
+
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getSum</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span> <span class="c1">// complete the operation when there is no carry</span>
+            <span class="k">return</span> <span class="n">a</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">sum</span><span class="o">,</span> <span class="n">carry</span><span class="o">;</span>
+        <span class="n">sum</span> <span class="o">=</span> <span class="n">a</span><span class="o">^</span><span class="n">b</span><span class="o">;</span> <span class="c1">// step-1 sum</span>
+        <span class="n">carry</span> <span class="o">=</span> <span class="o">(</span><span class="n">a</span><span class="o">&amp;</span><span class="n">b</span><span class="o">)&lt;&lt;</span><span class="mi">1</span><span class="o">;</span> <span class="c1">// step-2 sum</span>
+
+        <span class="k">return</span> <span class="nf">getSum</span><span class="o">(</span><span class="n">sum</span><span class="o">,</span> <span class="n">carry</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">/////////</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getSum</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">a</span> <span class="o">:</span> <span class="n">getSum</span><span class="o">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">getSum</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">;</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">carry</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="s">'''
+0x80000000
+Taking the binary of 0x80000000 we get:
+    1000 0000 0000 0000 0000 0000 0000 0000
+
+equivalent decimal value is 2,147,483,648(1's complement conversion)
+https://stackoverflow.com/questions/18813875/how-is-0x80000000-equated-to-2147483648-in-java
+
+
+
+0xffffffff
+Taking the binary of 0xffffffff we get:
+    1111 1111 1111 1111 1111 1111 1111 1111
+
+No sign bit in python
+0xFFFFFFFF masking to detect int32 overflow
+
+x &amp; 0xFFFFFFFF == x
+    ===&gt; will return True if x doesn't oveflow and x is larger than 0.
+
+https://stackoverflow.com/questions/36819849/detect-int32-overflow-using-0xffffffff-masking-in-python
+
+
+
+&gt;&gt;&gt; bin(0x80000000)
+'0b10000000000000000000000000000000'
+&gt;&gt;&gt; bin(0xffffffff)
+'0b11111111111111111111111111111111'
+
+&gt;&gt;&gt; 0x80000000 &amp; 0xffffffff
+2147483648
+&gt;&gt;&gt; 0x80000000 ^ 0xffffffff
+2147483647
+'''</span>
+
+<span class="s">'''
+&gt;&gt;&gt; 1^1
+0
+&gt;&gt;&gt; 0^0
+0
+&gt;&gt;&gt; 1^0
+1
+&gt;&gt;&gt; 0^1
+1
+'''</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">getSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="mh">0xFFFFFFFF</span>
+    <span class="n">kMax</span> <span class="o">=</span> <span class="mh">0x80000000</span>
+    <span class="c1"># the result of each step is passed recursively to the getSum function
+</span>    <span class="c1"># until there is no carry (b == 0)
+</span>    <span class="c1"># at that point, the function returns the final sum.
+</span>    <span class="k">while</span> <span class="n">a</span><span class="p">:</span>
+      <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">((</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mask</span>
+
+    <span class="k">return</span> <span class="n">b</span> <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">kMax</span> <span class="k">else</span> <span class="o">~</span><span class="p">(</span><span class="n">b</span> <span class="o">^</span> <span class="n">mask</span><span class="p">)</span>
+    <span class="c1"># ~(b ^ mask) turning it back into a positive number if b was negative
+</span>
+
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span> <span class="c1"># also passing OJ by switching a/b
+</span>  <span class="k">def</span> <span class="nf">getSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="mh">0xFFFFFFFF</span>
+    <span class="n">kMax</span> <span class="o">=</span> <span class="mh">0x80000000</span>
+    <span class="c1"># the result of each step is passed recursively to the getSum function
+</span>    <span class="c1"># until there is no carry (b == 0)
+</span>    <span class="c1"># at that point, the function returns the final sum.
+</span>    <span class="k">while</span> <span class="n">b</span><span class="p">:</span>
+      <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">,</span> <span class="p">((</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mask</span>
+
+    <span class="k">return</span> <span class="n">a</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">kMax</span> <span class="k">else</span> <span class="o">~</span><span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">mask</span><span class="p">)</span>
+
+<span class="c1">#############
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span> <span class="c1"># no mast, no overflow consideration
+</span>  <span class="k">def</span> <span class="nf">getSum</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span>
+
+    <span class="nb">sum</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span>  <span class="c1"># Step 1: sum without carry
+</span>    <span class="n">carry</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>  <span class="c1"># Step 2: calculate carry
+</span>
+    <span class="k">return</span> <span class="n">getSum</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="n">carry</span><span class="p">)</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">getSum</span><span class="p">(</span><span class="n">a</span> <span class="kt">int</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">b</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">s</span> <span class="o">:=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span>
+		<span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="m">1</span>
+		<span class="n">a</span> <span class="o">=</span> <span class="n">s</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">a</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-371.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

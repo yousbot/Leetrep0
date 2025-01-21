@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3264.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3264.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3264 - Final Array State After K Multiplication Operations I</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3264. Final Array State After K Multiplication Operations I Description You are given an integer array nums, an integer k, and an integer multiplier. You need to perform k operations on nums. In each operation: Find the minimum value x in nums. If there are...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3264.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3264.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3264.html" rel="stylesheet"/>
+   <link href="solution-3264.html" rel="stylesheet"/>
+   <link href="solution-3264.html" rel="stylesheet"/>
+   <link href="solution-3264.html" rel="stylesheet"/>
+   <link href="solution-3264.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3264 - Final Array State After K Multiplication Operations I" property="og:title"/>
+   <meta content="Leetcode 3264. Final Array State After K Multiplication Operations I Description You are given an integer array nums, an integer k, and an integer multiplier. You need to perform k operations on nums. In each operation: Find the minimum value x in nums. If there are multiple occurrences of the minimum value, select the one that appears first. Replace the selected minimum value x with x * multiplier. Return an integer array denoting the final state of nums after performing all k operations. &amp;nbsp; Example 1: Input: nums = [2,1,3,5,6], k = 5, multiplier = 2 Output: [8,4,6,5,6] Explanation: Operation Result After operation 1 [2, 2, 3, 5, 6] After operation 2 [4, 2, 3, 5, 6] After operation 3 [4, 4, 3, 5, 6] After operation 4 [4, 4, 6, 5, 6] After operation 5 [8, 4, 6, 5, 6] Example 2: Input: nums = [1,2], k = 3, multiplier = 4 Output: [16,8] Explanation: Operation Result After operation 1 [4, 2] After operation 2 [4, 8] After operation 3 [16, 8] &amp;nbsp; Constraints: 1 &amp;lt;= nums.length &amp;lt;= 100 1 &amp;lt;= nums[i] &amp;lt;= 100 1 &amp;lt;= k &amp;lt;= 10 1 &amp;lt;= multiplier &amp;lt;= 5 Solutions Solution 1: Priority Queue (Min-Heap) + Simulation We can use a min-heap to maintain the elements in the array $\textit{nums}$. Each time, we extract the minimum value from the min-heap, multiply it by $\textit{multiplier}$, and then put it back into the min-heap. During the implementation, we insert the indices of the elements into the min-heap and define a custom comparator function to sort the min-heap based on the values of the elements in $\textit{nums}$ as the primary key and the indices as the secondary key. Finally, we return the array $\textit{nums}$. The time complexity is $O((n + k) \times \log n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$. Java C++ Python Go TypeScript class Solution { public int[] getFinalState(int[] nums, int k, int multiplier) { PriorityQueue&amp;lt;Integer&amp;gt; pq = new PriorityQueue&amp;lt;&amp;gt;((i, j) -&amp;gt; nums[i] - nums[j] == 0 ? i - j : nums[i] - nums[j]); for (int i = 0; i &amp;lt; nums.length; i++) { pq.offer(i); } while (k-- &amp;gt; 0) { int i = pq.poll(); nums[i] *= multiplier; pq.offer(i); } return nums; } } class Solution { public: vector&amp;lt;int&amp;gt; getFinalState(vector&amp;lt;int&amp;gt;&amp;amp; nums, int k, int multiplier) { auto cmp = [&amp;amp;nums](int i, int j) { return nums[i] == nums[j] ? i &amp;gt; j : nums[i] &amp;gt; nums[j]; }; priority_queue&amp;lt;int, vector&amp;lt;int&amp;gt;, decltype(cmp)&amp;gt; pq(cmp); for (int i = 0; i &amp;lt; nums.size(); ++i) { pq.push(i); } while (k--) { int i = pq.top(); pq.pop(); nums[i] *= multiplier; pq.push(i); } return nums; } }; class Solution: def getFinalState(self, nums: List[int], k: int, multiplier: int) -&amp;gt; List[int]: pq = [(x, i) for i, x in enumerate(nums)] heapify(pq) for _ in range(k): _, i = heappop(pq) nums[i] *= multiplier heappush(pq, (nums[i], i)) return nums func getFinalState(nums []int, k int, multiplier int) []int { h := &amp;amp;hp{nums: nums}..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-09-11T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-09-11-3264-Final-Array-State-After-K-Multiplication-Operations-I/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3264.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3264 - Final Array State After K Multiplication Operations I" property="twitter:title"/>
+   <meta content="Leetcode 3264. Final Array State After K Multiplication Operations I Description You are given an integer array nums, an integer k, and an integer multiplier. You need to perform k operations on nums. In each operation: Find the minimum value x in nums. If there are multiple occurrences of the minimum value, select the one that appears first. Replace the selected minimum value x with x * multiplier. Return an integer array denoting the final state of nums after performing all k operations. &amp;nbsp; Example 1: Input: nums = [2,1,3,5,6], k = 5, multiplier = 2 Output: [8,4,6,5,6] Explanation: Operation Result After operation 1 [2, 2, 3, 5, 6] After operation 2 [4, 2, 3, 5, 6] After operation 3 [4, 4, 3, 5, 6] After operation 4 [4, 4, 6, 5, 6] After operation 5 [8, 4, 6, 5, 6] Example 2: Input: nums = [1,2], k = 3, multiplier = 4 Output: [16,8] Explanation: Operation Result After operation 1 [4, 2] After operation 2 [4, 8] After operation 3 [16, 8] &amp;nbsp; Constraints: 1 &amp;lt;= nums.length &amp;lt;= 100 1 &amp;lt;= nums[i] &amp;lt;= 100 1 &amp;lt;= k &amp;lt;= 10 1 &amp;lt;= multiplier &amp;lt;= 5 Solutions Solution 1: Priority Queue (Min-Heap) + Simulation We can use a min-heap to maintain the elements in the array $\textit{nums}$. Each time, we extract the minimum value from the min-heap, multiply it by $\textit{multiplier}$, and then put it back into the min-heap. During the implementation, we insert the indices of the elements into the min-heap and define a custom comparator function to sort the min-heap based on the values of the elements in $\textit{nums}$ as the primary key and the indices as the secondary key. Finally, we return the array $\textit{nums}$. The time complexity is $O((n + k) \times \log n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$. Java C++ Python Go TypeScript class Solution { public int[] getFinalState(int[] nums, int k, int multiplier) { PriorityQueue&amp;lt;Integer&amp;gt; pq = new PriorityQueue&amp;lt;&amp;gt;((i, j) -&amp;gt; nums[i] - nums[j] == 0 ? i - j : nums[i] - nums[j]); for (int i = 0; i &amp;lt; nums.length; i++) { pq.offer(i); } while (k-- &amp;gt; 0) { int i = pq.poll(); nums[i] *= multiplier; pq.offer(i); } return nums; } } class Solution { public: vector&amp;lt;int&amp;gt; getFinalState(vector&amp;lt;int&amp;gt;&amp;amp; nums, int k, int multiplier) { auto cmp = [&amp;amp;nums](int i, int j) { return nums[i] == nums[j] ? i &amp;gt; j : nums[i] &amp;gt; nums[j]; }; priority_queue&amp;lt;int, vector&amp;lt;int&amp;gt;, decltype(cmp)&amp;gt; pq(cmp); for (int i = 0; i &amp;lt; nums.size(); ++i) { pq.push(i); } while (k--) { int i = pq.top(); pq.pop(); nums[i] *= multiplier; pq.push(i); } return nums; } }; class Solution: def getFinalState(self, nums: List[int], k: int, multiplier: int) -&amp;gt; List[int]: pq = [(x, i) for i, x in enumerate(nums)] heapify(pq) for _ in range(k): _, i = heappop(pq) nums[i] *= multiplier heappush(pq, (nums[i], i)) return nums func getFinalState(nums []int, k int, multiplier int) []int { h := &amp;amp;hp{nums: nums}..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3264 - Final Array State After K Multiplication Operations I | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3264 - Final Array State After K Multiplication Operations I" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3264.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-09-11-3264-Final-Array-State-After-K-Multiplication-Operations-I/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-09-11T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3264 - Final Array State After K Multiplication Operations I","dateModified":"2024-09-11T00:00:00-07:00","datePublished":"2024-09-11T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-09-11-3264-Final-Array-State-After-K-Multiplication-Operations-I/"},"url":"https://leetcode.ca/2024-09-11-3264-Final-Array-State-After-K-Multiplication-Operations-I/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3264-final-array-state-after-k-multiplication-operations-i">
+       <a href="solution-3264.html">
+        3264. Final Array State After K Multiplication Operations I
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       You are given an integer array
+       <code>
+        nums
+       </code>
+       , an integer
+       <code>
+        k
+       </code>
+       , and an integer
+       <code>
+        multiplier
+       </code>
+       .
+      </p>
+      <p>
+       You need to perform
+       <code>
+        k
+       </code>
+       operations on
+       <code>
+        nums
+       </code>
+       . In each operation:
+      </p>
+      <ul>
+       <li>
+        Find the
+        <strong>
+         minimum
+        </strong>
+        value
+        <code>
+         x
+        </code>
+        in
+        <code>
+         nums
+        </code>
+        . If there are multiple occurrences of the minimum value, select the one that appears
+        <strong>
+         first
+        </strong>
+        .
+       </li>
+       <li>
+        Replace the selected minimum value
+        <code>
+         x
+        </code>
+        with
+        <code>
+         x * multiplier
+        </code>
+        .
+       </li>
+      </ul>
+      <p>
+       Return an integer array denoting the
+       <em>
+        final state
+       </em>
+       of
+       <code>
+        nums
+       </code>
+       after performing all
+       <code>
+        k
+       </code>
+       operations.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         nums = [2,1,3,5,6], k = 5, multiplier = 2
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         [8,4,6,5,6]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <table>
+        <tbody>
+         <tr>
+          <th>
+           Operation
+          </th>
+          <th>
+           Result
+          </th>
+         </tr>
+         <tr>
+          <td>
+           After operation 1
+          </td>
+          <td>
+           [2, 2, 3, 5, 6]
+          </td>
+         </tr>
+         <tr>
+          <td>
+           After operation 2
+          </td>
+          <td>
+           [4, 2, 3, 5, 6]
+          </td>
+         </tr>
+         <tr>
+          <td>
+           After operation 3
+          </td>
+          <td>
+           [4, 4, 3, 5, 6]
+          </td>
+         </tr>
+         <tr>
+          <td>
+           After operation 4
+          </td>
+          <td>
+           [4, 4, 6, 5, 6]
+          </td>
+         </tr>
+         <tr>
+          <td>
+           After operation 5
+          </td>
+          <td>
+           [8, 4, 6, 5, 6]
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+        <span class="example-io">
+         nums = [1,2], k = 3, multiplier = 4
+        </span>
+       </p>
+       <p>
+        <strong>
+         Output:
+        </strong>
+        <span class="example-io">
+         [16,8]
+        </span>
+       </p>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <table>
+        <tbody>
+         <tr>
+          <th>
+           Operation
+          </th>
+          <th>
+           Result
+          </th>
+         </tr>
+         <tr>
+          <td>
+           After operation 1
+          </td>
+          <td>
+           [4, 2]
+          </td>
+         </tr>
+         <tr>
+          <td>
+           After operation 2
+          </td>
+          <td>
+           [4, 8]
+          </td>
+         </tr>
+         <tr>
+          <td>
+           After operation 3
+          </td>
+          <td>
+           [16, 8]
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= nums.length &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= nums[i] &lt;= 100
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= k &lt;= 10
+        </code>
+       </li>
+       <li>
+        <code>
+         1 &lt;= multiplier &lt;= 5
+        </code>
+       </li>
+      </ul>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1-priority-queue-min-heap--simulation">
+       Solution 1: Priority Queue (Min-Heap) + Simulation
+      </h3>
+      <p>
+       We can use a min-heap to maintain the elements in the array $\textit{nums}$. Each time, we extract the minimum value from the min-heap, multiply it by $\textit{multiplier}$, and then put it back into the min-heap. During the implementation, we insert the indices of the elements into the min-heap and define a custom comparator function to sort the min-heap based on the values of the elements in $\textit{nums}$ as the primary key and the indices as the secondary key.
+      </p>
+      <p>
+       Finally, we return the array $\textit{nums}$.
+      </p>
+      <p>
+       The time complexity is $O((n + k) \times \log n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#c8128c40-ae91-45cc-8fbb-99f0b6e035cd'}">
+       <li class="uk-active">
+        <a href="solution-3264.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-3264.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-3264.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-3264.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-3264.html">
+         TypeScript
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="c8128c40-ae91-45cc-8fbb-99f0b6e035cd">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">getFinalState</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">multiplier</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">pq</span>
+            <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">:</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">k</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">*=</span> <span class="n">multiplier</span><span class="o">;</span>
+            <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">nums</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">getFinalState</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">multiplier</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">nums</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">?</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">j</span> <span class="o">:</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="p">};</span>
+        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">cmp</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">(</span><span class="n">cmp</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">k</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">multiplier</span><span class="p">;</span>
+            <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">nums</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">getFinalState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">pq</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">)]</span>
+        <span class="n">heapify</span><span class="p">(</span><span class="n">pq</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">pq</span><span class="p">)</span>
+            <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">multiplier</span>
+            <span class="n">heappush</span><span class="p">(</span><span class="n">pq</span><span class="p">,</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">nums</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">getFinalState</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">,</span> <span class="n">multiplier</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">h</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">hp</span><span class="p">{</span><span class="n">nums</span><span class="o">:</span> <span class="n">nums</span><span class="p">}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+		<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">i</span> <span class="o">:=</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+		<span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">multiplier</span>
+		<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+		<span class="n">k</span><span class="o">--</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">nums</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">hp</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">IntSlice</span>
+	<span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">h</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span> <span class="p">{</span>
+	<span class="n">old</span> <span class="o">:=</span> <span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+	<span class="n">x</span> <span class="o">:=</span> <span class="n">old</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span> <span class="o">=</span> <span class="n">old</span><span class="p">[</span><span class="o">:</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">x</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">hp</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">x</span> <span class="n">any</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">getFinalState</span><span class="p">(</span><span class="nx">nums</span><span class="p">:</span> <span class="kr">number</span><span class="p">[],</span> <span class="nx">k</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">multiplier</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span><span class="p">[]</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">pq</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PriorityQueue</span><span class="p">({</span>
+        <span class="na">compare</span><span class="p">:</span> <span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="p">?</span> <span class="nx">i</span> <span class="o">-</span> <span class="nx">j</span> <span class="p">:</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">-</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">j</span><span class="p">]),</span>
+    <span class="p">});</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">pq</span><span class="p">.</span><span class="nx">enqueue</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">k</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">pq</span><span class="p">.</span><span class="nx">dequeue</span><span class="p">()</span><span class="o">!</span><span class="p">;</span>
+        <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">*=</span> <span class="nx">multiplier</span><span class="p">;</span>
+        <span class="nx">pq</span><span class="p">.</span><span class="nx">enqueue</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">nums</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3264.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

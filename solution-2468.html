@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-2468.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-2468.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>2468 - Split Message Based on Limit</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 2468. Split Message Based on Limit Description You are given a string, message, and a positive integer, limit. You must split message into one or more parts based on limit. Each resulting part should have the suffix &amp;quot;&amp;lt;a/b&amp;gt;&amp;quot;, where &amp;quot;b&amp;quot; is to be replaced with...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-2468.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-2468.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-2468.html" rel="stylesheet"/>
+   <link href="solution-2468.html" rel="stylesheet"/>
+   <link href="solution-2468.html" rel="stylesheet"/>
+   <link href="solution-2468.html" rel="stylesheet"/>
+   <link href="solution-2468.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="2468 - Split Message Based on Limit" property="og:title"/>
+   <meta content="Leetcode 2468. Split Message Based on Limit Description You are given a string, message, and a positive integer, limit. You must split message into one or more parts based on limit. Each resulting part should have the suffix &amp;quot;&amp;lt;a/b&amp;gt;&amp;quot;, where &amp;quot;b&amp;quot; is to be replaced with the total number of parts and &amp;quot;a&amp;quot; is to be replaced with the index of the part, starting from 1 and going up to b. Additionally, the length of each resulting part (including its suffix) should be equal to limit, except for the last part whose length can be at most limit. The resulting parts should be formed such that when their suffixes are removed and they are all concatenated in order, they should be equal to message. Also, the result should contain as few parts as possible. Return the parts message would be split into as an array of strings. If it is impossible to split message as required, return an empty array. &amp;nbsp; Example 1: Input: message = &amp;quot;this is really a very awesome message&amp;quot;, limit = 9 Output: [&amp;quot;thi&amp;lt;1/14&amp;gt;&amp;quot;,&amp;quot;s i&amp;lt;2/14&amp;gt;&amp;quot;,&amp;quot;s r&amp;lt;3/14&amp;gt;&amp;quot;,&amp;quot;eal&amp;lt;4/14&amp;gt;&amp;quot;,&amp;quot;ly &amp;lt;5/14&amp;gt;&amp;quot;,&amp;quot;a v&amp;lt;6/14&amp;gt;&amp;quot;,&amp;quot;ery&amp;lt;7/14&amp;gt;&amp;quot;,&amp;quot; aw&amp;lt;8/14&amp;gt;&amp;quot;,&amp;quot;eso&amp;lt;9/14&amp;gt;&amp;quot;,&amp;quot;me&amp;lt;10/14&amp;gt;&amp;quot;,&amp;quot; m&amp;lt;11/14&amp;gt;&amp;quot;,&amp;quot;es&amp;lt;12/14&amp;gt;&amp;quot;,&amp;quot;sa&amp;lt;13/14&amp;gt;&amp;quot;,&amp;quot;ge&amp;lt;14/14&amp;gt;&amp;quot;] Explanation: The first 9 parts take 3 characters each from the beginning of message. The next 5 parts take 2 characters each to finish splitting message. In this example, each part, including the last, has length 9. It can be shown it is not possible to split message into less than 14 parts. Example 2: Input: message = &amp;quot;short message&amp;quot;, limit = 15 Output: [&amp;quot;short mess&amp;lt;1/2&amp;gt;&amp;quot;,&amp;quot;age&amp;lt;2/2&amp;gt;&amp;quot;] Explanation: Under the given constraints, the string can be split into two parts: - The first part comprises of the first 10 characters, and has a length 15. - The next part comprises of the last 3 characters, and has a length 8. &amp;nbsp; Constraints: 1 &amp;lt;= message.length &amp;lt;= 104 message consists only of lowercase English letters and &amp;#39; &amp;#39;. 1 &amp;lt;= limit &amp;lt;= 104 Solutions Solution 1: Enumerate the Number of Segments + Simulation We denote the length of the string message as $n$, and the number of segments as $k$. According to the problem, if $k &amp;gt; n$, it means that we can divide the string into more than $n$ segments. Since the length of the string is only $n$, dividing it into more than $n$ segments will inevitably lead to some segments with a length of $0$, which can be deleted. Therefore, we only need to limit the range of $k$ to $[1,.. n]$. We enumerate the number of segments $k$ from small to large. Let the length of $a$ segments in all segments be $sa$, the length of $b$ segments in all segments be $sb$, and the length of all symbols (including angle brackets and slashes) in all segments be $sc$. Then the value of $sa$ is ${\textstyle \sum_{j=1}^{k}} len(s_j)$, which can be directly obtained through the prefix sum; the value of $sb$ is $len(str(k)) \times k$; and the value of $sc$ is $3 \times k$. Therefore, the number of characters that..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2022-09-02T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2022-09-02-2468-Split-Message-Based-on-Limit/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-2468.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="2468 - Split Message Based on Limit" property="twitter:title"/>
+   <meta content="Leetcode 2468. Split Message Based on Limit Description You are given a string, message, and a positive integer, limit. You must split message into one or more parts based on limit. Each resulting part should have the suffix &amp;quot;&amp;lt;a/b&amp;gt;&amp;quot;, where &amp;quot;b&amp;quot; is to be replaced with the total number of parts and &amp;quot;a&amp;quot; is to be replaced with the index of the part, starting from 1 and going up to b. Additionally, the length of each resulting part (including its suffix) should be equal to limit, except for the last part whose length can be at most limit. The resulting parts should be formed such that when their suffixes are removed and they are all concatenated in order, they should be equal to message. Also, the result should contain as few parts as possible. Return the parts message would be split into as an array of strings. If it is impossible to split message as required, return an empty array. &amp;nbsp; Example 1: Input: message = &amp;quot;this is really a very awesome message&amp;quot;, limit = 9 Output: [&amp;quot;thi&amp;lt;1/14&amp;gt;&amp;quot;,&amp;quot;s i&amp;lt;2/14&amp;gt;&amp;quot;,&amp;quot;s r&amp;lt;3/14&amp;gt;&amp;quot;,&amp;quot;eal&amp;lt;4/14&amp;gt;&amp;quot;,&amp;quot;ly &amp;lt;5/14&amp;gt;&amp;quot;,&amp;quot;a v&amp;lt;6/14&amp;gt;&amp;quot;,&amp;quot;ery&amp;lt;7/14&amp;gt;&amp;quot;,&amp;quot; aw&amp;lt;8/14&amp;gt;&amp;quot;,&amp;quot;eso&amp;lt;9/14&amp;gt;&amp;quot;,&amp;quot;me&amp;lt;10/14&amp;gt;&amp;quot;,&amp;quot; m&amp;lt;11/14&amp;gt;&amp;quot;,&amp;quot;es&amp;lt;12/14&amp;gt;&amp;quot;,&amp;quot;sa&amp;lt;13/14&amp;gt;&amp;quot;,&amp;quot;ge&amp;lt;14/14&amp;gt;&amp;quot;] Explanation: The first 9 parts take 3 characters each from the beginning of message. The next 5 parts take 2 characters each to finish splitting message. In this example, each part, including the last, has length 9. It can be shown it is not possible to split message into less than 14 parts. Example 2: Input: message = &amp;quot;short message&amp;quot;, limit = 15 Output: [&amp;quot;short mess&amp;lt;1/2&amp;gt;&amp;quot;,&amp;quot;age&amp;lt;2/2&amp;gt;&amp;quot;] Explanation: Under the given constraints, the string can be split into two parts: - The first part comprises of the first 10 characters, and has a length 15. - The next part comprises of the last 3 characters, and has a length 8. &amp;nbsp; Constraints: 1 &amp;lt;= message.length &amp;lt;= 104 message consists only of lowercase English letters and &amp;#39; &amp;#39;. 1 &amp;lt;= limit &amp;lt;= 104 Solutions Solution 1: Enumerate the Number of Segments + Simulation We denote the length of the string message as $n$, and the number of segments as $k$. According to the problem, if $k &amp;gt; n$, it means that we can divide the string into more than $n$ segments. Since the length of the string is only $n$, dividing it into more than $n$ segments will inevitably lead to some segments with a length of $0$, which can be deleted. Therefore, we only need to limit the range of $k$ to $[1,.. n]$. We enumerate the number of segments $k$ from small to large. Let the length of $a$ segments in all segments be $sa$, the length of $b$ segments in all segments be $sb$, and the length of all symbols (including angle brackets and slashes) in all segments be $sc$. Then the value of $sa$ is ${\textstyle \sum_{j=1}^{k}} len(s_j)$, which can be directly obtained through the prefix sum; the value of $sb$ is $len(str(k)) \times k$; and the value of $sc$ is $3 \times k$. Therefore, the number of characters that..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    2468 - Split Message Based on Limit | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="2468 - Split Message Based on Limit" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-2468.html" rel="canonical">
+          <meta content="https://leetcode.ca/2022-09-02-2468-Split-Message-Based-on-Limit/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2022-09-02T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"2468 - Split Message Based on Limit","dateModified":"2022-09-02T00:00:00-07:00","datePublished":"2022-09-02T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2022-09-02-2468-Split-Message-Based-on-Limit/"},"url":"https://leetcode.ca/2022-09-02-2468-Split-Message-Based-on-Limit/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="2468-split-message-based-on-limit">
+       <a href="solution-2468.html">
+        2468. Split Message Based on Limit
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       You are given a string,
+       <code>
+        message
+       </code>
+       , and a positive integer,
+       <code>
+        limit
+       </code>
+       .
+      </p>
+      <p>
+       You must
+       <strong>
+        split
+       </strong>
+       <code>
+        message
+       </code>
+       into one or more
+       <strong>
+        parts
+       </strong>
+       based on
+       <code>
+        limit
+       </code>
+       . Each resulting part should have the suffix
+       <code>
+        "&lt;a/b&gt;"
+       </code>
+       , where
+       <code>
+        "b"
+       </code>
+       is to be
+       <strong>
+        replaced
+       </strong>
+       with the total number of parts and
+       <code>
+        "a"
+       </code>
+       is to be
+       <strong>
+        replaced
+       </strong>
+       with the index of the part, starting from
+       <code>
+        1
+       </code>
+       and going up to
+       <code>
+        b
+       </code>
+       . Additionally, the length of each resulting part (including its suffix) should be
+       <strong>
+        equal
+       </strong>
+       to
+       <code>
+        limit
+       </code>
+       , except for the last part whose length can be
+       <strong>
+        at most
+       </strong>
+       <code>
+        limit
+       </code>
+       .
+      </p>
+      <p>
+       The resulting parts should be formed such that when their suffixes are removed and they are all concatenated
+       <strong>
+        in order
+       </strong>
+       , they should be equal to
+       <code>
+        message
+       </code>
+       . Also, the result should contain as few parts as possible.
+      </p>
+      <p>
+       Return
+       <em>
+        the parts
+       </em>
+       <code>
+        message
+       </code>
+       <em>
+        would be split into as an array of strings
+       </em>
+       . If it is impossible to split
+       <code>
+        message
+       </code>
+       as required, return
+       <em>
+        an empty array
+       </em>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> message = "this is really a very awesome message", limit = 9
+<strong>Output:</strong> ["thi&lt;1/14&gt;","s i&lt;2/14&gt;","s r&lt;3/14&gt;","eal&lt;4/14&gt;","ly &lt;5/14&gt;","a v&lt;6/14&gt;","ery&lt;7/14&gt;"," aw&lt;8/14&gt;","eso&lt;9/14&gt;","me&lt;10/14&gt;"," m&lt;11/14&gt;","es&lt;12/14&gt;","sa&lt;13/14&gt;","ge&lt;14/14&gt;"]
+<strong>Explanation:</strong>
+The first 9 parts take 3 characters each from the beginning of message.
+The next 5 parts take 2 characters each to finish splitting message. 
+In this example, each part, including the last, has length 9. 
+It can be shown it is not possible to split message into less than 14 parts.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> message = "short message", limit = 15
+<strong>Output:</strong> ["short mess&lt;1/2&gt;","age&lt;2/2&gt;"]
+<strong>Explanation:</strong>
+Under the given constraints, the string can be split into two parts: 
+- The first part comprises of the first 10 characters, and has a length 15.
+- The next part comprises of the last 3 characters, and has a length 8.
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= message.length &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+       <li>
+        <code>
+         message
+        </code>
+        consists only of lowercase English letters and
+        <code>
+         ' '
+        </code>
+        .
+       </li>
+       <li>
+        <code>
+         1 &lt;= limit &lt;= 10
+         <sup>
+          4
+         </sup>
+        </code>
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Enumerate the Number of Segments + Simulation
+       </strong>
+      </p>
+      <p>
+       We denote the length of the string
+       <code class="language-plaintext highlighter-rouge">
+        message
+       </code>
+       as $n$, and the number of segments as $k$.
+      </p>
+      <p>
+       According to the problem, if $k &gt; n$, it means that we can divide the string into more than $n$ segments. Since the length of the string is only $n$, dividing it into more than $n$ segments will inevitably lead to some segments with a length of $0$, which can be deleted. Therefore, we only need to limit the range of $k$ to $[1,.. n]$.
+      </p>
+      <p>
+       We enumerate the number of segments $k$ from small to large. Let the length of $a$ segments in all segments be $sa$, the length of $b$ segments in all segments be $sb$, and the length of all symbols (including angle brackets and slashes) in all segments be $sc$.
+      </p>
+      <p>
+       Then the value of $sa$ is ${\textstyle \sum_{j=1}^{k}} len(s_j)$, which can be directly obtained through the prefix sum; the value of $sb$ is $len(str(k)) \times k$; and the value of $sc$ is $3 \times k$.
+      </p>
+      <p>
+       Therefore, the number of characters that can be filled in all segments is $limit\times k - (sa + sb + sc)$. If this value is greater than or equal to $n$, it means that the string can be divided into $k$ segments, and we can directly construct the answer and return it.
+      </p>
+      <p>
+       The time complexity is $O(n\times \log n)$, where $n$ is the length of the string
+       <code class="language-plaintext highlighter-rouge">
+        message
+       </code>
+       . Ignoring the space consumption of the answer, the space complexity is $O(1)$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#65b52384-93d6-4d66-bd42-f11dbfbff5c2'}">
+       <li class="uk-active">
+        <a href="solution-2468.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-2468.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-2468.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-2468.html">
+         Go
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="65b52384-93d6-4d66-bd42-f11dbfbff5c2">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span><span class="o">[]</span> <span class="nf">splitMessage</span><span class="o">(</span><span class="nc">String</span> <span class="n">message</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">sa</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">String</span><span class="o">[]</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">lk</span> <span class="o">=</span> <span class="o">(</span><span class="n">k</span> <span class="o">+</span> <span class="s">""</span><span class="o">).</span><span class="na">length</span><span class="o">();</span>
+            <span class="n">sa</span> <span class="o">+=</span> <span class="n">lk</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">sb</span> <span class="o">=</span> <span class="n">lk</span> <span class="o">*</span> <span class="n">k</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">sc</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">k</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">limit</span> <span class="o">*</span> <span class="n">k</span> <span class="o">-</span> <span class="o">(</span><span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nc">String</span> <span class="n">tail</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"&lt;%d/%d&gt;"</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+                    <span class="nc">String</span> <span class="n">t</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">limit</span> <span class="o">-</span> <span class="n">tail</span><span class="o">.</span><span class="na">length</span><span class="o">()))</span> <span class="o">+</span> <span class="n">tail</span><span class="o">;</span>
+                    <span class="n">ans</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="n">limit</span> <span class="o">-</span> <span class="n">tail</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+                <span class="o">}</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">splitMessage</span><span class="p">(</span><span class="n">string</span> <span class="n">message</span><span class="p">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">message</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">sa</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">lk</span> <span class="o">=</span> <span class="n">to_string</span><span class="p">(</span><span class="n">k</span><span class="p">).</span><span class="n">size</span><span class="p">();</span>
+            <span class="n">sa</span> <span class="o">+=</span> <span class="n">lk</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">sb</span> <span class="o">=</span> <span class="n">lk</span> <span class="o">*</span> <span class="n">k</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">sc</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">k</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">limit</span> <span class="o">-</span> <span class="p">(</span><span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">string</span> <span class="n">tail</span> <span class="o">=</span> <span class="s">"&lt;"</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s">"&gt;"</span><span class="p">;</span>
+                    <span class="n">string</span> <span class="n">t</span> <span class="o">=</span> <span class="n">message</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">limit</span> <span class="o">-</span> <span class="n">tail</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="o">+</span> <span class="n">tail</span><span class="p">;</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="n">limit</span> <span class="o">-</span> <span class="n">tail</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">splitMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">sa</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+            <span class="n">sb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="o">*</span> <span class="n">k</span>
+            <span class="n">sc</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">k</span>
+            <span class="k">if</span> <span class="n">limit</span> <span class="o">*</span> <span class="n">k</span> <span class="o">-</span> <span class="p">(</span><span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">:</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">tail</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'&lt;</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s">/</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s">&gt;'</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">limit</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">tail</span><span class="p">)]</span> <span class="o">+</span> <span class="n">tail</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="n">limit</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">ans</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">splitMessage</span><span class="p">(</span><span class="n">message</span> <span class="kt">string</span><span class="p">,</span> <span class="n">limit</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">ans</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+	<span class="n">sa</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">lk</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+		<span class="n">sa</span> <span class="o">+=</span> <span class="n">lk</span>
+		<span class="n">sb</span> <span class="o">:=</span> <span class="n">lk</span> <span class="o">*</span> <span class="n">k</span>
+		<span class="n">sc</span> <span class="o">:=</span> <span class="m">3</span> <span class="o">*</span> <span class="n">k</span>
+		<span class="k">if</span> <span class="n">limit</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="p">(</span><span class="n">sa</span><span class="o">+</span><span class="n">sb</span><span class="o">+</span><span class="n">sc</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="p">{</span>
+			<span class="n">i</span> <span class="o">:=</span> <span class="m">0</span>
+			<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+				<span class="n">tail</span> <span class="o">:=</span> <span class="s">"&lt;"</span> <span class="o">+</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s">"&gt;"</span>
+				<span class="n">t</span> <span class="o">:=</span> <span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">:</span><span class="n">min</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">limit</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">tail</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span> <span class="o">+</span> <span class="n">tail</span>
+				<span class="n">ans</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+				<span class="n">i</span> <span class="o">+=</span> <span class="n">limit</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-2468.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

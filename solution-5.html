@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-5.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-5.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>5 - Longest Palindromic Substring</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 5. Longest Palindromic Substring Description Given a string s, return the longest palindromic substring in s. &amp;nbsp; Example 1: Input: s = &amp;quot;babad&amp;quot; Output: &amp;quot;bab&amp;quot; Explanation: &amp;quot;aba&amp;quot; is also a valid answer. Example 2: Input: s = &amp;quot;cbbd&amp;quot; Output: &amp;quot;bb&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= s.length...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-5.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-5.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-5.html" rel="stylesheet"/>
+   <link href="solution-5.html" rel="stylesheet"/>
+   <link href="solution-5.html" rel="stylesheet"/>
+   <link href="solution-5.html" rel="stylesheet"/>
+   <link href="solution-5.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="5 - Longest Palindromic Substring" property="og:title"/>
+   <meta content="Leetcode 5. Longest Palindromic Substring Description Given a string s, return the longest palindromic substring in s. &amp;nbsp; Example 1: Input: s = &amp;quot;babad&amp;quot; Output: &amp;quot;bab&amp;quot; Explanation: &amp;quot;aba&amp;quot; is also a valid answer. Example 2: Input: s = &amp;quot;cbbd&amp;quot; Output: &amp;quot;bb&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 1000 s consist of only digits and English letters. Solutions Solution 1: Dynamic Programming We define $f[i][j]$ to represent whether the string $s[i..j]$ is a palindrome, initially $f[i][j] = true$. Next, we define variables $k$ and $mx$, where $k$ represents the starting position of the longest palindrome, and $mx$ represents the length of the longest palindrome. Initially, $k = 0$, $mx = 1$. Considering $f[i][j]$, if $s[i] = s[j]$, then $f[i][j] = f[i + 1][j - 1]$; otherwise, $f[i][j] = false$. If $f[i][j] = true$ and $mx &amp;lt; j - i + 1$, then we update $k = i$, $mx = j - i + 1$. Since $f[i][j]$ depends on $f[i + 1][j - 1]$, we need to ensure that $i + 1$ is before $j - 1$, so we need to enumerate $i$ from large to small, and enumerate $j$ from small to large. The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Here, $n$ is the length of the string $s$. Solution 2: Enumerate Palindrome Midpoint We can enumerate the midpoint of the palindrome, spread to both sides, and find the longest palindrome. The time complexity is $O(n^2)$, and the space complexity is $O(1)$. Here, $n$ is the length of the string $s$. Java C++ Python Go TypeScript Javascript C# Nimrod RenderScript Php class Solution { public String longestPalindrome(String s) { int n = s.length(); boolean[][] f = new boolean[n][n]; for (var g : f) { Arrays.fill(g, true); } int k = 0, mx = 1; for (int i = n - 2; i &amp;gt;= 0; --i) { for (int j = i + 1; j &amp;lt; n; ++j) { f[i][j] = false; if (s.charAt(i) == s.charAt(j)) { f[i][j] = f[i + 1][j - 1]; if (f[i][j] &amp;amp;&amp;amp; mx &amp;lt; j - i + 1) { mx = j - i + 1; k = i; } } } } return s.substring(k, k + mx); } } class Solution { public: string longestPalindrome(string s) { int n = s.size(); vector&amp;lt;vector&amp;lt;bool&amp;gt;&amp;gt; f(n, vector&amp;lt;bool&amp;gt;(n, true)); int k = 0, mx = 1; for (int i = n - 2; ~i; --i) { for (int j = i + 1; j &amp;lt; n; ++j) { f[i][j] = false; if (s[i] == s[j]) { f[i][j] = f[i + 1][j - 1]; if (f[i][j] &amp;amp;&amp;amp; mx &amp;lt; j - i + 1) { mx = j - i + 1; k = i; } } } } return s.substr(k, mx); } }; class Solution: def longestPalindrome(self, s: str) -&amp;gt; str: mlen = 0 start = end = 0 n = len(s) dp = [ [False] * n for i in range(n) ] for j in range(n): for i in range(j..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2015-12-05T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2015-12-05-5-Longest-Palindromic-Substring/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-5.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="5 - Longest Palindromic Substring" property="twitter:title"/>
+   <meta content="Leetcode 5. Longest Palindromic Substring Description Given a string s, return the longest palindromic substring in s. &amp;nbsp; Example 1: Input: s = &amp;quot;babad&amp;quot; Output: &amp;quot;bab&amp;quot; Explanation: &amp;quot;aba&amp;quot; is also a valid answer. Example 2: Input: s = &amp;quot;cbbd&amp;quot; Output: &amp;quot;bb&amp;quot; &amp;nbsp; Constraints: 1 &amp;lt;= s.length &amp;lt;= 1000 s consist of only digits and English letters. Solutions Solution 1: Dynamic Programming We define $f[i][j]$ to represent whether the string $s[i..j]$ is a palindrome, initially $f[i][j] = true$. Next, we define variables $k$ and $mx$, where $k$ represents the starting position of the longest palindrome, and $mx$ represents the length of the longest palindrome. Initially, $k = 0$, $mx = 1$. Considering $f[i][j]$, if $s[i] = s[j]$, then $f[i][j] = f[i + 1][j - 1]$; otherwise, $f[i][j] = false$. If $f[i][j] = true$ and $mx &amp;lt; j - i + 1$, then we update $k = i$, $mx = j - i + 1$. Since $f[i][j]$ depends on $f[i + 1][j - 1]$, we need to ensure that $i + 1$ is before $j - 1$, so we need to enumerate $i$ from large to small, and enumerate $j$ from small to large. The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Here, $n$ is the length of the string $s$. Solution 2: Enumerate Palindrome Midpoint We can enumerate the midpoint of the palindrome, spread to both sides, and find the longest palindrome. The time complexity is $O(n^2)$, and the space complexity is $O(1)$. Here, $n$ is the length of the string $s$. Java C++ Python Go TypeScript Javascript C# Nimrod RenderScript Php class Solution { public String longestPalindrome(String s) { int n = s.length(); boolean[][] f = new boolean[n][n]; for (var g : f) { Arrays.fill(g, true); } int k = 0, mx = 1; for (int i = n - 2; i &amp;gt;= 0; --i) { for (int j = i + 1; j &amp;lt; n; ++j) { f[i][j] = false; if (s.charAt(i) == s.charAt(j)) { f[i][j] = f[i + 1][j - 1]; if (f[i][j] &amp;amp;&amp;amp; mx &amp;lt; j - i + 1) { mx = j - i + 1; k = i; } } } } return s.substring(k, k + mx); } } class Solution { public: string longestPalindrome(string s) { int n = s.size(); vector&amp;lt;vector&amp;lt;bool&amp;gt;&amp;gt; f(n, vector&amp;lt;bool&amp;gt;(n, true)); int k = 0, mx = 1; for (int i = n - 2; ~i; --i) { for (int j = i + 1; j &amp;lt; n; ++j) { f[i][j] = false; if (s[i] == s[j]) { f[i][j] = f[i + 1][j - 1]; if (f[i][j] &amp;amp;&amp;amp; mx &amp;lt; j - i + 1) { mx = j - i + 1; k = i; } } } } return s.substr(k, mx); } }; class Solution: def longestPalindrome(self, s: str) -&amp;gt; str: mlen = 0 start = end = 0 n = len(s) dp = [ [False] * n for i in range(n) ] for j in range(n): for i in range(j..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    5 - Longest Palindromic Substring | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="5 - Longest Palindromic Substring" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-5.html" rel="canonical">
+          <meta content="https://leetcode.ca/2015-12-05-5-Longest-Palindromic-Substring/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2015-12-05T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"5 - Longest Palindromic Substring","dateModified":"2015-12-05T00:00:00-08:00","datePublished":"2015-12-05T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2015-12-05-5-Longest-Palindromic-Substring/"},"url":"https://leetcode.ca/2015-12-05-5-Longest-Palindromic-Substring/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="5-longest-palindromic-substring">
+       <a href="solution-5.html">
+        5. Longest Palindromic Substring
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Given a string
+       <code>
+        s
+       </code>
+       , return
+       <em>
+        the longest
+       </em>
+       <span data-keyword="palindromic-string">
+        <em>
+         palindromic
+        </em>
+       </span>
+       <span data-keyword="substring-nonempty">
+        <em>
+         substring
+        </em>
+       </span>
+       in
+       <code>
+        s
+       </code>
+       .
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "babad"
+<strong>Output:</strong> "bab"
+<strong>Explanation:</strong> "aba" is also a valid answer.
+</pre>
+      <p>
+       <strong class="example">
+        Example 2:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> s = "cbbd"
+<strong>Output:</strong> "bb"
+</pre>
+      <p>
+      </p>
+      <p>
+       <strong>
+        Constraints:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <code>
+         1 &lt;= s.length &lt;= 1000
+        </code>
+       </li>
+       <li>
+        <code>
+         s
+        </code>
+        consist of only digits and English letters.
+       </li>
+      </ul>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <p>
+       <strong>
+        Solution 1: Dynamic Programming
+       </strong>
+      </p>
+      <p>
+       We define $f[i][j]$ to represent whether the string $s[i..j]$ is a palindrome, initially $f[i][j] = true$.
+      </p>
+      <p>
+       Next, we define variables $k$ and $mx$, where $k$ represents the starting position of the longest palindrome, and $mx$ represents the length of the longest palindrome. Initially, $k = 0$, $mx = 1$.
+      </p>
+      <p>
+       Considering $f[i][j]$, if $s[i] = s[j]$, then $f[i][j] = f[i + 1][j - 1]$; otherwise, $f[i][j] = false$. If $f[i][j] = true$ and $mx &lt; j - i + 1$, then we update $k = i$, $mx = j - i + 1$.
+      </p>
+      <p>
+       Since $f[i][j]$ depends on $f[i + 1][j - 1]$, we need to ensure that $i + 1$ is before $j - 1$, so we need to enumerate $i$ from large to small, and enumerate $j$ from small to large.
+      </p>
+      <p>
+       The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Here, $n$ is the length of the string $s$.
+      </p>
+      <p>
+       <strong>
+        Solution 2: Enumerate Palindrome Midpoint
+       </strong>
+      </p>
+      <p>
+       We can enumerate the midpoint of the palindrome, spread to both sides, and find the longest palindrome.
+      </p>
+      <p>
+       The time complexity is $O(n^2)$, and the space complexity is $O(1)$. Here, $n$ is the length of the string $s$.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#29bcbd28-0557-4e68-a082-a65bd12fc17b'}">
+       <li class="uk-active">
+        <a href="solution-5.html">
+         Java
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         C++
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         Python
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         Go
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         TypeScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         Javascript
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         C#
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         Nimrod
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         RenderScript
+        </a>
+       </li>
+       <li>
+        <a href="solution-5.html">
+         Php
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="29bcbd28-0557-4e68-a082-a65bd12fc17b">
+       <li>
+        <div class="language-java highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">longestPalindrome</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">var</span> <span class="n">g</span> <span class="o">:</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="o">--</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">mx</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">mx</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                        <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">k</span> <span class="o">+</span> <span class="n">mx</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cpp highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">string</span> <span class="n">longestPalindrome</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">true</span><span class="p">));</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="o">~</span><span class="n">i</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">mx</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">mx</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                        <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">mx</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-py highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">longestPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">mlen</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">and</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">True</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">mlen</span><span class="p">:</span>
+                    <span class="n">mlen</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">end</span> <span class="o">=</span> <span class="n">j</span>
+
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1">######
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">longestPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">True</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">and</span> <span class="n">mx</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">k</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span> <span class="p">:</span> <span class="n">k</span> <span class="o">+</span> <span class="n">mx</span><span class="p">]</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-go highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">func</span> <span class="n">longestPalindrome</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="n">f</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span> <span class="p">{</span>
+		<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+			<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">k</span><span class="p">,</span> <span class="n">mx</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">-</span> <span class="m">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+			<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">mx</span> <span class="o">&lt;</span> <span class="n">j</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="m">1</span> <span class="p">{</span>
+					<span class="n">mx</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span>
+					<span class="n">k</span> <span class="o">=</span> <span class="n">i</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span> <span class="o">:</span> <span class="n">k</span><span class="o">+</span><span class="n">mx</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-ts highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">function</span> <span class="nx">longestPalindrome</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">string</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">[][]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">true</span><span class="p">));</span>
+    <span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">mx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">s</span><span class="p">[</span><span class="nx">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">mx</span> <span class="o">&lt;</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">mx</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="nx">k</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">k</span> <span class="o">+</span> <span class="nx">mx</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-js highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="cm">/**
+ * @param {string} s
+ * @return {string}
+ */</span>
+<span class="kd">var</span> <span class="nx">longestPalindrome</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">true</span><span class="p">));</span>
+    <span class="kd">let</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">mx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">s</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">s</span><span class="p">[</span><span class="nx">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">mx</span> <span class="o">&lt;</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">mx</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="nx">k</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">k</span> <span class="o">+</span> <span class="nx">mx</span><span class="p">);</span>
+<span class="p">};</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-cs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">LongestPalindrome</span><span class="p">(</span><span class="kt">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="n">s</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+        <span class="kt">bool</span><span class="p">[,]</span> <span class="n">f</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">bool</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">mx</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="n">n</span> <span class="p">-</span> <span class="m">2</span><span class="p">;</span> <span class="n">i</span> <span class="p">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="p">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="p">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">,</span> <span class="n">j</span> <span class="p">-</span> <span class="m">1</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="p">&amp;&amp;</span> <span class="n">mx</span> <span class="p">&lt;</span> <span class="n">j</span> <span class="p">-</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">mx</span> <span class="p">=</span> <span class="n">j</span> <span class="p">-</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span>
+                        <span class="n">k</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="nf">Substring</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">mx</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-nim highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">import</span> <span class="n">std</span><span class="o">/</span><span class="n">sequtils</span>
+
+<span class="k">proc </span><span class="nf">longestPalindrome</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="kt">string</span><span class="p">):</span> <span class="kt">string</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">n</span><span class="p">:</span> <span class="kt">int</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">len</span><span class="p">()</span>
+  <span class="k">var</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">newSeqWith</span><span class="o">[</span><span class="kt">bool</span><span class="o">]</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">newSeqWith</span><span class="o">[</span><span class="kt">bool</span><span class="o">]</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="kp">false</span><span class="p">))</span>
+    <span class="n">start</span><span class="p">:</span> <span class="kt">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">mx</span><span class="p">:</span> <span class="kt">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="mi">0</span> <span class="p">..</span><span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">j</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">s</span><span class="o">[</span><span class="n">j</span><span class="o">]</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="ow">and</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">s</span><span class="o">[</span><span class="n">j</span><span class="o">]</span>
+
+      <span class="k">if</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="ow">and</span> <span class="n">mx</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">mx</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+  <span class="n">result</span> <span class="o">=</span> <span class="n">s</span><span class="o">[</span><span class="n">start</span> <span class="p">..</span><span class="o">&lt;</span> <span class="n">start</span><span class="o">+</span><span class="n">mx</span><span class="o">]</span>
+
+<span class="c"># Driver Code</span>
+<span class="c"># echo(longestPalindrome("adbdaba"))</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-rs highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">impl</span> <span class="n">Solution</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">longest_palindrome</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">String</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="k">mut</span> <span class="n">ans</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="nf">.len</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">[</span><span class="o">..</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">dp</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="nd">vec!</span><span class="p">[</span><span class="kc">false</span><span class="p">;</span> <span class="n">n</span><span class="p">];</span> <span class="n">n</span><span class="p">];</span>
+        <span class="k">let</span> <span class="n">data</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">char</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">s</span><span class="nf">.chars</span><span class="p">()</span><span class="nf">.collect</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="n">end</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="n">n</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">start</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..=</span><span class="n">end</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">start</span><span class="p">][</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">||</span> <span class="n">dp</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">start</span><span class="p">][</span><span class="n">end</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="nf">.len</span><span class="p">()</span> <span class="p">{</span>
+                        <span class="n">ans</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="o">..=</span><span class="n">end</span><span class="p">];</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ans</span><span class="nf">.to_string</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="language-php highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="cd">/**
+     * @param string $s
+     * @return string
+     */</span>
+    <span class="k">function</span> <span class="n">longestPalindrome</span><span class="p">(</span><span class="nv">$s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="nv">$maxLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$s</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$len1</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">expandFromCenter</span><span class="p">(</span><span class="nv">$s</span><span class="p">,</span> <span class="nv">$i</span><span class="p">,</span> <span class="nv">$i</span><span class="p">);</span>
+            <span class="nv">$len2</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">expandFromCenter</span><span class="p">(</span><span class="nv">$s</span><span class="p">,</span> <span class="nv">$i</span><span class="p">,</span> <span class="nv">$i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="nv">$len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nv">$len1</span><span class="p">,</span> <span class="nv">$len2</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$len</span> <span class="o">&gt;</span> <span class="nv">$maxLength</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$start</span> <span class="o">=</span> <span class="nv">$i</span> <span class="o">-</span> <span class="nb">intval</span><span class="p">((</span><span class="nv">$len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="nv">$maxLength</span> <span class="o">=</span> <span class="nv">$len</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$s</span><span class="p">,</span> <span class="nv">$start</span><span class="p">,</span> <span class="nv">$maxLength</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="n">expandFromCenter</span><span class="p">(</span><span class="nv">$s</span><span class="p">,</span> <span class="nv">$left</span><span class="p">,</span> <span class="nv">$right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nv">$left</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$right</span> <span class="o">&lt;</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$s</span><span class="p">[</span><span class="nv">$left</span><span class="p">]</span> <span class="o">===</span> <span class="nv">$s</span><span class="p">[</span><span class="nv">$right</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nv">$left</span><span class="o">--</span><span class="p">;</span>
+            <span class="nv">$right</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$right</span> <span class="o">-</span> <span class="nv">$left</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-5.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3278.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3278.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3278 - Find Candidates for Data Scientist Position II</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3278. Find Candidates for Data Scientist Position II ð Description Table: Candidates +--++ \| candidate_id \| int \| \| skill \| varchar \| \| proficiency \| int \| +--++ \| Column Name \| Type \| +--++ (project_id, skill) is the primary key for this table....">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3278.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3278.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3278.html" rel="stylesheet"/>
+   <link href="solution-3278.html" rel="stylesheet"/>
+   <link href="solution-3278.html" rel="stylesheet"/>
+   <link href="solution-3278.html" rel="stylesheet"/>
+   <link href="solution-3278.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3278 - Find Candidates for Data Scientist Position II" property="og:title"/>
+   <meta content="Leetcode 3278. Find Candidates for Data Scientist Position II ð Description Table: Candidates +--++ \| candidate_id \| int \| \| skill \| varchar \| \| proficiency \| int \| +--++ \| Column Name \| Type \| +--++ (project_id, skill) is the primary key for this table. Each row includes project_id, required skill, and its importance (1-5) for the project. Leetcode is staffing for multiple data science projects. Write a solution to find the best candidate for each project based on the following criteria: Candidates must have all the skills required for a project. Calculate a score for each candidate-project pair as follows: Start with 100 points Add 10 points for each skill where proficiency &amp;gt; importance Subtract 5 points for each skill where proficiency &amp;lt; importance Include only the top candidate (highest score) for each project. If there&amp;rsquo;s a tie, choose the candidate with the lower candidate_id. If there is no suitable candidate for a project, do not return&amp;nbsp;that project. Return a result table ordered by project_id in ascending order. The result format is in the following example. &amp;nbsp; Example: Input: Candidates table: +--+--+-+ \| 101 \| Python \| 5 \| \| 101 \| Tableau \| 3 \| \| 101 \| PostgreSQL\| 4 \| \| 101 \| TensorFlow\| 2 \| \| 102 \| Python \| 4 \| \| 102 \| Tableau \| 5 \| \| 102 \| PostgreSQL\| 4 \| \| 102 \| R \| 4 \| \| 103 \| Python \| 3 \| \| 103 \| Tableau \| 5 \| \| 103 \| PostgreSQL\| 5 \| \| 103 \| Spark \| 4 \| +--+--++ \| project_id \| skill \| importance \| +-+--++ Output: +-+--+-+ \| project_id \| candidate_id \| score \| +-+--+-+ \| 501 \| 101 \| 105 \| \| 502 \| 102 \| 130 \| +-+--+-+ Explanation: For Project 501, Candidate 101 has the highest score of 105. All other candidates have the same score but Candidate 101 has the lowest candidate_id among them. For Project 502, Candidate 102 has the highest score of 130. The output table is ordered by project_id in ascending order. Solutions Solution 1: Equi-Join + Group Statistics + Window Function We can perform an equi-join of the Candidates table and the Projects table on the skill column, counting the number of matched skills and calculating the total score for each candidate in each project, which is recorded in table S. Next, we count the required number of skills for each project, recording the results in table T. Then, we perform an equi-join of tables S and T on the project_id column, filtering out candidates whose number of matched skills equals the required number of skills, and recording them in table P. We calculate the rank (rk) for each candidate within each project. Finally, we filter out the candidates with rank $rk = 1$ for each project, identifying them as the best candidates. SQL WITH S AS ( SELECT candidate_id, project_id, COUNT(*) matched_skills, SUM( CASE WHEN proficiency &amp;gt; importance THEN..." property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-09-25T00:00:00-07:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-09-25-3278-Find-Candidates-for-Data-Scientist-Position-II/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3278.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3278 - Find Candidates for Data Scientist Position II" property="twitter:title"/>
+   <meta content="Leetcode 3278. Find Candidates for Data Scientist Position II ð Description Table: Candidates +--++ \| candidate_id \| int \| \| skill \| varchar \| \| proficiency \| int \| +--++ \| Column Name \| Type \| +--++ (project_id, skill) is the primary key for this table. Each row includes project_id, required skill, and its importance (1-5) for the project. Leetcode is staffing for multiple data science projects. Write a solution to find the best candidate for each project based on the following criteria: Candidates must have all the skills required for a project. Calculate a score for each candidate-project pair as follows: Start with 100 points Add 10 points for each skill where proficiency &amp;gt; importance Subtract 5 points for each skill where proficiency &amp;lt; importance Include only the top candidate (highest score) for each project. If there&amp;rsquo;s a tie, choose the candidate with the lower candidate_id. If there is no suitable candidate for a project, do not return&amp;nbsp;that project. Return a result table ordered by project_id in ascending order. The result format is in the following example. &amp;nbsp; Example: Input: Candidates table: +--+--+-+ \| 101 \| Python \| 5 \| \| 101 \| Tableau \| 3 \| \| 101 \| PostgreSQL\| 4 \| \| 101 \| TensorFlow\| 2 \| \| 102 \| Python \| 4 \| \| 102 \| Tableau \| 5 \| \| 102 \| PostgreSQL\| 4 \| \| 102 \| R \| 4 \| \| 103 \| Python \| 3 \| \| 103 \| Tableau \| 5 \| \| 103 \| PostgreSQL\| 5 \| \| 103 \| Spark \| 4 \| +--+--++ \| project_id \| skill \| importance \| +-+--++ Output: +-+--+-+ \| project_id \| candidate_id \| score \| +-+--+-+ \| 501 \| 101 \| 105 \| \| 502 \| 102 \| 130 \| +-+--+-+ Explanation: For Project 501, Candidate 101 has the highest score of 105. All other candidates have the same score but Candidate 101 has the lowest candidate_id among them. For Project 502, Candidate 102 has the highest score of 130. The output table is ordered by project_id in ascending order. Solutions Solution 1: Equi-Join + Group Statistics + Window Function We can perform an equi-join of the Candidates table and the Projects table on the skill column, counting the number of matched skills and calculating the total score for each candidate in each project, which is recorded in table S. Next, we count the required number of skills for each project, recording the results in table T. Then, we perform an equi-join of tables S and T on the project_id column, filtering out candidates whose number of matched skills equals the required number of skills, and recording them in table P. We calculate the rank (rk) for each candidate within each project. Finally, we filter out the candidates with rank $rk = 1$ for each project, identifying them as the best candidates. SQL WITH S AS ( SELECT candidate_id, project_id, COUNT(*) matched_skills, SUM( CASE WHEN proficiency &amp;gt; importance THEN..." property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3278 - Find Candidates for Data Scientist Position II | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3278 - Find Candidates for Data Scientist Position II" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3278.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-09-25-3278-Find-Candidates-for-Data-Scientist-Position-II/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-09-25T00:00:00-07:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3278 - Find Candidates for Data Scientist Position II","dateModified":"2024-09-25T00:00:00-07:00","datePublished":"2024-09-25T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-09-25-3278-Find-Candidates-for-Data-Scientist-Position-II/"},"url":"https://leetcode.ca/2024-09-25-3278-Find-Candidates-for-Data-Scientist-Position-II/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <!-- problem:start -->
+      <h1 id="3278-find-candidates-for-data-scientist-position-ii-">
+       <a href="solution-3278.html">
+        3278. Find Candidates for Data Scientist Position II ð
+       </a>
+      </h1>
+      <h2 id="description">
+       Description
+      </h2>
+      <!-- description:start -->
+      <p>
+       Table:
+       <font face="monospace">
+        <code>
+         Candidates
+        </code>
+       </font>
+      </p>
+      <pre>
++--++ 
+\| candidate_id \| int     \| 
+\| skill        \| varchar \|
+\| proficiency  \| int     \|
++--++ 
+\| Column Name  \| Type    \| 
++--++
+(project_id, skill) is the primary key for this table.
+Each row includes project_id, required skill, and its importance (1-5) for the project.
+</pre>
+      <p>
+       Leetcode is staffing for multiple data science projects. Write a solution to find the
+       <strong>
+        best candidate
+       </strong>
+       for
+       <strong>
+        each project
+       </strong>
+       based on the following criteria:
+      </p>
+      <ol>
+       <li>
+        Candidates must have
+        <strong>
+         all
+        </strong>
+        the skills required for a project.
+       </li>
+       <li>
+        Calculate a
+        <strong>
+         score
+        </strong>
+        for each candidate-project pair as follows:
+        <ul>
+         <li>
+          <strong>
+           Start
+          </strong>
+          with
+          <code>
+           100
+          </code>
+          points
+         </li>
+         <li>
+          <strong>
+           Add
+          </strong>
+          <code>
+           10
+          </code>
+          points for each skill where
+          <strong>
+           proficiency &gt; importance
+          </strong>
+         </li>
+         <li>
+          <strong>
+           Subtract
+          </strong>
+          <code>
+           5
+          </code>
+          points for each skill where
+          <strong>
+           proficiency &lt; importance
+          </strong>
+         </li>
+        </ul>
+       </li>
+      </ol>
+      <p>
+       Include only the top candidate (highest score) for each project. If there’s a
+       <strong>
+        tie
+       </strong>
+       , choose the candidate with the
+       <strong>
+        lower
+       </strong>
+       <code>
+        candidate_id
+       </code>
+       . If there is
+       <strong>
+        no suitable candidate
+       </strong>
+       for a project,
+       <strong>
+        do not return
+       </strong>
+       that project.
+      </p>
+      <p>
+       Return a result table ordered by
+       <code>
+        project_id
+       </code>
+       in ascending order.
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example:
+       </strong>
+      </p>
+      <div class="example-block">
+       <p>
+        <strong>
+         Input:
+        </strong>
+       </p>
+       <p>
+        <code>
+         Candidates
+        </code>
+        table:
+       </p>
+       <pre class="example-io">
++--+--+-+
+\| 101          \| Python    \| 5           \|
+\| 101          \| Tableau   \| 3           \|
+\| 101          \| PostgreSQL\| 4           \|
+\| 101          \| TensorFlow\| 2           \|
+\| 102          \| Python    \| 4           \|
+\| 102          \| Tableau   \| 5           \|
+\| 102          \| PostgreSQL\| 4           \|
+\| 102          \| R         \| 4           \|
+\| 103          \| Python    \| 3           \|
+\| 103          \| Tableau   \| 5           \|
+\| 103          \| PostgreSQL\| 5           \|
+\| 103          \| Spark     \| 4           \|
++--+--++
+\| project_id  \| skill     \| importance \|
++-+--++
+</pre>
+       <p>
+        <strong>
+         Output:
+        </strong>
+       </p>
+       <pre class="example-io">
++-+--+-+
+\| project_id  \| candidate_id \| score \|
++-+--+-+
+\| 501         \| 101          \| 105   \|
+\| 502         \| 102          \| 130   \|
++-+--+-+
+</pre>
+       <p>
+        <strong>
+         Explanation:
+        </strong>
+       </p>
+       <ul>
+        <li>
+         For Project 501, Candidate 101 has the highest score of 105. All other candidates have the same score but Candidate 101 has the lowest candidate_id among them.
+        </li>
+        <li>
+         For Project 502, Candidate 102 has the highest score of 130.
+        </li>
+       </ul>
+       <p>
+        The output table is ordered by project_id in ascending order.
+       </p>
+      </div>
+      <!-- description:end -->
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <!-- solution:start -->
+      <h3 id="solution-1-equi-join--group-statistics--window-function">
+       Solution 1: Equi-Join + Group Statistics + Window Function
+      </h3>
+      <p>
+       We can perform an equi-join of the
+       <code class="language-plaintext highlighter-rouge">
+        Candidates
+       </code>
+       table and the
+       <code class="language-plaintext highlighter-rouge">
+        Projects
+       </code>
+       table on the
+       <code class="language-plaintext highlighter-rouge">
+        skill
+       </code>
+       column, counting the number of matched skills and calculating the total score for each candidate in each project, which is recorded in table
+       <code class="language-plaintext highlighter-rouge">
+        S
+       </code>
+       .
+      </p>
+      <p>
+       Next, we count the required number of skills for each project, recording the results in table
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       .
+      </p>
+      <p>
+       Then, we perform an equi-join of tables
+       <code class="language-plaintext highlighter-rouge">
+        S
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       on the
+       <code class="language-plaintext highlighter-rouge">
+        project_id
+       </code>
+       column, filtering out candidates whose number of matched skills equals the required number of skills, and recording them in table
+       <code class="language-plaintext highlighter-rouge">
+        P
+       </code>
+       . We calculate the rank (
+       <code class="language-plaintext highlighter-rouge">
+        rk
+       </code>
+       ) for each candidate within each project.
+      </p>
+      <p>
+       Finally, we filter out the candidates with rank $rk = 1$ for each project, identifying them as the best candidates.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#31470a27-7166-47ca-8f89-cb4d98acc373'}">
+       <li class="uk-active">
+        <a href="solution-3278.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="31470a27-7166-47ca-8f89-cb4d98acc373">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="k">WITH</span>
+    <span class="n">S</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">candidate_id</span><span class="p">,</span>
+            <span class="n">project_id</span><span class="p">,</span>
+            <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">matched_skills</span><span class="p">,</span>
+            <span class="k">SUM</span><span class="p">(</span>
+                <span class="k">CASE</span>
+                    <span class="k">WHEN</span> <span class="n">proficiency</span> <span class="o">&gt;</span> <span class="n">importance</span> <span class="k">THEN</span> <span class="mi">10</span>
+                    <span class="k">WHEN</span> <span class="n">proficiency</span> <span class="o">&lt;</span> <span class="n">importance</span> <span class="k">THEN</span> <span class="o">-</span><span class="mi">5</span>
+                    <span class="k">ELSE</span> <span class="mi">0</span>
+                <span class="k">END</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="mi">100</span> <span class="k">AS</span> <span class="n">score</span>
+        <span class="k">FROM</span>
+            <span class="n">Candidates</span>
+            <span class="k">JOIN</span> <span class="n">Projects</span> <span class="k">USING</span> <span class="p">(</span><span class="n">skill</span><span class="p">)</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="p">),</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="n">project_id</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">required_skills</span>
+        <span class="k">FROM</span> <span class="n">Projects</span>
+        <span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+    <span class="p">),</span>
+    <span class="n">P</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span>
+            <span class="n">project_id</span><span class="p">,</span>
+            <span class="n">candidate_id</span><span class="p">,</span>
+            <span class="n">score</span><span class="p">,</span>
+            <span class="n">RANK</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">(</span>
+                <span class="k">PARTITION</span> <span class="k">BY</span> <span class="n">project_id</span>
+                <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">score</span> <span class="k">DESC</span><span class="p">,</span> <span class="n">candidate_id</span>
+            <span class="p">)</span> <span class="n">rk</span>
+        <span class="k">FROM</span>
+            <span class="n">S</span>
+            <span class="k">JOIN</span> <span class="n">T</span> <span class="k">USING</span> <span class="p">(</span><span class="n">project_id</span><span class="p">)</span>
+        <span class="k">WHERE</span> <span class="n">matched_skills</span> <span class="o">=</span> <span class="n">required_skills</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">candidate_id</span><span class="p">,</span> <span class="n">score</span>
+<span class="k">FROM</span> <span class="n">P</span>
+<span class="k">WHERE</span> <span class="n">rk</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3278.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>

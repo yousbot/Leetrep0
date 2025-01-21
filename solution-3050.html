@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="solution-3050.html" rel="shortcut icon" type="image/png"/>
+  <link href="solution-3050.html" rel="stylesheet">
+   <script src="assets_js_uikit.min.js" type="text/javascript">
+   </script>
+   <script src="assets_js_uikit-icons.min.js" type="text/javascript">
+   </script>
+   <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: {'[+]': ['ams']}  // Include the 'ams' package
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+   </script>
+   <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+   </script>
+   <!-- below block is overlapping with SEO plugin generated title and description   -->
+   <!-- 
+  <title>3050 - Pizza Toppings Cost Analysis</title>
+
+  
+  <meta name="author" content="Leetcode">
+  
+
+  
+  <meta name="description" content="Leetcode 3050. Pizza Toppings Cost Analysis Description Table: Toppings +--------------+---------+ \| Column Name \| Type \| +--------------+---------+ \| topping_name \| varchar \| \| cost \| decimal \| +--------------+---------+ topping_name is the primary key for this table. Each row of this table contains topping name and the...">
+   -->
+   <meta content="LeetCode, Solution, Company Tag, Unlock Prime, Java, C++, Interview, Job, Algorithm, SQL, Canada" name="keywords"/>
+   <link href="solution-3050.html" rel="alternate" title="Leetcode" type="application/rss+xml"/>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K108N8L891">
+   </script>
+   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K108N8L891');
+   </script>
+   <!-- End Google Analytics -->
+   <script async="" data-ad-client="ca-pub-6766885420008650" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <link crossorigin="anonymous" href="solution-3050.html" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+   <link href="solution-3050.html" rel="stylesheet"/>
+   <link href="solution-3050.html" rel="stylesheet"/>
+   <link href="solution-3050.html" rel="stylesheet"/>
+   <link href="solution-3050.html" rel="stylesheet"/>
+   <link href="solution-3050.html" rel="stylesheet"/>
+   <meta content="Leetcode" property="og:site_name"/>
+   <meta content="3050 - Pizza Toppings Cost Analysis" property="og:title"/>
+   <meta content="Leetcode
+
+
+
+
+3050. Pizza Toppings Cost Analysis
+
+
+
+Description
+
+Table: Toppings
+
+
++--------------+---------+ 
+\| Column Name  \| Type    \| 
++--------------+---------+ 
+\| topping_name \| varchar \| 
+\| cost         \| decimal \|
++--------------+---------+
+topping_name is the primary key for this table.
+Each row of this table contains topping name and the cost of the topping. 
+
+
+Write a solution to calculate the total cost of all possible 3-topping pizza combinations from a given list of toppings. The total cost of toppings must be rounded to 2 decimal places.
+
+Note:
+
+
+	Do not include the pizzas where a topping is repeated. For example, &amp;lsquo;Pepperoni, Pepperoni, Onion Pizza&amp;rsquo;.
+	Toppings must be listed in alphabetical order. For example, &amp;#39;Chicken, Onions, Sausage&amp;#39;. &amp;#39;Onion, Sausage, Chicken&amp;#39; is not acceptable.
+
+
+Return the result table ordered by total cost in descending order and combination of toppings in ascending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Toppings table:
++--------------+------+
+\| topping_name \| cost \|
++--------------+------+
+\| Pepperoni    \| 0.50 \|
+\| Sausage      \| 0.70 \|
+\| Chicken      \| 0.55 \|
+\| Extra Cheese \| 0.40 \|
++--------------+------+
+Output: 
++--------------------------------+------------+
+\| pizza                          \| total_cost \| 
++--------------------------------+------------+
+\| Chicken,Pepperoni,Sausage      \| 1.75       \|  
+\| Chicken,Extra Cheese,Sausage   \| 1.65       \|
+\| Extra Cheese,Pepperoni,Sausage \| 1.60       \|
+\| Chicken,Extra Cheese,Pepperoni \| 1.45       \| 
++--------------------------------+------------+
+Explanation: 
+There are only four different combinations possible with the three topings:
+- Chicken, Pepperoni, Sausage: Total cost is $1.75 (Chicken $0.55, Pepperoni $0.50, Sausage $0.70).
+- Chicken, Extra Cheese, Sausage: Total cost is $1.65 (Chicken $0.55, Extra Cheese $0.40, Sausage $0.70).
+- Extra Cheese, Pepperoni, Sausage: Total cost is $1.60 (Extra Cheese $0.40, Pepperoni $0.50, Sausage $0.70).
+- Chicken, Extra Cheese, Pepperoni: Total cost is $1.45 (Chicken $0.55, Extra Cheese $0.40, Pepperoni $0.50).
+Output table is ordered by the total cost in descending order.
+
+Solutions
+
+Solution 1: Window Function + Conditional Join
+
+First, we use a window function to sort the table by the topping_name field and add a rk field to each row, representing the ranking of the current row.
+
+Then we use conditional join to join the table T three times, named as t1, t2, t3 respectively. The join conditions are t1.rk &amp;lt; t2.rk and t2.rk &amp;lt; t3.rk. After that, we calculate the total price of the three toppings, sort by total price in descending order, and then sort by topping name in ascending order.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT *, RANK() OVER (ORDER BY topping_name) AS rk
+        FROM Toppings
+    )
+SELECT
+    CONCAT(t1.topping_name, ',', t2.topping_name, ',', t3.topping_name) AS pizza,
+    t1.cost + t2.cost + t3.cost AS total_cost
+FROM
+    T AS t1
+    JOIN T AS t2 ON t1.rk &amp;lt; t2.rk
+    JOIN T AS t3 ON t2.rk &amp;lt; t3.rk
+ORDER BY 2 DESC, 1 ASC;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="og:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" property="og:image"/>
+   <!-- remove canonical below to use SEO plugin -->
+   <meta content="article" property="og:type"/>
+   <meta content="Leetcode" property="og:article:author"/>
+   <meta content="2024-03-01T00:00:00-08:00" property="og:article:published_time"/>
+   <meta content="https://leetcode.ca/2024-03-01-3050-Pizza-Toppings-Cost-Analysis/" property="og:url"/>
+   <!-- <link rel="canonical" href="solution-3050.html"> -->
+   <meta content="summary" name="twitter:card"/>
+   <meta content="@" name="twitter:site"/>
+   <meta content="@" name="twitter:creator"/>
+   <meta content="3050 - Pizza Toppings Cost Analysis" property="twitter:title"/>
+   <meta content="Leetcode
+
+
+
+
+3050. Pizza Toppings Cost Analysis
+
+
+
+Description
+
+Table: Toppings
+
+
++--------------+---------+ 
+\| Column Name  \| Type    \| 
++--------------+---------+ 
+\| topping_name \| varchar \| 
+\| cost         \| decimal \|
++--------------+---------+
+topping_name is the primary key for this table.
+Each row of this table contains topping name and the cost of the topping. 
+
+
+Write a solution to calculate the total cost of all possible 3-topping pizza combinations from a given list of toppings. The total cost of toppings must be rounded to 2 decimal places.
+
+Note:
+
+
+	Do not include the pizzas where a topping is repeated. For example, &amp;lsquo;Pepperoni, Pepperoni, Onion Pizza&amp;rsquo;.
+	Toppings must be listed in alphabetical order. For example, &amp;#39;Chicken, Onions, Sausage&amp;#39;. &amp;#39;Onion, Sausage, Chicken&amp;#39; is not acceptable.
+
+
+Return the result table ordered by total cost in descending order and combination of toppings in ascending order.
+
+The result format is in the following example.
+
+&amp;nbsp;
+Example 1:
+
+
+Input: 
+Toppings table:
++--------------+------+
+\| topping_name \| cost \|
++--------------+------+
+\| Pepperoni    \| 0.50 \|
+\| Sausage      \| 0.70 \|
+\| Chicken      \| 0.55 \|
+\| Extra Cheese \| 0.40 \|
++--------------+------+
+Output: 
++--------------------------------+------------+
+\| pizza                          \| total_cost \| 
++--------------------------------+------------+
+\| Chicken,Pepperoni,Sausage      \| 1.75       \|  
+\| Chicken,Extra Cheese,Sausage   \| 1.65       \|
+\| Extra Cheese,Pepperoni,Sausage \| 1.60       \|
+\| Chicken,Extra Cheese,Pepperoni \| 1.45       \| 
++--------------------------------+------------+
+Explanation: 
+There are only four different combinations possible with the three topings:
+- Chicken, Pepperoni, Sausage: Total cost is $1.75 (Chicken $0.55, Pepperoni $0.50, Sausage $0.70).
+- Chicken, Extra Cheese, Sausage: Total cost is $1.65 (Chicken $0.55, Extra Cheese $0.40, Sausage $0.70).
+- Extra Cheese, Pepperoni, Sausage: Total cost is $1.60 (Extra Cheese $0.40, Pepperoni $0.50, Sausage $0.70).
+- Chicken, Extra Cheese, Pepperoni: Total cost is $1.45 (Chicken $0.55, Extra Cheese $0.40, Pepperoni $0.50).
+Output table is ordered by the total cost in descending order.
+
+Solutions
+
+Solution 1: Window Function + Conditional Join
+
+First, we use a window function to sort the table by the topping_name field and add a rk field to each row, representing the ranking of the current row.
+
+Then we use conditional join to join the table T three times, named as t1, t2, t3 respectively. The join conditions are t1.rk &amp;lt; t2.rk and t2.rk &amp;lt; t3.rk. After that, we calculate the total price of the three toppings, sort by total price in descending order, and then sort by topping name in ascending order.
+
+
+
+	SQL
+
+
+
+
+
+	
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT *, RANK() OVER (ORDER BY topping_name) AS rk
+        FROM Toppings
+    )
+SELECT
+    CONCAT(t1.topping_name, ',', t2.topping_name, ',', t3.topping_name) AS pizza,
+    t1.cost + t2.cost + t3.cost AS total_cost
+FROM
+    T AS t1
+    JOIN T AS t2 ON t1.rk &amp;lt; t2.rk
+    JOIN T AS t3 ON t2.rk &amp;lt; t3.rk
+ORDER BY 2 DESC, 1 ASC;
+
+
+
+
+
+
+All Problems
+
+All Solutions" property="twitter:description"/>
+   <meta content="https://leetcode.ca/assets/img/avatar-icon.jpg" name="twitter:image"/>
+   <!-- Begin Jekyll SEO tag v2.6.1 -->
+   <title>
+    3050 - Pizza Toppings Cost Analysis | Leetcode
+   </title>
+   <meta content="Jekyll v3.10.0" name="generator">
+    <meta content="3050 - Pizza Toppings Cost Analysis" property="og:title">
+     <meta content="Leetcode" name="author">
+      <meta content="en_US" property="og:locale">
+       <meta content="Leetcode" name="description">
+        <meta content="Leetcode" property="og:description">
+         <link href="solution-3050.html" rel="canonical">
+          <meta content="https://leetcode.ca/2024-03-01-3050-Pizza-Toppings-Cost-Analysis/" property="og:url">
+           <meta content="Leetcode" property="og:site_name">
+            <meta content="article" property="og:type">
+             <meta content="2024-03-01T00:00:00-08:00" property="article:published_time">
+              <script type="application/ld+json">
+               {"description":"Leetcode","headline":"3050 - Pizza Toppings Cost Analysis","dateModified":"2024-03-01T00:00:00-08:00","datePublished":"2024-03-01T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://leetcode.ca/2024-03-01-3050-Pizza-Toppings-Cost-Analysis/"},"url":"https://leetcode.ca/2024-03-01-3050-Pizza-Toppings-Cost-Analysis/","author":{"@type":"Person","name":"Leetcode"},"@type":"BlogPosting","@context":"https://schema.org"}
+              </script>
+              <!-- End Jekyll SEO tag -->
+             </meta>
+            </meta>
+           </meta>
+          </meta>
+         </link>
+        </meta>
+       </meta>
+      </meta>
+     </meta>
+    </meta>
+   </meta>
+  </link>
+ </head>
+ <body>
+  
+  <!-- TODO this file has become a mess, refactor it -->
+  
+  <div class="container-md">
+   <div class="row">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+     <article class="blog-post" role="main">
+      
+      <script src="https://apis.google.com/js/platform.js">
+      </script>
+      <div class="g-ytsubscribe" data-channelid="UCslk3mmaMJy1enit3L9vWig" data-count="hidden" data-layout="full">
+      </div>
+      <h1 id="3050-pizza-toppings-cost-analysis">
+       <a href="solution-3050.html">
+        3050. Pizza Toppings Cost Analysis
+       </a>
+      </h1>
+      <!-- tags: -->
+      <h2 id="description">
+       Description
+      </h2>
+      <p>
+       Table:
+       <code>
+        <font face="monospace">
+         Toppings
+        </font>
+       </code>
+      </p>
+      <pre>
++--------------+---------+ 
+\| Column Name  \| Type    \| 
++--------------+---------+ 
+\| topping_name \| varchar \| 
+\| cost         \| decimal \|
++--------------+---------+
+topping_name is the primary key for this table.
+Each row of this table contains topping name and the cost of the topping. 
+</pre>
+      <p>
+       Write a solution to calculate the
+       <strong>
+        total cost
+       </strong>
+       of
+       <strong>
+        all possible
+        <code>
+         3
+        </code>
+        -topping
+       </strong>
+       pizza combinations from a given list of toppings. The total cost of toppings must be
+       <strong>
+        rounded
+       </strong>
+       to
+       <code>
+        2
+       </code>
+       <strong>
+        decimal
+       </strong>
+       places.
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+      </p>
+      <ul>
+       <li>
+        <strong>
+         Do not
+        </strong>
+        include the pizzas where a topping is
+        <strong>
+         repeated
+        </strong>
+        . For example, ‘Pepperoni, Pepperoni, Onion Pizza’.
+       </li>
+       <li>
+        Toppings
+        <strong>
+         must be
+        </strong>
+        listed in
+        <strong>
+         alphabetical order
+        </strong>
+        . For example, 'Chicken, Onions, Sausage'. 'Onion, Sausage, Chicken' is not acceptable.
+       </li>
+      </ul>
+      <p>
+       Return
+       <em>
+        the result table ordered by total cost in
+       </em>
+       <em>
+        <strong>
+         descending
+        </strong>
+       </em>
+       <em>
+        order and combination of toppings in
+        <strong>
+         ascending
+        </strong>
+        order.
+       </em>
+      </p>
+      <p>
+       The result format is in the following example.
+      </p>
+      <p>
+      </p>
+      <p>
+       <strong class="example">
+        Example 1:
+       </strong>
+      </p>
+      <pre>
+<strong>Input:</strong> 
+Toppings table:
++--------------+------+
+\| topping_name \| cost \|
++--------------+------+
+\| Pepperoni    \| 0.50 \|
+\| Sausage      \| 0.70 \|
+\| Chicken      \| 0.55 \|
+\| Extra Cheese \| 0.40 \|
++--------------+------+
+<strong>Output:</strong> 
++--------------------------------+------------+
+\| pizza                          \| total_cost \| 
++--------------------------------+------------+
+\| Chicken,Pepperoni,Sausage      \| 1.75       \|  
+\| Chicken,Extra Cheese,Sausage   \| 1.65       \|
+\| Extra Cheese,Pepperoni,Sausage \| 1.60       \|
+\| Chicken,Extra Cheese,Pepperoni \| 1.45       \| 
++--------------------------------+------------+
+<strong>Explanation:</strong> 
+There are only four different combinations possible with the three topings:
+- Chicken, Pepperoni, Sausage: Total cost is $1.75 (Chicken $0.55, Pepperoni $0.50, Sausage $0.70).
+- Chicken, Extra Cheese, Sausage: Total cost is $1.65 (Chicken $0.55, Extra Cheese $0.40, Sausage $0.70).
+- Extra Cheese, Pepperoni, Sausage: Total cost is $1.60 (Extra Cheese $0.40, Pepperoni $0.50, Sausage $0.70).
+- Chicken, Extra Cheese, Pepperoni: Total cost is $1.45 (Chicken $0.55, Extra Cheese $0.40, Pepperoni $0.50).
+Output table is ordered by the total cost in descending order.</pre>
+      <h2 id="solutions">
+       Solutions
+      </h2>
+      <h3 id="solution-1-window-function--conditional-join">
+       Solution 1: Window Function + Conditional Join
+      </h3>
+      <p>
+       First, we use a window function to sort the table by the
+       <code class="language-plaintext highlighter-rouge">
+        topping_name
+       </code>
+       field and add a
+       <code class="language-plaintext highlighter-rouge">
+        rk
+       </code>
+       field to each row, representing the ranking of the current row.
+      </p>
+      <p>
+       Then we use conditional join to join the table
+       <code class="language-plaintext highlighter-rouge">
+        T
+       </code>
+       three times, named as
+       <code class="language-plaintext highlighter-rouge">
+        t1
+       </code>
+       ,
+       <code class="language-plaintext highlighter-rouge">
+        t2
+       </code>
+       ,
+       <code class="language-plaintext highlighter-rouge">
+        t3
+       </code>
+       respectively. The join conditions are
+       <code class="language-plaintext highlighter-rouge">
+        t1.rk &lt; t2.rk
+       </code>
+       and
+       <code class="language-plaintext highlighter-rouge">
+        t2.rk &lt; t3.rk
+       </code>
+       . After that, we calculate the total price of the three toppings, sort by total price in descending order, and then sort by topping name in ascending order.
+      </p>
+      <ul class="uk-tab" data-uk-switcher="{connect:'#8851064b-3483-48ff-a391-e798854b197b'}">
+       <li class="uk-active">
+        <a href="solution-3050.html">
+         SQL
+        </a>
+       </li>
+      </ul>
+      <ul class="uk-switcher uk-margin" id="8851064b-3483-48ff-a391-e798854b197b">
+       <li>
+        <div class="language-sql highlighter-rouge">
+         <div class="highlight">
+          <pre class="highlight"><code><span class="o">#</span> <span class="k">Write</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">query</span> <span class="k">statement</span> <span class="n">below</span>
+<span class="k">WITH</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="o">*</span><span class="p">,</span> <span class="n">RANK</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">(</span><span class="k">ORDER</span> <span class="k">BY</span> <span class="n">topping_name</span><span class="p">)</span> <span class="k">AS</span> <span class="n">rk</span>
+        <span class="k">FROM</span> <span class="n">Toppings</span>
+    <span class="p">)</span>
+<span class="k">SELECT</span>
+    <span class="n">CONCAT</span><span class="p">(</span><span class="n">t1</span><span class="p">.</span><span class="n">topping_name</span><span class="p">,</span> <span class="s1">','</span><span class="p">,</span> <span class="n">t2</span><span class="p">.</span><span class="n">topping_name</span><span class="p">,</span> <span class="s1">','</span><span class="p">,</span> <span class="n">t3</span><span class="p">.</span><span class="n">topping_name</span><span class="p">)</span> <span class="k">AS</span> <span class="n">pizza</span><span class="p">,</span>
+    <span class="n">t1</span><span class="p">.</span><span class="n">cost</span> <span class="o">+</span> <span class="n">t2</span><span class="p">.</span><span class="n">cost</span> <span class="o">+</span> <span class="n">t3</span><span class="p">.</span><span class="n">cost</span> <span class="k">AS</span> <span class="n">total_cost</span>
+<span class="k">FROM</span>
+    <span class="n">T</span> <span class="k">AS</span> <span class="n">t1</span>
+    <span class="k">JOIN</span> <span class="n">T</span> <span class="k">AS</span> <span class="n">t2</span> <span class="k">ON</span> <span class="n">t1</span><span class="p">.</span><span class="n">rk</span> <span class="o">&lt;</span> <span class="n">t2</span><span class="p">.</span><span class="n">rk</span>
+    <span class="k">JOIN</span> <span class="n">T</span> <span class="k">AS</span> <span class="n">t3</span> <span class="k">ON</span> <span class="n">t2</span><span class="p">.</span><span class="n">rk</span> <span class="o">&lt;</span> <span class="n">t3</span><span class="p">.</span><span class="n">rk</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span> <span class="k">DESC</span><span class="p">,</span> <span class="mi">1</span> <span class="k">ASC</span><span class="p">;</span>
+
+</code></pre>
+         </div>
+        </div>
+       </li>
+      </ul>
+      
+     </article>
+     
+     
+     <div class="disqus-comments">
+      <div class="comments">
+       <div id="disqus_thread">
+       </div>
+       <script type="text/javascript">
+        var disqus_shortname = 'leetcodeca';
+	  /* ensure that pages with query string get the same discussion */
+	  var url_parts = window.location.href.split("?");
+	  var disqus_url = url_parts[0];
+	  (function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	  })();
+       </script>
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="solution-3050.html">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <script crossorigin="anonymous" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+  </script>
+  <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+  <script src="assets_js_beautifuljekyll.js">
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js">
+  </script>
+  <script src="assets_js_anchor-js-config.js">
+  </script>
+ </body>
+</html>
